@@ -1,52 +1,21 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useState} from 'react'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
-import moment from 'moment'
+
 import PaymentOptionForm from './PaymentOptionForm'
 import {usePaymentOptionContextContext} from './PaymentOption.Context'
+import ReadPaymentOptionOnly from './ReadPaymentOptionOnly'
+import EditPaymentOption from './EditPaymentOption'
 
 const AddPaymentOption = ({}) => {
   const paymentOptionCtx = usePaymentOptionContextContext()
 
-  console.log(paymentOptionCtx.getPaymentOptionsData.data)
-
-  const [paymentOptions, setPaymentOptions] = useState([
-    {
-      id: 1,
-      name: 'Google Pay',
-      createdBy: 'Arvind K',
-      date: Date.now(),
-    },
-    {
-      id: 2,
-      name: 'Payment UPI',
-      createdBy: 'Arvind K',
-      date: Date.now(),
-    },
-    {
-      id: 3,
-      name: 'Paytm',
-      createdBy: 'Arvind K',
-      date: Date.now(),
-    },
-    {
-      id: 4,
-      name: 'Card',
-      createdBy: 'Arvind K',
-      date: Date.now(),
-    },
-    {
-      id: 5,
-      name: 'Cash',
-      createdBy: 'Arvind K',
-      date: Date.now(),
-    },
-  ])
+  //console.log(paymentOptionCtx.getPaymentOptionsData.data)
 
   const [paymentOptionForm, setPaymentOptionForm] = useState(false)
 
   const [addPaymentOption, setAddPaymentOption] = useState({
-    name: 'Google Pay',
+    name: '',
     date: Date.now(),
   })
 
@@ -58,6 +27,23 @@ const AddPaymentOption = ({}) => {
     e.preventDefault()
     paymentOptionCtx.createNewPaymentOptionMutation.mutate(addPaymentOption)
     setPaymentOptionForm(false)
+  }
+
+  const [paymentOptionId, setPaymentOptionId] = useState(null)
+
+  const [editPaymentOption, setEditPaymentOption] = useState({
+    name: '',
+    date: '',
+    createdBy: '',
+  })
+
+  const handleEditPaymentOption = (id, editData) => {
+    setPaymentOptionId(id)
+    setEditPaymentOption({
+      name: editData.name,
+      date: editData.date,
+      createdBy: editData.createdBy,
+    })
   }
 
   return (
@@ -114,34 +100,24 @@ const AddPaymentOption = ({}) => {
                 )}
                 {paymentOptionCtx.getPaymentOptionsData.data &&
                   paymentOptionCtx.getPaymentOptionsData.data.map((paymentOption, index) => (
-                    <tr key={paymentOption._id}>
-                      <td>
-                        <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                          {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
-                        </div>
-                      </td>
-                      <td>{index + 1}</td>
-                      <td>{paymentOption.name}</td>
-                      <td>{paymentOption.createdBy}</td>
-                      <td>{moment(paymentOption.date).format('DD/MM/YYYY')}</td>
-
-                      <td>
-                        <div className='d-flex justify-content-end flex-shrink-0'>
-                          <button
-                            type='button'
-                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                          >
-                            <KTIcon iconName='pencil' className='fs-3' />
-                          </button>
-                          <button
-                            type='button'
-                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                          >
-                            <KTIcon iconName='trash' className='fs-3' />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
+                    <React.Fragment key={paymentOption._id}>
+                      {paymentOption._id === paymentOptionId ? (
+                        <EditPaymentOption
+                          paymentOption={paymentOption}
+                          index={index}
+                          editPaymentOption={editPaymentOption}
+                          setEditPaymentOption={setEditPaymentOption}
+                          setPaymentOptionId={setPaymentOptionId}
+                        />
+                      ) : (
+                        <ReadPaymentOptionOnly
+                          paymentOption={paymentOption}
+                          index={index}
+                          setPaymentOptionId={setPaymentOptionId}
+                          handleEditPaymentOption={handleEditPaymentOption}
+                        />
+                      )}
+                    </React.Fragment>
                   ))}
               </tbody>
               {/* end::Table body */}
