@@ -1,0 +1,65 @@
+import mongoose from "mongoose";
+import reciptNumberModel from "./reciptFees.models.js";
+
+const courseFeesSchema = new mongoose.Schema(
+  {
+    studentInfo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Students",
+    },
+    netCourseFees: {
+      type: Number,
+      required: true,
+    },
+
+    remainingFees: {
+      type: Number,
+      required: true,
+    },
+    amountPaid: {
+      type: Number,
+      required: true,
+    },
+    amountDate: {
+      type: String,
+      //required: true,
+      default: Date.now(),
+    },
+    reciptNumber: {
+      type: Number,
+      // required: true,
+    },
+    paymentOption: {
+      type: String,
+      required: true,
+    },
+    lateFees: {
+      type: Number,
+    },
+  },
+  { timestamps: true }
+);
+
+courseFeesSchema.pre("save", function (next) {
+  const doc = this;
+  // Check if the document is new or rollNumber is being modified
+  if (doc.isNew || doc.isModified("reciptNumber")) {
+    // Find and increment the counter for rollNumber
+    reciptNumberModel
+      .findByIdAndUpdate(
+        { _id: "reciptNumber" },
+        { $inc: { sequence_value: 1 } },
+        { new: true, upsert: true }
+      )
+      .then((counter) => {
+        doc.reciptNumber = counter.sequence_value + 100;
+        next();
+      })
+      .catch((err) => next(err));
+  } else {
+    next();
+  }
+});
+
+const CourseFeesModel = mongoose.model("CourseFees", courseFeesSchema);
+export default CourseFeesModel;
