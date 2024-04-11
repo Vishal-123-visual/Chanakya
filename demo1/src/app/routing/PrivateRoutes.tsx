@@ -7,6 +7,7 @@ import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
+import AddPaymentOption from '../pages/payment_option/AddPaymentOption'
 
 const PrivateRoutes = () => {
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -151,11 +152,22 @@ const PrivateRoutes = () => {
         <Route
           path='/student/:id'
           element={
-            // <SuspensedView>
-            <StudentProfile />
-            // </SuspensedView>
+            <SuspensedView>
+              <StudentProfile />
+            </SuspensedView>
           }
         />
+
+        {/* *************************************** Payment Option start here.. ******************************************* */}
+        <Route
+          path='/payment-option'
+          element={
+            <SuspensedView>
+              <AddPaymentOption />
+            </SuspensedView>
+          }
+        />
+        {/* *************************************** Payment Option End here.. ******************************************* */}
 
         {/* <Route path='/add-user' element={<AddUser />} />
         <Route path='/user-list' element={<UserList />} /> */}

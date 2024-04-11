@@ -27,6 +27,7 @@ import {CourseCategoryContextProvider} from './app/pages/course/category/CourseC
 import {CourseContextProvider} from './app/pages/course/CourseContext'
 import {CourseSubjectContextProvider} from './app/pages/course/course_subject/CourseSubjectContext'
 import {StudentCourseFeesContextProvider} from './app/pages/courseFees/StudentCourseFeesContext'
+import {PaymentOptionContextProvider} from './app/pages/payment_option/PaymentOption.Context'
 
 setupAxios(axios)
 Chart.register(...registerables)
@@ -45,7 +46,9 @@ if (container) {
                   <CourseSubjectContextProvider>
                     <AdmissionContextProvider>
                       <StudentCourseFeesContextProvider>
-                        <AppRoutes />
+                        <PaymentOptionContextProvider>
+                          <AppRoutes />
+                        </PaymentOptionContextProvider>
                       </StudentCourseFeesContextProvider>
                     </AdmissionContextProvider>
                   </CourseSubjectContextProvider>

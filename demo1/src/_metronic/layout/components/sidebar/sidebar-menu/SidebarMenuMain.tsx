@@ -142,7 +142,7 @@ const SidebarMenuMain = () => {
         fontIcon='bi-chat-left'
         icon='message-text-2'
       >
-        <SidebarMenuItem to='/course/addCourse' title='Add Payment Option' hasBullet={true} />
+        <SidebarMenuItem to='/payment-option' title='Add Payment Option' hasBullet={true} />
       </SidebarMenuItemWithSub>
       {/* ************* Manage Payment Option END   ****************** */}
 
