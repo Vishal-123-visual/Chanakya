@@ -27,6 +27,7 @@ const AddPaymentOption = ({}) => {
     e.preventDefault()
     paymentOptionCtx.createNewPaymentOptionMutation.mutate(addPaymentOption)
     setPaymentOptionForm(false)
+    setAddPaymentOption({name: '', date: Date.now()})
   }
 
   const [paymentOptionId, setPaymentOptionId] = useState(null)
