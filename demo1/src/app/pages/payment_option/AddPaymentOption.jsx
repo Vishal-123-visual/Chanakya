@@ -40,10 +40,24 @@ const AddPaymentOption = ({}) => {
   const handleEditPaymentOption = (id, editData) => {
     setPaymentOptionId(id)
     setEditPaymentOption({
+      _id: id,
       name: editData.name,
       date: editData.date,
       createdBy: editData.createdBy,
     })
+  }
+
+  const editPaymentOptionSubmitHandler = (e) => {
+    e.preventDefault()
+    //console.log(editPaymentOption)
+    paymentOptionCtx.updatePaymentOptionsMutation.mutate(editPaymentOption)
+    setPaymentOptionId(null)
+  }
+
+  const deletePaymentOptionHandler = (e, id) => {
+    e.preventDefault()
+    paymentOptionCtx.deletePaymentOptionMutation.mutate(id)
+    setPaymentOptionId(null)
   }
 
   return (
@@ -73,7 +87,11 @@ const AddPaymentOption = ({}) => {
         {/* begin::Table container */}
         <div className='table-responsive'>
           {/* begin::Table */}
-          <form onSubmit={addPaymentOptionSubmitHandler}>
+          <form
+            onSubmit={
+              paymentOptionId ? editPaymentOptionSubmitHandler : addPaymentOptionSubmitHandler
+            }
+          >
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
               {/* begin::Table head */}
               <thead>
@@ -113,7 +131,7 @@ const AddPaymentOption = ({}) => {
                         <ReadPaymentOptionOnly
                           paymentOption={paymentOption}
                           index={index}
-                          setPaymentOptionId={setPaymentOptionId}
+                          deletePaymentOptionHandler={deletePaymentOptionHandler}
                           handleEditPaymentOption={handleEditPaymentOption}
                         />
                       )}

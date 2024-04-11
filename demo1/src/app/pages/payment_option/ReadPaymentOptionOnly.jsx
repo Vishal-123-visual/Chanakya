@@ -4,7 +4,7 @@ import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 const ReadPaymentOptionOnly = ({
   paymentOption,
   index,
-  setPaymentOptionId,
+  deletePaymentOptionHandler,
   handleEditPaymentOption,
 }) => {
   return (
@@ -29,7 +29,7 @@ const ReadPaymentOptionOnly = ({
             <KTIcon iconName='pencil' className='fs-3' />
           </button>
           <button
-            onClick={() => setPaymentOptionId(paymentOption._id)}
+            onClick={(e) => deletePaymentOptionHandler(e, paymentOption._id)}
             type='button'
             className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
           >

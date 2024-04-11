@@ -33,3 +33,39 @@ export const getAllPaymentOptionsListController = asyncHandler(
     }
   }
 );
+
+export const updatePaymentOptionController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const paymentOption = await PaymentOptionsModel.findById(id);
+      if (!paymentOption) {
+        return res.status(404).json("Payment Option not found");
+      }
+
+      paymentOption.name = req.body.name || paymentOption.name;
+      paymentOption.date = req.body.date || paymentOption.date;
+      paymentOption.createdBy =
+        req.user.fName + " " + req.user.lName || paymentOption.createdBy;
+      let updatedPaymentOption = await paymentOption.save();
+      res.status(200).json(updatedPaymentOption);
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  }
+);
+
+export const deletePaymentOptionController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const paymentOption = await PaymentOptionsModel.findById(req.params.id);
+      if (!paymentOption) {
+        return res.status(404).json("Payment Option not found");
+      }
+      await paymentOption.deleteOne();
+      res.status(200).json({ message: "Payment Option deleted" });
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  }
+);

@@ -54,35 +54,35 @@ export const PaymentOptionContextProvider = ({children}) => {
   })
 
   // Course Types
-  const deleteCourseMutation = useMutation({
+  const deletePaymentOptionMutation = useMutation({
     mutationFn: async (id) => {
-      return axios.delete(`${BASE_URL}/api/courses/${id}`, config).then((res) => res.data)
+      return axios.delete(`${BASE_URL}/api/paymentOptions/${id}`, config).then((res) => res.data)
     },
     onSuccess: () => {
-      alert('Course  deleted successfully')
+      alert('Payment Option  deleted successfully')
     },
     onSettled: async (_, error) => {
       if (error) {
         alert(error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+        await queryClient.invalidateQueries({queryKey: ['getPaymentOptionsLists']})
       }
     },
   })
 
   // update Course type
-  const updateStudentSingleCourseFeesMutation = useMutation({
+  const updatePaymentOptionsMutation = useMutation({
     mutationFn: async (updateData) => {
-      console.log(updateData)
+      //console.log(updateData)
       return axios
-        .put(`${BASE_URL}/api/courseFees/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .put(`${BASE_URL}/api/paymentOptions/${updateData._id}`, updateData, config) // Corrected order of arguments
         .then((res) => res.data)
     },
     onSettled: async (_, error) => {
       if (error) {
         alert('Error while updating student...', error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+        await queryClient.invalidateQueries({queryKey: ['getPaymentOptionsLists']})
       }
     },
   })
@@ -90,9 +90,9 @@ export const PaymentOptionContextProvider = ({children}) => {
   return (
     <PaymentOptionContext.Provider
       value={{
-        deleteCourseMutation,
+        deletePaymentOptionMutation,
         createNewPaymentOptionMutation,
-        updateStudentSingleCourseFeesMutation,
+        updatePaymentOptionsMutation,
         getPaymentOptionsData,
       }}
     >
