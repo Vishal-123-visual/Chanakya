@@ -26,6 +26,17 @@ const EditCourse = () => {
 
   const resLocation = useLocation()
   //console.log(resLocation.state)
+  // category: '66162e348e119a9ec8640509'
+  // courseFees: 10000
+  // courseName: 'Science'
+  // courseType: '65f2a47bd8b6fc856a36a18a'
+  // createdAt: '2024-04-11T10:43:06.936Z'
+  // createdBy: 'Rahul Roy'
+  // numberOfYears: '65f2c3ec8e3c0f7ee82b9c77'
+  // updatedAt: '2024-04-11T10:43:06.936Z'
+  // user: '65deeeb6c0d01ccd202d6a1a'
+  // __v: 0
+  // _id: '6617beba5f09161365bb8968'
   const [editCourse, setEditCourse] = useState({
     _id: resLocation.state?._id,
     courseName: resLocation.state?.courseName,
@@ -34,6 +45,10 @@ const EditCourse = () => {
     category: resLocation.state?.category?._id,
     courseFees: resLocation.state?.courseFees,
   })
+
+  useEffect(() => {
+    localStorage.setItem('AddedNewCourse', JSON.stringify(editCourse))
+  }, [])
   const [loading, setLoading] = React.useState(false)
   const navigate = useNavigate()
   //console.log(editCourse)
