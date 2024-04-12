@@ -22,7 +22,6 @@ router
 router.get(
   "/studentFees/:studentId",
   requireSignIn,
-  isAdmin,
   getCourseFeesByStudentIdController
 );
 

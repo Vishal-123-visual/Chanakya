@@ -11,7 +11,7 @@ const router = Router();
 router
   .route("/")
   .post(requireSignIn, isAdmin, addSubjectController)
-  .get(requireSignIn, isAdmin, getCourseSubjectsListsController);
+  .get(requireSignIn, getCourseSubjectsListsController);
 router
   .route("/:id")
   .put(requireSignIn, isAdmin, updateCourseSubjectController)

@@ -46,16 +46,16 @@ router
 router
   .route("/category/:id")
   .get(requireSignIn, getSingleCourseCategoryController)
-  .put(requireSignIn, updateCourseCategoryController)
-  .delete(requireSignIn, deleteSingleCourseCategoryController);
+  .put(requireSignIn, isAdmin, updateCourseCategoryController)
+  .delete(requireSignIn, isAdmin, deleteSingleCourseCategoryController);
 
 // Add course Type
 router.route("/courseType").post(requireSignIn, createCourseTypeController);
 router
   .route("/courseType/:id")
   .get(getCourseTypeController)
-  .put(requireSignIn, updateCourseTypeController)
-  .delete(requireSignIn, deleteCourseTypeController);
+  .put(requireSignIn, isAdmin, updateCourseTypeController)
+  .delete(requireSignIn, isAdmin, deleteCourseTypeController);
 
 // Add Course Number of Years
 
@@ -67,7 +67,7 @@ router.post(
 router
   .route("/numberOfYears/:id")
   .get(getSingleNumberOfYearsController)
-  .put(requireSignIn, updateNumberOfYearsCourseController)
-  .delete(requireSignIn, deleteNumberOfYearsCourseController);
+  .put(requireSignIn, isAdmin, updateNumberOfYearsCourseController)
+  .delete(requireSignIn, isAdmin, deleteNumberOfYearsCourseController);
 
 export default router;

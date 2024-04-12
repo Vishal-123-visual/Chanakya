@@ -17,7 +17,7 @@ let router = Router();
 router.post("/users/auth", loginUserController);
 router
   .route("/users")
-  .get(requireSignIn, isAdmin, getAllUsersController)
+  .get(requireSignIn, getAllUsersController)
   .post(requireSignIn, isAdmin, addUsersControllers);
 router.post("/users/verifyToken", getUserByTokn);
 router.post("/users/requestPassword", requsetUserPasswordController);
