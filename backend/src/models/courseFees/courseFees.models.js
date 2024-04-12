@@ -30,8 +30,8 @@ const courseFeesSchema = new mongoose.Schema(
       // required: true,
     },
     paymentOption: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "PaymentOptions",
     },
     lateFees: {
       type: Number,

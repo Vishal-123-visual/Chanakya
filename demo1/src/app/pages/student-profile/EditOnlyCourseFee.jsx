@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import 'react-datepicker/dist/react-datepicker.css'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const EditOnlyCourseFee = ({
   StudentFee,
@@ -22,6 +23,9 @@ const EditOnlyCourseFee = ({
       }
     })
   }
+
+  const paymentOptionCtx = usePaymentOptionContextContext()
+  console.log(paymentOptionCtx.getPaymentOptionsData.data)
 
   return (
     <tr>
@@ -89,11 +93,17 @@ const EditOnlyCourseFee = ({
           }
         >
           <option value=''>select payment option</option>
-          <option value='cash'>Cash</option>
+          {/* <option value='cash'>Cash</option>
           <option value='google pay'>Google Pay</option>
           <option value='paytm'>Paytm</option>
           <option value='card'>Card</option>
-          <option value='debit card'>Debit Card</option>
+          <option value='debit card'>Debit Card</option> */}
+
+          {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
+            <option key={paymentOpt._id} value={paymentOpt._id}>
+              {paymentOpt.name}
+            </option>
+          ))}
         </select>
       </td>
       <td>

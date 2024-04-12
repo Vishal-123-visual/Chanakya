@@ -1,6 +1,8 @@
 import moment from 'moment'
+import React from 'react'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useAuth} from '../../modules/auth/core/Auth'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 const ReadOnlyCourseFee = ({
   StudentFee,
   index,
@@ -9,6 +11,11 @@ const ReadOnlyCourseFee = ({
 }) => {
   //console.log(StudentFee)
   const {auth} = useAuth()
+
+  const paymentOptionCtx = usePaymentOptionContextContext()
+  //console.log(paymentOptionCtx.getPaymentOptionsData.data)
+
+  //onsole.log(StudentFee.paymentOption)
 
   return (
     <tr key={StudentFee._id}>
@@ -21,7 +28,15 @@ const ReadOnlyCourseFee = ({
       <td>{StudentFee?.remainingFees}</td>
       <td>{moment(Date(StudentFee?.amountDate)).format('DD/MM/YYYY')}</td>
       <td>{StudentFee?.reciptNumber}</td>
-      <td>{StudentFee?.paymentOption}</td>
+
+      <td>
+        {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
+          <React.Fragment key={paymentOpt._id}>
+            {StudentFee.paymentOption === paymentOpt._id && paymentOpt.name}
+          </React.Fragment>
+        ))}
+      </td>
+
       <td>{StudentFee?.lateFees}</td>
 
       <td>

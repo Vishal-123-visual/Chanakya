@@ -1,5 +1,6 @@
 import moment from 'moment'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
+import {usePaymentOptionContextContext} from './PaymentOption.Context'
 
 const ReadPaymentOptionOnly = ({
   paymentOption,
@@ -7,6 +8,8 @@ const ReadPaymentOptionOnly = ({
   deletePaymentOptionHandler,
   handleEditPaymentOption,
 }) => {
+  const paymentOptionCtx = usePaymentOptionContextContext()
+  console.log(paymentOptionCtx.getPaymentOptionsData.data)
   return (
     <tr key={paymentOption._id}>
       <td>

@@ -92,8 +92,9 @@ export const getSingleStudentCourseFeesController = asyncHandler(
   async (req, res, next) => {
     try {
       const courseFees = await CourseFeesModel.findById(req.params.id).populate(
-        ["courseName", "studentInfo"]
+        ["courseName", "studentInfo", "PaymentOptions"]
       );
+
       if (!courseFees) {
         return res.status(404).json({ message: "Student fee not found" });
       }

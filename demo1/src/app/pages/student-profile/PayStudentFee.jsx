@@ -1,6 +1,7 @@
 import {useEffect} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFeeFormToggle}) => {
   const remainingFeesHandler = (e) => {
@@ -15,7 +16,8 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
     //console.log(payStudentFeesAdd)
   }
 
-  //console.log(payStudentFeesAdd)
+  const paymentOptionCtx = usePaymentOptionContextContext()
+  // console.log(paymentOptionCtx.getPaymentOptionsData.data)
 
   return (
     <tr>
@@ -74,12 +76,11 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
             setPayStudentFeesAdd({...payStudentFeesAdd, paymentOption: e.target.value})
           }
         >
-          <option value=''>select payment option</option>
-          <option value='cash'>Cash</option>
-          <option value='google pay'>google pay</option>
-          <option value='paytm'>paytm</option>
-          <option value='card'>card</option>
-          <option value='debit card'>debit card</option>
+          {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
+            <option key={paymentOpt._id} value={paymentOpt._id}>
+              {paymentOpt.name}
+            </option>
+          ))}
         </select>
       </td>
       <td>
