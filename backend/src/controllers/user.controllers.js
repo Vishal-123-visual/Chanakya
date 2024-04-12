@@ -345,6 +345,9 @@ export const getUserByIdController = asyncHandler(async (req, res, next) => {
     // "two_steps": false,
     // "joined_day": "10 Nov 2022, 9:23 pm",
     // "online": false
+
+    // console.log(user);
+
     res.status(200).json({
       data: {
         id: user._id,
