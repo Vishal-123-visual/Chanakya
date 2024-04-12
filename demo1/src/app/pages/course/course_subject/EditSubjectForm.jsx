@@ -5,13 +5,14 @@ const EditSubjectForm = ({editSubject, setEditSubject, setEditSubjectId}) => {
       <td>
         <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
       </td>
+      <td></td>
       <td>
         <input
           type='text'
           value={editSubject?.subjectName}
           onChange={(e) => setEditSubject({...editSubject, subjectName: e.target.value})}
           placeholder='Enter subject name...'
-          className='form-control'
+          className='form-control w-75 '
         />
       </td>
       <td>
@@ -20,9 +21,10 @@ const EditSubjectForm = ({editSubject, setEditSubject, setEditSubjectId}) => {
           value={editSubject.subjectCode}
           onChange={(e) => setEditSubject({...editSubject, subjectCode: e.target.value})}
           placeholder='Enter subject code...'
-          className='form-control'
+          className='form-control w-75 '
         />
       </td>
+
       <td>
         <input
           type='number'
@@ -31,12 +33,12 @@ const EditSubjectForm = ({editSubject, setEditSubject, setEditSubjectId}) => {
           value={editSubject.fullMarks}
           onChange={(e) => setEditSubject({...editSubject, fullMarks: e.target.value})}
           placeholder='Enter full Marks...'
-          className='form-control'
+          className='form-control w-75 '
         />
       </td>
       <td>
         <input
-          className='form-control'
+          className='form-control w-75 '
           type='number'
           min={1}
           max={1000}
@@ -45,6 +47,8 @@ const EditSubjectForm = ({editSubject, setEditSubject, setEditSubjectId}) => {
           placeholder='Enter pass Marks...'
         />
       </td>
+      <td></td>
+      <td></td>
 
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>

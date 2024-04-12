@@ -24,7 +24,7 @@ const AddCourseUpdateAndAdd = () => {
   const {createCourseMutation} = useCourseContext()
   const [loading, setLoading] = React.useState(false)
   const navigate = useNavigate()
-  console.log(getCourseCategoryLists)
+  //console.log(getCourseCategoryLists)
 
   let initialValues = {
     courseName: '',

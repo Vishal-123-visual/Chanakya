@@ -131,6 +131,7 @@ const SidebarMenuMain = () => {
           hasBullet={true}
         />
         <SidebarMenuItem to='/course/addCourse' title='Add Course' hasBullet={true} />
+        <SidebarMenuItem to='/course/viewCourses' title='View All Courses' hasBullet={true} />
         {/* <SidebarMenuItem to='/addmission-form' title='Add Course Category' hasBullet={true} /> */}
       </SidebarMenuItemWithSub>
       {/* ************* Manage Courses END   ****************** */}
