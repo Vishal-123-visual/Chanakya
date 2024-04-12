@@ -4,8 +4,8 @@ const paymentOptionsSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
       unique: true,
+      default: "Cash",
     },
     date: {
       type: Date,
