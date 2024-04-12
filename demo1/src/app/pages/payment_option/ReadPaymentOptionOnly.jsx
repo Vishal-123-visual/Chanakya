@@ -9,7 +9,7 @@ const ReadPaymentOptionOnly = ({
   handleEditPaymentOption,
 }) => {
   const paymentOptionCtx = usePaymentOptionContextContext()
-  console.log(paymentOptionCtx.getPaymentOptionsData.data)
+  // console.log(paymentOptionCtx.getPaymentOptionsData.data)
   return (
     <tr key={paymentOption._id}>
       <td>

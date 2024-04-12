@@ -25,7 +25,7 @@ const EditOnlyCourseFee = ({
   }
 
   const paymentOptionCtx = usePaymentOptionContextContext()
-  console.log(paymentOptionCtx.getPaymentOptionsData.data)
+  // console.log(paymentOptionCtx.getPaymentOptionsData.data)
 
   return (
     <tr>
