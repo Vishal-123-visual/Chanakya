@@ -140,6 +140,19 @@ const StudentsList: React.FC<Props> = ({className}) => {
                   </td>
                 </tr>
               ))}
+              <tr>
+                <td></td>
+                <td></td>
+                <td>
+                  {ctx.studentsLists.data.users.length === 0 && (
+                    <h4 className='text-center'>
+                      No Student Available ? <b>Create Student</b>
+                    </h4>
+                  )}
+                </td>
+                <td></td>
+                <td></td>
+              </tr>
             </tbody>
             {/* end::Table body */}
           </table>
