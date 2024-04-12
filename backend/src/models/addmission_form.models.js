@@ -30,10 +30,10 @@ const admissionFormSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    permanent_address: {
-      type: String,
-      required: true,
-    },
+    // permanent_address: {
+    //   type: String,
+    //   required: true,
+    // },
     date_of_birth: {
       type: Date,
       required: true,

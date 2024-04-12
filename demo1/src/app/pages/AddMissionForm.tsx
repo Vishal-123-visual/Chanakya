@@ -22,9 +22,9 @@ const addmissionFormSchema = Yup.object().shape({
   name: Yup.string().required('Name is required!'),
   father_name: Yup.string().required('Father Name is required!'),
   mobile_number: Yup.string().required('Mobile Number is required!'),
-  phone_number: Yup.string().required('Phone Number is required!'),
+  phone_number: Yup.string().required('Father Phone Number is required!'),
   present_address: Yup.string().required('Present Address is required!'),
-  permanent_address: Yup.string().required('Permanent Address is required!'),
+  //permanent_address: Yup.string().required('Permanent Address is required!'),
   date_of_birth: Yup.string().required('Date of birth is required!'),
   city: Yup.string().required('city is required!'),
   email: Yup.string().required('email is required!'),
@@ -315,7 +315,7 @@ const AddMissionForm: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Phone Number</span>
+                      <span className='required'>Father Phone Number</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -361,7 +361,7 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6'>
+                {/* <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
                       <span className='required'>Permanent Address</span>
@@ -381,7 +381,7 @@ const AddMissionForm: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* =================================Address Information==================================== */}

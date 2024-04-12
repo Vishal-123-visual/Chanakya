@@ -27,7 +27,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       mobile_number,
       phone_number,
       present_address,
-      permanent_address,
+      //permanent_address,
       date_of_birth,
       city,
       email,
@@ -58,7 +58,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.mobile_number = mobile_number || student.mobile_number;
     student.phone_number = phone_number || student.phone_number;
     student.present_address = present_address || student.present_address;
-    student.permanent_address = permanent_address || student.permanent_address;
+    //student.permanent_address = permanent_address || student.permanent_address;
     student.date_of_birth = date_of_birth || student.date_of_birth;
     student.city = city || student.city;
     student.email = email || student.email;

@@ -10,7 +10,7 @@ export const createAddMissionController = asyncHandler(
       mobile_number,
       phone_number,
       present_address,
-      permanent_address,
+      //permanent_address,
       date_of_birth,
       city,
       email,
@@ -64,10 +64,10 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide present address field!");
         return;
-      case !permanent_address:
-        res.status(400);
-        throw new Error("Please provide permanent address field!");
-        return;
+      // case !permanent_address:
+      //   res.status(400);
+      //   throw new Error("Please provide permanent address field!");
+      //   return;
       case !date_of_birth:
         res.status(400);
         throw new Error("Please provide date of birth field!");

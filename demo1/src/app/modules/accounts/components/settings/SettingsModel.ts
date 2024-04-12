@@ -25,7 +25,7 @@ export interface AddMissionFormInterface {
   mobile_number: string
   phone_number: string
   present_address: string
-  permanent_address: string
+  // permanent_address: string
   date_of_birth: Date
   city: string
   email: string
@@ -64,7 +64,7 @@ export interface updateMissionFormInterface {
   mobile_number: string
   phone_number: string
   present_address: string
-  permanent_address: string
+  //permanent_address: string
   date_of_birth: Date
   city: string
   email: string
@@ -100,7 +100,7 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   mobile_number: '',
   phone_number: '',
   present_address: '',
-  permanent_address: '',
+  //permanent_address: '',
   date_of_birth: new Date(),
   city: '',
   email: '',

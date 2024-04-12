@@ -24,9 +24,9 @@ const addmissionFormSchema = Yup.object().shape({
   name: Yup.string().required('Name is required!'),
   father_name: Yup.string().required('Father Name is required!'),
   mobile_number: Yup.string().required('Mobile Number is required!'),
-  phone_number: Yup.string().required('Phone Number is required!'),
+  phone_number: Yup.string().required('Father Phone Number is required!'),
   present_address: Yup.string().required('Present Address is required!'),
-  permanent_address: Yup.string().required('Permanent Address is required!'),
+  // permanent_address: Yup.string().required('Permanent Address is required!'),
   date_of_birth: Yup.string().required('Date of birth is required!'),
   city: Yup.string().required('city is required!'),
   email: Yup.string().required('email is required!'),
@@ -381,7 +381,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Phone Number</span>
+                      <span className='required'>Father Phone Number</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -429,7 +429,7 @@ const StudentProfile: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6'>
+                {/* <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
                       <span className='required'>Permanent Address</span>
@@ -450,7 +450,7 @@ const StudentProfile: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* =================================Address Information==================================== */}
@@ -586,6 +586,52 @@ const StudentProfile: React.FC = () => {
                         {/* <option value='10th'>10th</option> */}
                         <option value='10th'>10th</option>
                         <option value='10+2'>10+2</option>
+                        {[
+                          'None',
+                          'Aviation',
+                          'B.A',
+                          'B.Arch',
+                          'B.B.A',
+                          'B.Com',
+                          'B.E/B.Tech',
+                          'BHM',
+                          'BL/LLB',
+                          'B.Pharm',
+                          'B.Sc',
+                          'BSW',
+                          'CA',
+                          'CA Inter',
+                          'Class 12',
+                          'CS',
+                          'Diploma',
+                          'DSW',
+                          'ICWA',
+                          'ICWA Inter',
+                          'MA',
+                          'M.Arch',
+                          'M.Arch',
+                          'MBA',
+                          'MBBS',
+                          'MCA',
+                          'M.Com',
+                          'MD/MS',
+                          'M.Ed',
+                          'M.E/M.Tech/MS',
+                          'ML/LLM',
+                          'M.Pharma',
+                          'MPhil',
+                          'M.Sc',
+                          'MSW',
+                          'PGDCA',
+                          'PG Diploma',
+                          'PGDM',
+                          'Phd',
+                          'other',
+                        ]?.map((c, i) => (
+                          <option key={i} value={c}>
+                            {c}
+                          </option>
+                        ))}
                       </select>
                       {formik.touched.education_qualification &&
                         formik.errors.education_qualification && (
