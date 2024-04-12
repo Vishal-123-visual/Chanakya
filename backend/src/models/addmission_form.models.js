@@ -55,10 +55,10 @@ const admissionFormSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    professional_qualification: {
-      type: String,
-      required: true,
-    },
+    // professional_qualification: {
+    //   type: String,
+    //   required: true,
+    // },
     select_course: {
       type: String,
       required: true,

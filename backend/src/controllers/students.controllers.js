@@ -33,7 +33,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       email,
       student_status,
       education_qualification,
-      professional_qualification,
+      //professional_qualification,
       select_course,
       // document_attached,
       // select_software,
@@ -65,8 +65,8 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.student_status = student_status || student.student_status;
     student.education_qualification =
       education_qualification || student.education_qualification;
-    student.professional_qualification =
-      professional_qualification || student.professional_qualification;
+    // student.professional_qualification =
+    //   professional_qualification || student.professional_qualification;
     student.select_course = select_course || student.select_course;
     // student.document_attached = document_attached || student.document_attached;
     // student.select_software = select_software || student.select_software;

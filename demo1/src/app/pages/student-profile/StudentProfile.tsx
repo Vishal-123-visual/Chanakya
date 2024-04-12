@@ -32,7 +32,7 @@ const addmissionFormSchema = Yup.object().shape({
   email: Yup.string().required('email is required!'),
   student_status: Yup.string().required('Student status is required!'),
   education_qualification: Yup.string().required('Education qualification is required!'),
-  professional_qualification: Yup.string().required('Professional Qualification is required!'),
+  //professional_qualification: Yup.string().required('Professional Qualification is required!'),
   select_course: Yup.string().required('select course is required!'),
   name_of_person_for_commision: Yup.string().required('Name of person for commision is required!'),
   commision_paid: Yup.string().required('commision paid is required!'),
@@ -644,7 +644,7 @@ const StudentProfile: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6 mt-5'>
+                {/* <div className='col-6 mt-5'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label required fw-bold fs-6'>
                       Professional Qualification
@@ -714,7 +714,7 @@ const StudentProfile: React.FC = () => {
                         )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               {/* ---------------------------QUALIFICATION END HERE ----------------------- */}
 

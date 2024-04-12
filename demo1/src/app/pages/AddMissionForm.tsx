@@ -30,14 +30,14 @@ const addmissionFormSchema = Yup.object().shape({
   email: Yup.string().required('email is required!'),
   student_status: Yup.string().required('Student status is required!'),
   education_qualification: Yup.string().required('Education qualification is required!'),
-  professional_qualification: Yup.string().required('Professional Qualification is required!'),
+  //professional_qualification: Yup.string().required('Professional Qualification is required!'),
   select_course: Yup.string().required('select course is required!'),
   //document_attached: Yup.string().required('document attached is required!'),
   //select_software: Yup.string().required('select software  is required!'),
   name_of_person_for_commision: Yup.string().required('Name of person for commision is required!'),
   commision_paid: Yup.string().required('commision paid is required!'),
   commision_date: Yup.string().required('Commision date is required!'),
-  commision_voucher_number: Yup.string().required('Commision voucher number is required!'),
+  commision_voucher_number: Yup.string(),
   course_fees: Yup.string().required('Course fees is required!'),
   down_payment: Yup.string().required('Down Payment is required!'),
   discount: Yup.string().required('Discount is required!'),
@@ -512,6 +512,8 @@ const AddMissionForm: React.FC = () => {
                         {/* <option value='10th'>10th</option> */}
                         <option value='10th'>10th</option>
                         <option value='10+2'>10+2</option>
+                        <option value='graduate'>Graduate</option>
+                        <option value='diploma'>Diploma</option>
                       </select>
                       {formik.touched.education_qualification &&
                         formik.errors.education_qualification && (
@@ -524,7 +526,7 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6 mt-5'>
+                {/* <div className='col-6 mt-5'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label required fw-bold fs-6'>
                       Professional Qualification
@@ -593,7 +595,7 @@ const AddMissionForm: React.FC = () => {
                         )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               {/* ---------------------------QUALIFICATION END HERE ----------------------- */}
 

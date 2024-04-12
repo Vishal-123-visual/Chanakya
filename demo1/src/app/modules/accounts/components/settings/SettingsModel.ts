@@ -32,7 +32,7 @@ export interface AddMissionFormInterface {
   student_status: string
   // Qualification
   education_qualification: string
-  professional_qualification: string
+  //professional_qualification: string
   // course
   select_course: string
   //document_attached: string
@@ -41,7 +41,7 @@ export interface AddMissionFormInterface {
   name_of_person_for_commision: string
   commision_paid: string
   commision_date: string
-  commision_voucher_number: string
+  commision_voucher_number?: string
   // for office use only
   course_fees: string | number
 
@@ -71,7 +71,7 @@ export interface updateMissionFormInterface {
   student_status: string
   // Qualification
   education_qualification: string
-  professional_qualification: string
+  //professional_qualification: string
   // course
   select_course: string
   document_attached: string
@@ -80,7 +80,7 @@ export interface updateMissionFormInterface {
   name_of_person_for_commision: string
   commision_paid: string
   commision_date: string
-  commision_voucher_number: string
+  commision_voucher_number?: string
   // for office use only
   course_fees: string | number
   register_fee: string | number
@@ -106,7 +106,7 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   email: '',
   student_status: '',
   education_qualification: '',
-  professional_qualification: '',
+  // professional_qualification: '',
   select_course: '',
   //document_attached: '',
   //select_software: '',
