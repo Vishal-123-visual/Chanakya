@@ -1,4 +1,4 @@
-import {useEffect} from 'react'
+import {useEffect, Fragment} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
@@ -17,7 +17,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
   }
 
   const paymentOptionCtx = usePaymentOptionContextContext()
-  // console.log(paymentOptionCtx.getPaymentOptionsData.data)
+  //console.log(paymentOptionCtx.getPaymentOptionsData.data[4])
 
   return (
     <tr>
@@ -68,6 +68,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
           className='form-control w-auto '
         />
       </td> */}
+      <td></td>
       <td>
         <select
           className='form-select form-select-solid form-select-lg'
@@ -76,10 +77,14 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
             setPayStudentFeesAdd({...payStudentFeesAdd, paymentOption: e.target.value})
           }
         >
+          {' '}
+          <option>select payment option</option>
           {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
-            <option key={paymentOpt._id} value={paymentOpt._id}>
-              {paymentOpt.name}
-            </option>
+            <Fragment key={paymentOpt._id}>
+              <option key={paymentOpt._id} value={paymentOpt._id}>
+                {paymentOpt.name}
+              </option>
+            </Fragment>
           ))}
         </select>
       </td>

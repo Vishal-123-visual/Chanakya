@@ -7,21 +7,22 @@ export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
     //console.log(req.body);
     try {
-      const {
+      let {
         studentInfo,
         remainingFees,
         amountPaid,
         amountDate,
-        paymentOption,
         lateFees,
+        paymentOption,
       } = req.body;
+
+      //console.log(req.body);
 
       // Validate required fields
       if (
         !amountPaid ||
         !amountDate ||
-        !studentInfo ||
-        !paymentOption
+        !studentInfo
         //!remainingFees
       ) {
         return res.status(400).json({ message: "Required fields are missing" });

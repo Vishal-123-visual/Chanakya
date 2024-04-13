@@ -76,11 +76,15 @@ const AddMissionForm: React.FC = () => {
   }
 
   const handleCourseFeesDiscount = (e) => {
-    //console.log(formik.values.discount)
-    const discount = Number(e.target.value)
     const amount = selectedCourseNameData?.courseFees
-    const discountAmount = Number(amount) - discount
-    formik.setFieldValue('netCourseFees', discountAmount)
+    if (formik.values.student_status === 'NOGST') {
+      formik.setFieldValue('discount', 0)
+      formik.setFieldValue('netCourseFees', amount)
+    } else {
+      const discount = Number(e.target.value)
+      const discountAmount = formik.values.student_status === 'GST' && Number(amount) - discount
+      formik.setFieldValue('netCourseFees', discountAmount)
+    }
   }
 
   const downPaymentHandler = (e) => {
@@ -315,7 +319,7 @@ const AddMissionForm: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Father Phone Number</span>
+                      <span className='required'>Parent Number</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -468,9 +472,9 @@ const AddMissionForm: React.FC = () => {
                         className='form-select form-select-solid form-select-lg'
                         {...formik.getFieldProps('student_status')}
                       >
-                        <option value=''>select--</option>
-                        <option value='A'>A</option>
-                        <option value='B'>B</option>
+                        <option value=''>--select--</option>
+                        <option value='GST'>GST</option>
+                        <option value='NOGST'>NO GST</option>
                       </select>
                       {formik.touched.student_status && formik.errors.student_status && (
                         <div className='fv-plugins-message-container'>
@@ -739,7 +743,7 @@ const AddMissionForm: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Commision Voucher No</span>
+                      <span>Commision Voucher No</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -800,34 +804,36 @@ const AddMissionForm: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  <div className='col-6'>
-                    <div className='row mb-6'>
-                      <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Course Fees Discount</span>
-                      </label>
+                  {formik.values.student_status === 'GST' && (
+                    <div className='col-6'>
+                      <div className='row mb-6'>
+                        <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                          <span className='required'>Course Fees Discount</span>
+                        </label>
 
-                      <div className='col-lg-8 fv-row'>
-                        <input
-                          type='number'
-                          min={0}
-                          className='form-control form-control-lg form-control-solid'
-                          placeholder='Course Fees'
-                          name='discount' // Add name attribute
-                          onChange={(e) => {
-                            formik.getFieldProps('discount').onChange(e),
-                              handleCourseFeesDiscount(e) // Pass event to handleCourseFeesDiscount
-                          }}
-                          value={formik.values.discount}
-                        />
+                        <div className='col-lg-8 fv-row'>
+                          <input
+                            type='number'
+                            min={0}
+                            className='form-control form-control-lg form-control-solid'
+                            placeholder='Course Fees'
+                            name='discount' // Add name attribute
+                            onChange={(e) => {
+                              formik.getFieldProps('discount').onChange(e),
+                                handleCourseFeesDiscount(e) // Pass event to handleCourseFeesDiscount
+                            }}
+                            value={formik.values.discount}
+                          />
 
-                        {formik.touched.discount && formik.errors.discount && (
-                          <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>{formik.errors.discount}</div>
-                          </div>
-                        )}
+                          {formik.touched.discount && formik.errors.discount && (
+                            <div className='fv-plugins-message-container'>
+                              <div className='fv-help-block'>{formik.errors.discount}</div>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <div className='row'>

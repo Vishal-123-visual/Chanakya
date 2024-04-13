@@ -85,7 +85,6 @@ const admissionFormSchema = new mongoose.Schema(
     },
     commision_voucher_number: {
       type: String,
-      required: true,
     },
     course_fees: {
       type: String,

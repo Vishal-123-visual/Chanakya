@@ -381,7 +381,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Father Phone Number</span>
+                      <span className='required'>Parent Number</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -429,28 +429,6 @@ const StudentProfile: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Permanent Address</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        readOnly
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Permanent Address'
-                        {...formik.getFieldProps('permanent_address')}
-                      />
-                      {formik.touched.permanent_address && formik.errors.permanent_address && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.permanent_address}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div> */}
               </div>
 
               {/* =================================Address Information==================================== */}
@@ -542,8 +520,8 @@ const StudentProfile: React.FC = () => {
                         {...formik.getFieldProps('student_status')}
                       >
                         <option value=''>select--</option>
-                        <option value='A'>A</option>
-                        <option value='B'>B</option>
+                        <option value='GST'>GST</option>
+                        <option value='NoGST'>NO GST</option>
                       </select>
                       {formik.touched.student_status && formik.errors.student_status && (
                         <div className='fv-plugins-message-container'>
@@ -583,55 +561,10 @@ const StudentProfile: React.FC = () => {
                         {...formik.getFieldProps('education_qualification')}
                       >
                         <option value=''>-select-</option>
-                        {/* <option value='10th'>10th</option> */}
                         <option value='10th'>10th</option>
                         <option value='10+2'>10+2</option>
-                        {[
-                          'None',
-                          'Aviation',
-                          'B.A',
-                          'B.Arch',
-                          'B.B.A',
-                          'B.Com',
-                          'B.E/B.Tech',
-                          'BHM',
-                          'BL/LLB',
-                          'B.Pharm',
-                          'B.Sc',
-                          'BSW',
-                          'CA',
-                          'CA Inter',
-                          'Class 12',
-                          'CS',
-                          'Diploma',
-                          'DSW',
-                          'ICWA',
-                          'ICWA Inter',
-                          'MA',
-                          'M.Arch',
-                          'M.Arch',
-                          'MBA',
-                          'MBBS',
-                          'MCA',
-                          'M.Com',
-                          'MD/MS',
-                          'M.Ed',
-                          'M.E/M.Tech/MS',
-                          'ML/LLM',
-                          'M.Pharma',
-                          'MPhil',
-                          'M.Sc',
-                          'MSW',
-                          'PGDCA',
-                          'PG Diploma',
-                          'PGDM',
-                          'Phd',
-                          'other',
-                        ]?.map((c, i) => (
-                          <option key={i} value={c}>
-                            {c}
-                          </option>
-                        ))}
+                        <option value='graduate'>Graduate</option>
+                        <option value='diploma'>Diploma</option>
                       </select>
                       {formik.touched.education_qualification &&
                         formik.errors.education_qualification && (
@@ -859,7 +792,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Commision Voucher No</span>
+                      <span>Commision Voucher No</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>

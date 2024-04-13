@@ -116,10 +116,10 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide commision date field!");
         return;
-      case !commision_voucher_number:
-        res.status(400);
-        throw new Error("Please provide commision voucher number field!");
-        return;
+      // case !commision_voucher_number:
+      //   res.status(400);
+      //   throw new Error("Please provide commision voucher number field!");
+      //   return;
       case !course_fees:
         res.status(400);
         throw new Error("Please provide course fees field!");

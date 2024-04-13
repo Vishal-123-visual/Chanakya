@@ -25,18 +25,17 @@ export interface AddMissionFormInterface {
   mobile_number: string
   phone_number: string
   present_address: string
-  // permanent_address: string
+
   date_of_birth: Date
   city: string
   email: string
   student_status: string
   // Qualification
   education_qualification: string
-  //professional_qualification: string
+
   // course
   select_course: string
-  //document_attached: string
-  //select_software: string
+
   // commision
   name_of_person_for_commision: string
   commision_paid: string
