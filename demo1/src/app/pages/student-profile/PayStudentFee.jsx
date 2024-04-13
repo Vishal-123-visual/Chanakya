@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFeeFormToggle}) => {
-  console.log(payStudentFeesAdd)
+  //console.log(payStudentFeesAdd)
   const remainingFeesHandler = (e) => {
     setPayStudentFeesAdd((prev) => {
       return {
