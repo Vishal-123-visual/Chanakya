@@ -19,29 +19,27 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/images`
 
 const addmissionFormSchema = Yup.object().shape({
-  rollNumber: Yup.number().required('Roll Number is required!'),
+  rollNumber: Yup.number(),
   _id: Yup.string(),
-  name: Yup.string().required('Name is required!'),
-  father_name: Yup.string().required('Father Name is required!'),
-  mobile_number: Yup.string().required('Mobile Number is required!'),
-  phone_number: Yup.string().required('Father Phone Number is required!'),
-  present_address: Yup.string().required('Present Address is required!'),
-  // permanent_address: Yup.string().required('Permanent Address is required!'),
-  date_of_birth: Yup.string().required('Date of birth is required!'),
-  city: Yup.string().required('city is required!'),
-  email: Yup.string().required('email is required!'),
-  student_status: Yup.string().required('Student status is required!'),
-  education_qualification: Yup.string().required('Education qualification is required!'),
-  //professional_qualification: Yup.string().required('Professional Qualification is required!'),
-  select_course: Yup.string().required('select course is required!'),
-  name_of_person_for_commision: Yup.string().required('Name of person for commision is required!'),
-  commision_paid: Yup.string().required('commision paid is required!'),
-  commision_date: Yup.string().required('Commision date is required!'),
-  commision_voucher_number: Yup.string().required('Commision voucher number is required!'),
-  course_fees: Yup.string().required('Course fees is required!'),
-  down_payment: Yup.string().required('Down Payment is required!'),
-  date_of_joining: Yup.string().required('Date of joining is required!'),
-  no_of_installments: Yup.string().required('Number of installments  is required!'),
+  name: Yup.string(),
+  father_name: Yup.string(),
+  mobile_number: Yup.string(),
+  phone_number: Yup.string(),
+  present_address: Yup.string(),
+  date_of_birth: Yup.string(),
+  city: Yup.string(),
+  email: Yup.string(),
+  student_status: Yup.string(),
+  education_qualification: Yup.string(),
+  select_course: Yup.string(),
+  name_of_person_for_commision: Yup.string(),
+  commision_paid: Yup.string(),
+  commision_date: Yup.string(),
+  commision_voucher_number: Yup.string(),
+  course_fees: Yup.string(),
+  down_payment: Yup.string(),
+  date_of_joining: Yup.string(),
+  no_of_installments: Yup.string(),
 })
 
 const StudentProfile: React.FC = () => {
@@ -58,7 +56,7 @@ const StudentProfile: React.FC = () => {
   }
 
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  console.log(updateUserId)
+  //console.log(updateUserId)
 
   // let updateStudentId = updateUserId?._id
 
@@ -270,7 +268,7 @@ const StudentProfile: React.FC = () => {
               <div className='row mt-5 '>
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>Image</label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Image</label>
                     <div className='col-lg-6 fv-row'>
                       <input
                         disabled
@@ -286,9 +284,7 @@ const StudentProfile: React.FC = () => {
 
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Roll Number{' '}
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Roll Number </label>
                     <div className='col-lg-6 fv-row'>
                       <input
                         readOnly
@@ -310,7 +306,7 @@ const StudentProfile: React.FC = () => {
                 {/* ================================------Name----================================== */}
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>Name</label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Name</label>
                     <div className='col-lg-6 fv-row'>
                       <input
                         type='text'
@@ -331,9 +327,7 @@ const StudentProfile: React.FC = () => {
                 {/* ================================------Father Name----================================== */}
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Father Name
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Father Name</label>
                     <div className='col-lg-6 fv-row'>
                       <input
                         readOnly
@@ -358,9 +352,7 @@ const StudentProfile: React.FC = () => {
               <div className='row'>
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Mobile Number
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Mobile Number</label>
 
                     <div className='col-lg-8 fv-row'>
                       <input
@@ -381,7 +373,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Parent Number</span>
+                      <span className=''>Parent Number</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -410,7 +402,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Present Address</span>
+                      <span className=''>Present Address</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -439,7 +431,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>City</span>
+                      <span className=''>City</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -461,7 +453,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Email</span>
+                      <span className=''>Email</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -487,7 +479,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>DOB</span>
+                      <span className=''>DOB</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -509,9 +501,7 @@ const StudentProfile: React.FC = () => {
                 </div>
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Student Status
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Student Status</label>
 
                     <div className='col-lg-8 fv-row'>
                       <select
@@ -550,7 +540,7 @@ const StudentProfile: React.FC = () => {
                 </div>
                 <div className='col-6 mt-5'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                       Education Qualification
                     </label>
 
@@ -579,7 +569,7 @@ const StudentProfile: React.FC = () => {
                 </div>
                 {/* <div className='col-6 mt-5'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                       Professional Qualification
                     </label>
 
@@ -668,9 +658,7 @@ const StudentProfile: React.FC = () => {
 
                 <div className='col-6 mt-5'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Select Course
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Select Course</label>
 
                     <div className='col-lg-8 fv-row'>
                       <select
@@ -712,7 +700,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6 mt-5'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Name of Person for Commision</span>
+                      <span className=''>Name of Person for Commision</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -744,7 +732,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Commision Com. Paid</span>
+                      <span className=''>Commision Com. Paid</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -766,7 +754,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Commision Date</span>
+                      <span className=''>Commision Date</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -834,7 +822,7 @@ const StudentProfile: React.FC = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Course Fees</span>
+                        <span className=''>Course Fees</span>
                         {/* <p>(including 14% service Tax)</p> */}
                       </label>
 
@@ -857,7 +845,7 @@ const StudentProfile: React.FC = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Course Fees Discount</span>
+                        <span className=''>Course Fees Discount</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
@@ -884,7 +872,7 @@ const StudentProfile: React.FC = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Net Course Fees</span>
+                        <span className=''>Net Course Fees</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
@@ -907,7 +895,7 @@ const StudentProfile: React.FC = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Down Payment</span>
+                        <span className=''>Down Payment</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
@@ -932,7 +920,7 @@ const StudentProfile: React.FC = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Remaining Fee</span>
+                        <span className=''>Remaining Fee</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
@@ -958,7 +946,7 @@ const StudentProfile: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>D.O.J</span>
+                      <span className=''>D.O.J</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -981,7 +969,7 @@ const StudentProfile: React.FC = () => {
                 </div>
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                       No. of Installments
                     </label>
 
