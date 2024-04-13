@@ -121,6 +121,10 @@ const admissionFormSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
     },
+    totalPaid: {
+      type: Number,
+      default: 0,
+    },
   },
   {
     timestamps: true,

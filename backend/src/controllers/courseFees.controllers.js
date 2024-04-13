@@ -38,13 +38,14 @@ export const createCourseFeesController = asyncHandler(
       }
 
       // Save course fees
-      const newCourseFees = new CourseFeesModel(req.body);
+      const newCourseFees = new CourseFeesModel({ ...req.body });
       const savedCourseFees = await newCourseFees.save();
 
       // Update student's down_payment and netCourseFees
       student.down_payment = amountPaid;
       student.netCourseFees = newNetCourseFees;
       student.remainingCourseFees = remainingFees;
+      student.totalPaid += amountPaid;
       await student.save();
 
       res.status(201).json(savedCourseFees);
