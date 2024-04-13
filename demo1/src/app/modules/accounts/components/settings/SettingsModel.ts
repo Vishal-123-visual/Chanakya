@@ -45,10 +45,10 @@ export interface AddMissionFormInterface {
   course_fees: string | number
 
   netCourseFees: string | number
-  remainingCourseFees: string | number
+  remainingCourseFees?: string | number
 
   discount: string | number
-  down_payment: string | number
+  down_payment?: string | number
   date_of_joining: string | Date
   no_of_installments: string | number
   createdAt?: string | Date
@@ -73,7 +73,7 @@ export interface updateMissionFormInterface {
   //professional_qualification: string
   // course
   select_course: string
-  document_attached: string
+  // document_attached: string
   select_software: string
   // commision
   name_of_person_for_commision: string
@@ -83,7 +83,7 @@ export interface updateMissionFormInterface {
   // for office use only
   course_fees: string | number
   register_fee: string | number
-  down_payment: string | number
+  down_payment?: string | number
   date_of_joining: string | Date
   slot_time: string | Date
   recipt_no: string | number
@@ -116,8 +116,8 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   course_fees: '',
   discount: '',
   netCourseFees: '',
-  remainingCourseFees: '',
-  down_payment: '',
+  //remainingCourseFees: '',
+  //down_payment: '',
   date_of_joining: '',
   no_of_installments: '',
   createdAt: '',

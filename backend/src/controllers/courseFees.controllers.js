@@ -44,7 +44,7 @@ export const createCourseFeesController = asyncHandler(
 
       // Update student's down_payment and netCourseFees
       student.down_payment = amountPaid;
-      student.netCourseFees = newNetCourseFees;
+      // student.netCourseFees = newNetCourseFees;
       student.remainingCourseFees = remainingFees;
       student.totalPaid += amountPaid;
       await student.save();

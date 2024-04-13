@@ -100,12 +100,10 @@ const admissionFormSchema = new mongoose.Schema(
     },
     remainingCourseFees: {
       type: Number,
-      required: true,
     },
 
     down_payment: {
       type: String,
-      required: true,
     },
     date_of_joining: {
       type: Date,

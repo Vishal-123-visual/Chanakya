@@ -39,10 +39,10 @@ const addmissionFormSchema = Yup.object().shape({
   commision_date: Yup.string().required('Commision date is required!'),
   commision_voucher_number: Yup.string(),
   course_fees: Yup.string().required('Course fees is required!'),
-  down_payment: Yup.string().required('Down Payment is required!'),
+  //down_payment: Yup.string().required('Down Payment is required!'),
   discount: Yup.string().required('Discount is required!'),
   netCourseFees: Yup.string().required('Net CourseFees is required!'),
-  remainingCourseFees: Yup.string().required('Remaining CourseFees is required!'),
+  //remainingCourseFees: Yup.string().required('Remaining CourseFees is required!'),
 
   date_of_joining: Yup.string().required('Date of joining is required!'),
   no_of_installments: Yup.string().required('Number of installments  is required!'),
@@ -68,7 +68,7 @@ const AddMissionForm: React.FC = () => {
     const selectedCourseData = courseCtx.getCourseLists.data.find(
       (c) => c.courseName === selectedCourse
     )
-    console.log(selectedCourseData)
+    //console.log(selectedCourseData)
     setSelectedCourseNameData(selectedCourseData)
     //console.log(selectedCourseData)
     formik.setFieldValue('select_course', selectedCourse)
@@ -530,76 +530,6 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className='col-6 mt-5'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Professional Qualification
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <select
-                        className='form-select form-select-solid form-select-lg'
-                        {...formik.getFieldProps('professional_qualification')}
-                      >
-                        <option value=''>-select-</option>
-                        {[
-                          'None',
-                          'Aviation',
-                          'B.A',
-                          'B.Arch',
-                          'B.B.A',
-                          'B.Com',
-                          'B.E/B.Tech',
-                          'BHM',
-                          'BL/LLB',
-                          'B.Pharm',
-                          'B.Sc',
-                          'BSW',
-                          'CA',
-                          'CA Inter',
-                          'Class 12',
-                          'CS',
-                          'Diploma',
-                          'DSW',
-                          'ICWA',
-                          'ICWA Inter',
-                          'MA',
-                          'M.Arch',
-                          'M.Arch',
-                          'MBA',
-                          'MBBS',
-                          'MCA',
-                          'M.Com',
-                          'MD/MS',
-                          'M.Ed',
-                          'M.E/M.Tech/MS',
-                          'ML/LLM',
-                          'M.Pharma',
-                          'MPhil',
-                          'M.Sc',
-                          'MSW',
-                          'PGDCA',
-                          'PG Diploma',
-                          'PGDM',
-                          'Phd',
-                          'other',
-                        ].map((c, i) => (
-                          <option key={i} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                      </select>
-                      {formik.touched.professional_qualification &&
-                        formik.errors.professional_qualification && (
-                          <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>
-                              {formik.errors.professional_qualification}
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div> */}
               </div>
               {/* ---------------------------QUALIFICATION END HERE ----------------------- */}
 
@@ -819,8 +749,8 @@ const AddMissionForm: React.FC = () => {
                             placeholder='Course Fees'
                             name='discount' // Add name attribute
                             onChange={(e) => {
-                              formik.getFieldProps('discount').onChange(e),
-                                handleCourseFeesDiscount(e) // Pass event to handleCourseFeesDiscount
+                              formik.getFieldProps('discount').onChange(e)
+                              handleCourseFeesDiscount(e)
                             }}
                             value={formik.values.discount}
                           />
@@ -860,7 +790,7 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className='col-6'>
+                  {/* <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
                         <span className='required'>Down Payment</span>
@@ -885,10 +815,10 @@ const AddMissionForm: React.FC = () => {
                         )}
                       </div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
-                <div className='row'>
+                {/* <div className='row'>
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
@@ -911,7 +841,7 @@ const AddMissionForm: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </>
 
               <div className='row'>
