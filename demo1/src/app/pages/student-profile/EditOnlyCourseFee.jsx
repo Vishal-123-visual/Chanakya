@@ -10,6 +10,7 @@ const EditOnlyCourseFee = ({
   setEditStudentCourseFees,
   editStudentCourseFees,
 }) => {
+  console.log(StudentFee)
   useEffect(() => {
     setEditStudentCourseFees(StudentFee)
   }, [])
@@ -63,7 +64,7 @@ const EditOnlyCourseFee = ({
         />
       </td>
       <td>
-        <DatePicker
+        {/* <DatePicker
           selected={moment(Date(StudentFee?.amountDate)).format('DD/MM/YYYY')}
           onChange={(date) =>
             setEditStudentCourseFees({...editStudentCourseFees, amountDate: date})
@@ -71,7 +72,7 @@ const EditOnlyCourseFee = ({
           dateFormat='dd/MM/yyyy'
           className='form-control form-control-lg form-control-solid'
           placeholderText='DD/MM/YYYY'
-        />
+        /> */}
       </td>
       <td>
         <input

@@ -2,6 +2,7 @@ import {useEffect, Fragment} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {Link} from 'react-router-dom'
 
 const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFeeFormToggle}) => {
   //console.log(payStudentFeesAdd)
@@ -107,6 +108,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
           >
             Pay
           </button>
+
           <button
             type='button'
             onClick={() => setAddStudentFeeFormToggle(false)}

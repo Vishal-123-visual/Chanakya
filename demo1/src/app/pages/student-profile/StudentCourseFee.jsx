@@ -10,11 +10,12 @@ import {useNavigate} from 'react-router-dom'
 import ReadOnlyCourseFee from './ReadOnlyCourseFee'
 import EditOnlyCourseFee from './EditOnlyCourseFee'
 const StudentCourseFee = ({className, studentInfoData}) => {
-  console.log(studentInfoData)
+  //console.log(studentInfoData)
   const navigate = useNavigate()
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
   const [studentCourseFeeEditId, setStudentCourseFeesEditId] = useState(null)
+  //console.log(studentCourseFeeEditId)
 
   const [editStudentCourseFees, setEditStudentCourseFees] = useState({
     netCourseFees: 0,
@@ -60,6 +61,10 @@ const StudentCourseFee = ({className, studentInfoData}) => {
 
   const payStudentFeesAddHandler = (e) => {
     e.preventDefault()
+    let url = `https://web.whatsapp.com/send?phone=+919872029065`
+
+    // // Appending the message to the URL by encoding it
+    url += `&text=Hello, ${studentInfoData.name} your fess has been submitted successfully ${payStudentFeesAdd.amountPaid} Rs? &app_absent=0`
     try {
       studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
         ...payStudentFeesAdd,
@@ -73,6 +78,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         paymentOption: '',
         lateFees: 0,
       })
+      window.open(url)
       navigate(`/students`)
       window.location.reload()
     } catch (error) {
@@ -81,8 +87,10 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   }
 
   const editStudentCourseFessHandler = (e) => {
+    // console.log(editStudentCourseFees)
     e.preventDefault()
     studentPayFeeCtx.updateStudentSingleCourseFeesMutation.mutate(editStudentCourseFees)
+    setStudentCourseFeesEditId(null)
   }
 
   // console.log(payStudentFeesAdd)

@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
+import { USER_EMAIL } from "../config/config.js";
+import { mailTransporter } from "../utils/mail_helpers.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -41,6 +43,20 @@ export const createCourseFeesController = asyncHandler(
       // Save course fees
       const newCourseFees = new CourseFeesModel({ ...req.body });
       const savedCourseFees = await newCourseFees.save();
+
+      const mailOptions = {
+        from: USER_EMAIL,
+        to: "thakurarvindkr10@gmail.com, thakurarvindk10@gmail.com",
+        subject: "Welcome to Visual Media Technolog",
+        text: "This is an test email from Visual Media",
+      };
+
+      try {
+        const result = await mailTransporter.sendMail(mailOptions);
+        console.log("Email sent successfully", result);
+      } catch (error) {
+        console.log("Email send failed with error:", error);
+      }
 
       // Update student's down_payment and netCourseFees
       student.down_payment = amountPaid;
