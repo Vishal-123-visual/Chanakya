@@ -1,6 +1,9 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
+import fs from "fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 
 export const getAllStudentsController = asyncHandler(async (req, res, next) => {
   try {
@@ -105,6 +108,14 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
       return res
         .status(404)
         .json({ success: false, message: "Student not found!" });
+    }
+
+    // image path
+
+    let imagePath = student.image;
+    if (imagePath) {
+      imagePath = `C:/Users/Web/Desktop/SchoolsManagement-2-main/backend/images/${imagePath}`;
+      fs.unlinkSync(imagePath);
     }
 
     // Find associated course fees records
