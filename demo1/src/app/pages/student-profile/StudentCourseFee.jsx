@@ -170,6 +170,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                         />
                       ) : (
                         <ReadOnlyCourseFee
+                          studentInfoData={studentInfoData}
                           StudentFee={StudentFee}
                           index={index}
                           delelteStudentCourseFeesHandler={delelteStudentCourseFeesHandler}
