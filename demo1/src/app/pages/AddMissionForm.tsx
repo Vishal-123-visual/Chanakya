@@ -46,6 +46,7 @@ const addmissionFormSchema = Yup.object().shape({
 
   date_of_joining: Yup.string().required('Date of joining is required!'),
   no_of_installments: Yup.string().required('Number of installments  is required!'),
+  no_of_installments_amount: Yup.string(),
 })
 
 const AddMissionForm: React.FC = () => {
@@ -790,84 +791,33 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* <div className='col-6'>
-                    <div className='row mb-6'>
-                      <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Down Payment</span>
-                      </label>
-
-                      <div className='col-lg-8 fv-row'>
-                        <input
-                          type='text'
-                          className='form-control form-control-lg form-control-solid'
-                          placeholder='Down Payment'
-                          name='down_payment'
-                          onChange={(e) => {
-                            formik.getFieldProps('down_payment').onChange(e)
-                            downPaymentHandler(e)
-                          }}
-                          value={formik.values.down_payment}
-                        />
-                        {formik.touched.down_payment && formik.errors.down_payment && (
-                          <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>{formik.errors.down_payment}</div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div> */}
-                </div>
-
-                {/* <div className='row'>
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Remaining Fee</span>
+                        <span className='required'>D.O.J</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
-                        <input
-                          type='number'
+                        <DatePicker
+                          selected={formik.values.date_of_joining}
+                          onChange={(date) => formik.setFieldValue('date_of_joining', date)}
+                          dateFormat='dd/MM/yyyy'
                           className='form-control form-control-lg form-control-solid'
-                          placeholder='Remaining Fees'
-                          readOnly
-                          {...formik.getFieldProps('remainingCourseFees')}
+                          placeholderText='DD/MM/YYYY'
                         />
-                        {formik.touched.remainingCourseFees && formik.errors.remainingCourseFees && (
+
+                        {formik.touched.date_of_joining && formik.errors.date_of_joining && (
                           <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>{formik.errors.remainingCourseFees}</div>
+                            <div className='fv-help-block'>{formik.errors.date_of_joining}</div>
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                </div> */}
+                </div>
               </>
 
               <div className='row'>
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>D.O.J</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <DatePicker
-                        selected={formik.values.date_of_joining}
-                        onChange={(date) => formik.setFieldValue('date_of_joining', date)}
-                        dateFormat='dd/MM/yyyy'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholderText='DD/MM/YYYY'
-                      />
-
-                      {formik.touched.date_of_joining && formik.errors.date_of_joining && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.date_of_joining}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label required fw-bold fs-6'>
@@ -891,6 +841,23 @@ const AddMissionForm: React.FC = () => {
                           <div className='fv-help-block'>{formik.errors.no_of_installments}</div>
                         </div>
                       )}
+                    </div>
+                  </div>
+                </div>
+                <div className='col-6'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
+                      No. of Installments Amount
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <input
+                        type='number'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholder='Net Course Fees'
+                        {...formik.getFieldProps('no_of_installments_amount')}
+                        readOnly
+                      />
                     </div>
                   </div>
                 </div>

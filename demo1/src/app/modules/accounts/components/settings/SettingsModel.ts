@@ -51,6 +51,7 @@ export interface AddMissionFormInterface {
   down_payment?: string | number
   date_of_joining: string | Date
   no_of_installments: string | number
+  no_of_installments_amount: string | number
   createdAt?: string | Date
   updatedAt?: string | Date
   __v?: string | number
@@ -88,6 +89,7 @@ export interface updateMissionFormInterface {
   slot_time: string | Date
   recipt_no: string | number
   no_of_installments: string | number
+  no_of_installments_amount: string | number
   date: string | Date
 }
 
@@ -120,6 +122,7 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   //down_payment: '',
   date_of_joining: '',
   no_of_installments: '',
+  no_of_installments_amount: '',
   createdAt: '',
   updatedAt: '',
   __v: 0,

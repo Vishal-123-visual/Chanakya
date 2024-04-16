@@ -7,9 +7,8 @@ import { mailTransporter } from "../utils/mail_helpers.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    //console.log(req.body);
     try {
-      let {
+      const {
         studentInfo,
         remainingFees,
         amountPaid,
@@ -18,21 +17,16 @@ export const createCourseFeesController = asyncHandler(
         paymentOption,
       } = req.body;
 
-      //console.log(req.body);
-
       // Validate required fields
-      if (
-        !amountPaid ||
-        !amountDate ||
-        !studentInfo
-        //!remainingFees
-      ) {
+      if (!amountPaid || !amountDate || !studentInfo) {
         return res.status(400).json({ message: "Required fields are missing" });
       }
-      //console.log(req.body);
 
-      // Calculate new netCourseFees
+      // Fetch student and validate remaining fees
       const student = await admissionFormModel.findById(studentInfo);
+      if (!student) {
+        return res.status(404).json({ message: "Student not found" });
+      }
       const newNetCourseFees = remainingFees;
       if (newNetCourseFees < 0) {
         return res
@@ -44,26 +38,14 @@ export const createCourseFeesController = asyncHandler(
       const newCourseFees = new CourseFeesModel({ ...req.body });
       const savedCourseFees = await newCourseFees.save();
 
-      const mailOptions = {
-        from: USER_EMAIL,
-        to: "thakurarvindkr10@gmail.com, thakurarvindk10@gmail.com",
-        subject: "Welcome to Visual Media Technolog",
-        text: "This is an test email from Visual Media",
-      };
-
-      try {
-        const result = await mailTransporter.sendMail(mailOptions);
-        console.log("Email sent successfully", result);
-      } catch (error) {
-        console.log("Email send failed with error:", error);
-      }
-
-      // Update student's down_payment and netCourseFees
+      // Update student's payment information
       student.down_payment = amountPaid;
-      // student.netCourseFees = newNetCourseFees;
       student.remainingCourseFees = remainingFees;
       student.totalPaid += amountPaid;
       await student.save();
+
+      // Send email asynchronously
+      sendEmail();
 
       res.status(201).json(savedCourseFees);
     } catch (error) {
@@ -73,19 +55,22 @@ export const createCourseFeesController = asyncHandler(
   }
 );
 
-// export const getAllCourseFeesController = asyncHandler(
-//   async (req, res, next) => {
-//     try {
-//       console.log(req.body);
-//       const courseFees = await CourseFeesModel.find({}).populate([
-//         "studentInfo",
-//       ]);
-//       res.status(200).json(courseFees);
-//     } catch (error) {
-//       res.status(500).json({ error: error });
-//     }
-//   }
-// );
+// Function to send email asynchronously
+async function sendEmail() {
+  const mailOptions = {
+    from: USER_EMAIL,
+    to: "thakurarvindkr10@gmail.com, thakurarvindk10@gmail.com",
+    subject: "Welcome to Visual Media Technolog",
+    text: "This is a test email from Visual Media",
+  };
+
+  try {
+    const result = await mailTransporter.sendMail(mailOptions);
+    //console.log("Email sent successfully", result);
+  } catch (error) {
+    console.log("Email send failed with error:", error);
+  }
+}
 
 export const getCourseFeesByStudentIdController = asyncHandler(
   async (req, res, next) => {
