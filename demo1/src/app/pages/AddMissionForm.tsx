@@ -416,17 +416,17 @@ const AddMissionForm: React.FC = () => {
                     </label>
 
                     <div className='col-lg-8 fv-row'>
-                      {/* <DatePicker
+                      <DatePicker
                         selected={formik.values.date_of_birth}
                         onChange={(date) => formik.setFieldValue('date_of_birth', date)}
                         dateFormat='dd/MM/yyyy'
                         className='form-control form-control-lg form-control-solid'
                         placeholderText='DD/MM/YYYY'
-                      /> */}
-                      <Calendar
+                      />
+                      {/* <Calendar
                         value={formik.values.date_of_birth}
                         onChange={(date) => formik.setFieldValue('date_of_birth', date)}
-                      />
+                      /> */}
                       {formik.touched.date_of_birth && formik.errors.date_of_birth && (
                         <div className='fv-plugins-message-container'>
                           {/* <div className='fv-help-block'>{formik.errors.date_of_birth}</div> */}
@@ -771,17 +771,17 @@ const AddMissionForm: React.FC = () => {
                       </label>
 
                       <div className='col-lg-8 fv-row'>
-                        {/* <DatePicker
+                        <DatePicker
                           selected={formik.values.date_of_joining}
                           onChange={(date) => formik.setFieldValue('date_of_joining', date)}
                           dateFormat='dd/MM/yyyy'
                           className='form-control form-control-lg form-control-solid'
                           placeholderText='DD/MM/YYYY'
-                        /> */}
-                        <Calendar
+                        />
+                        {/* <Calendar
                           onChange={(date) => formik.setFieldValue('date_of_joining', date)}
                           value={formik.values.date_of_joining}
-                        />
+                        /> */}
                         {formik.touched.date_of_joining && formik.errors.date_of_joining && (
                           <div className='fv-plugins-message-container'>
                             <div className='fv-help-block'>{formik.errors.date_of_joining}</div>

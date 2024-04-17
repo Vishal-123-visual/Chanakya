@@ -10,7 +10,7 @@ import {useNavigate} from 'react-router-dom'
 import ReadOnlyCourseFee from './ReadOnlyCourseFee'
 import EditOnlyCourseFee from './EditOnlyCourseFee'
 const StudentCourseFee = ({className, studentInfoData}) => {
-  //console.log(studentInfoData)
+  console.log(studentInfoData)
   const navigate = useNavigate()
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
@@ -61,7 +61,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
 
   const payStudentFeesAddHandler = (e) => {
     e.preventDefault()
-    let url = `https://web.whatsapp.com/send?phone=+919872029065`
+    let url = `https://web.whatsapp.com/send?phone=+91${studentInfoData.phone_number}`
 
     // // Appending the message to the URL by encoding it
     url += `&text=Hello, ${studentInfoData.name} your fess has been submitted successfully ${payStudentFeesAdd.amountPaid} Rs? &app_absent=0`
@@ -69,6 +69,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
         ...payStudentFeesAdd,
         studentInfo: studentInfoData?._id,
+        no_of_installments_amount: studentInfoData.no_of_installments_amount,
       })
       setPayStudentFeesAdd({
         netCourseFees: 0,
