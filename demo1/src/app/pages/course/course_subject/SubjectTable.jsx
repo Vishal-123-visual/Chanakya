@@ -61,7 +61,6 @@ const SubjectTable = ({className, yearWiseAndSemster, activeTab, editCourse}) =>
     }
     ctx.updateCourseCategoryMutation.mutate(updatedData)
     //console.log(updatedData)
-
     setEditSubjectId(null)
   }
 

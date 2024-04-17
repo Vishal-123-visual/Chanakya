@@ -8,7 +8,7 @@ import { MailHTML } from "../../helpers/mail/index.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    console.log(req.body);
+    //console.log(req.body);
     try {
       const {
         studentInfo,
