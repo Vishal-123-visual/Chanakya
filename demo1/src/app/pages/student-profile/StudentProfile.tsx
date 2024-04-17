@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from 'react'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import * as Yup from 'yup'
@@ -40,6 +42,7 @@ const addmissionFormSchema = Yup.object().shape({
   down_payment: Yup.string(),
   date_of_joining: Yup.string(),
   no_of_installments: Yup.string(),
+  no_of_installments_amount: Yup.string(),
 })
 
 const StudentProfile: React.FC = () => {
@@ -491,6 +494,7 @@ const StudentProfile: React.FC = () => {
                         className='form-control form-control-lg form-control-solid'
                         placeholderText='DD/MM/YYYY'
                       />
+
                       {formik.touched.date_of_birth && formik.errors.date_of_birth && (
                         <div className='fv-plugins-message-container'>
                           {/* <div className='fv-help-block'>{formik.errors.date_of_birth}</div> */}
@@ -939,34 +943,34 @@ const StudentProfile: React.FC = () => {
                       </div>
                     </div>
                   </div>
+                  <div className='col-6'>
+                    <div className='row mb-6'>
+                      <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                        <span className=''>D.O.J</span>
+                      </label>
+
+                      <div className='col-lg-8 fv-row'>
+                        <DatePicker
+                          readOnly
+                          selected={formik.values.date_of_joining}
+                          onChange={(date) => formik.setFieldValue('date_of_joining', date)}
+                          dateFormat='dd/MM/yyyy'
+                          className='form-control form-control-lg form-control-solid'
+                          placeholderText='DD/MM/YYYY'
+                        />
+
+                        {formik.touched.date_of_joining && formik.errors.date_of_joining && (
+                          <div className='fv-plugins-message-container'>
+                            <div className='fv-help-block'>{formik.errors.date_of_joining}</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </>
 
               <div className='row'>
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className=''>D.O.J</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <DatePicker
-                        readOnly
-                        selected={formik.values.date_of_joining}
-                        onChange={(date) => formik.setFieldValue('date_of_joining', date)}
-                        dateFormat='dd/MM/yyyy'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholderText='DD/MM/YYYY'
-                      />
-
-                      {formik.touched.date_of_joining && formik.errors.date_of_joining && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.date_of_joining}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label  fw-bold fs-6'>
@@ -991,6 +995,22 @@ const StudentProfile: React.FC = () => {
                           <div className='fv-help-block'>{formik.errors.no_of_installments}</div>
                         </div>
                       )}
+                    </div>
+                  </div>
+                </div>
+                <div className='col-6'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
+                      No. of Installments Amount
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <input
+                        type='text'
+                        className='form-control w-50 '
+                        readOnly
+                        value={formik.values.no_of_installments_amount}
+                      />
                     </div>
                   </div>
                 </div>

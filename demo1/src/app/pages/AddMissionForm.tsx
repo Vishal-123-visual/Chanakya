@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
+
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {
@@ -118,21 +121,12 @@ const AddMissionForm: React.FC = () => {
     }
   }, [image])
 
-  // const courseFeesSubmitHandler = (values) => {
-  //   const studentInfo = JSON.parse(localStorage?.getItem('StudentInfo')!)?.studentInfo
-  //   console.log(studentInfo)
-  //   let courseFeesStudent = {
-  //     courseName: selectedCourseNameData._id,
-  //     courseFees: selectedCourseNameData.courseFees,
-  //     studentInfo: studentInfo,
-  //     discount: values.discount,
-  //     downPayment: values.down_payment,
-  //     remainingFees: values.remainingCourseFees,
-  //     noOfInstallments: values.no_of_installments,
-  //   }
-
-  //   //console.log(studentInfo)
-  // }
+  const numberOfInstallmentAmountHandler = (e) => {
+    const numberOfInstallmentAmount: number =
+      Number(formik.values.netCourseFees) / Number(e.target.value)
+    formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount.toFixed(2))
+    formik.setFieldValue('no_of_installments', e.target.value)
+  }
 
   const navigate = useNavigate()
   const context = useAdmissionContext()
@@ -152,10 +146,6 @@ const AddMissionForm: React.FC = () => {
       if (image) {
         formData.append('image', image)
       }
-
-      //console.log(formData)
-
-      //console.log(formData)
 
       if (updateUserId) {
         context.updateStudentMutation.mutate(formData)
@@ -366,27 +356,6 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Permanent Address</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Permanent Address'
-                        {...formik.getFieldProps('permanent_address')}
-                      />
-                      {formik.touched.permanent_address && formik.errors.permanent_address && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.permanent_address}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div> */}
               </div>
 
               {/* =================================Address Information==================================== */}
@@ -447,12 +416,16 @@ const AddMissionForm: React.FC = () => {
                     </label>
 
                     <div className='col-lg-8 fv-row'>
-                      <DatePicker
+                      {/* <DatePicker
                         selected={formik.values.date_of_birth}
                         onChange={(date) => formik.setFieldValue('date_of_birth', date)}
                         dateFormat='dd/MM/yyyy'
                         className='form-control form-control-lg form-control-solid'
                         placeholderText='DD/MM/YYYY'
+                      /> */}
+                      <Calendar
+                        value={formik.values.date_of_birth}
+                        onChange={(date) => formik.setFieldValue('date_of_birth', date)}
                       />
                       {formik.touched.date_of_birth && formik.errors.date_of_birth && (
                         <div className='fv-plugins-message-container'>
@@ -798,14 +771,17 @@ const AddMissionForm: React.FC = () => {
                       </label>
 
                       <div className='col-lg-8 fv-row'>
-                        <DatePicker
+                        {/* <DatePicker
                           selected={formik.values.date_of_joining}
                           onChange={(date) => formik.setFieldValue('date_of_joining', date)}
                           dateFormat='dd/MM/yyyy'
                           className='form-control form-control-lg form-control-solid'
                           placeholderText='DD/MM/YYYY'
+                        /> */}
+                        <Calendar
+                          onChange={(date) => formik.setFieldValue('date_of_joining', date)}
+                          value={formik.values.date_of_joining}
                         />
-
                         {formik.touched.date_of_joining && formik.errors.date_of_joining && (
                           <div className='fv-plugins-message-container'>
                             <div className='fv-help-block'>{formik.errors.date_of_joining}</div>
@@ -827,7 +803,10 @@ const AddMissionForm: React.FC = () => {
                     <div className='col-lg-8 fv-row'>
                       <select
                         className='form-select form-select-solid form-select-lg'
-                        {...formik.getFieldProps('no_of_installments')}
+                        onChange={(e) => {
+                          formik.getFieldProps('no_of_installments').onChange(e)
+                          numberOfInstallmentAmountHandler(e)
+                        }}
                       >
                         <option value=''>-select-</option>
                         {Array.from({length: 60}, (_, index) => (
