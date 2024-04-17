@@ -64,10 +64,7 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide present address field!");
         return;
-      // case !permanent_address:
-      //   res.status(400);
-      //   throw new Error("Please provide permanent address field!");
-      //   return;
+
       case !date_of_birth:
         res.status(400);
         throw new Error("Please provide date of birth field!");
@@ -88,22 +85,12 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide education qualification field!");
         return;
-      // case !professional_qualification:
-      //   res.status(400);
-      //   throw new Error("Please provide professional qualification field!");
-      //   return;
+
       case !select_course:
         res.status(400);
         throw new Error("Please provide select course field!");
         return;
-      // case !document_attached:
-      //   res.status(400);
-      //   throw new Error("Please provide document attached  field!");
-      //   return;
-      // case !select_software:
-      //   res.status(400);
-      //   throw new Error("Please provide select software field!");
-      //   return;
+
       case !name_of_person_for_commision:
         res.status(400);
         throw new Error("Please provide name of person for commision field!");
@@ -116,10 +103,7 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide commision date field!");
         return;
-      // case !commision_voucher_number:
-      //   res.status(400);
-      //   throw new Error("Please provide commision voucher number field!");
-      //   return;
+
       case !course_fees:
         res.status(400);
         throw new Error("Please provide course fees field!");
@@ -132,14 +116,7 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide  course net fees field!");
         return;
-      // case !down_payment:
-      //   res.status(400);
-      //   throw new Error("Please provide down payment field!");
-      //   return;
-      // case !remainingCourseFees:
-      //   res.status(400);
-      //   throw new Error("Please provide  course remaining fees  field!");
-      //   return;
+
       case !date_of_joining:
         res.status(400);
         throw new Error("Please provide date of joining field!");

@@ -7,6 +7,7 @@ import { mailTransporter } from "../utils/mail_helpers.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
+    console.log(req.body);
     try {
       const {
         studentInfo,
@@ -39,9 +40,16 @@ export const createCourseFeesController = asyncHandler(
       const savedCourseFees = await newCourseFees.save();
 
       // Update student's payment information
-      student.down_payment = amountPaid;
-      student.remainingCourseFees = remainingFees;
-      student.totalPaid += amountPaid;
+      if (student.netCourseFees === amountPaid) {
+        student.down_payment = amountPaid;
+        student.remainingCourseFees = 0;
+        student.totalPaid += amountPaid;
+      } else {
+        student.down_payment = amountPaid;
+        student.remainingCourseFees = remainingFees;
+        student.totalPaid += amountPaid;
+        student.no_of_installments -= 1;
+      }
       await student.save();
 
       // Send email asynchronously

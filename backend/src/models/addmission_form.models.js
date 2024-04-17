@@ -114,6 +114,9 @@ const admissionFormSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    no_of_installments_amount: {
+      type: Number,
+    },
     courseName: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
