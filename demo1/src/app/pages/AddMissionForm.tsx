@@ -810,8 +810,8 @@ const AddMissionForm: React.FC = () => {
                       >
                         <option value=''>-select-</option>
                         {Array.from({length: 60}, (_, index) => (
-                          <option key={index} value={index + 1}>
-                            {index + 1}
+                          <option key={index} value={index}>
+                            {index}
                           </option>
                         ))}
                       </select>

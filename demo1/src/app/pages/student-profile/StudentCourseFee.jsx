@@ -10,7 +10,7 @@ import {useNavigate} from 'react-router-dom'
 import ReadOnlyCourseFee from './ReadOnlyCourseFee'
 import EditOnlyCourseFee from './EditOnlyCourseFee'
 const StudentCourseFee = ({className, studentInfoData}) => {
-  console.log(studentInfoData)
+  //console.log(studentInfoData)
   const navigate = useNavigate()
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
@@ -47,7 +47,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
 
     setPayStudentFeesAdd({
       netCourseFees: initialAmountPaid,
-      remainingFees: studentInfoData?.remainingCourseFees,
+      remainingFees: Number(studentInfoData?.remainingCourseFees).toFixed(2),
       amountPaid: '',
       amountDate: Date.now(),
       paymentOption: '',

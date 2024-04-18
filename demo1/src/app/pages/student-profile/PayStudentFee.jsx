@@ -11,7 +11,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       return {
         ...prev,
         amountPaid: Number(e.target.value),
-        remainingFees: Number(prev.netCourseFees) - Number(e.target.value),
+        remainingFees: (Number(prev.netCourseFees) - Number(e.target.value)).toFixed(2),
       }
     })
 

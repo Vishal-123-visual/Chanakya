@@ -59,7 +59,29 @@ const StudentProfile: React.FC = () => {
   }
 
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  console.log(updateUserId)
+  //console.log(updateUserId)
+
+  useEffect(() => {
+    if (updateUserId['remainingCourseFees'] === undefined) {
+      let numberOfInstallmentAmount: number =
+        Number(formik.values.netCourseFees) / Number(updateUserId.no_of_installments)
+      // Check if numberOfInstallmentAmount is NaN, and set it to 0 if NaN
+      if (isNaN(numberOfInstallmentAmount)) {
+        numberOfInstallmentAmount = 0
+      }
+      //console.log(numberOfInstallmentAmount)
+      formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount.toFixed(2))
+    } else {
+      let numberOfInstallmentAmount: number =
+        Number(formik.values.remainingCourseFees) / Number(updateUserId.no_of_installments)
+      // Check if numberOfInstallmentAmount is NaN, and set it to 0 if NaN
+      if (isNaN(numberOfInstallmentAmount)) {
+        numberOfInstallmentAmount = 0
+      }
+      //console.log(numberOfInstallmentAmount)
+      formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount.toFixed(2))
+    }
+  }, [])
 
   // let updateStudentId = updateUserId?._id
 
@@ -571,77 +593,6 @@ const StudentProfile: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className='col-6 mt-5'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
-                      Professional Qualification
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <select
-                        disabled
-                        className='form-select form-select-solid form-select-lg'
-                        {...formik.getFieldProps('professional_qualification')}
-                      >
-                        <option value=''>-select-</option>
-                        {[
-                          'None',
-                          'Aviation',
-                          'B.A',
-                          'B.Arch',
-                          'B.B.A',
-                          'B.Com',
-                          'B.E/B.Tech',
-                          'BHM',
-                          'BL/LLB',
-                          'B.Pharm',
-                          'B.Sc',
-                          'BSW',
-                          'CA',
-                          'CA Inter',
-                          'Class 12',
-                          'CS',
-                          'Diploma',
-                          'DSW',
-                          'ICWA',
-                          'ICWA Inter',
-                          'MA',
-                          'M.Arch',
-                          'M.Arch',
-                          'MBA',
-                          'MBBS',
-                          'MCA',
-                          'M.Com',
-                          'MD/MS',
-                          'M.Ed',
-                          'M.E/M.Tech/MS',
-                          'ML/LLM',
-                          'M.Pharma',
-                          'MPhil',
-                          'M.Sc',
-                          'MSW',
-                          'PGDCA',
-                          'PG Diploma',
-                          'PGDM',
-                          'Phd',
-                          'other',
-                        ]?.map((c, i) => (
-                          <option key={i} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                      </select>
-                      {formik.touched.professional_qualification &&
-                        formik.errors.professional_qualification && (
-                          <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>
-                              {formik.errors.professional_qualification}
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div> */}
               </div>
               {/* ---------------------------QUALIFICATION END HERE ----------------------- */}
 
@@ -896,7 +847,7 @@ const StudentProfile: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className='col-6'>
+                  {/* <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
                         <span className=''>Down Payment</span>
@@ -913,6 +864,31 @@ const StudentProfile: React.FC = () => {
                         {formik.touched.down_payment && formik.errors.down_payment && (
                           <div className='fv-plugins-message-container'>
                             <div className='fv-help-block'>{formik.errors.down_payment}</div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div> */}
+
+                  <div className='col-6'>
+                    <div className='row mb-6'>
+                      <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                        <span className=''>D.O.J</span>
+                      </label>
+
+                      <div className='col-lg-8 fv-row'>
+                        <DatePicker
+                          readOnly
+                          selected={formik.values.date_of_joining}
+                          onChange={(date) => formik.setFieldValue('date_of_joining', date)}
+                          dateFormat='dd/MM/yyyy'
+                          className='form-control form-control-lg form-control-solid'
+                          placeholderText='DD/MM/YYYY'
+                        />
+
+                        {formik.touched.date_of_joining && formik.errors.date_of_joining && (
+                          <div className='fv-plugins-message-container'>
+                            <div className='fv-help-block'>{formik.errors.date_of_joining}</div>
                           </div>
                         )}
                       </div>
@@ -945,23 +921,30 @@ const StudentProfile: React.FC = () => {
                   </div>
                   <div className='col-6'>
                     <div className='row mb-6'>
-                      <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className=''>D.O.J</span>
+                      <label className='col-lg-4 col-form-label  fw-bold fs-6'>
+                        No. of Installments
                       </label>
 
                       <div className='col-lg-8 fv-row'>
-                        <DatePicker
-                          readOnly
-                          selected={formik.values.date_of_joining}
-                          onChange={(date) => formik.setFieldValue('date_of_joining', date)}
-                          dateFormat='dd/MM/yyyy'
-                          className='form-control form-control-lg form-control-solid'
-                          placeholderText='DD/MM/YYYY'
-                        />
-
-                        {formik.touched.date_of_joining && formik.errors.date_of_joining && (
+                        <select
+                          disabled
+                          className='form-select form-select-solid form-select-lg'
+                          value={formik.values.no_of_installments}
+                          onChange={(e) => {
+                            formik.getFieldProps('no_of_installments').onChange(e)
+                            //numberOfInstallmentAmountHandler(e)
+                          }}
+                        >
+                          <option value=''>-select-</option>
+                          {Array.from({length: 60}, (_, index) => (
+                            <option key={index} value={index}>
+                              {index}
+                            </option>
+                          ))}
+                        </select>
+                        {formik.touched.no_of_installments && formik.errors.no_of_installments && (
                           <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>{formik.errors.date_of_joining}</div>
+                            <div className='fv-help-block'>{formik.errors.no_of_installments}</div>
                           </div>
                         )}
                       </div>
@@ -971,33 +954,6 @@ const StudentProfile: React.FC = () => {
               </>
 
               <div className='row'>
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
-                      No. of Installments
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <select
-                        disabled
-                        className='form-select form-select-solid form-select-lg'
-                        {...formik.getFieldProps('no_of_installments')}
-                      >
-                        <option value=''>-select-</option>
-                        {Array.from({length: 60}, (_, index) => (
-                          <option key={index} value={index + 1}>
-                            {index + 1}
-                          </option>
-                        ))}
-                      </select>
-                      {formik.touched.no_of_installments && formik.errors.no_of_installments && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.no_of_installments}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label  fw-bold fs-6'>
