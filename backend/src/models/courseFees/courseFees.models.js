@@ -7,6 +7,10 @@ const courseFeesSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Students",
     },
+    courseName: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Course",
+    },
     netCourseFees: {
       type: Number,
       required: true,

@@ -241,6 +241,7 @@ export const getAllCourseFeesController = asyncHandler(
     try {
       const allCourseFees = await CourseFeesModel.find({}).populate([
         "studentInfo",
+        "courseName",
       ]);
       res.status(200).json(allCourseFees);
     } catch (error) {
