@@ -1,5 +1,9 @@
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 const MonthlyCollectionFee = () => {
+  const ctx = useStudentCourseFeesContext()
+  const result = ctx.useGetStudentMonthlyCourseFeesCollection()
+  //console.log(result)
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -41,13 +45,17 @@ const MonthlyCollectionFee = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-              </tr>
+              {result?.data?.map((data) => (
+                <tr key={data._id}>
+                  <td></td>
+                  <td>{data.studentInfo.rollNumber}</td>
+                  <td>{data.studentInfo.name}</td>
+                  <td>{data.courseName.courseName}</td>
+                  <td></td>
+                  <td>{data.studentInfo.phone_number}</td>
+                  <td>{data.studentInfo.no_of_installments_amount}</td>
+                </tr>
+              ))}
             </tbody>
             {/* end::Table body */}
           </table>

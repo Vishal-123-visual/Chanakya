@@ -33,6 +33,21 @@ export const StudentCourseFeesContextProvider = ({children}) => {
 
     return result
   }
+  function useGetStudentMonthlyCourseFeesCollection(searchData) {
+    const result = useQuery({
+      queryKey: ['getStudentCourseFeesLists'],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/courseFees/allCourseFess`, config)
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+
+    return result
+  }
 
   // const useDeleteSingleStudentCourseFees = useMutation({
   //   mutationKey: ['getStudentCourseFeesLists'],
@@ -138,6 +153,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
         deleteCourseMutation,
         createStudentCourseFeesMutation,
         updateStudentSingleCourseFeesMutation,
+        useGetStudentMonthlyCourseFeesCollection,
       }}
     >
       {children}
