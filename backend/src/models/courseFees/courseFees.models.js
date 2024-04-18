@@ -25,6 +25,9 @@ const courseFeesSchema = new mongoose.Schema(
       //required: true,
       default: Date.now(),
     },
+    no_of_installments: {
+      type: Number,
+    },
     no_of_installments_amount: {
       type: Number,
     },

@@ -149,3 +149,17 @@ export const getSingleStudentDetailsController = asyncHandler(
     }
   }
 );
+
+export const getAllStudentsMonthlyCollectionFeesController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const student = await admissionFormModel
+        .find({})
+        .sort({ createdAt: -1 })
+        .populate("courseName");
+      res.status(200).json(student);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);

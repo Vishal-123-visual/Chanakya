@@ -5,6 +5,7 @@ import CourseFeesModel from "../models/courseFees/courseFees.models.js";
 import { USER_EMAIL } from "../config/config.js";
 import { mailTransporter } from "../utils/mail_helpers.js";
 import { MailHTML } from "../../helpers/mail/index.js";
+import CourseModel from "../models/course/courses.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -234,3 +235,30 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
     }
   }
 );
+
+export const getAllCourseFeesController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const allCourseFees = await CourseFeesModel.find({}).populate([
+        "studentInfo",
+      ]);
+      res.status(200).json(allCourseFees);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+
+// {
+//   "_id": "661a374ae78c47616b93557e",
+//   "courseName": "Digital Marketing",
+//   "courseFees": 40000,
+//   "courseType": "65f2a48cd8b6fc856a36a192",
+//   "numberOfYears": "660402aa2b8b76432d3dcfb1",
+//   "category": "6618f56785f0da6d6281dcd2",
+//   "user": "65deeeb6c0d01ccd202d6a1a",
+//   "createdBy": "Rahul Roy",
+//   "createdAt": "2024-04-13T07:42:02.778Z",
+//   "updatedAt": "2024-04-13T07:42:02.778Z",
+//   "__v": 0
+// }

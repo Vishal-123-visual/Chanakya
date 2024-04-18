@@ -136,6 +136,21 @@ const SidebarMenuMain = () => {
       </SidebarMenuItemWithSub>
       {/* ************* Manage Courses END   ****************** */}
 
+      {/********************** Manage Monthy Collection of Student Course Fees Installment Start***********************  */}
+      <SidebarMenuItemWithSub
+        to='/apps/chat'
+        title='Manage Monthly Collection'
+        fontIcon='bi-chat-left'
+        icon='message-text-2'
+      >
+        <SidebarMenuItem
+          to='/monthlyCollectionFees'
+          title='Monthly Collection Fees'
+          hasBullet={true}
+        />
+      </SidebarMenuItemWithSub>
+      {/********************** Manage Monthy Collection of Student Course Fees Installment End***********************  */}
+
       {/* ************* Manage Payment Option Start   ****************** */}
       <SidebarMenuItemWithSub
         to='/apps/chat'

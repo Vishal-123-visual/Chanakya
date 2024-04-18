@@ -33,6 +33,9 @@ const PrivateRoutes = () => {
   const AddCourseUpdateAndAdd = lazy(() => import('../pages/course/AddCourse'))
   const EditCourse = lazy(() => import('../pages/course/EditCourse'))
   const ViewCourse = lazy(() => import('../pages/course/ViewCourse'))
+  const MonthlyCollectionFee = lazy(
+    () => import('../pages/monthly_collection_fee/MonthlyCollectionFee')
+  )
   return (
     <Routes>
       <Route element={<MasterLayout />}>
@@ -167,6 +170,16 @@ const PrivateRoutes = () => {
           }
         />
 
+        {/* *************************************** Monthly Collection fees start here.. ******************************************* */}
+        <Route
+          path='/monthlyCollectionFees'
+          element={
+            <SuspensedView>
+              <MonthlyCollectionFee />
+            </SuspensedView>
+          }
+        />
+        {/* *************************************** Monthly Collection fees End here.. ******************************************* */}
         {/* *************************************** Payment Option start here.. ******************************************* */}
         <Route
           path='/payment-option'

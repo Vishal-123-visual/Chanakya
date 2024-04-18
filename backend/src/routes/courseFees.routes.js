@@ -2,7 +2,7 @@ import { Router } from "express";
 import { isAdmin, requireSignIn } from "../middlewares/auth.middleware.js";
 import {
   createCourseFeesController,
-  // getAllCourseFeesController,
+  getAllCourseFeesController,
   getSingleStudentCourseFeesController,
   updateSingleStudentCourseFeesController,
   deleteSingleStudentCourseFeesController,
@@ -11,7 +11,9 @@ import {
 const router = Router();
 
 router.post("/", requireSignIn, createCourseFeesController);
-// router.route("/").get(requireSignIn, isAdmin, getAllCourseFeesController);
+router
+  .route("/allCourseFess")
+  .get(requireSignIn, isAdmin, getAllCourseFeesController);
 
 router
   .route("/:id")
