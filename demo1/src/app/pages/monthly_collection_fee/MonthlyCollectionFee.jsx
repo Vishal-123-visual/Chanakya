@@ -47,13 +47,23 @@ const MonthlyCollectionFee = () => {
             <tbody>
               {result?.data?.map((data) => (
                 <tr key={data._id}>
-                  <td></td>
+                  <td>
+                    <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                  </td>
                   <td>{data.studentInfo.rollNumber}</td>
                   <td>{data.studentInfo.name}</td>
+
                   <td>{data.courseName.courseName}</td>
-                  <td></td>
-                  <td>{data.studentInfo.phone_number}</td>
-                  <td>{data.studentInfo.no_of_installments_amount}</td>
+                  <td>
+                    <div className='d-flex justify-content-end flex-shrink-0'>
+                      {data.studentInfo.phone_number}
+                    </div>
+                  </td>
+                  <td>
+                    <div className='d-flex justify-content-end flex-shrink-0'>
+                      {data.studentInfo.no_of_installments_amount}
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>
