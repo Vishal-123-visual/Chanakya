@@ -11,7 +11,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 const AddSubject = ({className, editCourse = {}}) => {
   const [courseSubjectRef, setCourseSubjectRef] = useState({})
   const [activeTab, setActiveTab] = useState(1)
-  //console.log(editCourse)
+  console.log(editCourse)
 
   const handleTabClick = (index) => {
     //console.log(index)
@@ -72,7 +72,7 @@ const AddSubject = ({className, editCourse = {}}) => {
     }
 
     fetchData()
-  }, [Object?.keys(editCourse)?.length > 0]) // Ensure useEffect runs when editCourse changes
+  }, [Object?.keys(editCourse)?.length > 0, editCourse]) // Ensure useEffect runs when editCourse changes
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}

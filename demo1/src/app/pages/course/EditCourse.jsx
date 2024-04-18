@@ -37,6 +37,16 @@ const EditCourse = () => {
   // user: '65deeeb6c0d01ccd202d6a1a'
   // __v: 0
   // _id: '6617beba5f09161365bb8968'
+
+  //   {
+  //     "_id": "661fb62f726696537672cf85",
+  //     "courseName": "Design Viz Pro",
+  //     "courseType": "65f2a47bd8b6fc856a36a18a",
+  //     "numberOfYears": "660402aa2b8b76432d3dcfb1",
+  //     "category": "6618f56785f0da6d6281dcd2",
+  //     "courseFees": 30000
+  // }
+
   const [editCourse, setEditCourse] = useState({
     _id: resLocation.state?._id,
     courseName: resLocation.state?.courseName,
@@ -60,6 +70,7 @@ const EditCourse = () => {
     onSubmit: async (values) => {
       updateCourseMutation.mutate({...values, _id: resLocation.state?._id})
       //navigate('/course/addCourse')
+      //localStorage.setItem('AddedNewCourse', JSON.stringify(values))
       //console.log(values)
       setEditCourse(values)
       setLoading(true)
