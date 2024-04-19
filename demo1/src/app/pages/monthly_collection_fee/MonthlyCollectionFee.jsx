@@ -2,26 +2,43 @@ import {Link, useNavigate} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import {useState} from 'react'
+
 const MonthlyCollectionFee = () => {
   const ctx = useStudentCourseFeesContext()
   const result = ctx.useGetStudentMonthlyCourseFeesCollection()
   const [searchContentValues, setSearchContentValues] = useState({from: '', to: ''})
+  const [filteredData, setFilteredData] = useState([])
+  const [totalCollectionFees, setTotalCollectionFees] = useState(0)
 
   const searchContentValueHandler = (e) => {
     e.preventDefault()
-    console.log(searchContentValues)
+    const filteredResults = result.data.filter((data) => {
+      const createdAtMonth = new Date(data.createdAt).getMonth() + 1
+      return (
+        createdAtMonth >= Number(searchContentValues.from) &&
+        createdAtMonth <= Number(searchContentValues.to)
+      )
+    })
+    setFilteredData(filteredResults)
+    calculateTotalCollectionFees(filteredResults)
   }
-  //console.log(new Date(result.data[0].createdAt).getMonth())
+
+  const calculateTotalCollectionFees = (data) => {
+    const totalFees = data.reduce((total, item) => total + item.no_of_installments_amount, 0)
+    setTotalCollectionFees(totalFees)
+  }
 
   const navigate = useNavigate()
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Monthly Collection</span>
+          <p className=' mt-1 fw-semibold fs-7'>Total Collection Fees Rs {totalCollectionFees}</p>
         </h3>
-        <div className='d-flex justify-content-center align-items-center  gap-5 '>
+        <div className='d-flex justify-content-center align-items-center gap-5 '>
           <label htmlFor='From'>
             From{' '}
             <select
@@ -149,23 +166,27 @@ const MonthlyCollectionFee = () => {
             </thead>
             {/* end::Table head */}
             {/* begin::Table body */}
-            {/* new Date(result.data[0].createdAt).getMonth() */}
             <tbody>
-              {result?.data
-                ?.filter(
-                  (searchValue) =>
-                    new Date(searchValue.createdAt).getMonth() ===
-                      Number(searchContentValues.from) ||
-                    new Date(searchValue.createdAt).getMonth() === Number(searchContentValues.to)
-                )
-                .map((data) => (
+              {filteredData.length === 0 ? (
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <h2>Loading.....</h2>
+                  </td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              ) : (
+                filteredData?.map((data) => (
                   <tr key={data._id}>
                     <td>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                     </td>
                     <td>
                       <button
-                        className='btn btn-link '
+                        className='btn btn-link'
                         onClick={() =>
                           navigate(`/student/${data.studentInfo._id}`, {
                             state: data.studentInfo,
@@ -189,7 +210,8 @@ const MonthlyCollectionFee = () => {
                       </div>
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
             </tbody>
             {/* end::Table body */}
           </table>
@@ -197,8 +219,10 @@ const MonthlyCollectionFee = () => {
         </div>
         {/* end::Table container */}
       </div>
-      {/* begin::Body */}
+      {/* end::Body */}
+      <div></div>
     </div>
   )
 }
+
 export default MonthlyCollectionFee

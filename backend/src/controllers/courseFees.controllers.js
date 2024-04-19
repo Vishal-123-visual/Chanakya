@@ -260,10 +260,9 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
 export const getAllCourseFeesController = asyncHandler(
   async (req, res, next) => {
     try {
-      const allCourseFees = await CourseFeesModel.find({}).populate([
-        "studentInfo",
-        "courseName",
-      ]);
+      const allCourseFees = await CourseFeesModel.find({})
+        .populate(["studentInfo", "courseName"])
+        .sort("courseName");
       res.status(200).json(allCourseFees);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
