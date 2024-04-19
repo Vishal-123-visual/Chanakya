@@ -58,9 +58,12 @@ const StudentProfile: React.FC = () => {
     }
   }
 
-  const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  console.log(updateUserId)
+  const [updateUserId, setUpdateUserId] = useState<any>(location?.state)
+  //console.log(updateUserId)
 
+  // if (updateUserId === null) {
+  //   setUpdateUserId(location?.state)
+  // }
   useEffect(() => {
     if (updateUserId['remainingCourseFees'] === undefined) {
       let numberOfInstallmentAmount: number =
@@ -73,13 +76,13 @@ const StudentProfile: React.FC = () => {
       formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount.toFixed(2))
     } else {
       let numberOfInstallmentAmount: number =
-        Number(formik.values.remainingCourseFees) / Number(updateUserId.no_of_installments)
+        Number(formik.values?.remainingCourseFees) / Number(updateUserId?.no_of_installments)
       // Check if numberOfInstallmentAmount is NaN, and set it to 0 if NaN
       if (isNaN(numberOfInstallmentAmount)) {
         numberOfInstallmentAmount = 0
       }
       //console.log(numberOfInstallmentAmount)
-      formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount.toFixed(2))
+      formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount?.toFixed(2))
     }
   }, [])
 
@@ -107,7 +110,7 @@ const StudentProfile: React.FC = () => {
       let formData = new FormData()
 
       // Append each field of values to formData
-      Object.entries(values).forEach(([key, value]) => {
+      Object?.entries(values).forEach(([key, value]) => {
         formData.append(key, value as string) // Ensure value is a string, adjust if needed
       })
 
@@ -911,9 +914,11 @@ const StudentProfile: React.FC = () => {
                           placeholder='Remaining Fees'
                           {...formik.getFieldProps('remainingCourseFees')}
                         />
-                        {formik.touched.remainingCourseFees && formik.errors.remainingCourseFees && (
+                        {formik.touched?.remainingCourseFees && formik.errors?.remainingCourseFees && (
                           <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>{formik.errors.remainingCourseFees}</div>
+                            <div className='fv-help-block'>
+                              {formik.errors?.remainingCourseFees}
+                            </div>
                           </div>
                         )}
                       </div>

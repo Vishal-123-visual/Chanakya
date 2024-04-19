@@ -1,7 +1,3 @@
-Course Fees
-Discount
-Net Core Fees
-Downpayment
-remaining fees
-number of installments
-Date of Joining
+10 installments
+1 is paid
+2 currnet time + 1 month = next month

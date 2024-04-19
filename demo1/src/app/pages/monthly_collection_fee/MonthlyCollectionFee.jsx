@@ -1,9 +1,12 @@
+import {Link, useNavigate} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 const MonthlyCollectionFee = () => {
   const ctx = useStudentCourseFeesContext()
   const result = ctx.useGetStudentMonthlyCourseFeesCollection()
   //console.log(result)
+
+  const navigate = useNavigate()
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -13,10 +16,85 @@ const MonthlyCollectionFee = () => {
         </h3>
         <div className='d-flex justify-content-center align-items-center  gap-5 '>
           <label htmlFor='From'>
-            From <input type='text' name='From' id='From' className='form-control w-auto' />
+            From{' '}
+            <select type='text' name='From' id='From' className='form-control w-auto'>
+              <option value=''>select month</option>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
+                <option key={month} value={month}>
+                  {(() => {
+                    switch (month) {
+                      case 1:
+                        return 'Jan'
+                      case 2:
+                        return 'Feb'
+                      case 3:
+                        return 'Mar'
+                      case 4:
+                        return 'Apr'
+                      case 5:
+                        return 'May'
+                      case 6:
+                        return 'Jun'
+                      case 7:
+                        return 'Jul'
+                      case 8:
+                        return 'Aug'
+                      case 9:
+                        return 'Sep'
+                      case 10:
+                        return 'Oct'
+                      case 11:
+                        return 'Nov'
+                      case 12:
+                        return 'Dec'
+                      default:
+                        return ''
+                    }
+                  })()}
+                </option>
+              ))}
+            </select>
           </label>
-          <label htmlFor='TO'>
-            To <input type='text' name='TO' id='TO' className='form-control w-auto' />
+
+          <label htmlFor='To'>
+            To{' '}
+            <select type='text' name='To' id='To' className='form-control w-auto'>
+              <option value=''>select month</option>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
+                <option key={month} value={month}>
+                  {(() => {
+                    switch (month) {
+                      case 1:
+                        return 'Jan'
+                      case 2:
+                        return 'Feb'
+                      case 3:
+                        return 'Mar'
+                      case 4:
+                        return 'Apr'
+                      case 5:
+                        return 'May'
+                      case 6:
+                        return 'Jun'
+                      case 7:
+                        return 'Jul'
+                      case 8:
+                        return 'Aug'
+                      case 9:
+                        return 'Sep'
+                      case 10:
+                        return 'Oct'
+                      case 11:
+                        return 'Nov'
+                      case 12:
+                        return 'Dec'
+                      default:
+                        return ''
+                    }
+                  })()}
+                </option>
+              ))}
+            </select>
           </label>
 
           <button className='btn btn-sm btn-light-primary'>Search</button>
@@ -50,7 +128,18 @@ const MonthlyCollectionFee = () => {
                   <td>
                     <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                   </td>
-                  <td>{data.studentInfo.rollNumber}</td>
+                  <td>
+                    <button
+                      className='btn btn-link '
+                      onClick={() =>
+                        navigate(`/student/${data.studentInfo._id}`, {
+                          state: data.studentInfo,
+                        })
+                      }
+                    >
+                      {data.studentInfo.rollNumber}
+                    </button>
+                  </td>
                   <td>{data.studentInfo.name}</td>
 
                   <td>{data.courseName.courseName}</td>
