@@ -1,10 +1,17 @@
 import {Link, useNavigate} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import {useState} from 'react'
 const MonthlyCollectionFee = () => {
   const ctx = useStudentCourseFeesContext()
   const result = ctx.useGetStudentMonthlyCourseFeesCollection()
-  //console.log(result)
+  const [searchContentValues, setSearchContentValues] = useState({from: '', to: ''})
+
+  const searchContentValueHandler = (e) => {
+    e.preventDefault()
+    console.log(searchContentValues)
+  }
+  //console.log(new Date(result.data[0].createdAt).getMonth())
 
   const navigate = useNavigate()
   return (
@@ -17,7 +24,14 @@ const MonthlyCollectionFee = () => {
         <div className='d-flex justify-content-center align-items-center  gap-5 '>
           <label htmlFor='From'>
             From{' '}
-            <select type='text' name='From' id='From' className='form-control w-auto'>
+            <select
+              value={searchContentValues.from}
+              onChange={(e) => setSearchContentValues((prev) => ({...prev, from: e.target.value}))}
+              type='text'
+              name='From'
+              id='From'
+              className='form-control w-auto'
+            >
               <option value=''>select month</option>
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
                 <option key={month} value={month}>
@@ -58,7 +72,14 @@ const MonthlyCollectionFee = () => {
 
           <label htmlFor='To'>
             To{' '}
-            <select type='text' name='To' id='To' className='form-control w-auto'>
+            <select
+              value={searchContentValues.to}
+              onChange={(e) => setSearchContentValues((prev) => ({...prev, to: e.target.value}))}
+              type='text'
+              name='To'
+              id='To'
+              className='form-control w-auto'
+            >
               <option value=''>select month</option>
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
                 <option key={month} value={month}>
@@ -97,7 +118,13 @@ const MonthlyCollectionFee = () => {
             </select>
           </label>
 
-          <button className='btn btn-sm btn-light-primary'>Search</button>
+          <button
+            onClick={searchContentValueHandler}
+            type='submit'
+            className='btn btn-sm btn-light-primary'
+          >
+            Search
+          </button>
         </div>
       </div>
       {/* end::Header */}
@@ -122,39 +149,47 @@ const MonthlyCollectionFee = () => {
             </thead>
             {/* end::Table head */}
             {/* begin::Table body */}
+            {/* new Date(result.data[0].createdAt).getMonth() */}
             <tbody>
-              {result?.data?.map((data) => (
-                <tr key={data._id}>
-                  <td>
-                    <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                  </td>
-                  <td>
-                    <button
-                      className='btn btn-link '
-                      onClick={() =>
-                        navigate(`/student/${data.studentInfo._id}`, {
-                          state: data.studentInfo,
-                        })
-                      }
-                    >
-                      {data.studentInfo.rollNumber}
-                    </button>
-                  </td>
-                  <td>{data.studentInfo.name}</td>
+              {result?.data
+                ?.filter(
+                  (searchValue) =>
+                    new Date(searchValue.createdAt).getMonth() ===
+                      Number(searchContentValues.from) ||
+                    new Date(searchValue.createdAt).getMonth() === Number(searchContentValues.to)
+                )
+                .map((data) => (
+                  <tr key={data._id}>
+                    <td>
+                      <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                    </td>
+                    <td>
+                      <button
+                        className='btn btn-link '
+                        onClick={() =>
+                          navigate(`/student/${data.studentInfo._id}`, {
+                            state: data.studentInfo,
+                          })
+                        }
+                      >
+                        {data.studentInfo.rollNumber}
+                      </button>
+                    </td>
+                    <td>{data.studentInfo.name}</td>
 
-                  <td>{data.courseName.courseName}</td>
-                  <td>
-                    <div className='d-flex justify-content-end flex-shrink-0'>
-                      {data.studentInfo.phone_number}
-                    </div>
-                  </td>
-                  <td>
-                    <div className='d-flex justify-content-end flex-shrink-0'>
-                      {data.studentInfo.no_of_installments_amount}
-                    </div>
-                  </td>
-                </tr>
-              ))}
+                    <td>{data.courseName.courseName}</td>
+                    <td>
+                      <div className='d-flex justify-content-end flex-shrink-0'>
+                        {data.studentInfo.phone_number}
+                      </div>
+                    </td>
+                    <td>
+                      <div className='d-flex justify-content-end flex-shrink-0'>
+                        {data.studentInfo.no_of_installments_amount}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
             {/* end::Table body */}
           </table>

@@ -6,6 +6,7 @@ import { USER_EMAIL } from "../config/config.js";
 import { mailTransporter } from "../utils/mail_helpers.js";
 import { MailHTML } from "../../helpers/mail/index.js";
 import CourseModel from "../models/course/courses.models.js";
+import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -30,23 +31,43 @@ export const createCourseFeesController = asyncHandler(
       if (!student) {
         return res.status(404).json({ message: "Student not found" });
       }
-      const newNetCourseFees = remainingFees;
-      if (newNetCourseFees < 0) {
-        return res
-          .status(400)
-          .json({ message: "Amount paid exceeds remaining course fees" });
-      }
 
       // Save course fees
       const newCourseFees = new CourseFeesModel({ ...req.body });
       const savedCourseFees = await newCourseFees.save();
 
       // Update student's payment information
-
       student.down_payment = amountPaid;
       student.remainingCourseFees = remainingFees;
       student.totalPaid += amountPaid;
       student.no_of_installments -= 1;
+
+      // Calculate and store new installment expiration times
+      const expirationDate = new Date();
+      expirationDate.setMonth(expirationDate.getMonth() + 1);
+
+      let nextInstallment = Number(req.body.no_of_installments) - 1;
+      // console.log(nextInstallment, Number(req.body.remainingFees));
+
+      const installmentExpiration = new PaymentInstallmentTimeExpireModel({
+        studentInfo,
+        courseName: req.body.courseName,
+        expiration_date: expirationDate,
+        installment_number: nextInstallment,
+        installment_amount: Number(
+          Math.floor(Number(req.body.remainingFees)) / nextInstallment
+        ),
+      });
+
+      //  console.log(installmentExpiration);
+      await installmentExpiration.save();
+
+      student.no_of_installments_expireTimeandAmount =
+        installmentExpiration.expiration_date +
+        "," +
+        installmentExpiration.installment_number +
+        "," +
+        installmentExpiration.installment_amount;
 
       await student.save();
 
@@ -65,7 +86,7 @@ export const createCourseFeesController = asyncHandler(
 async function sendEmail() {
   const mailOptions = {
     from: USER_EMAIL,
-    to: "thakurarvindkr10@gmail.com, thakurarvindk10@gmail.com",
+    to: "thakurarvindkr10@gmail.com, cepelon828@kravify.com",
     subject: "Welcome to Visual Media Technolog",
     text: "This is a test email from Visual Media",
     html: ` <body style="font-family: Arial, sans-serif; margin: 0; padding: 0">
