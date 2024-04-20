@@ -21,11 +21,12 @@ const MonthlyCollectionFee = () => {
       )
     })
     // console.log(filteredResults[0].studentInfo)
-    console.log(
-      new Date(
-        filteredResults[0]?.studentInfo?.no_of_installments_expireTimeandAmount.split(',')[0]
-      ).getMonth() + 2
-    )
+    // console.log(
+    //   new Date(
+    //     filteredResults[0]?.studentInfo?.no_of_installments_expireTimeandAmount.split(',')[0]
+    //   ).getMonth() + 2
+    // )
+    //console.log(filteredResults)
     setFilteredData(filteredResults)
     calculateTotalCollectionFees(filteredResults)
   }
@@ -36,6 +37,25 @@ const MonthlyCollectionFee = () => {
   }
 
   const navigate = useNavigate()
+
+  const compareTimeInstallment = (t1) => {
+    let resDate = new Date(t1).getTime()
+    console.log(resDate)
+    let currDate = new Date().getTime()
+
+    if (currDate > resDate) {
+      // return `Your installation time get expired ${new Date(
+      //   currDate
+      // ).toDateString()}, !== ${new Date(resDate).toDateString()} `
+      return 'month skipped'
+    } else {
+      // return `Your installation time is avialable ${new Date(
+      //   currDate
+      // ).toDateString()}, between ${new Date(resDate).toDateString()} `
+      return '0 Month Skipped'
+    }
+    //console.log(resDate, currDate)
+  }
 
   return (
     <div className={`card`}>
@@ -169,6 +189,8 @@ const MonthlyCollectionFee = () => {
                 <th className='min-w-150px'>Roll Number</th>
                 <th className='min-w-140px'>Name</th>
                 <th className='min-w-120px'>Course</th>
+                <th className='min-w-120px'>Time Avaiable</th>
+
                 <th className='min-w-100px text-end'>Contact</th>
                 <th className='min-w-100px text-end'>Installments</th>
               </tr>
@@ -211,6 +233,7 @@ const MonthlyCollectionFee = () => {
                         <td>{data?.studentInfo?.name}</td>
 
                         <td>{data?.courseName?.courseName}</td>
+                        <td>{compareTimeInstallment(data?.expiration_date)}</td>
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
                             {data?.studentInfo?.phone_number}
