@@ -7,6 +7,7 @@ import {
   updateSingleStudentCourseFeesController,
   deleteSingleStudentCourseFeesController,
   getCourseFeesByStudentIdController,
+  //getAllStudentCourseFeesNextInstallmentController,
 } from "../controllers/courseFees.controllers.js";
 const router = Router();
 
@@ -14,6 +15,13 @@ router.post("/", requireSignIn, createCourseFeesController);
 router
   .route("/allCourseFess")
   .get(requireSignIn, isAdmin, getAllCourseFeesController);
+// router
+//   .route("/nextinstallment")
+//   .get(
+//     requireSignIn,
+//     isAdmin,
+//     getAllStudentCourseFeesNextInstallmentController
+//   );
 
 router
   .route("/:id")

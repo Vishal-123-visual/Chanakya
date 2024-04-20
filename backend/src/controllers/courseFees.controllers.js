@@ -43,11 +43,21 @@ export const createCourseFeesController = asyncHandler(
       student.no_of_installments -= 1;
 
       // Calculate and store new installment expiration times
-      const expirationDate = new Date();
-      expirationDate.setMonth(expirationDate.getMonth() + 1);
+      let expirationDate = new Date();
+      if (student.no_of_installments_expireTimeandAmount) {
+        // Get the expiration date of the last installment
+        const lastExpirationDate = new Date(
+          student.no_of_installments_expireTimeandAmount.split(",")[0]
+        );
+        // Set the expiration date of the next installment to be one month after the last one
+        expirationDate = new Date(lastExpirationDate);
+        expirationDate.setMonth(expirationDate.getMonth() + 1);
+      } else {
+        // If there are no previous installments, set the expiration date to be one month from now
+        expirationDate.setMonth(expirationDate.getMonth() + 1);
+      }
 
-      let nextInstallment = Number(req.body.no_of_installments) - 1;
-      // console.log(nextInstallment, Number(req.body.remainingFees));
+      const nextInstallment = Number(req.body.no_of_installments) - 1;
 
       const installmentExpiration = new PaymentInstallmentTimeExpireModel({
         studentInfo,
@@ -59,15 +69,9 @@ export const createCourseFeesController = asyncHandler(
         ),
       });
 
-      //  console.log(installmentExpiration);
       await installmentExpiration.save();
 
-      student.no_of_installments_expireTimeandAmount =
-        installmentExpiration.expiration_date +
-        "," +
-        installmentExpiration.installment_number +
-        "," +
-        installmentExpiration.installment_amount;
+      student.no_of_installments_expireTimeandAmount = `${expirationDate},${nextInstallment},${installmentExpiration.installment_amount}`;
 
       await student.save();
 
@@ -260,10 +264,15 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
 export const getAllCourseFeesController = asyncHandler(
   async (req, res, next) => {
     try {
-      const allCourseFees = await CourseFeesModel.find({})
-        .populate(["studentInfo", "courseName"])
-        .sort("courseName");
-      res.status(200).json(allCourseFees);
+      // const allCourseFees = await CourseFeesModel.find({})
+      //   .populate(["studentInfo", "courseName"])
+      //   .sort("courseName");
+      const nextInstallmentCourseFees =
+        await PaymentInstallmentTimeExpireModel.find({})
+          .populate(["studentInfo", "courseName"])
+          .sort("courseName");
+      //console.log(nextInstallmentCourseFees);
+      res.status(200).json(nextInstallmentCourseFees);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }

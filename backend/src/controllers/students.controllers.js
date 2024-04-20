@@ -4,6 +4,7 @@ import CourseFeesModel from "../models/courseFees/courseFees.models.js";
 import fs from "fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
 
 export const getAllStudentsController = asyncHandler(async (req, res, next) => {
   try {
@@ -122,6 +123,16 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
     const studentCourseFeesRecord = await CourseFeesModel.find({
       studentInfo: req.params.id,
     });
+
+    const installMentFees = await PaymentInstallmentTimeExpireModel.find({
+      studentInfo: req.params.id,
+    });
+
+    console.log(installMentFees);
+
+    installMentFees?.map(
+      async (installMentFee) => await installMentFee?.deleteOne()
+    );
 
     studentCourseFeesRecord?.map(
       async (studentFeeRecord) => await studentFeeRecord?.deleteOne()
