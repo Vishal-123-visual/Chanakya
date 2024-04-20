@@ -26,7 +26,11 @@ const MonthlyCollectionFee = () => {
     //     filteredResults[0]?.studentInfo?.no_of_installments_expireTimeandAmount.split(',')[0]
     //   ).getMonth() + 2
     // )
-    //console.log(filteredResults)
+    // console.log(
+    //   new Date(
+    //     filteredResults[0].studentInfo.no_of_installments_expireTimeandAmount.split(',')[0]
+    //   ).getTime()
+    // )
     setFilteredData(filteredResults)
     calculateTotalCollectionFees(filteredResults)
   }
@@ -40,22 +44,40 @@ const MonthlyCollectionFee = () => {
 
   const compareTimeInstallment = (t1) => {
     let resDate = new Date(t1).getTime()
-    console.log(resDate)
     let currDate = new Date().getTime()
 
+    //console.log(resDate, currDate)
+
     if (currDate > resDate) {
-      // return `Your installation time get expired ${new Date(
-      //   currDate
-      // ).toDateString()}, !== ${new Date(resDate).toDateString()} `
-      return 'month skipped'
+      return 'Month Skipped'
     } else {
-      // return `Your installation time is avialable ${new Date(
-      //   currDate
-      // ).toDateString()}, between ${new Date(resDate).toDateString()} `
+      console.log(
+        Number(new Date(resDate).toString().split(' ')[2]),
+        Number(new Date(currDate).toString().split(' ')[2])
+      )
       return '0 Month Skipped'
     }
-    //console.log(resDate, currDate)
   }
+
+  // const compareTimeInstallment = (t1) => {
+  //   let resDate = new Date(t1)
+  //   let currDate = new Date()
+
+  //   // Get the month of the expiration date
+  //   let resMonth = resDate.getTime()
+
+  //   // Get the month of the current date
+  //   let currMonth = currDate.getTime()
+  //   console.log(currMonth > resMonth)
+
+  //   if (resMonth === currMonth) {
+  //     return '0 Month Skipped'
+  //   } else if (currMonth > resMonth) {
+  //     return 'Month Skipped'
+  //   } else {
+  //     return 'No Month Skipped'
+  //   }
+  // }
 
   return (
     <div className={`card`}>

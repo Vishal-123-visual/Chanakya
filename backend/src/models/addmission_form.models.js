@@ -118,7 +118,7 @@ const admissionFormSchema = new mongoose.Schema(
       type: Number,
     },
     no_of_installments_expireTimeandAmount: {
-      type: String,
+      type: Date,
     },
     courseName: {
       type: mongoose.Schema.Types.ObjectId,

@@ -1,3 +1,2 @@
-10 installments
-1 is paid
-2 currnet time + 1 month = next month
+2024-04-20T11:26:56.117+00:00
+2024-04-20T11:26:56.117+00:00

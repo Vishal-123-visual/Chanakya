@@ -47,7 +47,7 @@ export const createCourseFeesController = asyncHandler(
       if (student.no_of_installments_expireTimeandAmount) {
         // Get the expiration date of the last installment
         const lastExpirationDate = new Date(
-          student.no_of_installments_expireTimeandAmount.split(",")[0]
+          student.no_of_installments_expireTimeandAmount
         );
         // Set the expiration date of the next installment to be one month after the last one
         expirationDate = new Date(lastExpirationDate);
@@ -71,7 +71,7 @@ export const createCourseFeesController = asyncHandler(
 
       await installmentExpiration.save();
 
-      student.no_of_installments_expireTimeandAmount = `${expirationDate},${nextInstallment},${installmentExpiration.installment_amount}`;
+      student.no_of_installments_expireTimeandAmount = expirationDate;
 
       await student.save();
 
