@@ -20,17 +20,8 @@ const MonthlyCollectionFee = () => {
         createdAtMonth <= Number(searchContentValues.to)
       )
     })
-    // console.log(filteredResults[0].studentInfo)
-    // console.log(
-    //   new Date(
-    //     filteredResults[0]?.studentInfo?.no_of_installments_expireTimeandAmount.split(',')[0]
-    //   ).getMonth() + 2
-    // )
-    // console.log(
-    //   new Date(
-    //     filteredResults[0].studentInfo.no_of_installments_expireTimeandAmount.split(',')[0]
-    //   ).getTime()
-    // )
+
+    //console.log(filteredResults)
     setFilteredData(filteredResults)
     calculateTotalCollectionFees(filteredResults)
   }
@@ -51,10 +42,10 @@ const MonthlyCollectionFee = () => {
     if (currDate > resDate) {
       return 'Month Skipped'
     } else {
-      console.log(
-        Number(new Date(resDate).toString().split(' ')[2]),
-        Number(new Date(currDate).toString().split(' ')[2])
-      )
+      // console.log(
+      //   Number(new Date(resDate).toString().split(' ')[2]),
+      //   Number(new Date(currDate).toString().split(' ')[2])
+      // )
       return '0 Month Skipped'
     }
   }
@@ -255,7 +246,7 @@ const MonthlyCollectionFee = () => {
                         <td>{data?.studentInfo?.name}</td>
 
                         <td>{data?.courseName?.courseName}</td>
-                        <td>{compareTimeInstallment(data?.expiration_date)}</td>
+                        <td>{data.studentInfo?.installmentPaymentSkipMonth} Month Skipped</td>
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
                             {data?.studentInfo?.phone_number}

@@ -180,7 +180,100 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       if (!studentFees) {
         return res.status(404).json({ message: "Student fee not found" });
       }
-      //console.log(studentFees);
+
+      const studentInfo = await admissionFormModel.findById(studentId);
+      //console.log("from ------------>", studentInfo);
+
+      // now get next payment installment data
+      let installmentExpireDate =
+        studentInfo.no_of_installments_expireTimeandAmount;
+      const nextInstallmentExpireTimeData =
+        await PaymentInstallmentTimeExpireModel.find({
+          studentInfo: studentId,
+          expiration_date: installmentExpireDate,
+        });
+
+      // console.log(
+      //   "next installment fees",
+      //   installmentExpireDate,
+      //   nextInstallmentExpireTimeData
+      // );
+
+      //console.log("student info data ----------------> ", studentInfo);
+
+      // // get the old time and current time
+      let installmentPayTime = new Date(installmentExpireDate).getTime();
+      let currentTimePaymentInstallment = new Date().getTime();
+
+      if (installmentPayTime < currentTimePaymentInstallment) {
+        let numberOfInstallment = studentInfo.no_of_installments;
+        studentInfo.installmentPaymentSkipMonth += 1;
+        studentInfo.no_of_installments = numberOfInstallment - 1;
+        studentInfo.no_of_installments_amount =
+          studentInfo.remainingCourseFees / numberOfInstallment - 1;
+        await studentInfo.save();
+      } else {
+        let arrayOfCurrentTime = new Date(currentTimePaymentInstallment)
+          .toDateString()
+          .split(" ");
+        let arrayOfPrevTime = new Date(installmentPayTime)
+          .toDateString()
+          .split(" ");
+        let dayMonthDateYearCurrent =
+          arrayOfCurrentTime[0] +
+          arrayOfCurrentTime[1] +
+          arrayOfCurrentTime[2] +
+          arrayOfCurrentTime[3];
+        let dayMonthDateYearPrev =
+          arrayOfPrevTime[0] +
+          arrayOfPrevTime[1] +
+          arrayOfPrevTime[2] +
+          arrayOfPrevTime[3];
+        console.log(dayMonthDateYearPrev);
+
+        if (
+          arrayOfCurrentTime[0] +
+            arrayOfCurrentTime[1] +
+            1 +
+            arrayOfCurrentTime[3] ===
+          dayMonthDateYearPrev
+        ) {
+          // then send mail to student
+          sendEmail();
+        }
+
+        if (
+          arrayOfCurrentTime[0] +
+            arrayOfCurrentTime[1] +
+            10 +
+            arrayOfCurrentTime[3] ===
+          dayMonthDateYearPrev
+        ) {
+          // then send mail to student
+          sendEmail();
+        }
+        if (
+          arrayOfCurrentTime[0] +
+            arrayOfCurrentTime[1] +
+            12 +
+            arrayOfCurrentTime[3] ===
+          dayMonthDateYearPrev
+        ) {
+          // then send mail to student
+          sendEmail();
+        }
+        if (
+          arrayOfCurrentTime[0] +
+            arrayOfCurrentTime[1] +
+            15 +
+            arrayOfCurrentTime[3] ===
+          dayMonthDateYearPrev
+        ) {
+          // then send mail to student
+          sendEmail();
+        }
+      }
+
       res.status(200).json(studentFees);
     } catch (error) {
       res.status(500).json({ error: error });
@@ -278,17 +371,3 @@ export const getAllCourseFeesController = asyncHandler(
     }
   }
 );
-
-// {
-//   "_id": "661a374ae78c47616b93557e",
-//   "courseName": "Digital Marketing",
-//   "courseFees": 40000,
-//   "courseType": "65f2a48cd8b6fc856a36a192",
-//   "numberOfYears": "660402aa2b8b76432d3dcfb1",
-//   "category": "6618f56785f0da6d6281dcd2",
-//   "user": "65deeeb6c0d01ccd202d6a1a",
-//   "createdBy": "Rahul Roy",
-//   "createdAt": "2024-04-13T07:42:02.778Z",
-//   "updatedAt": "2024-04-13T07:42:02.778Z",
-//   "__v": 0
-// }
