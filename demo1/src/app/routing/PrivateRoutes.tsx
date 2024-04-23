@@ -7,9 +7,13 @@ import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
-import AddPaymentOption from '../pages/payment_option/AddPaymentOption'
+// import AddCompany from '../pages/compay/AddCompany'
+// import Company from '../pages/compay/Company'
+// import AddPaymentOption from '../pages/payment_option/AddPaymentOption'
 
 const PrivateRoutes = () => {
+  const AddCompany = lazy(() => import('../pages/compay/AddCompany'))
+  const Company = lazy(() => import('../pages/compay/Company'))
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
   const WizardsPage = lazy(() => import('../modules/wizards/WizardsPage'))
   const AccountPage = lazy(() => import('../modules/accounts/AccountPage'))
@@ -36,6 +40,8 @@ const PrivateRoutes = () => {
   const MonthlyCollectionFee = lazy(
     () => import('../pages/monthly_collection_fee/MonthlyCollectionFee')
   )
+  const AddPaymentOption = lazy(() => import('../pages/payment_option/AddPaymentOption'))
+
   return (
     <Routes>
       <Route element={<MasterLayout />}>
@@ -190,6 +196,25 @@ const PrivateRoutes = () => {
           }
         />
         {/* *************************************** Payment Option End here.. ******************************************* */}
+
+        {/* ******************************................ Manage Company start here..............******************************************* */}
+        <Route
+          path='/company'
+          element={
+            <SuspensedView>
+              <Company />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/add-company'
+          element={
+            <SuspensedView>
+              <AddCompany />
+            </SuspensedView>
+          }
+        />
+        {/* ******************************................ Manage Company start here..............******************************************* */}
 
         {/* <Route path='/add-user' element={<AddUser />} />
         <Route path='/user-list' element={<UserList />} /> */}

@@ -162,6 +162,18 @@ const SidebarMenuMain = () => {
       </SidebarMenuItemWithSub>
       {/* ************* Manage Payment Option END   ****************** */}
 
+      {/* *************************************  Manage Company Start ******************************** */}
+      <SidebarMenuItemWithSub
+        to='/apps/chat'
+        title='Manage Company'
+        fontIcon='bi-chat-left'
+        icon='message-text-2'
+      >
+        <SidebarMenuItem to='/company' title='Company' hasBullet={true} />
+        <SidebarMenuItem to='/add-company' title='Add Company' hasBullet={true} />
+      </SidebarMenuItemWithSub>
+      {/* *************************************  Manage Company End ******************************** */}
+
       <SidebarMenuItem
         to='/apps/user-management/users'
         icon='abstract-28'
