@@ -7,6 +7,7 @@ import { mailTransporter } from "../utils/mail_helpers.js";
 import { MailHTML } from "../../helpers/mail/index.js";
 import CourseModel from "../models/course/courses.models.js";
 import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
+import PaymentOptionsModel from "../models/payment-options/paymentoption.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -27,7 +28,9 @@ export const createCourseFeesController = asyncHandler(
       }
 
       // Fetch student and validate remaining fees
-      const student = await admissionFormModel.findById(studentInfo);
+      const student = await admissionFormModel
+        .findById(studentInfo)
+        .populate("courseName");
       if (!student) {
         return res.status(404).json({ message: "Student not found" });
       }
@@ -74,9 +77,84 @@ export const createCourseFeesController = asyncHandler(
       student.no_of_installments_expireTimeandAmount = expirationDate;
 
       await student.save();
+      const findPaymentOptionName = await PaymentOptionsModel.findById(
+        paymentOption
+      );
+      console.log(findPaymentOptionName);
 
       // Send email asynchronously
-      sendEmail();
+
+      sendEmail(
+        `${req.user.email}, ${student.email} thakurarvindkr10@gmail.com`,
+        "Regarding to Submitted Fees in Visual Media Technology",
+        `Hello ${student.name} you have submitted fees `,
+        ` <div style="font-family: Arial, sans-serif; margin: 0; padding: 0">
+                  <div
+                    style="
+                      max-width: 768px;
+                      margin: 0 auto;
+                      background-color: #7da7e1;
+                      border: 2px solid #000;
+                      padding: 20px;
+                      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    "
+                  >
+                    <h3 style="text-align: center">Visual Media Technology</h3>
+                    <header
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                      "
+                    >
+                      <p>Receipt No 123</p>
+                      <p>RECEIPT</p>
+                      <img
+                        src="https://www.relanimation.in/wp-content/uploads/2023/05/cropped-Reliance-logo.png"
+                        alt="logo"
+                        style="width: 100px"
+                      /> 
+                    </header>
+                    <p>Date ${Date.now()}</p>
+                    <p>Received a sum of Rupees : ${amountPaid + lateFees}</p>
+                    <p>Mr./Mrs./Ms : ${student.name}</p>
+                    <section style="display: flex; justify-content: space-around">
+                      <div class="left" style="font-size: 16px; font-weight: 600">
+                        <p>Course Fees : ${student.course_fees}</p>
+                        <p>Late Fees : ${lateFees}</p>
+                        <p>Total : ${amountPaid + lateFees}</p>
+                      </div>
+                      <div class="right" style="font-size: 16px; font-weight: 600">
+                        <p>Course Name : ${student.courseName.courseName}</p>
+                        <p>Payment By : ${findPaymentOptionName.name}</p>
+                        <p>Cash Amount : ${amountPaid}</p>
+                      </div>
+                    </section>
+                    <section
+                      style="
+                        display: flex;
+                        justify-content: space-around;
+                        font-size: 12px;
+                        font-weight: 300;
+                      "
+                    >
+                      <p>
+                        CHEQUES SUBJECT TO REALISATION THE RECEIPT MUST BE PRODUCED WHEN
+                        DEMANDED
+                      </p>
+                      <p>FEES ONCE PAID ARE NOT REFUNDABLE</p>
+                      <p>Auth. Franchisee of Big Animation (1) Pvt. Ltd</p>
+                    </section>
+                    <footer style="text-align: center; margin-top: 20px">
+                      <p>
+                        RELIANCE EDUCATION, SCO 114-115, Basement, Sector 34-A, Chandigarh.
+                        (M) +91-7696300600
+                      </p>
+                      <p>www.relianceedu.com E-mail: chandigarh@relianceedu.com</p>
+                    </footer>
+                  </div>
+       </div>`
+      );
 
       res.status(201).json(savedCourseFees);
     } catch (error) {
@@ -87,83 +165,18 @@ export const createCourseFeesController = asyncHandler(
 );
 
 // Function to send email asynchronously
-async function sendEmail() {
+async function sendEmail(toEmails, subject, text, html) {
   const mailOptions = {
     from: USER_EMAIL,
-    to: "thakurarvindkr10@gmail.com, cepelon828@kravify.com",
-    subject: "Welcome to Visual Media Technolog",
-    text: "This is a test email from Visual Media",
-    html: ` <body style="font-family: Arial, sans-serif; margin: 0; padding: 0">
-   <div
-     style="
-       max-width: 768px;
-       margin: 0 auto;
-       background-color: #7da7e1;
-       border: 2px solid #000;
-       padding: 20px;
-       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-     "
-   >
-     <h3 style="text-align: center">Visual Media Technology</h3>
-     <header
-       style="
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-       "
-     >
-       <p>Receipt No 123</p>
-       <p>RECEIPT</p>
-       <img
-         src="https://www.relanimation.in/wp-content/uploads/2023/05/cropped-Reliance-logo.png"
-         alt="logo"
-         style="width: 100px"
-       />
-     </header>
-     <p>Date 17/04/2023</p>
-     <p>Received a sum of Rupees : 30000</p>
-     <p>Mr./Mrs./Ms : Ajay</p>
-     <section style="display: flex; justify-content: space-around">
-       <div class="left" style="font-size: 16px; font-weight: 600">
-         <p>Course Fees : 50000</p>
-         <p>Late Fees : 0</p>
-         <p>Total : 3000</p>
-       </div>
-       <div class="right" style="font-size: 16px; font-weight: 600">
-         <p>Course Name : Digital Marketing</p>
-         <p>Payment By : Cash</p>
-         <p>Cash Amount : 3000</p>
-       </div>
-     </section>
-     <section
-       style="
-         display: flex;
-         justify-content: space-around;
-         font-size: 12px;
-         font-weight: 300;
-       "
-     >
-       <p>
-         CHEQUES SUBJECT TO REALISATION THE RECEIPT MUST BE PRODUCED WHEN
-         DEMANDED
-       </p>
-       <p>FEES ONCE PAID ARE NOT REFUNDABLE</p>
-       <p>Auth. Franchisee of Big Animation (1) Pvt. Ltd</p>
-     </section>
-     <footer style="text-align: center; margin-top: 20px">
-       <p>
-         RELIANCE EDUCATION, SCO 114-115, Basement, Sector 34-A, Chandigarh.
-         (M) +91-7696300600
-       </p>
-       <p>www.relianceedu.com E-mail: chandigarh@relianceedu.com</p>
-     </footer>
-   </div>
- </body>`,
+    to: toEmails,
+    subject: subject,
+    text: text,
+    html,
   };
 
   try {
     const result = await mailTransporter.sendMail(mailOptions);
-    //console.log("Email sent successfully", result);
+    console.log("Email sent successfully", result);
   } catch (error) {
     console.log("Email send failed with error:", error);
   }
@@ -172,6 +185,7 @@ async function sendEmail() {
 export const getCourseFeesByStudentIdController = asyncHandler(
   async (req, res, next) => {
     try {
+      console.log(req.user.email, req.user.role);
       const { studentId } = req.params;
       //console.log(studentId);
       const studentFees = await CourseFeesModel.find({
@@ -181,17 +195,19 @@ export const getCourseFeesByStudentIdController = asyncHandler(
         return res.status(404).json({ message: "Student fee not found" });
       }
 
-      const studentInfo = await admissionFormModel.findById(studentId);
-      //console.log("from ------------>", studentInfo);
+      const studentInfo = await admissionFormModel
+        .findById(studentId)
+        .populate("courseName");
+      console.log("from ------------>", studentInfo);
 
       // now get next payment installment data
       let installmentExpireDate =
         studentInfo.no_of_installments_expireTimeandAmount;
-      const nextInstallmentExpireTimeData =
-        await PaymentInstallmentTimeExpireModel.find({
-          studentInfo: studentId,
-          expiration_date: installmentExpireDate,
-        });
+      // const nextInstallmentExpireTimeData =
+      //   await PaymentInstallmentTimeExpireModel.find({
+      //     studentInfo: studentId,
+      //     expiration_date: installmentExpireDate,
+      //   });
 
       // console.log(
       //   "next installment fees",
@@ -208,9 +224,11 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       if (installmentPayTime < currentTimePaymentInstallment) {
         let numberOfInstallment = studentInfo.no_of_installments;
         studentInfo.installmentPaymentSkipMonth += 1;
-        studentInfo.no_of_installments = numberOfInstallment - 1;
-        studentInfo.no_of_installments_amount =
-          studentInfo.remainingCourseFees / numberOfInstallment - 1;
+        if (numberOfInstallment > 0) {
+          studentInfo.no_of_installments = numberOfInstallment - 1;
+          studentInfo.no_of_installments_amount =
+            studentInfo.remainingCourseFees / numberOfInstallment - 1;
+        }
         await studentInfo.save();
       } else {
         let arrayOfCurrentTime = new Date(currentTimePaymentInstallment)
@@ -229,7 +247,7 @@ export const getCourseFeesByStudentIdController = asyncHandler(
           arrayOfPrevTime[1] +
           arrayOfPrevTime[2] +
           arrayOfPrevTime[3];
-        console.log(dayMonthDateYearPrev);
+        //console.log(dayMonthDateYearPrev);
 
         if (
           arrayOfCurrentTime[0] +
@@ -239,7 +257,11 @@ export const getCourseFeesByStudentIdController = asyncHandler(
           dayMonthDateYearPrev
         ) {
           // then send mail to student
-          sendEmail();
+          sendEmail(
+            `${req.user.email}, ${studentInfo.email}`,
+            "Welcome to visual Media Technology",
+            "Regarding to Fees Installment due in Visual Media Technology"
+          );
         }
 
         if (
