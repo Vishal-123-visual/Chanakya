@@ -11,7 +11,7 @@ import PaymentOptionsModel from "../models/payment-options/paymentoption.models.
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    console.log(req.body);
+    //console.log(req.body);
     try {
       const {
         studentInfo,
@@ -38,6 +38,8 @@ export const createCourseFeesController = asyncHandler(
       // Save course fees
       const newCourseFees = new CourseFeesModel({ ...req.body });
       const savedCourseFees = await newCourseFees.save();
+
+      //console.log("saved course fees", savedCourseFees);
 
       // Update student's payment information
       student.down_payment = amountPaid;
@@ -107,7 +109,7 @@ export const createCourseFeesController = asyncHandler(
                         align-items: center;
                       "
                     >
-                      <p>Receipt No 123</p>
+                      <p>Receipt No ${savedCourseFees.reciptNumber}</p>
                       <p>RECEIPT</p>
                       <img
                         src="https://www.relanimation.in/wp-content/uploads/2023/05/cropped-Reliance-logo.png"
@@ -115,7 +117,7 @@ export const createCourseFeesController = asyncHandler(
                         style="width: 100px"
                       /> 
                     </header>
-                    <p>Date ${Date.now()}</p>
+                    <p>Date ${new Date().toDateString()}</p>
                     <p>Received a sum of Rupees : ${amountPaid + lateFees}</p>
                     <p>Mr./Mrs./Ms : ${student.name}</p>
                     <section style="display: flex; justify-content: space-around">
