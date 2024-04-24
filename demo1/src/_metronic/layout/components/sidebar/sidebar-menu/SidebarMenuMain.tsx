@@ -162,7 +162,7 @@ const SidebarMenuMain = () => {
       </SidebarMenuItemWithSub>
       {/* ************* Manage Payment Option END   ****************** */}
 
-      {/* *************************************  Manage Company Start ******************************** */}
+      {/* *************************************  y Start ******************************** */}
       <SidebarMenuItemWithSub
         to='/apps/chat'
         title='Manage Company'
@@ -171,6 +171,7 @@ const SidebarMenuMain = () => {
       >
         <SidebarMenuItem to='/company' title='Company' hasBullet={true} />
         <SidebarMenuItem to='/add-company' title='Add Company' hasBullet={true} />
+        <SidebarMenuItem to='/update-company' title='Update Company' hasBullet={true} />
       </SidebarMenuItemWithSub>
       {/* *************************************  Manage Company End ******************************** */}
 

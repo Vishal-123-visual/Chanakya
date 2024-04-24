@@ -76,11 +76,11 @@ export const CompanyContextProvider = ({children}) => {
   })
 
   // update Course type
-  const updateCourseMutation = useMutation({
+  const updateCompanyMutation = useMutation({
     mutationFn: async (updateData) => {
-      //console.log(updateData)
+      let id = updateData.get('id')
       return axios
-        .put(`${BASE_URL}/api/courses/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .put(`${BASE_URL}/api/company/${id}`, updateData, config) // Corrected order of arguments
         .then((res) => res.data)
     },
     onSettled: async (_, error) => {
@@ -96,7 +96,12 @@ export const CompanyContextProvider = ({children}) => {
 
   return (
     <CompanyContext.Provider
-      value={{createAddCompanyMutation, getCompanyLists, deleteCompanyMutation}}
+      value={{
+        createAddCompanyMutation,
+        getCompanyLists,
+        deleteCompanyMutation,
+        updateCompanyMutation,
+      }}
     >
       {children}
     </CompanyContext.Provider>

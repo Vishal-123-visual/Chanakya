@@ -49,16 +49,27 @@ export const getAllCompanyListsController = asyncHandler(
 );
 export const updateCompanyController = asyncHandler(async (req, res, next) => {
   try {
-    const companies = await CompanyModels.find({});
-    res.status(200).json(companies);
+    const company = await CompanyModels.findById(req.params.id);
+    //console.log(company);
+
+    if (!company) {
+      return res.status(404).json({ message: "Company not found" });
+    }
+
+    console.log(req.body, req.file);
   } catch (error) {
     res.status(500).json({ message: "Error in updating company" });
   }
 });
+
 export const deleteCompanyController = asyncHandler(async (req, res, next) => {
   try {
     const company = await CompanyModels.findById(req.params.id);
-    console.log(company);
+    //console.log(company);
+
+    if (!company) {
+      return res.status(404).json({ message: "Company not found" });
+    }
 
     let imagePath = company.logo;
     if (imagePath) {

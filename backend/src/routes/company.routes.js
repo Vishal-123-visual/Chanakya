@@ -17,7 +17,7 @@ router
 
 router
   .route("/:id")
-  .put(requireSignIn, isAdmin, updateCompanyController)
+  .put(requireSignIn, isAdmin, upload.single("logo"), updateCompanyController)
   .delete(requireSignIn, isAdmin, deleteCompanyController);
 
 export default router;

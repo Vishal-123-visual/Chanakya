@@ -96,7 +96,7 @@ const Company = () => {
                   <td>
                     <div className='d-flex justify-content-end flex-shrink-0'>
                       <button
-                        onClick={() => companyCTX.deleteCompanyMutation.mutate(companyData._id)}
+                        onClick={() => navigate('/update-company', {state: companyData})}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                       >
                         <KTIcon iconName='pencil' className='fs-3' />

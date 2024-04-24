@@ -7,11 +7,9 @@ import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
-// import AddCompany from '../pages/compay/AddCompany'
-// import Company from '../pages/compay/Company'
-// import AddPaymentOption from '../pages/payment_option/AddPaymentOption'
 
 const PrivateRoutes = () => {
+  const UpdateCompany = lazy(() => import('../pages/compay/UpdateCompany'))
   const AddCompany = lazy(() => import('../pages/compay/AddCompany'))
   const Company = lazy(() => import('../pages/compay/Company'))
   const ProfilePage = lazy(() => import('../modules/profile/ProfilePage'))
@@ -211,6 +209,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <AddCompany />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/update-company'
+          element={
+            <SuspensedView>
+              <UpdateCompany />
             </SuspensedView>
           }
         />
