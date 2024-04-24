@@ -107,7 +107,7 @@ const AddMissionForm: React.FC = () => {
   }
 
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  //console.log(updateUserId)
+  console.log(updateUserId)
 
   // let updateStudentId = updateUserId?._id
 
@@ -150,6 +150,7 @@ const AddMissionForm: React.FC = () => {
       }
 
       if (updateUserId) {
+        formData.append('id', updateUserId?._id)
         context.updateStudentMutation.mutate(formData)
         setLoading(true)
       } else {
@@ -565,11 +566,12 @@ const AddMissionForm: React.FC = () => {
                           formik.getFieldProps('select_course').onChange(e)
                           handleSelectChange(e)
                         }}
+                        defaultValue={updateUserId && updateUserId.select_course}
                       >
                         <option value=''>-select-</option>
-                        {courseCtx.getCourseLists.data.map((c: any) => (
-                          <option key={c._id} value={c.courseName}>
-                            {c.courseName}
+                        {courseCtx?.getCourseLists?.data?.map((c: any) => (
+                          <option key={c?._id} value={c?.courseName}>
+                            {c?.courseName}
                           </option>
                         ))}
                       </select>

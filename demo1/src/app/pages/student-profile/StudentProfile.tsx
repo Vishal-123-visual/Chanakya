@@ -16,6 +16,7 @@ import {AccountHeader} from '../../modules/accounts/AccountHeader'
 import {Dropdown1} from '../../../_metronic/partials'
 import {useCourseContext} from '../course/CourseContext'
 import StudentCourseFee from './StudentCourseFee'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/images`
@@ -51,6 +52,7 @@ const StudentProfile: React.FC = () => {
 
   const location = useLocation()
   const courseCtx = useCourseContext()
+  const companyCTX = useCompanyContext()
 
   const setProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -593,6 +595,31 @@ const StudentProfile: React.FC = () => {
                             </div>
                           </div>
                         )}
+                    </div>
+                  </div>
+                </div>
+                <div className='col-6 mt-5'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Company Name</label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <select
+                        disabled
+                        className='form-select form-select-solid form-select-lg'
+                        {...formik.getFieldProps('companyName')}
+                      >
+                        <option value=''>-select-</option>
+                        {companyCTX.getCompanyLists?.data?.map((companyData) => (
+                          <option key={companyData?._id} value={companyData?._id}>
+                            {companyData?.companyName}
+                          </option>
+                        ))}
+                      </select>
+                      {formik.touched.companyName && formik.errors.companyName && (
+                        <div className='fv-plugins-message-container'>
+                          <div className='fv-help-block'>{formik.errors.companyName}</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
