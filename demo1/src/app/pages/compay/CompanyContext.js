@@ -2,6 +2,7 @@ import {createContext, useContext, useState} from 'react'
 import axios from 'axios'
 import {useQueryClient, useMutation, useQuery} from 'react-query'
 import {useAuth} from '../../modules/auth'
+import {useNavigate} from 'react-router-dom'
 
 const CompanyContext = createContext()
 
@@ -16,11 +17,11 @@ export const CompanyContextProvider = ({children}) => {
     },
   }
 
-  const getCourseLists = useQuery({
-    queryKey: ['getCourseLists'],
+  const getCompanyLists = useQuery({
+    queryKey: ['getCompanyLists'],
     queryFn: async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/courses`, config)
+        const response = await axios.get(`${BASE_URL}/api/company`, config)
         return response.data
       } catch (error) {
         throw new Error('Error fetching student data: ' + error.message)
@@ -28,15 +29,13 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
-  //console.log(getCourseLists)
+  //console.log(getCompanyLists)
 
   //console.log(studentsLists)
-  const createCourseMutation = useMutation({
+  const createAddCompanyMutation = useMutation({
     mutationFn: async (data) => {
       //console.log(data)
-      return axios
-        .post(`${BASE_URL}/api/courses`, data, config)
-        .then((res) => localStorage.setItem('AddedNewCourse', JSON.stringify(res.data)))
+      return axios.post(`${BASE_URL}/api/company`, data, config)
     },
     onMutate: () => {
       //console.log('mutate')
@@ -47,8 +46,7 @@ export const CompanyContextProvider = ({children}) => {
     },
 
     onSuccess: () => {
-      alert('Added Course  Successfully!')
-      //console.log('success')
+      //alert('Added Course  Successfully!')
     },
 
     onSettled: async (_, error) => {
@@ -57,24 +55,22 @@ export const CompanyContextProvider = ({children}) => {
         //console.log(error)
         alert(error.response.data.error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getCourseLists']})
+        await queryClient.invalidateQueries({queryKey: ['getCompanyLists']})
       }
     },
   })
 
   // Course Types
-  const deleteCourseMutation = useMutation({
+  const deleteCompanyMutation = useMutation({
     mutationFn: async (id) => {
-      return axios.delete(`${BASE_URL}/api/courses/${id}`, config).then((res) => res.data)
+      return axios.delete(`${BASE_URL}/api/company/${id}`, config).then((res) => res.data)
     },
-    onSuccess: () => {
-      alert('Course  deleted successfully')
-    },
+    onSuccess: () => {},
     onSettled: async (_, error) => {
       if (error) {
         alert(error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getCourseLists']})
+        await queryClient.invalidateQueries({queryKey: ['getCompanyLists']})
       }
     },
   })
@@ -92,7 +88,7 @@ export const CompanyContextProvider = ({children}) => {
         alert('Error while updating student...', error)
       } else {
         await queryClient.invalidateQueries({
-          queryKey: ['getCourseLists', 'getNumberOfCourseYearsTypes', 'getCourseSubjectLists'],
+          queryKey: ['getCompanyLists'],
         })
       }
     },
@@ -100,12 +96,7 @@ export const CompanyContextProvider = ({children}) => {
 
   return (
     <CompanyContext.Provider
-      value={{
-        getCourseLists,
-        deleteCourseMutation,
-        createCourseMutation,
-        updateCourseMutation,
-      }}
+      value={{createAddCompanyMutation, getCompanyLists, deleteCompanyMutation}}
     >
       {children}
     </CompanyContext.Provider>
@@ -115,7 +106,7 @@ export const CompanyContextProvider = ({children}) => {
 export const useCompanyContext = () => {
   const context = useContext(CompanyContext)
   if (!context) {
-    throw new Error('useAdmissionContext must be used within an AdmissionContextProvider')
+    throw new Error('Something went wrong! Please try again')
   }
   return context
 }

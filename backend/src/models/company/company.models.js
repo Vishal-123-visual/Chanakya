@@ -4,11 +4,11 @@ const companySchema = new mongoose.Schema(
   {
     logo: {
       type: String,
-      required: true,
     },
     companyName: {
       type: String,
       required: true,
+      unique: true,
     },
     companyAddress: {
       type: String,

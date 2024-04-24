@@ -3,11 +3,11 @@ import {useNavigate} from 'react-router-dom'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
+import {useCompanyContext} from './CompanyContext'
 
 const CourseSchema = Yup.object().shape({
-  logo: Yup.string().required('Company Logo is required'),
   companyName: Yup.string().required('Company Name is required'),
-  comapnyAddress: Yup.string().required('Company Address is required'),
+  companyAddress: Yup.string().required('Company Address is required'),
   reciptNumber: Yup.string().required('Company recipt number'),
   gst: Yup.string(),
 })
@@ -17,6 +17,8 @@ const AddCompany = () => {
   const navigate = useNavigate()
   const [preview, setPreview] = useState('')
   const [logo, setLogo] = useState(null)
+  const companyCTX = useCompanyContext()
+  //console.log(companyCTX)
   //console.log(getCourseCategoryLists)
 
   const setProfile = (e) => {
@@ -35,9 +37,8 @@ const AddCompany = () => {
   }, [logo])
 
   let initialValues = {
-    logo: '',
     companyName: '',
-    comapnyAddress: '',
+    companyAddress: '',
     reciptNumber: '',
     gst: '',
   }
@@ -47,7 +48,20 @@ const AddCompany = () => {
     validationSchema: CourseSchema,
     onSubmit: async (values) => {
       setLoading(true)
-      console.log(values)
+      let formData = new FormData()
+      //console.log(values)
+
+      // Append each field of values to formData
+      Object.entries(values).forEach(([key, value]) => {
+        formData.append(key, value) // Ensure value is a string, adjust if needed
+      })
+
+      // Append the image to formData
+      if (logo) {
+        formData.append('logo', logo)
+      }
+      companyCTX.createAddCompanyMutation.mutate(formData)
+      navigate('/company')
     },
   })
   return (
@@ -83,10 +97,7 @@ const AddCompany = () => {
                       type='file'
                       name='logo' // Add the name attribute
                       className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
-                      onChange={(e) => {
-                        formik.getFieldProps('logo').onChange(e)
-                        setProfile(e)
-                      }}
+                      onChange={(e) => setProfile(e)}
                     />
                   </div>
                 </label>
@@ -116,11 +127,11 @@ const AddCompany = () => {
                       type='text'
                       className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                       placeholder='Enter Company Address'
-                      {...formik.getFieldProps('comapnyAddress')}
+                      {...formik.getFieldProps('companyAddress')}
                     />
-                    {formik.touched.comapnyAddress && formik.errors.comapnyAddress && (
+                    {formik.touched.companyAddress && formik.errors.companyAddress && (
                       <div className='fv-plugins-message-container'>
-                        <div className='fv-help-block'>{formik.errors?.comapnyAddress}</div>
+                        <div className='fv-help-block'>{formik.errors?.companyAddress}</div>
                       </div>
                     )}
                   </div>

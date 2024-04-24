@@ -128,7 +128,7 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
       studentInfo: req.params.id,
     });
 
-    console.log(installMentFees);
+    // console.log(installMentFees);
 
     installMentFees?.map(
       async (installMentFee) => await installMentFee?.deleteOne()

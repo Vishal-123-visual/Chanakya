@@ -8,6 +8,7 @@ import courseRoutes from "./routes/course.routes.js";
 import subjectRoutes from "./routes/subject.routes.js";
 import courseFeesRoutes from "./routes/courseFees.routes.js";
 import paymentOptionsRoutes from "./routes/paymentOptions.routes.js";
+import companyRoutes from "./routes/company.routes.js";
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.use("/api/courses", courseRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/courseFees", courseFeesRoutes);
 app.use("/api/paymentOptions", paymentOptionsRoutes);
+app.use("/api/company", companyRoutes);
 const __dirname = path.resolve();
 app.use("/images", express.static(path.join(__dirname + "/images")));
 
