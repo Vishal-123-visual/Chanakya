@@ -5,7 +5,7 @@ import CompanyModels from "../models/company/company.models.js";
 export const createCompanyController = asyncHandler(async (req, res, next) => {
   const { companyName, companyAddress, reciptNumber, gst } = req.body;
   const file = req?.file?.filename;
-  console.log(file);
+  // console.log(file);
   try {
     switch (true) {
       case !file:
@@ -50,13 +50,20 @@ export const getAllCompanyListsController = asyncHandler(
 export const updateCompanyController = asyncHandler(async (req, res, next) => {
   try {
     const company = await CompanyModels.findById(req.params.id);
-    //console.log(company);
 
     if (!company) {
       return res.status(404).json({ message: "Company not found" });
     }
+    const file = req?.file?.filename;
 
-    console.log(req.body, req.file);
+    company.companyName = req.body.companyName || company.companyName;
+    company.companyAddress = req.body.companyAddress || company.companyAddress;
+    company.reciptNumber = req.body.reciptNumber || company.reciptNumber;
+    company.gst = req.body.gst || company.gst;
+    company.logo = file || company.logo;
+
+    const updatedCompany = await company.save();
+    res.status(200).json(updatedCompany);
   } catch (error) {
     res.status(500).json({ message: "Error in updating company" });
   }
