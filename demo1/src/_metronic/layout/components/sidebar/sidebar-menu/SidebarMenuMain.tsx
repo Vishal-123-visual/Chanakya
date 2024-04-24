@@ -120,7 +120,7 @@ const SidebarMenuMain = () => {
       {/* ----------------------------- Company Menu END Here ............................... */}
 
       {/* ******************  Manage Student added Started------- **************************** */}
-      <SidebarMenuItemWithSub
+      {/* <SidebarMenuItemWithSub
         to='/apps/chat'
         title='Manage Students'
         fontIcon='bi-chat-left'
@@ -129,10 +129,7 @@ const SidebarMenuMain = () => {
         <SidebarMenuItem to='/my-page' title='Users' hasBullet={true} />
         <SidebarMenuItem to='/students' title='Students' hasBullet={true} />
         <SidebarMenuItem to='/addmission-form' title='Admission Form' hasBullet={true} />
-
-        {/* <SidebarMenuItem to='/add-user' title='Add User' hasBullet={true} /> */}
-        {/* <SidebarMenuItem to='/user-list' title='User List' hasBullet={true} /> */}
-      </SidebarMenuItemWithSub>
+      </SidebarMenuItemWithSub> */}
       {/* ******************  Manage Student added end ------- **************************** */}
 
       {/* ************* Manage Courses Start   ****************** */}
