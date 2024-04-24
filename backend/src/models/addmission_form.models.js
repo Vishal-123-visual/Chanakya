@@ -3,6 +3,11 @@ import CounterRollNumberModel from "./student-rollNumber/CounterRollNumber.model
 
 const admissionFormSchema = new mongoose.Schema(
   {
+    companyName: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
     rollNumber: {
       type: Number,
       required: true,

@@ -5,6 +5,7 @@ export const createAddMissionController = asyncHandler(
   async (req, res, next) => {
     const {
       //rollNumber,
+      companyName,
       name,
       father_name,
       mobile_number,
@@ -36,6 +37,10 @@ export const createAddMissionController = asyncHandler(
     // console.log(req.file);
     const file = req?.file?.filename;
     switch (true) {
+      case !companyName:
+        res.status(400);
+        throw new Error("Please provide company Name field!");
+        return;
       // case !rollNumber:
       //   res.status(400);
       //   throw new Error("Please provide roll Number field!");

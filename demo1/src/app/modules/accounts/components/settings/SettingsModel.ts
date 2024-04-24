@@ -17,6 +17,7 @@ export interface IProfileDetails {
 }
 
 export interface AddMissionFormInterface {
+  companyName?: string
   rollNumber?: number
   image?: string
   _id?: string
@@ -58,6 +59,7 @@ export interface AddMissionFormInterface {
 }
 
 export interface updateMissionFormInterface {
+  companyName?: string
   _id: string | undefined
   name: string
   father_name: string
@@ -94,6 +96,7 @@ export interface updateMissionFormInterface {
 }
 
 export const addMissionFormInitialValues: AddMissionFormInterface = {
+  companyName: '',
   rollNumber: 0,
   image: '',
   name: '',

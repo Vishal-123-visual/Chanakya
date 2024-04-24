@@ -15,6 +15,7 @@ import {useLocation, useNavigate} from 'react-router-dom'
 import {toAbsoluteUrl} from '../../_metronic/helpers'
 import {useCourseContext} from './course/CourseContext'
 import {useStudentCourseFeesContext} from './courseFees/StudentCourseFeesContext'
+import {useCompanyContext} from './compay/CompanyContext'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/images`
 
@@ -22,6 +23,7 @@ const addmissionFormSchema = Yup.object().shape({
   rollNumber: Yup.number(),
   // image: Yup.object(),
   _id: Yup.string(),
+  companyName: Yup.string(),
   name: Yup.string().required('Name is required!'),
   father_name: Yup.string().required('Father Name is required!'),
   mobile_number: Yup.string().required('Mobile Number is required!'),
@@ -161,6 +163,8 @@ const AddMissionForm: React.FC = () => {
   })
 
   const courseCtx = useCourseContext()
+  const companyCTX = useCompanyContext()
+  console.log(companyCTX.getCompanyLists.data)
   //console.log(courseCtx.getCourseLists.data)
 
   return (
@@ -189,7 +193,10 @@ const AddMissionForm: React.FC = () => {
               <div className='d-flex justify-content-center'>
                 <div className='symbol symbol-100px symbol-lg-160px symbol-fixed position-relative'>
                   {updateUserId ? (
-                    <img src={BASE_URL_Image + `/${updateUserId?.image}`} alt='Metornic' />
+                    <img
+                      src={preview ? preview : BASE_URL_Image + `/${updateUserId?.image}`}
+                      alt='Metornic'
+                    />
                   ) : (
                     <img
                       src={preview ? preview : toAbsoluteUrl('/media/avatars/300-1.jpg')}
@@ -423,10 +430,7 @@ const AddMissionForm: React.FC = () => {
                         className='form-control form-control-lg form-control-solid'
                         placeholderText='DD/MM/YYYY'
                       />
-                      {/* <Calendar
-                        value={formik.values.date_of_birth}
-                        onChange={(date) => formik.setFieldValue('date_of_birth', date)}
-                      /> */}
+
                       {formik.touched.date_of_birth && formik.errors.date_of_birth && (
                         <div className='fv-plugins-message-container'>
                           {/* <div className='fv-help-block'>{formik.errors.date_of_birth}</div> */}
@@ -501,6 +505,32 @@ const AddMissionForm: React.FC = () => {
                             </div>
                           </div>
                         )}
+                    </div>
+                  </div>
+                </div>
+                <div className='col-6 mt-5'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                      Company Name
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <select
+                        className='form-select form-select-solid form-select-lg'
+                        {...formik.getFieldProps('companyName')}
+                      >
+                        <option value=''>-select-</option>
+                        {companyCTX.getCompanyLists?.data?.map((companyData) => (
+                          <option key={companyData?._id} value={companyData?._id}>
+                            {companyData?.companyName}
+                          </option>
+                        ))}
+                      </select>
+                      {formik.touched.companyName && formik.errors.companyName && (
+                        <div className='fv-plugins-message-container'>
+                          <div className='fv-help-block'>{formik.errors.companyName}</div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

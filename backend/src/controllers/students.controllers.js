@@ -56,6 +56,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     // console.log(req.body);
 
     // Use || for conditional updates
+    student.companyName = req.body.companyName || student.companyName;
     student.rollNumber = rollNumber || student.rollNumber;
     student.name = name || student.name;
     student.father_name = father_name || student.father_name;
