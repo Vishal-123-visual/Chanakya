@@ -4,9 +4,13 @@ import {useIntl} from 'react-intl'
 import {KTIcon} from '../../../../helpers'
 import {SidebarMenuItemWithSub} from './SidebarMenuItemWithSub'
 import {SidebarMenuItem} from './SidebarMenuItem'
+import {useCompanyContext} from '../../../../../app/pages/compay/CompanyContext'
 
 const SidebarMenuMain = () => {
   const intl = useIntl()
+
+  const companyCTX = useCompanyContext()
+  console.log(companyCTX.getCompanyLists.data)
 
   return (
     <>
@@ -100,6 +104,21 @@ const SidebarMenuMain = () => {
         <SidebarMenuItem to='/apps/chat/drawer-chat' title='Drawer Chart' hasBullet={true} />
       </SidebarMenuItemWithSub>
 
+      {/* ----------------------------- Company Menu Start Here ............................... */}
+      {companyCTX.getCompanyLists?.data?.map((CompanyListData) => (
+        <SidebarMenuItemWithSub
+          key={CompanyListData?._id}
+          to='/apps/chat'
+          title={CompanyListData.companyName}
+          fontIcon='bi-chat-left'
+          icon='message-text-2'
+        >
+          <SidebarMenuItem to='/students' title='Students' hasBullet={true} />
+          <SidebarMenuItem to='/addmission-form' title='Admission Form' hasBullet={true} />
+        </SidebarMenuItemWithSub>
+      ))}
+      {/* ----------------------------- Company Menu END Here ............................... */}
+
       {/* ******************  Manage Student added Started------- **************************** */}
       <SidebarMenuItemWithSub
         to='/apps/chat'
@@ -162,7 +181,7 @@ const SidebarMenuMain = () => {
       </SidebarMenuItemWithSub>
       {/* ************* Manage Payment Option END   ****************** */}
 
-      {/* *************************************  y Start ******************************** */}
+      {/* ************************************* Manage Company Start ******************************** */}
       <SidebarMenuItemWithSub
         to='/apps/chat'
         title='Manage Company'
@@ -171,7 +190,6 @@ const SidebarMenuMain = () => {
       >
         <SidebarMenuItem to='/company' title='Company' hasBullet={true} />
         <SidebarMenuItem to='/add-company' title='Add Company' hasBullet={true} />
-        <SidebarMenuItem to='/update-company' title='Update Company' hasBullet={true} />
       </SidebarMenuItemWithSub>
       {/* *************************************  Manage Company End ******************************** */}
 
