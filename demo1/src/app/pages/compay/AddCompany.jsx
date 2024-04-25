@@ -8,7 +8,7 @@ import {useCompanyContext} from './CompanyContext'
 const CourseSchema = Yup.object().shape({
   companyName: Yup.string().required('Company Name is required'),
   companyAddress: Yup.string().required('Company Address is required'),
-  reciptNumber: Yup.number().required('Company recipt number'),
+  reciptNumber: Yup.string().required('Company recipt number'),
   gst: Yup.number(),
 })
 
@@ -140,7 +140,7 @@ const AddCompany = () => {
                   Recipt Number{' '}
                   <div className='fv-row mt-5 '>
                     <input
-                      type='number'
+                      type='text'
                       className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                       placeholder='Enter recipt Number'
                       {...formik.getFieldProps('reciptNumber')}

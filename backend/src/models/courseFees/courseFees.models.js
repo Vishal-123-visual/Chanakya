@@ -40,7 +40,7 @@ const courseFeesSchema = new mongoose.Schema(
       type: Number,
     },
     reciptNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
     paymentOption: {

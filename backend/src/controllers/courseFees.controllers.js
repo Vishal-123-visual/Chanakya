@@ -36,6 +36,8 @@ export const createCourseFeesController = asyncHandler(
         return res.status(404).json({ message: "Student not found" });
       }
 
+      //console.log(student);
+
       // generate the recipt number from
       let reciptNumber;
       if (student.companyName.reciptNumber) {
@@ -48,13 +50,17 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber,
         companyName: student.companyName._id,
       });
-      reciptNumber++;
+      let reciptNumberString =
+        Number(reciptNumber.split(" ")[0]) +
+        1 +
+        " " +
+        student.companyName.reciptNumber.split(" ")[1];
       const savedCourseFees = await newCourseFees.save();
       const currentCompany = await CompanyModels.findById(
         student.companyName._id
       );
 
-      currentCompany.reciptNumber = reciptNumber;
+      currentCompany.reciptNumber = reciptNumberString;
       await currentCompany.save();
 
       //console.log("saved course fees", savedCourseFees);
@@ -218,7 +224,7 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       const studentInfo = await admissionFormModel
         .findById(studentId)
         .populate(["courseName", "companyName"]);
-      console.log("from ------------>", studentInfo);
+      //console.log("from ------------>", studentInfo);
 
       // now get next payment installment data
       let installmentExpireDate =

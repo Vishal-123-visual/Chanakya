@@ -15,7 +15,7 @@ const companySchema = new mongoose.Schema(
       required: true,
     },
     reciptNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
     gst: {

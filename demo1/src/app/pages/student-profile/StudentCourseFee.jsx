@@ -29,7 +29,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
 
   const studentPayFeeCtx = useStudentCourseFeesContext()
   const result = studentPayFeeCtx.useSingleStudentCourseFees(studentInfoData?._id)
-  console.log(result)
+  // console.log(result)
 
   const addStudentFeeFormToggleHandler = () => {
     setAddStudentFeeFormToggle((prev) => !prev)
@@ -82,7 +82,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         lateFees: 0,
       })
       window.open(url)
-      navigate(`/students`)
+      navigate(`/students/${studentInfoData?.companyName}`)
       window.location.reload()
     } catch (error) {
       console.log(error)

@@ -60,6 +60,10 @@ const AddMissionForm: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState<any>({})
+
+  const courseCtx = useCourseContext()
+  const companyCTX = useCompanyContext()
+  console.log(companyCTX.getCompanyLists.data)
   // console.log(selectedCourseNameData)
 
   // const setProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -139,6 +143,8 @@ const AddMissionForm: React.FC = () => {
     onSubmit: async (values) => {
       let formData = new FormData()
 
+      //console.log(values)
+
       // Append each field of values to formData
       Object.entries(values).forEach(([key, value]) => {
         formData.append(key, value as string) // Ensure value is a string, adjust if needed
@@ -159,13 +165,15 @@ const AddMissionForm: React.FC = () => {
         setLoading(true)
       }
 
-      navigate('/students')
+      navigate(`/students/${values?.companyName}`)
+      // companyCTX.getCompanyLists.data.forEach((companyId) => {
+      //    if(companyId===values.companyName){
+
+      //    }
+      // })
     },
   })
 
-  const courseCtx = useCourseContext()
-  const companyCTX = useCompanyContext()
-  console.log(companyCTX.getCompanyLists.data)
   //console.log(courseCtx.getCourseLists.data)
 
   return (
