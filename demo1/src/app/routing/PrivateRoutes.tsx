@@ -158,7 +158,7 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='/students'
+          path='/students/:id'
           element={
             <SuspensedView>
               <StudentsList className='' />

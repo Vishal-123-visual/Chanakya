@@ -113,7 +113,11 @@ const SidebarMenuMain = () => {
           fontIcon='bi-chat-left'
           icon='message-text-2'
         >
-          <SidebarMenuItem to='/students' title='Students' hasBullet={true} />
+          <SidebarMenuItem
+            to={`/students/${CompanyListData?._id}`}
+            title='Students'
+            hasBullet={true}
+          />
           <SidebarMenuItem to='/addmission-form' title='Admission Form' hasBullet={true} />
         </SidebarMenuItemWithSub>
       ))}
