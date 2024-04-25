@@ -16,7 +16,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
   // console.log(ctx.studentsLists.data.users)
   // console.log(new Date(ctx.studentsLists.data.users[0].commision_date).toLocaleDateString())
   const params = useParams()
-  console.log(params.id)
+  //console.log(params.id)
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
