@@ -7,6 +7,10 @@ const courseFeesSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Students",
     },
+    companyName: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+    },
     courseName: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
@@ -37,7 +41,7 @@ const courseFeesSchema = new mongoose.Schema(
     },
     reciptNumber: {
       type: Number,
-      // required: true,
+      required: true,
     },
     paymentOption: {
       type: mongoose.Schema.Types.ObjectId,
@@ -50,26 +54,26 @@ const courseFeesSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-courseFeesSchema.pre("save", function (next) {
-  const doc = this;
-  // Check if the document is new or rollNumber is being modified
-  if (doc.isNew || doc.isModified("reciptNumber")) {
-    // Find and increment the counter for rollNumber
-    reciptNumberModel
-      .findByIdAndUpdate(
-        { _id: "reciptNumber" },
-        { $inc: { sequence_value: 1 } },
-        { new: true, upsert: true }
-      )
-      .then((counter) => {
-        doc.reciptNumber = counter.sequence_value + 100;
-        next();
-      })
-      .catch((err) => next(err));
-  } else {
-    next();
-  }
-});
+// courseFeesSchema.pre("save", function (next) {
+//   const doc = this;
+//   // Check if the document is new or rollNumber is being modified
+//   if (doc.isNew || doc.isModified("reciptNumber")) {
+//     // Find and increment the counter for rollNumber
+//     reciptNumberModel
+//       .findByIdAndUpdate(
+//         { _id: "reciptNumber" },
+//         { $inc: { sequence_value: 1 } },
+//         { new: true, upsert: true }
+//       )
+//       .then((counter) => {
+//         doc.reciptNumber = counter.sequence_value + 100;
+//         next();
+//       })
+//       .catch((err) => next(err));
+//   } else {
+//     next();
+//   }
+// });
 
 const CourseFeesModel = mongoose.model("CourseFees", courseFeesSchema);
 export default CourseFeesModel;

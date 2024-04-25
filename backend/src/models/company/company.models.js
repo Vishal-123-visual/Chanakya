@@ -15,11 +15,12 @@ const companySchema = new mongoose.Schema(
       required: true,
     },
     reciptNumber: {
-      type: String,
+      type: Number,
       required: true,
     },
     gst: {
-      type: String,
+      type: Number,
+      required: true,
     },
   },
   { timestamps: true }

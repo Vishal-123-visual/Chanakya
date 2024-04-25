@@ -154,7 +154,9 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
 export const getSingleStudentDetailsController = asyncHandler(
   async (req, res, next) => {
     try {
-      const student = await admissionFormModel.findById(req.params.id);
+      const student = await admissionFormModel
+        .findById(req.params.id)
+        .populate("companyName");
       res.status(200).json(student);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });

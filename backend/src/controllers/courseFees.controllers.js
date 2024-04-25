@@ -8,6 +8,7 @@ import { MailHTML } from "../../helpers/mail/index.js";
 import CourseModel from "../models/course/courses.models.js";
 import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
 import PaymentOptionsModel from "../models/payment-options/paymentoption.models.js";
+import CompanyModels from "../models/company/company.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -30,14 +31,31 @@ export const createCourseFeesController = asyncHandler(
       // Fetch student and validate remaining fees
       const student = await admissionFormModel
         .findById(studentInfo)
-        .populate("courseName");
+        .populate(["courseName", "companyName"]);
       if (!student) {
         return res.status(404).json({ message: "Student not found" });
       }
 
+      // generate the recipt number from
+      let reciptNumber;
+      if (student.companyName.reciptNumber) {
+        reciptNumber = student.companyName.reciptNumber;
+      }
+
       // Save course fees
-      const newCourseFees = new CourseFeesModel({ ...req.body });
+      const newCourseFees = new CourseFeesModel({
+        ...req.body,
+        reciptNumber,
+        companyName: student.companyName._id,
+      });
+      reciptNumber++;
       const savedCourseFees = await newCourseFees.save();
+      const currentCompany = await CompanyModels.findById(
+        student.companyName._id
+      );
+
+      currentCompany.reciptNumber = reciptNumber;
+      await currentCompany.save();
 
       //console.log("saved course fees", savedCourseFees);
 
@@ -199,7 +217,7 @@ export const getCourseFeesByStudentIdController = asyncHandler(
 
       const studentInfo = await admissionFormModel
         .findById(studentId)
-        .populate("courseName");
+        .populate(["courseName", "companyName"]);
       console.log("from ------------>", studentInfo);
 
       // now get next payment installment data
