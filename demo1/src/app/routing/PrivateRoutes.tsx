@@ -176,7 +176,7 @@ const PrivateRoutes = () => {
 
         {/* *************************************** Monthly Collection fees start here.. ******************************************* */}
         <Route
-          path='/monthlyCollectionFees'
+          path='/monthlyCollectionFees/:id'
           element={
             <SuspensedView>
               <MonthlyCollectionFee />

@@ -10,7 +10,7 @@ const SidebarMenuMain = () => {
   const intl = useIntl()
 
   const companyCTX = useCompanyContext()
-  console.log(companyCTX.getCompanyLists.data)
+  //console.log(companyCTX.getCompanyLists.data)
 
   return (
     <>
@@ -118,6 +118,11 @@ const SidebarMenuMain = () => {
             title='Students'
             hasBullet={true}
           />
+          <SidebarMenuItem
+            to={`/monthlyCollectionFees/${CompanyListData?._id}`}
+            title='Monthly Collections'
+            hasBullet={true}
+          />
           <SidebarMenuItem to='/addmission-form' title='Admission Form' hasBullet={true} />
         </SidebarMenuItemWithSub>
       ))}
@@ -157,7 +162,7 @@ const SidebarMenuMain = () => {
       {/* ************* Manage Courses END   ****************** */}
 
       {/********************** Manage Monthy Collection of Student Course Fees Installment Start***********************  */}
-      <SidebarMenuItemWithSub
+      {/* <SidebarMenuItemWithSub
         to='/apps/chat'
         title='Manage Monthly Collection'
         fontIcon='bi-chat-left'
@@ -168,7 +173,7 @@ const SidebarMenuMain = () => {
           title='Monthly Collection Fees'
           hasBullet={true}
         />
-      </SidebarMenuItemWithSub>
+      </SidebarMenuItemWithSub> */}
       {/********************** Manage Monthy Collection of Student Course Fees Installment End***********************  */}
 
       {/* ************* Manage Payment Option Start   ****************** */}

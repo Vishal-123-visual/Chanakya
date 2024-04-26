@@ -1,4 +1,4 @@
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import React, {useState} from 'react'
@@ -6,7 +6,9 @@ import React, {useState} from 'react'
 const MonthlyCollectionFee = () => {
   const ctx = useStudentCourseFeesContext()
   const result = ctx.useGetStudentMonthlyCourseFeesCollection()
-  //console.log(result.data)
+  const paramsData = useParams()
+  //console.log(paramsData.id)
+  console.log(result.data)
   const [searchContentValues, setSearchContentValues] = useState({from: '', to: ''})
   const [filteredData, setFilteredData] = useState([])
   const [totalCollectionFees, setTotalCollectionFees] = useState(0)
@@ -223,44 +225,48 @@ const MonthlyCollectionFee = () => {
                   <td></td>
                 </tr>
               ) : (
-                filteredData?.map((data) => (
-                  <React.Fragment key={data._id}>
-                    {data.studentInfo !== null && (
-                      <tr key={data._id}>
-                        <td>
-                          <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                        </td>
-                        <td>
-                          <button
-                            className='btn btn-link'
-                            onClick={() =>
-                              navigate(`/student/${data.studentInfo._id}`, {
-                                state: data.studentInfo,
-                              })
-                            }
-                          >
-                            {}
-                            {data?.studentInfo?.rollNumber}
-                          </button>
-                        </td>
-                        <td>{data?.studentInfo?.name}</td>
+                filteredData
+                  ?.filter(
+                    (companyDataId) => companyDataId?.studentInfo?.companyName === paramsData.id
+                  )
+                  .map((data) => (
+                    <React.Fragment key={data._id}>
+                      {data.studentInfo !== null && (
+                        <tr key={data._id}>
+                          <td>
+                            <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                          </td>
+                          <td>
+                            <button
+                              className='btn btn-link'
+                              onClick={() =>
+                                navigate(`/student/${data.studentInfo._id}`, {
+                                  state: data.studentInfo,
+                                })
+                              }
+                            >
+                              {}
+                              {data?.studentInfo?.rollNumber}
+                            </button>
+                          </td>
+                          <td>{data?.studentInfo?.name}</td>
 
-                        <td>{data?.courseName?.courseName}</td>
-                        <td>{data.studentInfo?.installmentPaymentSkipMonth} Month Skipped</td>
-                        <td>
-                          <div className='d-flex justify-content-end flex-shrink-0'>
-                            {data?.studentInfo?.phone_number}
-                          </div>
-                        </td>
-                        <td>
-                          <div className='d-flex justify-content-end flex-shrink-0'>
-                            {data?.installment_amount}
-                          </div>
-                        </td>
-                      </tr>
-                    )}
-                  </React.Fragment>
-                ))
+                          <td>{data?.courseName?.courseName}</td>
+                          <td>{data.studentInfo?.installmentPaymentSkipMonth} Month Skipped</td>
+                          <td>
+                            <div className='d-flex justify-content-end flex-shrink-0'>
+                              {data?.studentInfo?.phone_number}
+                            </div>
+                          </td>
+                          <td>
+                            <div className='d-flex justify-content-end flex-shrink-0'>
+                              {data?.installment_amount}
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  ))
               )}
             </tbody>
             {/* end::Table body */}
