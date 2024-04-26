@@ -56,7 +56,7 @@ export const createCourseFeesController = asyncHandler(
         student.companyName._id
       );
 
-      console.log(reciptNumberString);
+      //console.log(reciptNumberString);
 
       currentCompany.reciptNumber =
         reciptNumber.split("-")[0] + "-" + reciptNumberString;
@@ -110,7 +110,7 @@ export const createCourseFeesController = asyncHandler(
       // Send email asynchronously
 
       sendEmail(
-        `${req.user.email}, ${student.email} thakurarvindkr10@gmail.com`,
+        `${req.user.email}, ${student.email} ${currentCompany.email},thakurarvindkr10@gmail.com`,
         "Regarding to Submitted Fees in Visual Media Technology",
         `Hello ${student.name} you have submitted fees `,
         ` <div style="font-family: Arial, sans-serif; margin: 0; padding: 0">
@@ -124,7 +124,9 @@ export const createCourseFeesController = asyncHandler(
                       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                     "
                   >
-                    <h3 style="text-align: center">Visual Media Technology</h3>
+                    <h3 style="text-align: center">${
+                      currentCompany.companyName
+                    }</h3>
                     <header
                       style="
                         display: flex;
@@ -135,7 +137,9 @@ export const createCourseFeesController = asyncHandler(
                       <p>Receipt No ${savedCourseFees.reciptNumber}</p>
                       <p>RECEIPT</p>
                       <img
-                        src="https://www.relanimation.in/wp-content/uploads/2023/05/cropped-Reliance-logo.png"
+                        src={http://localhost:8080/images/${
+                          currentCompany.logo
+                        }}
                         alt="logo"
                         style="width: 100px"
                       /> 
