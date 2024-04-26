@@ -45,6 +45,7 @@ const Company = () => {
                   <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                 </th>
                 <th className='min-w-150px'>Company</th>
+                <th className='min-w-150px'>Email</th>
                 <th className='min-w-140px'>Address</th>
                 <th className='min-w-120px'>Recipt No</th>
                 <th className='min-w-120px'>GST</th>
@@ -79,6 +80,9 @@ const Company = () => {
                         </p>
                       </div>
                     </div>
+                  </td>
+                  <td>
+                    <p className='text-dark fw-bold text-hover-primary fs-6'>{companyData.email}</p>
                   </td>
                   <td>
                     <p className='text-dark fw-bold text-hover-primary fs-6'>

@@ -8,6 +8,7 @@ import {useCompanyContext} from './CompanyContext'
 const CourseSchema = Yup.object().shape({
   companyName: Yup.string().required('Company Name is required'),
   companyAddress: Yup.string().required('Company Address is required'),
+  email: Yup.string().required('Company Email Address is required'),
   reciptNumber: Yup.string().required('Company recipt number'),
   gst: Yup.string(),
 })
@@ -41,6 +42,7 @@ const UpdateCompany = () => {
     reciptNumber: updatedCompanyData?.reciptNumber,
     gst: updatedCompanyData?.gst,
     logo: updatedCompanyData?.logo,
+    email: updatedCompanyData?.email,
   }
   //console.log(logo)
 
@@ -128,6 +130,26 @@ const UpdateCompany = () => {
                     )}
                   </div>
                 </label>
+
+                {/* ----------------------- Company Email Field Start----------------------------- */}
+                <label className='col-6 col-form-label fw-bold fs-6'>
+                  Company Email{' '}
+                  <div className='fv-row mt-5 '>
+                    <input
+                      type='email'
+                      className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                      placeholder='Enter Company Email Address..'
+                      {...formik.getFieldProps('email')}
+                    />
+                    {formik.touched.email && formik.errors.email && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors?.email}</div>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {/* ----------------------- Company Email Field End ----------------------------- */}
+
                 {/* ============================ Start course fees==================== */}
                 <label className='col-6 col-form-label fw-bold fs-6'>
                   Company Address{' '}
