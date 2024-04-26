@@ -252,7 +252,9 @@ const StudentProfile: React.FC = () => {
                       <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                         <div className='d-flex align-items-center'>
                           <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
-                          <div className='fs-2 fw-bolder'>Rs.{updateUserId?.totalPaid}</div>
+                          <div className='fs-2 fw-bolder'>
+                            Rs.{Number(updateUserId?.totalPaid)?.toFixed(2)}
+                          </div>
                         </div>
 
                         <div className='fw-bold fs-6 text-gray-400'>Fees Paid</div>
@@ -262,7 +264,10 @@ const StudentProfile: React.FC = () => {
                         <div className='d-flex align-items-center'>
                           <KTIcon iconName='arrow-up' className='fs-3 text-success me-2' />
                           <div className='fs-2 fw-bolder'>
-                            Rs.{updateUserId?.remainingCourseFees}
+                            Rs.
+                            {isNaN(Number(updateUserId?.remainingCourseFees))
+                              ? 0.0
+                              : Number(updateUserId?.remainingCourseFees).toFixed(2)}
                           </div>
                         </div>
 
