@@ -146,7 +146,7 @@ const UpdateCompany = () => {
                   </div>
                 </label>
                 <label className='col-6 col-form-label fw-bold fs-6'>
-                  Recipt Number{' '}
+                  Recipt Number (example : ILS-100)
                   <div className='fv-row mt-5 '>
                     <input
                       type='text'

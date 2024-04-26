@@ -50,17 +50,16 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber,
         companyName: student.companyName._id,
       });
-      let reciptNumberString =
-        Number(reciptNumber.split(" ")[0]) +
-        1 +
-        " " +
-        student.companyName.reciptNumber.split(" ")[1];
+      let reciptNumberString = Number(reciptNumber.split("-")[1]) + 1;
       const savedCourseFees = await newCourseFees.save();
       const currentCompany = await CompanyModels.findById(
         student.companyName._id
       );
 
-      currentCompany.reciptNumber = reciptNumberString;
+      console.log(reciptNumberString);
+
+      currentCompany.reciptNumber =
+        reciptNumber.split("-")[0] + "-" + reciptNumberString;
       await currentCompany.save();
 
       //console.log("saved course fees", savedCourseFees);

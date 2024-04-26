@@ -39,7 +39,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       </td>
       <td>
         <input
-          type='text'
+          type='number'
           className='form-control w-auto '
           onChange={remainingFeesHandler}
           value={payStudentFeesAdd.amountPaid}
