@@ -63,7 +63,7 @@ const AddMissionForm: React.FC = () => {
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
-  console.log(companyCTX.getCompanyLists.data)
+  //console.log(companyCTX.getCompanyLists.data)
   // console.log(selectedCourseNameData)
 
   // const setProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +72,13 @@ const AddMissionForm: React.FC = () => {
   //     setImage(e.target.files[0])
   //   }
   // }
+
+  const studentStatusHandler = (e) => {
+    if (e.target.value === 'NOGST') {
+      formik.setFieldValue('netCourseFees', formik.values.course_fees)
+      formik.setFieldValue('discount', 0)
+    }
+  }
 
   const handleSelectChange = (event) => {
     const selectedCourse = event.target.value
@@ -87,14 +94,9 @@ const AddMissionForm: React.FC = () => {
 
   const handleCourseFeesDiscount = (e) => {
     const amount = selectedCourseNameData?.courseFees
-    if (formik.values.student_status === 'NOGST') {
-      formik.setFieldValue('discount', 0)
-      formik.setFieldValue('netCourseFees', amount)
-    } else {
-      const discount = Number(e.target.value)
-      const discountAmount = formik.values.student_status === 'GST' && Number(amount) - discount
-      formik.setFieldValue('netCourseFees', discountAmount)
-    }
+    const discount = Number(e.target.value)
+    const discountAmount = formik.values.student_status === 'GST' && Number(amount) - discount
+    formik.setFieldValue('netCourseFees', discountAmount)
   }
 
   const downPaymentHandler = (e) => {
@@ -448,29 +450,6 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Student Status
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <select
-                        className='form-select form-select-solid form-select-lg'
-                        {...formik.getFieldProps('student_status')}
-                      >
-                        <option value=''>--select--</option>
-                        <option value='GST'>GST</option>
-                        <option value='NOGST'>NO GST</option>
-                      </select>
-                      {formik.touched.student_status && formik.errors.student_status && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.student_status}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
               </div>
               {/* ============================== DOB and Student Status ==================================== */}
 
@@ -575,6 +554,8 @@ const AddMissionForm: React.FC = () => {
                           handleSelectChange(e)
                         }}
                         defaultValue={updateUserId && updateUserId.select_course}
+                        name='select_course'
+                        id='select_course'
                       >
                         <option value=''>-select-</option>
                         {courseCtx?.getCourseLists?.data?.map((c: any) => (
@@ -586,6 +567,35 @@ const AddMissionForm: React.FC = () => {
                       {formik.touched.select_course && formik.errors.select_course && (
                         <div className='fv-plugins-message-container'>
                           <div className='fv-help-block'>{formik.errors.select_course}</div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className='col-6 mt-5'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                      Student Status
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <select
+                        className='form-select form-select-solid form-select-lg'
+                        onChange={(e) => {
+                          formik.getFieldProps('student_status').onChange(e)
+                          studentStatusHandler(e)
+                        }}
+                        id='student_status'
+                        name='student_status'
+                      >
+                        <option value=''>--select--</option>
+                        <option value='GST'>GST</option>
+                        <option value='NOGST'>NO GST</option>
+                      </select>
+                      {formik.touched.student_status && formik.errors.student_status && (
+                        <div className='fv-plugins-message-container'>
+                          <div className='fv-help-block'>{formik.errors.student_status}</div>
                         </div>
                       )}
                     </div>
@@ -847,6 +857,8 @@ const AddMissionForm: React.FC = () => {
                           formik.getFieldProps('no_of_installments').onChange(e)
                           numberOfInstallmentAmountHandler(e)
                         }}
+                        id='no_of_installments'
+                        name='no_of_installments'
                       >
                         <option value=''>-select-</option>
                         {Array.from({length: 60}, (_, index) => (
