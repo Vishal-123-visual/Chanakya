@@ -117,7 +117,7 @@ export const createCourseFeesController = asyncHandler(
                   <div
                     style="
                       max-width: 768px;
-                      margin: 0 auto;
+                      margin: 0 auto; 
                       background-color: #7da7e1;
                       border: 2px solid #000;
                       padding: 20px;

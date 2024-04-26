@@ -111,7 +111,7 @@ const AddMissionForm: React.FC = () => {
   }
 
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  console.log(updateUserId)
+  //console.log(updateUserId)
 
   // let updateStudentId = updateUserId?._id
 
