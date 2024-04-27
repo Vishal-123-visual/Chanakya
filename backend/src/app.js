@@ -9,9 +9,26 @@ import subjectRoutes from "./routes/subject.routes.js";
 import courseFeesRoutes from "./routes/courseFees.routes.js";
 import paymentOptionsRoutes from "./routes/paymentOptions.routes.js";
 import companyRoutes from "./routes/company.routes.js";
+import { BACKEND_URL, FRONTEND_URL } from "./config/config.js";
 
 const app = express();
-app.use(cors());
+// app.use(cors());
+
+const allowedOrigins = [BACKEND_URL, FRONTEND_URL];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // Check if the request origin is included in the allowedOrigins array
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

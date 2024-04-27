@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
-import { USER_EMAIL } from "../config/config.js";
+import { BACKEND_URL, USER_EMAIL } from "../config/config.js";
 import { mailTransporter } from "../utils/mail_helpers.js";
 import { MailHTML } from "../../helpers/mail/index.js";
 import CourseModel from "../models/course/courses.models.js";
@@ -12,7 +12,7 @@ import CompanyModels from "../models/company/company.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    //console.log(req.body);
+    console.log("from create course fees ->>>>", req.body);
     try {
       const {
         studentInfo,
@@ -136,9 +136,14 @@ export const createCourseFeesController = asyncHandler(
                 savedCourseFees.reciptNumber
               }</td>
               <td style="width: 33%; text-align: center;"><strong>RECEIPT</strong></td>
-              <td style="width: 33%; text-align: right;"><img src="http://localhost:8080/images/${
-                currentCompany.logo
-              }" alt="Company Logo" style="max-width: 100px;"></td>
+              <td style="width: 33%; text-align: right;">
+              <td style="width: 33%; text-align: right;">
+              <img src="${BACKEND_URL}/images/${
+          currentCompany.logo
+        }" alt="Company Logo" style="max-width: 100px;">
+            </td>
+            
+        </td>
             </tr>
           </table>
         

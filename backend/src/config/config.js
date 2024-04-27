@@ -7,4 +7,6 @@ export const {
   NODE_ENV,
   USER_EMAIL,
   USER_PASSWORD,
+  FRONTEND_URL,
+  BACKEND_URL,
 } = process.env;
