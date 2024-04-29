@@ -65,3 +65,7 @@
      </footer>
    </div>
  </body>`
+
+remainingFees
+remainingCourseFees
+installmentPaymentSkipMonth

@@ -44,6 +44,125 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber = student.companyName.reciptNumber;
       }
 
+      if (
+        Number(req.body.remainingFees) === 0 &&
+        student.installmentPaymentSkipMonth === 0
+      ) {
+        student.remainingCourseFees = 0;
+        // Save course fees
+        const newCourseFees = new CourseFeesModel({
+          ...req.body,
+          reciptNumber,
+          companyName: student.companyName._id,
+        });
+
+        const savedCourseFees = await newCourseFees.save();
+        const currentCompany = await CompanyModels.findById(
+          student.companyName._id
+        );
+
+        student.down_payment = amountPaid;
+        student.remainingCourseFees = remainingFees;
+        student.totalPaid += amountPaid;
+        student.no_of_installments -= 1;
+        const findPaymentOptionName = await PaymentOptionsModel.findById(
+          paymentOption
+        );
+        //console.log(findPaymentOptionName);
+
+        // Send email asynchronously
+
+        sendEmail(
+          `${req.user.email}, ${student.email} ${currentCompany.email},thakurarvindkr10@gmail.com`,
+          "Regarding to Submitted Fees in Visual Media Technology",
+          `Hello ${student.name} you have submitted fees `,
+          `<!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Email Template</title>
+          </head>
+          <body style="margin: 0; padding: 0; font-family: Arial, sans-serif;">
+          
+          <div style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 2px solid #000000; padding: 20px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          
+            <!-- Company Name and Logo -->
+            <table style="width: 100%;">
+              <tr>
+                <td colspan="3" style="text-align: center;">
+                  <h3 style="margin: 0;">${currentCompany.companyName}</h3>
+                </td>
+              </tr>
+              <tr>
+                <td style="width: 33%; text-align: left;"><strong>Receipt No:</strong> ${
+                  savedCourseFees.reciptNumber
+                }</td>
+                <td style="width: 33%; text-align: center;"><strong>RECEIPT</strong></td>
+                <td style="width: 33%; text-align: right;">
+                <td style="width: 33%; text-align: right;">
+                <img src="${BACKEND_URL}/images/${
+            currentCompany.logo
+          }" alt="Company Logo" style="max-width: 100px;">
+              </td>
+              
+          </td>
+              </tr>
+            </table>
+          
+            <!-- Date and Payment Details -->
+            <p style="margin-top: 20px;"><strong>Date:</strong> ${new Date().toDateString()}</p>
+            <p><strong>Received Amount:</strong> ${amountPaid + lateFees}</p>
+            <p><strong>Student Name:</strong> ${student.name}</p>
+          
+            <!-- Payment Breakdown -->
+            <table style="width: 100%; margin-top: 20px;">
+              <tr>
+                <td style="width: 50%; text-align: left;">
+                  <p><strong>Course Fees:</strong> ${student.course_fees}</p>
+                  <p><strong>Late Fees:</strong> ${lateFees}</p>
+                  <p><strong>Total:</strong> ${amountPaid + lateFees}</p>
+                </td>
+                <td style="width: 50%; text-align: left;">
+                  <p><strong>Course Name:</strong> ${
+                    student.courseName.courseName
+                  }</p>
+                  <p><strong>Payment By:</strong> ${
+                    findPaymentOptionName.name
+                  }</p>
+                  <p><strong>Cash Amount:</strong> ${amountPaid}</p>
+                </td>
+              </tr>
+            </table>
+          
+            <!-- Additional Notes -->
+            <div style="margin-top: 20px;">
+              <p><strong>Notes:</strong></p>
+              <ul>
+                <li>CHEQUES SUBJECT TO REALISATION THE RECEIPT MUST BE PRODUCED WHEN DEMANDED</li>
+                <li>FEES ONCE PAID ARE NOT REFUNDABLE</li>
+                <li>Auth. Franchisee of Big Animation (1) Pvt. Ltd</li>
+              </ul>
+            </div>
+          
+            <!-- Footer -->
+            <footer style="text-align: center; margin-top: 20px;">
+              <p>RELIANCE EDUCATION, SCO 114-115, Basement, Sector 34-A, Chandigarh.</p>
+              <p>(M) +91-7696300600</p>
+              <p><a href="http://www.relianceedu.com">www.relianceedu.com</a> | E-mail: <a href="mailto:chandigarh@relianceedu.com">chandigarh@relianceedu.com</a></p>
+            </footer>
+          
+          </div>
+          
+          </body> 
+          </html>
+          `
+        );
+
+        await student.save();
+        return res.status(200).json({ message: "all course fees paid" });
+      }
+
       // Save course fees
       const newCourseFees = new CourseFeesModel({
         ...req.body,
@@ -191,7 +310,7 @@ export const createCourseFeesController = asyncHandler(
         
         </div>
         
-        </body>
+        </body> 
         </html>
         `
       );
