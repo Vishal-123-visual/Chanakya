@@ -962,7 +962,7 @@ export const createCourseFeesController = asyncHandler(
                          style="display: inline-block"
                        >
                          <img
-                           src="./img/paste-logo-light@2x.png"
+                           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuaK7as-riRhMr1y0nkBi-nlFVyT9tQyMkKhpASaYs1A&s"
                            alt="Logo"
                            border="0"
                            width="48"
