@@ -2,7 +2,6 @@
   "name": "demo1",
   "version": "8.2.0",
   "private": true,
-  "homepage": "/metronic8/react/demo1",
   "dependencies": {
     "@formatjs/intl-pluralrules": "5.2.4",
     "@formatjs/intl-relativetimeformat": "11.2.4",

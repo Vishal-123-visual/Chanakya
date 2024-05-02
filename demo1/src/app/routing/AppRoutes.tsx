@@ -5,26 +5,26 @@
  * components (e.g: `src/app/modules/Auth/pages/AuthPage`, `src/app/BasePage`).
  */
 
-import { FC } from 'react'
-import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
-import { PrivateRoutes } from './PrivateRoutes'
-import { ErrorsPage } from '../modules/errors/ErrorsPage'
-import { Logout, AuthPage, useAuth } from '../modules/auth'
-import { App } from '../App'
+import {FC} from 'react'
+import {Routes, Route, BrowserRouter, Navigate} from 'react-router-dom'
+import {PrivateRoutes} from './PrivateRoutes'
+import {ErrorsPage} from '../modules/errors/ErrorsPage'
+import {Logout, AuthPage, useAuth} from '../modules/auth'
+import {App} from '../App'
 import MyPage from '../pages/MyPage'
-import { Header } from '../../_metronic/layout/components/header/Header'
+import {Header} from '../../_metronic/layout/components/header/Header'
 
 /**
  * Base URL of the website.
  *
  * @see https://facebook.github.io/create-react-app/docs/using-the-public-folder
  */
-const { PUBLIC_URL } = process.env
+const {PUBLIC_URL} = process.env
 
 const AppRoutes: FC = () => {
-  const { currentUser } = useAuth()
+  const {currentUser} = useAuth()
   return (
-    <BrowserRouter basename={PUBLIC_URL}>
+    <BrowserRouter>
       <Routes>
         <Route element={<App />}>
           <Route path='error/*' element={<ErrorsPage />} />
@@ -46,4 +46,4 @@ const AppRoutes: FC = () => {
   )
 }
 
-export { AppRoutes }
+export {AppRoutes}
