@@ -99,7 +99,12 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       if (imagePath) {
         imagePath = path.join(__dirname + `/images/${imagePath}`);
         //console.log(imagePath);
-        fs.unlinkSync(imagePath);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        } else {
+          console.log("File does not exist:", imagePath);
+        }
+        // fs.unlinkSync(imagePath);
       }
       student.image = file;
     } else {
@@ -133,7 +138,11 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
       // imagePath = `C:/Users/Web/Desktop/SchoolsManagement-2-main/backend/images/${imagePath}`;
       imagePath = path.join(__dirname + `/images/${imagePath}`);
       //console.log(imagePath);
-      fs.unlinkSync(imagePath);
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath);
+      } else {
+        console.log("File does not exist:", imagePath);
+      }
     }
 
     // Find associated course fees records

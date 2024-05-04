@@ -74,8 +74,12 @@ export const updateCompanyController = asyncHandler(async (req, res, next) => {
 
       if (imagePath) {
         imagePath = path.join(__dirname + `/images/${imagePath}`);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
+        } else {
+          console.log("File does not exist:", imagePath);
+        }
         //console.log(imagePath);
-        fs.unlinkSync(imagePath);
       }
       company.logo = file;
     } else {
@@ -99,16 +103,26 @@ export const deleteCompanyController = asyncHandler(async (req, res, next) => {
     }
 
     let imagePath = company.logo;
+    console.log(imagePath);
 
     if (imagePath) {
       imagePath = path.join(__dirname + `/images/${imagePath}`);
-      //console.log(imagePath);
-      fs.unlinkSync(imagePath);
+      if (fs.existsSync(imagePath)) {
+        // File exists, proceed with deletion
+        fs.unlinkSync(imagePath);
+      } else {
+        // File does not exist, handle accordingly
+        console.log("File does not exist:", imagePath);
+      }
+
+      console.log(imagePath);
+      // fs.unlinkSync(imagePath);
     }
 
     await company.deleteOne();
     res.status(200).json({ message: "Company deleted successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error in delete company" });
   }
 });
