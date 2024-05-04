@@ -17,7 +17,7 @@ import {useCourseContext} from './course/CourseContext'
 import {useStudentCourseFeesContext} from './courseFees/StudentCourseFeesContext'
 import {useCompanyContext} from './compay/CompanyContext'
 const BASE_URL = process.env.REACT_APP_BASE_URL
-const BASE_URL_Image = `${BASE_URL}/images`
+const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const addmissionFormSchema = Yup.object().shape({
   rollNumber: Yup.number(),

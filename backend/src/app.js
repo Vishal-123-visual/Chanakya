@@ -28,6 +28,6 @@ app.use("/api/courseFees", courseFeesRoutes);
 app.use("/api/paymentOptions", paymentOptionsRoutes);
 app.use("/api/company", companyRoutes);
 const __dirname = path.resolve();
-app.use("/images", express.static(path.join(__dirname + "/images")));
+app.use("/api/images", express.static(path.join(__dirname + "/images")));
 
 export default app;

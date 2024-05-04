@@ -15,7 +15,7 @@ const CourseSchema = Yup.object().shape({
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
-const BASE_URL_Image = `${BASE_URL}/images`
+const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const UpdateCompany = () => {
   const location = useLocation()

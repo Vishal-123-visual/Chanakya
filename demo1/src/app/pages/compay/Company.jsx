@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom'
 import {useCompanyContext} from './CompanyContext'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
-const BASE_URL_Image = `${BASE_URL}/images`
+const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const Company = () => {
   const navigate = useNavigate()
