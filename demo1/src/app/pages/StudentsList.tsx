@@ -9,7 +9,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 type Props = {
   className: string
 }
-const BASE_URL_Image = `${BASE_URL}/images`
+const BASE_URL_Image = `${BASE_URL}/api/images`
 const StudentsList: React.FC<Props> = ({className}) => {
   const ctx = useAdmissionContext()
   const navigate = useNavigate()
