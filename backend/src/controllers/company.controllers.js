@@ -1,6 +1,9 @@
 import asyncHandler from "../middlewares/asyncHandler.js";
 import fs from "fs";
 import CompanyModels from "../models/company/company.models.js";
+import path from "path";
+
+const __dirname = path.resolve();
 
 export const createCompanyController = asyncHandler(async (req, res, next) => {
   const { companyName, companyAddress, reciptNumber, gst, email } = req.body;
@@ -64,7 +67,20 @@ export const updateCompanyController = asyncHandler(async (req, res, next) => {
     company.reciptNumber = req.body.reciptNumber || company.reciptNumber;
     company.email = req.body.email || company.email;
     company.gst = req.body.gst || company.gst;
-    company.logo = file || company.logo;
+    // company.logo = file || company.logo;
+
+    if (file) {
+      let imagePath = company.logo;
+
+      if (imagePath) {
+        imagePath = path.join(__dirname + `/images/${imagePath}`);
+        //console.log(imagePath);
+        fs.unlinkSync(imagePath);
+      }
+      company.logo = file;
+    } else {
+      company.logo = company.logo;
+    }
 
     const updatedCompany = await company.save();
     res.status(200).json(updatedCompany);
@@ -83,8 +99,10 @@ export const deleteCompanyController = asyncHandler(async (req, res, next) => {
     }
 
     let imagePath = company.logo;
+
     if (imagePath) {
-      imagePath = `C:/Users/Web/Desktop/SchoolsManagement-2-main/backend/images/${imagePath}`;
+      imagePath = path.join(__dirname + `/images/${imagePath}`);
+      //console.log(imagePath);
       fs.unlinkSync(imagePath);
     }
 
