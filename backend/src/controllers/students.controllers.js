@@ -2,9 +2,12 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
 import fs from "fs";
+import path from "path";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
+
+const __dirname = path.resolve();
 
 export const getAllStudentsController = asyncHandler(async (req, res, next) => {
   try {
@@ -90,7 +93,18 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.date_of_joining = date_of_joining || student.date_of_joining;
     student.no_of_installments =
       no_of_installments || student.no_of_installments;
-    student.image = file || student.image;
+
+    if (file) {
+      let imagePath = student.image;
+      if (imagePath) {
+        imagePath = path.join(__dirname + `/images/${imagePath}`);
+        //console.log(imagePath);
+        fs.unlinkSync(imagePath);
+      }
+      student.image = file;
+    } else {
+      student.image = student.image;
+    }
 
     let updatedStudent = await student.save();
 
@@ -116,7 +130,9 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
 
     let imagePath = student.image;
     if (imagePath) {
-      imagePath = `C:/Users/Web/Desktop/SchoolsManagement-2-main/backend/images/${imagePath}`;
+      // imagePath = `C:/Users/Web/Desktop/SchoolsManagement-2-main/backend/images/${imagePath}`;
+      imagePath = path.join(__dirname + `/images/${imagePath}`);
+      //console.log(imagePath);
       fs.unlinkSync(imagePath);
     }
 
