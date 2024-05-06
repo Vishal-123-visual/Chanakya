@@ -98,13 +98,11 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       let imagePath = student.image;
       if (imagePath) {
         imagePath = path.join(__dirname + `/images/${imagePath}`);
-        //console.log(imagePath);
         if (fs.existsSync(imagePath)) {
           fs.unlinkSync(imagePath);
         } else {
           console.log("File does not exist:", imagePath);
         }
-        // fs.unlinkSync(imagePath);
       }
       student.image = file;
     } else {
@@ -135,9 +133,7 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
 
     let imagePath = student.image;
     if (imagePath) {
-      // imagePath = `C:/Users/Web/Desktop/SchoolsManagement-2-main/backend/images/${imagePath}`;
       imagePath = path.join(__dirname + `/images/${imagePath}`);
-      //console.log(imagePath);
       if (fs.existsSync(imagePath)) {
         fs.unlinkSync(imagePath);
       } else {

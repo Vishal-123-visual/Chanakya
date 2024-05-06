@@ -79,7 +79,6 @@ export const updateCompanyController = asyncHandler(async (req, res, next) => {
         } else {
           console.log("File does not exist:", imagePath);
         }
-        //console.log(imagePath);
       }
       company.logo = file;
     } else {
@@ -103,20 +102,14 @@ export const deleteCompanyController = asyncHandler(async (req, res, next) => {
     }
 
     let imagePath = company.logo;
-    console.log(imagePath);
 
     if (imagePath) {
       imagePath = path.join(__dirname + `/images/${imagePath}`);
       if (fs.existsSync(imagePath)) {
-        // File exists, proceed with deletion
         fs.unlinkSync(imagePath);
       } else {
-        // File does not exist, handle accordingly
         console.log("File does not exist:", imagePath);
       }
-
-      console.log(imagePath);
-      // fs.unlinkSync(imagePath);
     }
 
     await company.deleteOne();
