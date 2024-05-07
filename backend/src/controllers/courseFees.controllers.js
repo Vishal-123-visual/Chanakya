@@ -12,7 +12,7 @@ import CompanyModels from "../models/company/company.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    console.log("from create course fees ->>>>", req.body);
+    //console.log("from create course fees ->>>>", req.body);
     try {
       const {
         studentInfo,
@@ -571,9 +571,9 @@ export const createCourseFeesController = asyncHandler(
                                             font-size: 16px;
                                             line-height: 24px;
                                           ">
-                                      <p><strong>Delivery Address</strong></p>
+                                      <p><strong>Student Address</strong></p>
                                       <p>
-                                        1234 S. Broadway Ave<br />Unit 2<br />Denver, CO 80211
+                                       ${student.present_address}
                                       </p>
                                     </td>
                                   </tr>
@@ -601,9 +601,9 @@ export const createCourseFeesController = asyncHandler(
                                             font-size: 16px;
                                             line-height: 24px;
                                           ">
-                                      <p><strong>Billing Address</strong></p>
+                                      <p><strong>Acadamy Address</strong></p>
                                       <p>
-                                        1234 S. Broadway Ave<br />Unit 2<br />Denver, CO 80211
+                                        ${student.companyName.companyAddress}
                                       </p>
                                     </td>
                                   </tr>
@@ -754,7 +754,7 @@ export const createCourseFeesController = asyncHandler(
       const findPaymentOptionName = await PaymentOptionsModel.findById(
         paymentOption
       );
-      console.log(findPaymentOptionName);
+      // console.log(findPaymentOptionName);
 
       // Send email asynchronously
 
