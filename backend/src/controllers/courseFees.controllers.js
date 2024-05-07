@@ -71,7 +71,6 @@ export const createCourseFeesController = asyncHandler(
         //console.log(findPaymentOptionName);
 
         // Send email asynchronously
-
         sendEmail(
           `${req.user.email}, ${student.email} ${student.companyName.email},thakurarvindkr10@gmail.com`,
           "Regarding to Submitted Fees in Visual Media Technology",
@@ -297,6 +296,7 @@ export const createCourseFeesController = asyncHandler(
                         <p><strong>Father Phone Number</strong></p>
                         <p><strong>Roll Number</strong></p>
                         <p><strong>Course Name</strong></p>
+                        <p><strong>Payment Method</strong></p>
                         <p><strong>Academy Name</strong></p>
   
                       </td>
@@ -327,10 +327,12 @@ export const createCourseFeesController = asyncHandler(
                           </p>
                           <p>
                           ${student.rollNumber}
-                          
                         </p>
                         <p>
                         ${student.courseName.courseName} 
+                        </p>
+                        <p>
+                        ${findPaymentOptionName.name}
                         </p>
                         <p>
                           ${student.companyName.companyName}
@@ -400,30 +402,13 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 16px;
                                           line-height: 24px;
                                         ">
-                              <strong>${student.companyName.reciptNumber}</strong>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td align="left" width="75%" style="
-                                          padding: 6px 12px;
-                                          font-family: 'Source Sans Pro', Helvetica, Arial,
-                                            sans-serif;
-                                          font-size: 16px;
-                                          line-height: 24px;
-                                        ">
-                              Student Phone Number
-                            </td>
-                            <td align="left" width="25%" style="
-                                          padding: 6px 12px;
-                                          font-family: 'Source Sans Pro', Helvetica, Arial,
-                                            sans-serif;
-                                          font-size: 16px;
-                                          line-height: 24px;
-                                        ">
-                              +91${student.phone_number}
+                              <strong>${
+                                student.companyName.reciptNumber
+                              }</strong>
                             </td>
                           </tr>
                          
+  
                           <tr>
                             <td align="left" width="75%" style="
                                           padding: 6px 12px;
@@ -432,7 +417,7 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 16px;
                                           line-height: 24px;
                                         ">
-                              Acadamy Name
+                              Course Fees
                             </td>
                             <td align="left" width="25%" style="
                                           padding: 6px 12px;
@@ -441,9 +426,11 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 16px;
                                           line-height: 24px;
                                         ">
-                              ${student.companyName.companyName}
+                              ${student.courseName.courseFees} Rs
                             </td>
                           </tr>
+  
+                          
                           <tr>
                             <td align="left" width="75%" style="
                                           padding: 6px 12px;
@@ -465,30 +452,30 @@ export const createCourseFeesController = asyncHandler(
                             </td>
                           </tr>
           
+          
+          
+          
                           <tr>
                             <td align="left" width="75%" style="
-                                        padding: 6px 12px;
-                                        font-family: 'Source Sans Pro', Helvetica, Arial,
-                                          sans-serif;
-                                        font-size: 16px;
-                                        line-height: 24px;
-                                      ">
-                              Payment Method
+                                    padding: 6px 12px;
+                                    font-family: 'Source Sans Pro', Helvetica, Arial,
+                                      sans-serif;
+                                    font-size: 16px;
+                                    line-height: 24px;
+                                  ">
+                              Late Fees
                             </td>
                             <td align="left" width="25%" style="
-                                        padding: 6px 12px;
-                                        font-family: 'Source Sans Pro', Helvetica, Arial,
-                                          sans-serif;
-                                        font-size: 16px;
-                                        line-height: 24px;
-                                      ">
-                              ${findPaymentOptionName.name}
+                                    padding: 6px 12px;
+                                    font-family: 'Source Sans Pro', Helvetica, Arial,
+                                      sans-serif;
+                                    font-size: 16px;
+                                    line-height: 24px;
+                                  ">
+                              ${lateFees} Rs
                             </td>
                           </tr>
-          
-          
-          
-                          <tr>
+                          <tr style='border:3px dotted black;'>
                             <td align="left" width="75%" style="
                                     padding: 6px 12px;
                                     font-family: 'Source Sans Pro', Helvetica, Arial,
@@ -496,7 +483,7 @@ export const createCourseFeesController = asyncHandler(
                                     font-size: 16px;
                                     line-height: 24px;
                                   ">
-                              Remaining Course Fees
+                              Total Amount
                             </td>
                             <td align="left" width="25%" style="
                                     padding: 6px 12px;
@@ -505,7 +492,9 @@ export const createCourseFeesController = asyncHandler(
                                     font-size: 16px;
                                     line-height: 24px;
                                   ">
-                              ${req.body.remainingFees} Rs
+                              ${
+                                Number(lateFees) + Number(student.down_payment)
+                              } Rs
                             </td>
                           </tr>
           
@@ -973,6 +962,7 @@ export const createCourseFeesController = asyncHandler(
                       <p><strong>Father Phone Number</strong></p>
                       <p><strong>Roll Number</strong></p>
                       <p><strong>Course Name</strong></p>
+                      <p><strong>Payment Method</strong></p>
                       <p><strong>Academy Name</strong></p>
 
                     </td>
@@ -1003,10 +993,12 @@ export const createCourseFeesController = asyncHandler(
                         </p>
                         <p>
                         ${student.rollNumber}
-                        
                       </p>
                       <p>
                       ${student.courseName.courseName} 
+                      </p>
+                      <p>
+                      ${findPaymentOptionName.name}
                       </p>
                       <p>
                         ${student.companyName.companyName}
@@ -1079,27 +1071,8 @@ export const createCourseFeesController = asyncHandler(
                             <strong>${student.companyName.reciptNumber}</strong>
                           </td>
                         </tr>
-                        <tr>
-                          <td align="left" width="75%" style="
-                                        padding: 6px 12px;
-                                        font-family: 'Source Sans Pro', Helvetica, Arial,
-                                          sans-serif;
-                                        font-size: 16px;
-                                        line-height: 24px;
-                                      ">
-                            Student Phone Number
-                          </td>
-                          <td align="left" width="25%" style="
-                                        padding: 6px 12px;
-                                        font-family: 'Source Sans Pro', Helvetica, Arial,
-                                          sans-serif;
-                                        font-size: 16px;
-                                        line-height: 24px;
-                                      ">
-                            +91${student.phone_number}
-                          </td>
-                        </tr>
                        
+
                         <tr>
                           <td align="left" width="75%" style="
                                         padding: 6px 12px;
@@ -1108,7 +1081,7 @@ export const createCourseFeesController = asyncHandler(
                                         font-size: 16px;
                                         line-height: 24px;
                                       ">
-                            Acadamy Name
+                            Course Fees
                           </td>
                           <td align="left" width="25%" style="
                                         padding: 6px 12px;
@@ -1117,9 +1090,11 @@ export const createCourseFeesController = asyncHandler(
                                         font-size: 16px;
                                         line-height: 24px;
                                       ">
-                            ${student.companyName.companyName}
+                            ${student.courseName.courseFees} Rs
                           </td>
                         </tr>
+
+                        
                         <tr>
                           <td align="left" width="75%" style="
                                         padding: 6px 12px;
@@ -1141,30 +1116,30 @@ export const createCourseFeesController = asyncHandler(
                           </td>
                         </tr>
         
+        
+        
+        
                         <tr>
                           <td align="left" width="75%" style="
-                                      padding: 6px 12px;
-                                      font-family: 'Source Sans Pro', Helvetica, Arial,
-                                        sans-serif;
-                                      font-size: 16px;
-                                      line-height: 24px;
-                                    ">
-                            Payment Method
+                                  padding: 6px 12px;
+                                  font-family: 'Source Sans Pro', Helvetica, Arial,
+                                    sans-serif;
+                                  font-size: 16px;
+                                  line-height: 24px;
+                                ">
+                            Late Fees
                           </td>
                           <td align="left" width="25%" style="
-                                      padding: 6px 12px;
-                                      font-family: 'Source Sans Pro', Helvetica, Arial,
-                                        sans-serif;
-                                      font-size: 16px;
-                                      line-height: 24px;
-                                    ">
-                            ${findPaymentOptionName.name}
+                                  padding: 6px 12px;
+                                  font-family: 'Source Sans Pro', Helvetica, Arial,
+                                    sans-serif;
+                                  font-size: 16px;
+                                  line-height: 24px;
+                                ">
+                            ${lateFees} Rs
                           </td>
                         </tr>
-        
-        
-        
-                        <tr>
+                        <tr style='border:3px dotted black;'>
                           <td align="left" width="75%" style="
                                   padding: 6px 12px;
                                   font-family: 'Source Sans Pro', Helvetica, Arial,
@@ -1172,7 +1147,7 @@ export const createCourseFeesController = asyncHandler(
                                   font-size: 16px;
                                   line-height: 24px;
                                 ">
-                            Remaining Course Fees
+                            Total Amount
                           </td>
                           <td align="left" width="25%" style="
                                   padding: 6px 12px;
@@ -1181,7 +1156,9 @@ export const createCourseFeesController = asyncHandler(
                                   font-size: 16px;
                                   line-height: 24px;
                                 ">
-                            ${req.body.remainingFees} Rs
+                            ${
+                              Number(lateFees) + Number(student.down_payment)
+                            } Rs
                           </td>
                         </tr>
         
