@@ -294,27 +294,25 @@ export const createCourseFeesController = asyncHandler(
                                       min-width: 240px;
                                       vertical-align: top;
                                     ">
-                          <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
-                            <tr>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Student Name</td>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Arvind Kumar</td>
-                            </tr>
-                            <tr>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Father Name</td>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Shree Bhoore Singh</td>
-                            </tr>
-                            <tr>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Roll Number</td>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">1000
-                              </td>
-                            </tr>
-                            <tr>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Course Name</td>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Full Stack development
-                              </td>
-                            </tr>
-          
-                          </table>
+                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
+                                    <tr>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Student Name</td>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.name}</td>
+                                    </tr>
+                                    <tr>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Father Name</td>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.father_name}</td>
+                                    </tr>
+                                    <tr>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Roll Number</td>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.rollNumber}</td>
+                                    </tr>
+                                    <tr>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Course Name</td>
+                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.courseName.courseName}</td>
+                                    </tr>
+                                  </table>
+                                  
                         </div>
                         <!--[if (gte mso 9)|(IE)]>
                                 </td>
@@ -329,16 +327,16 @@ export const createCourseFeesController = asyncHandler(
                                     ">
                           <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
                             <tr>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Course Fees</td>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">50000</td>
+                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">Course Fees</td>
+                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${student.courseName.courseFees}</td>
                             </tr>
                             <tr>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">Late Fees</td>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">0</td>
+                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">Late Fees</td>
+                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${lateFees}</td>
                             </tr>
                             <tr>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">GST</td>
-                              <td style="font-size: 16px; padding-left: 36px;" align="left" valign="top">5%
+                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">GST</td>
+                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${student.companyName.gst}
                               </td>
                             </tr>
                           </table>
@@ -403,7 +401,7 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 16px;
                                           line-height: 24px;
                                         ">
-                              <strong>Recipt #</strong>
+                              <strong>Recipt No</strong>
                             </td>
                             <td align="left" bgcolor="#D2C7BA" width="25%" style="
                                           padding: 12px;
@@ -423,7 +421,7 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 16px;
                                           line-height: 24px;
                                         ">
-                              ${student.name}
+                              Student Phone Number
                             </td>
                             <td align="left" width="25%" style="
                                           padding: 6px 12px;
@@ -435,26 +433,7 @@ export const createCourseFeesController = asyncHandler(
                               +91${student.phone_number}
                             </td>
                           </tr>
-                          <tr>
-                            <td align="left" width="75%" style="
-                                          padding: 6px 12px;
-                                          font-family: 'Source Sans Pro', Helvetica, Arial,
-                                            sans-serif;
-                                          font-size: 16px;
-                                          line-height: 24px;
-                                        ">
-                              ${student.courseName.courseName}
-                            </td>
-                            <td align="left" width="25%" style="
-                                          padding: 6px 12px;
-                                          font-family: 'Source Sans Pro', Helvetica, Arial,
-                                            sans-serif;
-                                          font-size: 16px;
-                                          line-height: 24px;
-                                        ">
-                              ${student.courseName.courseFees} Rs
-                            </td>
-                          </tr>
+                         
                           <tr>
                             <td align="left" width="75%" style="
                                           padding: 6px 12px;
@@ -1278,9 +1257,9 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 16px;
                                           line-height: 24px;
                                         ">
-                                    <p><strong>Delivery Address</strong></p>
+                                    <p><strong>Student Address</strong></p>
                                     <p>
-                                      1234 S. Broadway Ave<br />Unit 2<br />Denver, CO 80211
+                                     ${student.present_address}
                                     </p>
                                   </td>
                                 </tr>
@@ -1308,9 +1287,9 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 16px;
                                           line-height: 24px;
                                         ">
-                                    <p><strong>Billing Address</strong></p>
+                                    <p><strong>Acadamy Address</strong></p>
                                     <p>
-                                      1234 S. Broadway Ave<br />Unit 2<br />Denver, CO 80211
+                                      ${student.companyName.companyAddress}
                                     </p>
                                   </td>
                                 </tr>
