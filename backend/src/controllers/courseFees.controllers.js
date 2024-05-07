@@ -269,94 +269,84 @@ export const createCourseFeesController = asyncHandler(
                 </td>
               </tr>
               <!-- end hero -->
-          
               <!-- start student info block -->
-              <tr>
-                <td align="center" bgcolor="#D2C7BA" valign="top" width="100%">
-                  <!--[if (gte mso 9)|(IE)]>
-                          <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                          <tr>
-                          <td align="center" valign="top" width="600">
-                          <![endif]-->
-                  <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%"
-                    style="max-width: 600px">
+      <tr>
+        <td align="center" bgcolor="#D2C7BA" valign="top" width="100%">
+          <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%"
+            style="max-width: 600px">
+            <tr>
+              <td align="center" valign="top" style="font-size: 0;">
+  
+                <div style="
+                                  display: inline-block;
+                                  width: 100%;
+                                  max-width: 50%;
+                                  min-width: 240px;
+                                  vertical-align: top;
+                                ">
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
                     <tr>
-                      <td align="center" valign="top" style="font-size: 0">
-                        <!--[if (gte mso 9)|(IE)]>
-                                <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                                <tr>
-                                <td align="left" valign="top" width="300">
-                                <![endif]-->
-                        <div style="
-                                      display: inline-block;
-                                      width: 100%;
-                                      max-width: 50%;
-                                      min-width: 240px;
-                                      vertical-align: top;
-                                    ">
-                                    <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
-                                    <tr>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Student Name</td>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.name}</td>
-                                    </tr>
-                                    <tr>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Father Name</td>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.father_name}</td>
-                                    </tr>
-                                    <tr>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Roll Number</td>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.rollNumber}</td>
-                                    </tr>
-                                    <tr>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Course Name</td>
-                                      <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.courseName.courseName}</td>
-                                    </tr>
-                                  </table>
-                                  
-                        </div>
-                        <!--[if (gte mso 9)|(IE)]>
-                                </td>
-                                <td align="left" valign="top" width="300">
-                                <![endif]-->
-                        <div style="
-                                      display: inline-block;
-                                      width: 100%;
-                                      max-width: 50%;
-                                      min-width: 240px;
-                                      vertical-align: top;
-                                    ">
-                          <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
-                            <tr>
-                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">Course Fees</td>
-                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${student.courseName.courseFees}</td>
-                            </tr>
-                            <tr>
-                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">Late Fees</td>
-                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${lateFees}</td>
-                            </tr>
-                            <tr>
-                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">GST</td>
-                              <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${student.companyName.gst}
-                              </td>
-                            </tr>
-                          </table>
-                        </div>
-                        <!--[if (gte mso 9)|(IE)]>
-                                </td>
-                                </tr>
-                                </table>
-                                <![endif]-->
+                      <td valign="top" style="
+                                        padding-left: 36px;
+                                        font-family: 'Source Sans Pro', Helvetica, Arial,
+                                          sans-serif;
+                                        font-size: 16px;
+                                      ">
+                        <p><strong>Student Name</strong></p>
+                        <p><strong>Father Name</strong></p>
+                        <p><strong>Father Phone Number</strong></p>
+                        <p><strong>Roll Number</strong></p>
+                        <p><strong>Course Name</strong></p>
+                        <p><strong>Academy Name</strong></p>
+  
                       </td>
                     </tr>
                   </table>
-                  <!--[if (gte mso 9)|(IE)]>
-                          </td>
-                          </tr>
-                          </table>
-                          <![endif]-->
-                </td>
-              </tr>
-              <!-- end student info block -->
+                </div>
+                <div style="
+                                  display: inline-block;
+                                  width: 100%;
+                                  max-width: 50%;
+                                  min-width: 240px;
+                                  vertical-align: top;
+                                ">
+                  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
+                    <tr>
+                      <td valign="top" style="
+                                        font-family: 'Source Sans Pro', Helvetica, Arial,
+                                          sans-serif;
+                                        font-size: 16px;
+                                        
+                                      ">
+                        <p>${student.name}</p>
+                        <p>
+                          ${student.father_name}
+                        </p>
+                        <p>
+                          +91 ${student.mobile_number}
+                          </p>
+                          <p>
+                          ${student.rollNumber}
+                          
+                        </p>
+                        <p>
+                        ${student.courseName.courseName} 
+                        </p>
+                        <p>
+                          ${student.companyName.companyName}
+                        </p>
+                      </td>
+                     
+                    </tr>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <!-- end student info block -->
+  
           
               <!-- start copy block -->
               <tr>
@@ -955,94 +945,84 @@ export const createCourseFeesController = asyncHandler(
               </td>
             </tr>
             <!-- end hero -->
-        
             <!-- start student info block -->
-            <tr>
-              <td align="center" bgcolor="#D2C7BA" valign="top" width="100%">
-                <!--[if (gte mso 9)|(IE)]>
-                        <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                        <tr>
-                        <td align="center" valign="top" width="600">
-                        <![endif]-->
-                <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%"
-                  style="max-width: 600px">
+    <tr>
+      <td align="center" bgcolor="#D2C7BA" valign="top" width="100%">
+        <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%"
+          style="max-width: 600px">
+          <tr>
+            <td align="center" valign="top" style="font-size: 0;">
+
+              <div style="
+                                display: inline-block;
+                                width: 100%;
+                                max-width: 50%;
+                                min-width: 240px;
+                                vertical-align: top;
+                              ">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
                   <tr>
-                    <td align="center" valign="top" style="font-size: 0">
-                      <!--[if (gte mso 9)|(IE)]>
-                              <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
-                              <tr>
-                              <td align="left" valign="top" width="300">
-                              <![endif]-->
-                      <div style="
-                                    display: inline-block;
-                                    width: 100%;
-                                    max-width: 50%;
-                                    min-width: 240px;
-                                    vertical-align: top;
-                                  ">
-                                  <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
-                                  <tr>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Student Name</td>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.name}</td>
-                                  </tr>
-                                  <tr>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Father Name</td>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.father_name}</td>
-                                  </tr>
-                                  <tr>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Roll Number</td>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.rollNumber}</td>
-                                  </tr>
-                                  <tr>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">Course Name</td>
-                                    <td style="font-size: 16px; padding-left: 36px; width: fit-content;" valign="top">${student.courseName.courseName}</td>
-                                  </tr>
-                                </table>
-                                
-                      </div>
-                      <!--[if (gte mso 9)|(IE)]>
-                              </td>
-                              <td align="left" valign="top" width="300">
-                              <![endif]-->
-                      <div style="
-                                    display: inline-block;
-                                    width: 100%;
-                                    max-width: 50%;
-                                    min-width: 240px;
-                                    vertical-align: top;
-                                  ">
-                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
-                          <tr>
-                            <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">Course Fees</td>
-                            <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${student.courseName.courseFees}</td>
-                          </tr>
-                          <tr>
-                            <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">Late Fees</td>
-                            <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${lateFees}</td>
-                          </tr>
-                          <tr>
-                            <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">GST</td>
-                            <td style="font-size: 16px; padding-left: 36px; width: fit-content;"  valign="top">${student.companyName.gst}
-                            </td>
-                          </tr>
-                        </table>
-                      </div>
-                      <!--[if (gte mso 9)|(IE)]>
-                              </td>
-                              </tr>
-                              </table>
-                              <![endif]-->
+                    <td valign="top" style="
+                                      padding-left: 36px;
+                                      font-family: 'Source Sans Pro', Helvetica, Arial,
+                                        sans-serif;
+                                      font-size: 16px;
+                                    ">
+                      <p><strong>Student Name</strong></p>
+                      <p><strong>Father Name</strong></p>
+                      <p><strong>Father Phone Number</strong></p>
+                      <p><strong>Roll Number</strong></p>
+                      <p><strong>Course Name</strong></p>
+                      <p><strong>Academy Name</strong></p>
+
                     </td>
                   </tr>
                 </table>
-                <!--[if (gte mso 9)|(IE)]>
-                        </td>
-                        </tr>
-                        </table>
-                        <![endif]-->
-              </td>
-            </tr>
-            <!-- end student info block -->
+              </div>
+              <div style="
+                                display: inline-block;
+                                width: 100%;
+                                max-width: 50%;
+                                min-width: 240px;
+                                vertical-align: top;
+                              ">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
+                  <tr>
+                    <td valign="top" style="
+                                      font-family: 'Source Sans Pro', Helvetica, Arial,
+                                        sans-serif;
+                                      font-size: 16px;
+                                      
+                                    ">
+                      <p>${student.name}</p>
+                      <p>
+                        ${student.father_name}
+                      </p>
+                      <p>
+                        +91 ${student.mobile_number}
+                        </p>
+                        <p>
+                        ${student.rollNumber}
+                        
+                      </p>
+                      <p>
+                      ${student.courseName.courseName} 
+                      </p>
+                      <p>
+                        ${student.companyName.companyName}
+                      </p>
+                    </td>
+                   
+                  </tr>
+                </table>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <!-- end student info block -->
+
         
             <!-- start copy block -->
             <tr>
