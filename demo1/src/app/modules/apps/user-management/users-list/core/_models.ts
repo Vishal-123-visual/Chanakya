@@ -1,4 +1,4 @@
-import { ID, Response } from '../../../../../../_metronic/helpers'
+import {ID, Response} from '../../../../../../_metronic/helpers'
 // export type User = {
 //   id?: ID
 //   name?: string
@@ -16,27 +16,25 @@ import { ID, Response } from '../../../../../../_metronic/helpers'
 //   }
 // }
 export type User = {
-  id?: ID,
-  avatar?: string,
-  fName?: string,
-  lName?: string,
+  id?: ID
+  avatar?: string
+  fName?: string
+  lName?: string
   email?: string
   role?: string
-  phone?: string,
+  phone?: string
   password?: string
 }
 export type User1 = {
-  _id?: ID,
-  avatar?: string,
-  fName?: string,
-  lName?: string,
+  _id?: ID
+  avatar?: string
+  fName?: string
+  lName?: string
   email?: string
   role?: string
-  phone?: string,
+  phone?: string
   password?: string
 }
-
-
 
 export type UsersQueryResponse = Response<Array<User>>
 
@@ -46,6 +44,6 @@ export const initialUser: User = {
   fName: '',
   email: '',
   phone: '',
-  lName: "",
-  password: "asasdf"
+  lName: '',
+  password: '',
 }

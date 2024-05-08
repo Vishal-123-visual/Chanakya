@@ -261,14 +261,35 @@ export const editUserController = asyncHandler(async (req, res, next) => {
   try {
     let user = await userModel.findById(req.params.id);
 
-    if (user._id.toString() === req.user._id.toString()) {
-      return res
-        .status(400)
-        .json({ error: "Cannot edit the current logged-in user." });
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
     }
 
     if (user.role === "SuperAdmin") {
       return res.status(400).json({ error: "Cannot update SuperAdmin user." });
+    }
+
+    if (user._id.toString() === req.user._id.toString()) {
+      let hashPassword = await bcryptjs.hash(password, 10);
+      user.fName = fName || user.fName;
+      user.lName = lName || user.lName;
+      user.email = email || user.email;
+      user.role = role || user.role;
+      user.phone = phone || user.phone;
+      user.password = hashPassword || user.password;
+      const token = generateToken(res, user._id);
+
+      let updateUser = await user.save();
+      return res.status(200).json({
+        _id: updateUser._id,
+        first_name: updateUser.fName,
+        role: updateUser.role,
+        email: updateUser.email,
+        api_token: token,
+        last_name: updateUser.lName,
+        email_verified_at: updateUser.createdAt,
+        updated_at: updateUser.updatedAt,
+      });
     }
 
     // Uncomment the input validation block for better validation
@@ -287,9 +308,21 @@ export const editUserController = asyncHandler(async (req, res, next) => {
     user.role = role || user.role;
     user.phone = phone || user.phone;
     user.password = hashPassword || user.password;
+    const token = generateToken(res, user._id);
 
     let updateUser = await user.save();
-    res.status(200).json({ success: "User updated successfully." });
+    res.status(200).json({
+      _id: updateUser._id,
+      first_name: updateUser.fName,
+      role: updateUser.role,
+      email: updateUser.email,
+      api_token: token,
+      last_name: updateUser.lName,
+      email_verified_at: updateUser.createdAt,
+      updated_at: updateUser.updatedAt,
+    });
+    // let updateUser = await user.save();
+    // res.status(200).json({ success: "User updated successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -348,6 +381,8 @@ export const getUserByIdController = asyncHandler(async (req, res, next) => {
 
     // console.log(user);
 
+    user.password = undefined;
+
     res.status(200).json({
       data: {
         id: user._id,
@@ -355,7 +390,6 @@ export const getUserByIdController = asyncHandler(async (req, res, next) => {
         lName: user.lName,
         email: user.email,
         role: user.role,
-        password: user.password,
         phone: user.phone,
       },
     });

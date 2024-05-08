@@ -6,8 +6,8 @@ import {useQueryRequest} from '../../core/QueryRequestProvider'
 const UsersListSearchComponent = () => {
   const {updateState} = useQueryRequest()
   const [searchTerm, setSearchTerm] = useState<string>('')
-  console.log(searchTerm);
-  
+  //console.log(searchTerm);
+
   // Debounce search term so that it only gives us latest value ...
   // ... if searchTerm has not been updated within last 500ms.
   // The goal is to only have the API call fire when user stops typing ...
