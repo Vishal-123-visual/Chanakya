@@ -10,7 +10,6 @@ import courseFeesRoutes from "./routes/courseFees.routes.js";
 import paymentOptionsRoutes from "./routes/paymentOptions.routes.js";
 import companyRoutes from "./routes/company.routes.js";
 import { BACKEND_URL, FRONTEND_URL } from "./config/config.js";
-import dist from "../../demo1/";
 
 const app = express();
 // app.use(cors());
@@ -30,9 +29,9 @@ app.use("/api/paymentOptions", paymentOptionsRoutes);
 app.use("/api/company", companyRoutes);
 const __dirname = path.resolve();
 app.use("/api/images", express.static(path.join(__dirname + "/images")));
-app.use(express.static(path.join(__dirname, "../../demo1/build")));
+app.use(express.static(path.join(__dirname, "./build")));
 app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../../demo1/build/website/index.html"));
+  res.sendFile(path.join(__dirname, "/build/index.html"));
 });
 
 export default app;
