@@ -1,14 +1,14 @@
-import { useIntl } from 'react-intl'
-import { MenuItem } from './MenuItem'
-import { MenuInnerWithSub } from './MenuInnerWithSub'
-import { MegaMenu } from './MegaMenu'
+import {useIntl} from 'react-intl'
+import {MenuItem} from './MenuItem'
+import {MenuInnerWithSub} from './MenuInnerWithSub'
+import {MegaMenu} from './MegaMenu'
 
 export function MenuInner() {
   const intl = useIntl()
   return (
     <>
-      <MenuItem title={intl.formatMessage({ id: 'MENU.DASHBOARD' })} to='/dashboard' />
-      <MenuItem title='Layout Builder' to='/builder' />
+      <MenuItem title={intl.formatMessage({id: 'MENU.DASHBOARD'})} to='/dashboard' />
+      {/* <MenuItem title='Layout Builder' to='/builder' /> */}
       <MenuInnerWithSub
         title='Crafted'
         to='/crafted'
@@ -96,7 +96,6 @@ export function MenuInner() {
           <MenuItem to='/crafted/widgets/mixed' title='Mixed' hasBullet={true} />
           <MenuItem to='/crafted/widgets/tables' title='Tables' hasBullet={true} />
           <MenuItem to='/crafted/widgets/feeds' title='Feeds' hasBullet={true} />
-
         </MenuInnerWithSub>
       </MenuInnerWithSub>
 
