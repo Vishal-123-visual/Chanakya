@@ -39,9 +39,9 @@ const addmissionFormSchema = Yup.object().shape({
   select_course: Yup.string().required('select course is required!'),
   //document_attached: Yup.string().required('document attached is required!'),
   //select_software: Yup.string().required('select software  is required!'),
-  name_of_person_for_commision: Yup.string().required('Name of person for commision is required!'),
-  commision_paid: Yup.string().required('commision paid is required!'),
-  commision_date: Yup.string().required('Commision date is required!'),
+  name_of_person_for_commision: Yup.string(),
+  commision_paid: Yup.string(),
+  commision_date: Yup.string(),
   commision_voucher_number: Yup.string(),
   course_fees: Yup.string().required('Course fees is required!'),
   //down_payment: Yup.string().required('Down Payment is required!'),
@@ -620,7 +620,7 @@ const AddMissionForm: React.FC = () => {
                 <div className='col-6 mt-5'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Name of Person for Commision</span>
+                      <span>Name of Person for Commision</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -651,7 +651,7 @@ const AddMissionForm: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Commision Com. Paid</span>
+                      <span>Commision Com. Paid</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -672,7 +672,7 @@ const AddMissionForm: React.FC = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Commision Date</span>
+                      <span>Commision Date</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
