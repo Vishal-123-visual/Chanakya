@@ -123,7 +123,7 @@ const AddCourseUpdateAndAdd = () => {
               </div>
               <div className='row mb-6'>
                 <label className='col-6 col-form-label required fw-bold fs-6'>
-                  Number Of Years{' '}
+                  Number Of Years/Semester{' '}
                   <div className='fv-row mt-5 '>
                     <select
                       className='form-select form-select-solid form-select-lg'

@@ -112,6 +112,13 @@ const SubjectTable = ({className, yearWiseAndSemster, activeTab, editCourse}) =>
                 {/* end::Table head */}
                 {/* begin::Table body */}
                 <tbody>
+                  {AddSubjectFromToggle && (
+                    <AddSubjectForm
+                      setAddSubjectFormToggle={setAddSubjectFormToggle}
+                      newSubject={newSubject}
+                      setNewSubject={setNewSubject}
+                    />
+                  )}
                   {subjects
                     .filter((subject) => {
                       const semester = parseInt(subject?.semYear.split(' ')[1])
@@ -145,13 +152,6 @@ const SubjectTable = ({className, yearWiseAndSemster, activeTab, editCourse}) =>
                         )}
                       </Fragment>
                     ))}
-                  {AddSubjectFromToggle && (
-                    <AddSubjectForm
-                      setAddSubjectFormToggle={setAddSubjectFormToggle}
-                      newSubject={newSubject}
-                      setNewSubject={setNewSubject}
-                    />
-                  )}
                 </tbody>
                 {/* end::Table body */}
               </table>
