@@ -27,7 +27,7 @@ const Sidebar = () => {
         >
           <SidebarLogo sidebarRef={sidebarRef} />
           <SidebarMenu />
-          <SidebarFooter />
+          {/* <SidebarFooter /> */}
         </div>
       )}
     </>
