@@ -78,15 +78,12 @@ const admissionFormSchema = new mongoose.Schema(
     // },
     name_of_person_for_commision: {
       type: String,
-      required: true,
     },
     commision_paid: {
       type: String,
-      required: true,
     },
     commision_date: {
       type: Date,
-      required: true,
     },
     commision_voucher_number: {
       type: String,

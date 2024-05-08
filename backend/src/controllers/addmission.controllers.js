@@ -21,10 +21,10 @@ export const createAddMissionController = asyncHandler(
       select_course,
       //document_attached,
       //select_software,
-      name_of_person_for_commision,
-      commision_paid,
-      commision_date,
-      commision_voucher_number,
+      // name_of_person_for_commision,
+      // commision_paid,
+      // commision_date,
+      // commision_voucher_number,
       course_fees,
       discount,
       netCourseFees,
@@ -96,18 +96,18 @@ export const createAddMissionController = asyncHandler(
         throw new Error("Please provide select course field!");
         return;
 
-      case !name_of_person_for_commision:
-        res.status(400);
-        throw new Error("Please provide name of person for commision field!");
-        return;
-      case !commision_paid:
-        res.status(400);
-        throw new Error("Please provide commision paid field!");
-        return;
-      case !commision_date:
-        res.status(400);
-        throw new Error("Please provide commision date field!");
-        return;
+      // case !name_of_person_for_commision:
+      //   res.status(400);
+      //   throw new Error("Please provide name of person for commision field!");
+      //   return;
+      // case !commision_paid:
+      //   res.status(400);
+      //   throw new Error("Please provide commision paid field!");
+      //   return;
+      // case !commision_date:
+      //   res.status(400);
+      //   throw new Error("Please provide commision date field!");
+      //   return;
 
       case !course_fees:
         res.status(400);

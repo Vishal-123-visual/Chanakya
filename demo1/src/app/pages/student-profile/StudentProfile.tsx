@@ -547,7 +547,7 @@ const StudentProfile: React.FC = () => {
                       >
                         <option value=''>select--</option>
                         <option value='GST'>GST</option>
-                        <option value='NoGST'>NO GST</option>
+                        <option value='NOGST'>NO GST</option>
                       </select>
                       {formik.touched.student_status && formik.errors.student_status && (
                         <div className='fv-plugins-message-container'>

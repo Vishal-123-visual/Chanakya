@@ -60,6 +60,8 @@ const AddMissionForm: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState<any>({})
+  const [updateUserId, setUpdateUserId] = useState<any>(location.state)
+  //console.log(updateUserId)
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
@@ -93,9 +95,14 @@ const AddMissionForm: React.FC = () => {
   }
 
   const handleCourseFeesDiscount = (e) => {
-    const amount = selectedCourseNameData?.courseFees
+    console.log(formik)
+    const amount = updateUserId
+      ? Number(updateUserId.course_fees)
+      : selectedCourseNameData?.courseFees
     const discount = Number(e.target.value)
+    //console.log(amount)
     const discountAmount = formik.values.student_status === 'GST' && Number(amount) - discount
+    //console.log(discountAmount)
     formik.setFieldValue('netCourseFees', discountAmount)
   }
 
@@ -112,7 +119,6 @@ const AddMissionForm: React.FC = () => {
     }
   }
 
-  const [updateUserId, setUpdateUserId] = useState<any>(location.state)
   //console.log(updateUserId)
 
   // let updateStudentId = updateUserId?._id
@@ -120,12 +126,11 @@ const AddMissionForm: React.FC = () => {
   let updateStudentInitialValues: AddMissionFormInterface = updateUserId
     ? updateUserId
     : initialValues
-
+  //console.log(updateStudentInitialValues)
   useEffect(() => {
     if (image) {
       // setPreview(URL.createObjectURL(image))
       setPreview(URL.createObjectURL(image))
-      //console.log(image.name)
     }
   }, [image])
 
@@ -586,6 +591,7 @@ const AddMissionForm: React.FC = () => {
                           formik.getFieldProps('student_status').onChange(e)
                           studentStatusHandler(e)
                         }}
+                        value={formik.values.student_status}
                         id='student_status'
                         name='student_status'
                       >
