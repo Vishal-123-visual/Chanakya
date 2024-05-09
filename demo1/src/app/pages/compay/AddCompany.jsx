@@ -9,6 +9,8 @@ const CourseSchema = Yup.object().shape({
   companyName: Yup.string().required('Company Name is required'),
   companyAddress: Yup.string().required('Company Address is required'),
   email: Yup.string().required('Company Email Address  is required'),
+  companyPhone: Yup.string().required('Company Phone Number is required'),
+  companyWebsite: Yup.string().required('Company Website is required'),
   reciptNumber: Yup.string().required('Company recipt number'),
   gst: Yup.number(),
 })
@@ -39,9 +41,11 @@ const AddCompany = () => {
 
   let initialValues = {
     companyName: '',
+    companyPhone: '',
+    companyWebsite: '',
     companyAddress: '',
-    reciptNumber: 0,
-    gst: 0,
+    reciptNumber: '',
+    gst: '',
     email: '',
   }
 
@@ -141,6 +145,44 @@ const AddCompany = () => {
                 </label>
                 {/* ----------------------- Company Email Field End ----------------------------- */}
 
+                {/* ----------------------- Company Phone Field Start----------------------------- */}
+                <label className='col-6 col-form-label fw-bold fs-6'>
+                  Company Phone{' '}
+                  <div className='fv-row mt-5 '>
+                    <input
+                      type='text'
+                      className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                      placeholder='Enter Company Phone Number..'
+                      {...formik.getFieldProps('companyPhone')}
+                    />
+                    {formik.touched.companyPhone && formik.errors.companyPhone && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors?.companyPhone}</div>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {/* ----------------------- Company Phone Field End ----------------------------- */}
+
+                {/* ----------------------- Company Website Field Start----------------------------- */}
+                <label className='col-6 col-form-label fw-bold fs-6'>
+                  Company Website{' '}
+                  <div className='fv-row mt-5 '>
+                    <input
+                      type='text'
+                      className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                      placeholder='Enter Company website'
+                      {...formik.getFieldProps('companyWebsite')}
+                    />
+                    {formik.touched.companyWebsite && formik.errors.companyWebsite && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors?.companyWebsite}</div>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {/* ----------------------- Company Website Field End ----------------------------- */}
+
                 {/* ============================ Start course fees==================== */}
                 <label className='col-6 col-form-label fw-bold fs-6'>
                   Company Address{' '}
@@ -182,6 +224,7 @@ const AddCompany = () => {
                       className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                       placeholder='Enter GST number'
                       {...formik.getFieldProps('gst')}
+                      min={0}
                     />
                     {formik.touched.gst && formik.errors.gst && (
                       <div className='fv-plugins-message-container'>

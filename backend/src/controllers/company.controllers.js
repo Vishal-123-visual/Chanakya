@@ -6,7 +6,15 @@ import path from "path";
 const __dirname = path.resolve();
 
 export const createCompanyController = asyncHandler(async (req, res, next) => {
-  const { companyName, companyAddress, reciptNumber, gst, email } = req.body;
+  const {
+    companyName,
+    companyPhone,
+    companyWebsite,
+    companyAddress,
+    reciptNumber,
+    gst,
+    email,
+  } = req.body;
   const file = req?.file?.filename;
   // console.log(file);
   try {
@@ -17,6 +25,10 @@ export const createCompanyController = asyncHandler(async (req, res, next) => {
         return res.status(401).json({ message: "Company name is required" });
       case !email:
         return res.status(401).json({ message: "Company email is required" });
+      case !companyPhone:
+        return res.status(401).json({ message: "Company phone is required" });
+      case !companyWebsite:
+        return res.status(401).json({ message: "Company website is required" });
       case !companyAddress:
         return res
           .status(401)
@@ -30,6 +42,8 @@ export const createCompanyController = asyncHandler(async (req, res, next) => {
     }
     const newCompany = new CompanyModels({
       companyName,
+      companyPhone,
+      companyWebsite,
       companyAddress,
       reciptNumber,
       gst,
@@ -63,6 +77,8 @@ export const updateCompanyController = asyncHandler(async (req, res, next) => {
     const file = req?.file?.filename;
 
     company.companyName = req.body.companyName || company.companyName;
+    company.companyPhone = req.body.companyPhone || company.companyPhone;
+    company.companyWebsite = req.body.companyWebsite || company.companyWebsite;
     company.companyAddress = req.body.companyAddress || company.companyAddress;
     company.reciptNumber = req.body.reciptNumber || company.reciptNumber;
     company.email = req.body.email || company.email;

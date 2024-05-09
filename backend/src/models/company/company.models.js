@@ -14,6 +14,14 @@ const companySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    companyPhone: {
+      type: String,
+      required: true,
+    },
+    companyWebsite: {
+      type: String,
+      required: true,
+    },
     companyAddress: {
       type: String,
       required: true,
