@@ -8,9 +8,11 @@ import {useCompanyContext} from './CompanyContext'
 const CourseSchema = Yup.object().shape({
   companyName: Yup.string().required('Company Name is required'),
   companyAddress: Yup.string().required('Company Address is required'),
-  email: Yup.string().required('Company Email Address is required'),
+  email: Yup.string().required('Company Email Address  is required'),
+  companyPhone: Yup.string().required('Company Phone Number is required'),
+  companyWebsite: Yup.string().required('Company Website is required'),
   reciptNumber: Yup.string().required('Company recipt number'),
-  gst: Yup.string(),
+  gst: Yup.number(),
 })
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -38,6 +40,8 @@ const UpdateCompany = () => {
   let initialValues = {
     id: updatedCompanyData._id,
     companyName: updatedCompanyData?.companyName,
+    companyPhone: updatedCompanyData?.companyPhone,
+    companyWebsite: updatedCompanyData?.companyWebsite,
     companyAddress: updatedCompanyData?.companyAddress,
     reciptNumber: updatedCompanyData?.reciptNumber,
     gst: updatedCompanyData?.gst,
@@ -149,6 +153,44 @@ const UpdateCompany = () => {
                   </div>
                 </label>
                 {/* ----------------------- Company Email Field End ----------------------------- */}
+
+                {/* ----------------------- Company Phone Field Start----------------------------- */}
+                <label className='col-6 col-form-label fw-bold fs-6'>
+                  Company Phone{' '}
+                  <div className='fv-row mt-5 '>
+                    <input
+                      type='text'
+                      className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                      placeholder='Enter Company Phone Number..'
+                      {...formik.getFieldProps('companyPhone')}
+                    />
+                    {formik.touched.companyPhone && formik.errors.companyPhone && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors?.companyPhone}</div>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {/* ----------------------- Company Phone Field End ----------------------------- */}
+
+                {/* ----------------------- Company Website Field Start----------------------------- */}
+                <label className='col-6 col-form-label fw-bold fs-6'>
+                  Company Website{' '}
+                  <div className='fv-row mt-5 '>
+                    <input
+                      type='text'
+                      className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                      placeholder='Enter Company website'
+                      {...formik.getFieldProps('companyWebsite')}
+                    />
+                    {formik.touched.companyWebsite && formik.errors.companyWebsite && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors?.companyWebsite}</div>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                {/* ----------------------- Company Website Field End ----------------------------- */}
 
                 {/* ============================ Start course fees==================== */}
                 <label className='col-6 col-form-label fw-bold fs-6'>
