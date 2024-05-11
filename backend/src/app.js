@@ -29,9 +29,9 @@ app.use("/api/paymentOptions", paymentOptionsRoutes);
 app.use("/api/company", companyRoutes);
 const __dirname = path.resolve();
 app.use("/api/images", express.static(path.join(__dirname + "/images")));
-app.use(express.static(path.join(__dirname, "./build")));
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "/build/index.html"));
-});
+//app.use(express.static(path.join(__dirname, "./build")));
+// app.get("/*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "/build/index.html"));
+// });
 
 export default app;
