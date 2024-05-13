@@ -10,7 +10,7 @@ type CourseType = {
 }
 
 let initialValues: CourseType = {
-  courseType: '1 year',
+  courseType: '',
 }
 
 const profileDetailsSchema = Yup.object().shape({

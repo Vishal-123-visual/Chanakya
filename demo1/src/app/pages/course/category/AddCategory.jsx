@@ -15,7 +15,7 @@ const AddCourseCategory = () => {
   const [loading, setLoading] = React.useState(false)
   const navigate = useNavigate()
 
-  let initialValues = editcategoryCourse ? editcategoryCourse : {category: 'PDP'}
+  let initialValues = editcategoryCourse ? editcategoryCourse : {category: ''}
   const formik = useFormik({
     initialValues,
     validationSchema: CourseCategorySchema,

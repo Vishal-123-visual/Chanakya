@@ -6,4 +6,5 @@ backend/.env
 backend/images
 
 demo1/build
+backend/build
 
