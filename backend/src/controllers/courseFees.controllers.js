@@ -70,13 +70,17 @@ export const createCourseFeesController = asyncHandler(
         );
         //console.log(findPaymentOptionName);
         // Send email asynchronously
+
+        let companyLogoURL =
+          BACKEND_URL + "/api/images/" + student.companyName.logo;
+        // Send email asynchronously
         sendEmail(
           `${req.user.email}, ${student.email} ${student.companyName.email},thakurarvindkr10@gmail.com`,
           "Regarding to Submitted Fees in Visual Media Technology",
           `Hello ${student.name} you have submitted fees `,
           `<!DOCTYPE html>
       <html>
-
+  
       <head>
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
@@ -94,7 +98,7 @@ export const createCourseFeesController = asyncHandler(
               src: local("Source Sans Pro Regular"), local("SourceSansPro-Regular"),
                 url(https://fonts.gstatic.com/s/sourcesanspro/v10/ODelI1aHBYDBqgeIAH2zlBM0YzuT7MdOe03otPbuUS0.woff) format("woff");
             }
-
+  
             @font-face {
               font-family: "Source Sans Pro";
               font-style: normal;
@@ -103,7 +107,7 @@ export const createCourseFeesController = asyncHandler(
                 url(https://fonts.gstatic.com/s/sourcesanspro/v10/toadOcfmlt9b38dHJxOBGFkQc6VGVFSmCnC_l7QZG60.woff) format("woff");
             }
           }
-
+  
           /**
                  * Avoid browser level font resizing.
                  * 1. Windows Mobile
@@ -118,7 +122,7 @@ export const createCourseFeesController = asyncHandler(
             -webkit-text-size-adjust: 100%;
             /* 2 */
           }
-
+  
           /**
                  * Remove extra space added to tables and cells in Outlook.
                  */
@@ -127,14 +131,14 @@ export const createCourseFeesController = asyncHandler(
             mso-table-rspace: 0pt;
             mso-table-lspace: 0pt;
           }
-
+  
           /**
                  * Better fluid images in Internet Explorer.
                  */
           img {
             -ms-interpolation-mode: bicubic;
           }
-
+  
           /**
                  * Remove blue links for iOS devices.
                  */
@@ -146,32 +150,32 @@ export const createCourseFeesController = asyncHandler(
             color: inherit !important;
             text-decoration: none !important;
           }
-
+  
           /**
                  * Fix centering issues in Android 4.4.
                  */
           div[style*="margin: 16px 0;"] {
             margin: 0 !important;
           }
-
+  
           body {
             width: 100% !important;
             height: 100% !important;
             padding: 0 !important;
             margin: 0 !important;
           }
-
+  
           /**
                  * Collapse table borders to avoid space between cells.
                  */
           table {
             border-collapse: collapse !important;
           }
-
+  
           a {
             color: #1a82e2;
           }
-
+  
           img {
             height: auto;
             line-height: 100%;
@@ -181,7 +185,7 @@ export const createCourseFeesController = asyncHandler(
           }
         </style>
       </head>
-
+  
       <body style="background-color: #d2c7ba">
         <!-- start preheader -->
         <div class="preheader" style="
@@ -198,7 +202,7 @@ export const createCourseFeesController = asyncHandler(
           an email is viewed in the inbox.
         </div>
         <!-- end preheader -->
-
+  
         <!-- start body -->
         <table border="0" cellpadding="0" cellspacing="0" width="100%">
           <!-- start logo -->
@@ -213,9 +217,7 @@ export const createCourseFeesController = asyncHandler(
                 <tr>
                   <td align="center" valign="top" style="padding: 36px 24px">
                     <a href="https://sendgrid.com" target="_blank" style="display: inline-block">
-                      <img src={${BACKEND_URL} + "/api/images/" + ${
-            student.companyName.logo
-          }} alt="Logo" border="0" width="200px" style="
+                      <img src=${companyLogoURL} alt="Logo" border="0" width="200px" style="
                                     display: block;
                                     width: 48px;
                                     max-width: 48px;
@@ -233,7 +235,7 @@ export const createCourseFeesController = asyncHandler(
             </td>
           </tr>
           <!-- end logo -->
-
+  
           <!-- start hero -->
           <tr>
             <td align="center" bgcolor="#D2C7BA">
@@ -276,7 +278,7 @@ export const createCourseFeesController = asyncHandler(
         style="max-width: 600px">
         <tr>
           <td align="center" valign="top" style="font-size: 0;">
-
+  
             <div style="
                               display: inline-block;
                               width: 100%;
@@ -294,12 +296,11 @@ export const createCourseFeesController = asyncHandler(
                                   ">
                     <p><strong>Student Name</strong></p>
                     <p><strong>Father Name</strong></p>
-                    <p><strong>Father Phone Number</strong></p>
                     <p><strong>Roll Number</strong></p>
                     <p><strong>Course Name</strong></p>
                     <p><strong>Payment Method</strong></p>
-                    <p><strong>Academy Name</strong></p>
-
+                    
+  
                   </td>
                 </tr>
               </table>
@@ -323,9 +324,7 @@ export const createCourseFeesController = asyncHandler(
                     <p>
                       ${student.father_name}
                     </p>
-                    <p>
-                      +91 ${student.mobile_number}
-                      </p>
+                    
                       <p>
                       ${student.rollNumber}
                     </p>
@@ -335,9 +334,7 @@ export const createCourseFeesController = asyncHandler(
                     <p>
                     ${findPaymentOptionName.name}
                     </p>
-                    <p>
-                      ${student.companyName.companyName}
-                    </p>
+                    
                   </td>
                 
                 </tr>
@@ -349,8 +346,8 @@ export const createCourseFeesController = asyncHandler(
       </td>
       </tr>
       <!-- end student info block -->
-
-
+  
+  
           <!-- start copy block -->
           <tr>
             <td align="center" bgcolor="#D2C7BA">
@@ -376,7 +373,7 @@ export const createCourseFeesController = asyncHandler(
                   </td>
                 </tr>
                 <!-- end copy -->
-
+  
                 <!-- start receipt table -->
                 <tr>
                   <td align="left" bgcolor="#ffffff" style="
@@ -405,31 +402,7 @@ export const createCourseFeesController = asyncHandler(
                                     ">
                           <strong>${student.companyName.reciptNumber}</strong>
                         </td>
-                      </tr>
-                    
-
-                      <tr>
-                        <td align="left" width="75%" style="
-                                      padding: 6px 12px;
-                                      font-family: 'Source Sans Pro', Helvetica, Arial,
-                                        sans-serif;
-                                      font-size: 16px;
-                                      line-height: 24px;
-                                    ">
-                          Course Fees
-                        </td>
-                        <td align="left" width="25%" style="
-                                      padding: 6px 12px;
-                                      font-family: 'Source Sans Pro', Helvetica, Arial,
-                                        sans-serif;
-                                      font-size: 16px;
-                                      line-height: 24px;
-                                    ">
-                          ${student.courseName.courseFees} Rs
-                        </td>
-                      </tr>
-
-                      
+                      </tr> 
                       <tr>
                         <td align="left" width="75%" style="
                                       padding: 6px 12px;
@@ -450,10 +423,10 @@ export const createCourseFeesController = asyncHandler(
                           ${student.down_payment} Rs
                         </td>
                       </tr>
-
-
-
-
+  
+  
+  
+  
                       <tr>
                         <td align="left" width="75%" style="
                                 padding: 6px 12px;
@@ -526,24 +499,24 @@ export const createCourseFeesController = asyncHandler(
                           ).toFixed(2)} Rs
                         </td>
                       </tr>
-
+  
                       <!-- end reeipt table -->
                     </table>
                     <!--[if (gte mso 9)|(IE)]>
                           </td>
                           </tr>
-
+  
                         
-
+  
                       </table>
                       <![endif]-->
                   </td>
                 </tr>
                 <!-- end copy block -->
-
+  
                 <!-- start 1 copy block -->
                 <!-- end copy block -->
-
+  
                 <!-- start receipt address block -->
                 <tr>
                   <td align="center" bgcolor="#D2C7BA" valign="top" width="100%">
@@ -594,7 +567,7 @@ export const createCourseFeesController = asyncHandler(
                                       </td>
                                   </tr>
                               </table>
-
+  
                             
                           </div>
                           <!--[if (gte mso 9)|(IE)]>
@@ -613,7 +586,7 @@ export const createCourseFeesController = asyncHandler(
                   </td>
                 </tr>
                 <!-- end receipt address block -->
-
+  
                 <!-- start footer -->
                 <tr>
                   <td align="center" bgcolor="#D2C7BA" style="padding: 24px">
@@ -642,7 +615,7 @@ export const createCourseFeesController = asyncHandler(
                         </td>
                       </tr>
                       <!-- end permission -->
-
+  
                       <!-- start unsubscribe -->
                       <tr>
                         <td align="center" bgcolor="#D2C7BA" style="
@@ -674,7 +647,7 @@ export const createCourseFeesController = asyncHandler(
               </table>
               <!-- end body -->
       </body>
-
+  
       </html>`
         );
 
@@ -745,6 +718,8 @@ export const createCourseFeesController = asyncHandler(
       );
       // console.log(findPaymentOptionName);
       // Send email asynchronously
+      let companyLogoURL =
+        BACKEND_URL + "/api/images/" + student.companyName.logo;
       sendEmail(
         `${req.user.email}, ${student.email} ${student.companyName.email},thakurarvindkr10@gmail.com`,
         "Regarding to Submitted Fees in Visual Media Technology",
@@ -888,9 +863,7 @@ export const createCourseFeesController = asyncHandler(
               <tr>
                 <td align="center" valign="top" style="padding: 36px 24px">
                   <a href="https://sendgrid.com" target="_blank" style="display: inline-block">
-                    <img src={${BACKEND_URL} + "/api/images/" + ${
-          student.companyName.logo
-        }} alt="Logo" border="0" width="200px" style="
+                    <img src=${companyLogoURL} alt="Logo" border="0" width="200px" style="
                                   display: block;
                                   width: 48px;
                                   max-width: 48px;
@@ -969,11 +942,10 @@ export const createCourseFeesController = asyncHandler(
                                 ">
                   <p><strong>Student Name</strong></p>
                   <p><strong>Father Name</strong></p>
-                  <p><strong>Father Phone Number</strong></p>
                   <p><strong>Roll Number</strong></p>
                   <p><strong>Course Name</strong></p>
                   <p><strong>Payment Method</strong></p>
-                  <p><strong>Academy Name</strong></p>
+                  
 
                 </td>
               </tr>
@@ -998,9 +970,7 @@ export const createCourseFeesController = asyncHandler(
                   <p>
                     ${student.father_name}
                   </p>
-                  <p>
-                    +91 ${student.mobile_number}
-                    </p>
+                  
                     <p>
                     ${student.rollNumber}
                   </p>
@@ -1010,9 +980,7 @@ export const createCourseFeesController = asyncHandler(
                   <p>
                   ${findPaymentOptionName.name}
                   </p>
-                  <p>
-                    ${student.companyName.companyName}
-                  </p>
+                  
                 </td>
               
               </tr>
@@ -1080,31 +1048,7 @@ export const createCourseFeesController = asyncHandler(
                                   ">
                         <strong>${student.companyName.reciptNumber}</strong>
                       </td>
-                    </tr>
-                  
-
-                    <tr>
-                      <td align="left" width="75%" style="
-                                    padding: 6px 12px;
-                                    font-family: 'Source Sans Pro', Helvetica, Arial,
-                                      sans-serif;
-                                    font-size: 16px;
-                                    line-height: 24px;
-                                  ">
-                        Course Fees
-                      </td>
-                      <td align="left" width="25%" style="
-                                    padding: 6px 12px;
-                                    font-family: 'Source Sans Pro', Helvetica, Arial,
-                                      sans-serif;
-                                    font-size: 16px;
-                                    line-height: 24px;
-                                  ">
-                        ${student.courseName.courseFees} Rs
-                      </td>
-                    </tr>
-
-                    
+                    </tr> 
                     <tr>
                       <td align="left" width="75%" style="
                                     padding: 6px 12px;
