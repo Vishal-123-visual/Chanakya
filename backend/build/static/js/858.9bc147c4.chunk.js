@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkdemo1=self.webpackChunkdemo1||[]).push([[858],{2858:function(e,s,t){t.r(s);var a=t(1732),r=t(9071),n=t(184),i=[{title:"User Management",path:"/apps/user-management/users",isSeparator:!1,isActive:!1},{title:"",path:"",isSeparator:!0,isActive:!1}];s.default=function(){return(0,n.jsxs)(n.Fragment,{children:[(0,n.jsx)(a.V1,{breadcrumbs:i,children:"Schools Management"}),(0,n.jsx)(r.f,{})]})}}}]);
-//# sourceMappingURL=858.9bc147c4.chunk.js.map
