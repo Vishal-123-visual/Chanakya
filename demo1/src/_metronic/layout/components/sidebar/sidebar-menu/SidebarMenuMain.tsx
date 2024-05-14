@@ -205,6 +205,19 @@ const SidebarMenuMain = () => {
         title='User management'
         fontIcon='bi-layers'
       />
+
+      {/* ------------------------------ Settings Page Start ----------------------------------------- */}
+      <SidebarMenuItemWithSub
+        to='/apps/chat'
+        title='Settings'
+        fontIcon='bi-chat-left'
+        icon='abstract-29'
+      >
+        <SidebarMenuItem to='/email-template' title='Email Template' hasBullet={true} />
+      </SidebarMenuItemWithSub>
+
+      {/* ------------------------------ Settings Page End ------------------------------------------- */}
+
       {/* <div className='menu-item'>
         <a
           target='_blank'

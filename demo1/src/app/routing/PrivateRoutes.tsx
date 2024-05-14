@@ -39,6 +39,7 @@ const PrivateRoutes = () => {
     () => import('../pages/monthly_collection_fee/MonthlyCollectionFee')
   )
   const AddPaymentOption = lazy(() => import('../pages/payment_option/AddPaymentOption'))
+  const EmailTemplate = lazy(() => import('../pages/email-template/EmailTemplate'))
 
   return (
     <Routes>
@@ -195,7 +196,7 @@ const PrivateRoutes = () => {
         />
         {/* *************************************** Payment Option End here.. ******************************************* */}
 
-        {/* ******************************................ Manage Company start here..............******************************************* */}
+        {/* ******************************......... Manage Company start here.....***************************** */}
         <Route
           path='/company'
           element={
@@ -221,6 +222,17 @@ const PrivateRoutes = () => {
           }
         />
         {/* ******************************................ Manage Company start here..............******************************************* */}
+
+        {/* ------------------------------- Email Template Start ----------------------------------- */}
+        <Route
+          path='/email-template'
+          element={
+            <SuspensedView>
+              <EmailTemplate />
+            </SuspensedView>
+          }
+        />
+        {/* ------------------------------- Email Template End ----------------------------------- */}
 
         {/* <Route path='/add-user' element={<AddUser />} />
         <Route path='/user-list' element={<UserList />} /> */}
