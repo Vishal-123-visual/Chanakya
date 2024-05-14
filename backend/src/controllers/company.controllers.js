@@ -2,6 +2,9 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import fs from "fs";
 import CompanyModels from "../models/company/company.models.js";
 import path from "path";
+import admissionFormModel from "../models/addmission_form.models.js";
+import CourseFeesModel from "../models/courseFees/courseFees.models.js";
+import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
 
 const __dirname = path.resolve();
 
@@ -127,6 +130,47 @@ export const deleteCompanyController = asyncHandler(async (req, res, next) => {
         console.log("File does not exist:", imagePath);
       }
     }
+
+    const companyStudents = await admissionFormModel.find({
+      companyName: req.params.id,
+    });
+    console.log(companyStudents);
+
+    // delete company students
+    companyStudents?.map(async (companyStudent) => {
+      let imagePathCompanyStudent = companyStudent.image;
+      if (imagePathCompanyStudent) {
+        imagePathCompanyStudent = path.join(
+          __dirname + `/images/${imagePathCompanyStudent}`
+        );
+        if (fs.existsSync(imagePathCompanyStudent)) {
+          fs.unlinkSync(imagePathCompanyStudent);
+        } else {
+          console.log("File does not exist:", imagePathCompanyStudent);
+        }
+      }
+
+      // Find associated course fees records
+      const studentCourseFeesRecord = await CourseFeesModel.find({
+        studentInfo: companyStudent._id,
+      });
+
+      const installMentFees = await PaymentInstallmentTimeExpireModel.find({
+        studentInfo: companyStudent._id,
+      });
+
+      // console.log(installMentFees);
+
+      installMentFees?.map(
+        async (installMentFee) => await installMentFee?.deleteOne()
+      );
+
+      studentCourseFeesRecord?.map(
+        async (studentFeeRecord) => await studentFeeRecord?.deleteOne()
+      );
+
+      await companyStudent?.deleteOne();
+    });
 
     await company.deleteOne();
     res.status(200).json({ message: "Company deleted successfully" });
