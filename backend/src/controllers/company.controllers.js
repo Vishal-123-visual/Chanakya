@@ -134,7 +134,7 @@ export const deleteCompanyController = asyncHandler(async (req, res, next) => {
     const companyStudents = await admissionFormModel.find({
       companyName: req.params.id,
     });
-    console.log(companyStudents);
+    // console.log(companyStudents);
 
     // delete company students
     companyStudents?.map(async (companyStudent) => {
