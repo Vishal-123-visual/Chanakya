@@ -214,6 +214,7 @@ const SidebarMenuMain = () => {
         icon='abstract-29'
       >
         <SidebarMenuItem to='/email-template' title='Email Template' hasBullet={true} />
+        <SidebarMenuItem to='/email-suggesstions' title='Send Email Suggestion' hasBullet={true} />
       </SidebarMenuItemWithSub>
 
       {/* ------------------------------ Settings Page End ------------------------------------------- */}

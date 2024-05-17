@@ -28,6 +28,17 @@ export const CompanyContextProvider = ({children}) => {
       }
     },
   })
+  const getEmailSuggestionStatus = useQuery({
+    queryKey: ['getEmailRemainderSuggesstions'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/emailRemainder/status`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
 
   //console.log(getCompanyLists)
 
@@ -123,6 +134,35 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  // add email remainder suggestions
+  const postEmailSuggestionStatus = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/emailRemainder/status`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getEmailRemainderSuggesstions']})
+      }
+    },
+  })
+
   return (
     <CompanyContext.Provider
       value={{
@@ -131,6 +171,8 @@ export const CompanyContextProvider = ({children}) => {
         deleteCompanyMutation,
         updateCompanyMutation,
         postEmailRemainderText,
+        postEmailSuggestionStatus,
+        getEmailSuggestionStatus,
       }}
     >
       {children}

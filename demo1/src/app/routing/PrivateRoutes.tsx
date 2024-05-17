@@ -40,6 +40,7 @@ const PrivateRoutes = () => {
   )
   const AddPaymentOption = lazy(() => import('../pages/payment_option/AddPaymentOption'))
   const EmailTemplate = lazy(() => import('../pages/email-template/EmailTemplate'))
+  const SendEmailSuggestion = lazy(() => import('../pages/email-template/SendEmailSuggestion'))
 
   return (
     <Routes>
@@ -229,6 +230,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <EmailTemplate />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/email-suggesstions'
+          element={
+            <SuspensedView>
+              <SendEmailSuggestion />
             </SuspensedView>
           }
         />
