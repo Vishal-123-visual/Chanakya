@@ -18,6 +18,10 @@ export const addEmailRemainderController = asyncHandler(
           error: "All fields are required",
         });
       }
+
+      const emailsTexts = await EmailRemainderModel.find({});
+      emailsTexts.forEach(async (emailsText) => await emailsText.deleteOne());
+
       const emailRemainder = new EmailRemainderModel({
         firstRemainder,
         secondRemainder,

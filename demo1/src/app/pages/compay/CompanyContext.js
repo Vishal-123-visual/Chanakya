@@ -94,6 +94,35 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  // add email remainder text from input fields data
+  const postEmailRemainderText = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/emailRemainder`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getRemainderText']})
+      }
+    },
+  })
+
   return (
     <CompanyContext.Provider
       value={{
@@ -101,6 +130,7 @@ export const CompanyContextProvider = ({children}) => {
         getCompanyLists,
         deleteCompanyMutation,
         updateCompanyMutation,
+        postEmailRemainderText,
       }}
     >
       {children}
