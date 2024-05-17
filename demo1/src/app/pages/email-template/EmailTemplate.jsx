@@ -3,14 +3,11 @@ import {useCompanyContext} from '../compay/CompanyContext'
 
 const EmailTemplate = () => {
   const companyCTX = useCompanyContext()
-  console.log(companyCTX.postEmailRemainderText)
   const [textEmailsData, setTextEmailsData] = useState({
     firstRemainder: '',
     secondRemainder: '',
     thirdRemainder: '',
   })
-
-  const [loading, setLoading] = useState(false)
 
   const onChangeHandler = (e) => {
     setTextEmailsData({...textEmailsData, [e.target.name]: e.target.value})
@@ -18,13 +15,11 @@ const EmailTemplate = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    setLoading(true)
     try {
       companyCTX.postEmailRemainderText.mutate(textEmailsData)
     } catch (error) {
       console.log(error)
     } finally {
-      setLoading(false)
       setTextEmailsData({
         firstRemainder: '',
         secondRemainder: '',
@@ -41,7 +36,7 @@ const EmailTemplate = () => {
           <label htmlFor='firstRemainder' className='form-label'>
             First Reminder
           </label>
-          <input
+          <textarea
             id='firstRemainder'
             value={textEmailsData.firstRemainder}
             onChange={onChangeHandler}
@@ -54,7 +49,7 @@ const EmailTemplate = () => {
           <label htmlFor='secondRemainder' className='form-label'>
             Second Reminder
           </label>
-          <input
+          <textarea
             id='secondRemainder'
             value={textEmailsData.secondRemainder}
             onChange={onChangeHandler}
@@ -67,7 +62,7 @@ const EmailTemplate = () => {
           <label htmlFor='thirdRemainder' className='form-label'>
             Third Reminder
           </label>
-          <input
+          <textarea
             id='thirdRemainder'
             value={textEmailsData.thirdRemainder}
             onChange={onChangeHandler}
@@ -76,8 +71,12 @@ const EmailTemplate = () => {
             name='thirdRemainder'
           />
         </div>
-        <button disabled={loading} type='submit' className='btn btn-primary'>
-          Submit
+        <button
+          disabled={companyCTX.postEmailRemainderText.isLoading === true}
+          type='submit'
+          className='btn btn-primary'
+        >
+          {companyCTX.postEmailRemainderText.isLoading === true ? 'Adding' : 'Submit'}
         </button>
       </form>
     </div>
