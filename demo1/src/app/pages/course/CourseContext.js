@@ -82,17 +82,19 @@ export const CourseContextProvider = ({children}) => {
   // update Course type
   const updateCourseMutation = useMutation({
     mutationFn: async (updateData) => {
-      //console.log(updateData)
       return axios
-        .put(`${BASE_URL}/api/courses/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .put(`${BASE_URL}/api/courses/${updateData._id}`, updateData, config)
         .then((res) => res.data)
     },
     onSettled: async (_, error) => {
       if (error) {
-        alert('Error while updating student...', error)
+        alert('Error while updating course...', error)
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['getCourseLists'],
+        })
+        await queryClient.invalidateQueries({
+          queryKey: ['getCourseSubjectLists'],
         })
       }
     },
