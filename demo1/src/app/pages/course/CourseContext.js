@@ -92,7 +92,7 @@ export const CourseContextProvider = ({children}) => {
         alert('Error while updating student...', error)
       } else {
         await queryClient.invalidateQueries({
-          queryKey: ['getCourseLists', 'getNumberOfCourseYearsTypes', 'getCourseSubjectLists'],
+          queryKey: ['getCourseLists'],
         })
       }
     },

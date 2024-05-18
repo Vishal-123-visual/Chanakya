@@ -27,7 +27,7 @@ const SendEmailSuggestion = () => {
           id='sendEmailCheckbox'
           onChange={handleCheckboxChange}
           checked={
-            companyCtx.getEmailSuggestionStatus.data.emailSuggestions[0].emailSuggestionStatus
+            companyCtx.getEmailSuggestionStatus?.data?.emailSuggestions[0]?.emailSuggestionStatus
           }
         />
         <label className='form-check-label' htmlFor='sendEmailCheckbox'>
