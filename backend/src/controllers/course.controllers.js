@@ -45,34 +45,60 @@ export const getAllCourseController = asyncHandler(async (req, res, next) => {
   }
 });
 
-export const updateCourseController = asyncHandler(async (req, res, next) => {
+export const updateCourseController = asyncHandler(async (req, res) => {
   try {
     const { courseName, courseType, numberOfYears, category, courseFees } =
       req.body;
-    //console.log(req.params.id);
+
+    // Find the course by ID
     let findCourse = await CourseModel.findOne({ _id: req.params.id });
-    //console.log(findCourse);
+
+    // If the course is not found, return a 404 error
     if (!findCourse) {
       return res.status(404).json("Course not found");
     }
 
+    // Update the course details with the provided values or keep the current values if not provided
     findCourse.courseName = courseName || findCourse.courseName;
     findCourse.courseType = courseType || findCourse.courseType;
     findCourse.courseFees = courseFees || findCourse.courseFees;
-
     findCourse.numberOfYears = numberOfYears || findCourse.numberOfYears;
     findCourse.category = category || findCourse.category;
     findCourse.user = req.user._id || findCourse.user;
     findCourse.createdBy =
       req.user.fName + " " + req.user.lName || findCourse.createdBy;
 
-    let updatedCourse = await findCourse.save();
+    // Save the updated course
+    await findCourse.save();
+
+    // Find subjects associated with the course
+    let courseSubjects = await SubjectModel.find({ course: req.params.id });
+
+    // Find the course type details
+    let courseSubjectsTypes = await CourseTypeModel.findById(courseType);
+
+    // Update the semYear for each subject associated with the course
+    await Promise.all(
+      courseSubjects.map(async (courseSubject) => {
+        if (courseSubject.semYear) {
+          courseSubject.semYear = courseSubject.semYear.replace(
+            courseSubject.semYear.split(" ")[0],
+            courseSubjectsTypes.courseType === "Annual"
+              ? "Year"
+              : courseSubjectsTypes.courseType
+          );
+        }
+        await courseSubject.save();
+      })
+    );
+
+    // Return a success response
     res.status(200).json("Updated Course Successfully");
   } catch (error) {
-    res.status(500).json({ error: error });
+    // Return a 500 error with the error message
+    res.status(500).json({ error: error.message });
   }
 });
-
 export const getSingleCourseController = asyncHandler(
   async (req, res, next) => {
     try {
