@@ -206,7 +206,7 @@ const StudentProfile: React.FC = () => {
                   </div>
 
                   <div className='d-flex my-4'>
-                    <a href='#' className='btn btn-sm btn-light me-2' id='kt_user_follow_button'>
+                    {/* <a href='#' className='btn btn-sm btn-light me-2' id='kt_user_follow_button'>
                       <KTIcon iconName='check' className='fs-3 d-none' />
 
                       <span className='indicator-label'>Follow</span>
@@ -222,15 +222,18 @@ const StudentProfile: React.FC = () => {
                       data-bs-target='#kt_modal_offer_a_deal'
                     >
                       Hire Me
-                    </a>
+                    </a> */}
                     <div className='me-0'>
                       <button
-                        className='btn btn-sm btn-icon btn-bg-light btn-active-color-primary'
+                        onClick={() =>
+                          navigate('/course-subjects-addMarks', {state: {updateUserId}})
+                        }
+                        className='btn  btn-bg-light btn-active-color-primary'
                         data-kt-menu-trigger='click'
                         data-kt-menu-placement='bottom-end'
                         data-kt-menu-flip='top-end'
                       >
-                        <i className='bi bi-three-dots fs-3'></i>
+                        Course Subjects
                       </button>
                       <Dropdown1 />
                     </div>

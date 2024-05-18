@@ -11,7 +11,10 @@ const __dirname = path.resolve();
 
 export const getAllStudentsController = asyncHandler(async (req, res, next) => {
   try {
-    const users = await admissionFormModel.find({}).sort({ createdAt: -1 });
+    const users = await admissionFormModel
+      .find({})
+      .populate(["courseName"])
+      .sort({ createdAt: -1 });
     res.status(200).json({ users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

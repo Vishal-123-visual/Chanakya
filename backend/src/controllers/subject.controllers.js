@@ -45,7 +45,7 @@ export const getCourseSubjectsListsController = asyncHandler(
     try {
       const subjects = await SubjectModel.find({})
         .populate(["course", "courseType"])
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: 1 });
       res.status(200).json(subjects);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
