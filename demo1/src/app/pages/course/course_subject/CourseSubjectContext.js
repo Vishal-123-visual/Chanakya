@@ -80,10 +80,29 @@ export const CourseSubjectContextProvider = ({children}) => {
         .put(`${BASE_URL}/api/subjects/${updateData._id}`, updateData, config) // Corrected order of arguments
         .then((res) => res.data)
     },
-    onSettled: async (_, error) => {
+    onSettled: async (_, error, data) => {
       if (error) {
         alert('Error while updating student...', error)
       } else {
+        // console.log('from course subject context ---->> ', data)
+        await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists']})
+      }
+    },
+  })
+
+  // update Course type
+  const updateCourseSubjectMarksMutation = useMutation({
+    mutationFn: async (updateData) => {
+      //console.log(updateData)
+      return axios
+        .put(`${BASE_URL}/api/subjects/marks/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .then((res) => res.data)
+    },
+    onSettled: async (_, error, data) => {
+      if (error) {
+        //alert('Error while updating student...', error)
+      } else {
+        // console.log('from course subject context ---->> ', data)
         await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists']})
       }
     },
@@ -115,6 +134,7 @@ export const CourseSubjectContextProvider = ({children}) => {
         updateCourseCategoryMutation,
         deleteCourseSubjectMutation,
         useSubjectsBasedOnCourse,
+        updateCourseSubjectMarksMutation,
       }}
     >
       {children}

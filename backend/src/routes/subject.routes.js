@@ -5,6 +5,7 @@ import {
   updateCourseSubjectController,
   deleteCourseSubjectController,
   getSubjectBasedOnCourseController,
+  updateCourseSubjectMarksController,
 } from "../controllers/subject.controllers.js";
 import { isAdmin, requireSignIn } from "../middlewares/auth.middleware.js";
 const router = Router();
@@ -18,6 +19,7 @@ router
   .put(requireSignIn, isAdmin, updateCourseSubjectController)
   .delete(requireSignIn, isAdmin, deleteCourseSubjectController);
 
+router.put("/marks/:id", updateCourseSubjectMarksController);
 // get subject according to course
 router.get("/:courseId", getSubjectBasedOnCourseController);
 

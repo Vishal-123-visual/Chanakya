@@ -1,6 +1,6 @@
 import {NavLink, useLocation} from 'react-router-dom'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 const CourseStudentSubjectMarks = () => {
   const courseSubjectsCtx = useCourseSubjectContext()
@@ -11,19 +11,19 @@ const CourseStudentSubjectMarks = () => {
   )
 
   const YearandSemesterSets = Array.from(new Set(data?.map((item) => item.semYear) || []))
-  //console.log(YearandSemesterSets)
 
   const handleTabClick = (index) => {
     setActiveTab(index)
   }
 
-  // Group subjects by semester
-  const groupedSubjects = YearandSemesterSets.reduce((acc, semYear) => {
-    acc[semYear] = data?.filter((subject) => subject.semYear === semYear) || []
-    return acc
-  }, {})
-
-  //console.log(groupedSubjects)
+  const subjectCourseMarksHandler = (e, id) => {
+    const {name, value} = e.target
+    courseSubjectsCtx.updateCourseCategoryMutation.mutate({
+      _id: id,
+      [name]: value,
+    })
+    window.location.reload()
+  }
 
   return (
     <div className='card'>
@@ -85,9 +85,10 @@ const CourseStudentSubjectMarks = () => {
               {/* end::Table head */}
               {/* begin::Table body */}
               <tbody>
-                {groupedSubjects[YearandSemesterSets[activeTab - 1]]?.map(
-                  (yearWiseSubject, indexValue) => (
-                    <tr key={indexValue}>
+                {data
+                  ?.filter((subject) => subject.semYear === YearandSemesterSets[activeTab - 1])
+                  ?.map((yearWiseSubject, indexValue) => (
+                    <tr key={yearWiseSubject._id}>
                       <td>
                         <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                       </td>
@@ -102,9 +103,9 @@ const CourseStudentSubjectMarks = () => {
                         </div>
                       </td>
                       <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                        <button className='btn text-dark fw-bold text-hover-primary d-block fs-6'>
                           {yearWiseSubject.subjectName}
-                        </a>
+                        </button>
                       </td>
                       <td className='text-end'>
                         <div className='d-flex flex-column w-100 me-2'>
@@ -136,27 +137,53 @@ const CourseStudentSubjectMarks = () => {
                       <td className='text-end'>
                         <div className='d-flex flex-column w-100 me-2'>
                           <div className='d-flex flex-stack mb-2'>
-                            <span className='text-muted me-2 fs-7 fw-semibold'>50</span>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>
+                              <input
+                                type='text'
+                                name='theory'
+                                className='form-control w-auto'
+                                id={`theory_${yearWiseSubject._id}`}
+                                defaultValue={yearWiseSubject?.theory}
+                                onBlur={(e) => subjectCourseMarksHandler(e, yearWiseSubject._id)}
+                              />
+                            </span>
                           </div>
                         </div>
                       </td>
                       <td className='text-end'>
                         <div className='d-flex flex-column w-100 me-2'>
                           <div className='d-flex flex-stack mb-2'>
-                            <span className='text-muted me-2 fs-7 fw-semibold'>50</span>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>
+                              <input
+                                type='text'
+                                name='practical'
+                                className='form-control w-auto'
+                                id={`practical_${yearWiseSubject._id}`}
+                                defaultValue={yearWiseSubject?.practical}
+                                onBlur={(e) => subjectCourseMarksHandler(e, yearWiseSubject._id)}
+                              />
+                            </span>
                           </div>
                         </div>
                       </td>
                       <td className='text-end'>
                         <div className='d-flex flex-column w-100 me-2'>
                           <div className='d-flex flex-stack mb-2'>
-                            <span className='text-muted me-2 fs-7 fw-semibold'>50</span>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>
+                              <input
+                                type='text'
+                                name='totalMarks'
+                                className='form-control w-auto'
+                                id={`totalMarks_${yearWiseSubject._id}`}
+                                defaultValue={yearWiseSubject?.totalMarks}
+                                onBlur={(e) => subjectCourseMarksHandler(e, yearWiseSubject._id)}
+                              />
+                            </span>
                           </div>
                         </div>
                       </td>
                     </tr>
-                  )
-                )}
+                  ))}
               </tbody>
               {/* end::Table body */}
             </table>
