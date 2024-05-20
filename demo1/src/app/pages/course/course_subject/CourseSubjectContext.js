@@ -60,6 +60,18 @@ export const CourseSubjectContextProvider = ({children}) => {
     },
   })
 
+  const useSubjectsBasedOnCourse = (courseId) => {
+    return useQuery({
+      queryKey: ['getSubjectsBasedOnCourse', courseId],
+      queryFn: async () => {
+        const response = await axios.get(`${BASE_URL}/api/subjects/${courseId}`, config)
+        // console.log(response)
+        return response.data
+      },
+      enabled: !!courseId, // Only run the query if courseId is provided
+    })
+  }
+
   // update Course type
   const updateCourseCategoryMutation = useMutation({
     mutationFn: async (updateData) => {
@@ -102,6 +114,7 @@ export const CourseSubjectContextProvider = ({children}) => {
         getCourseSubjectLists,
         updateCourseCategoryMutation,
         deleteCourseSubjectMutation,
+        useSubjectsBasedOnCourse,
       }}
     >
       {children}

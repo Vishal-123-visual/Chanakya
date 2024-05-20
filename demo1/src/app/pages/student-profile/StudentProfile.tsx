@@ -17,6 +17,7 @@ import {Dropdown1} from '../../../_metronic/partials'
 import {useCourseContext} from '../course/CourseContext'
 import StudentCourseFee from './StudentCourseFee'
 import {useCompanyContext} from '../compay/CompanyContext'
+import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -53,6 +54,7 @@ const StudentProfile: React.FC = () => {
   const location = useLocation()
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
+  const courseSubjectsCTX = useCourseSubjectContext()
 
   const setProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -130,6 +132,11 @@ const StudentProfile: React.FC = () => {
       navigate('/students')
     },
   })
+
+  const navigateCourseSubjectsHandler = () => {
+    //console.log('data of subjects based on course', data)
+    navigate('/course-subjects-addMarks', {state: {updateUserId}})
+  }
 
   return (
     <>
@@ -225,9 +232,7 @@ const StudentProfile: React.FC = () => {
                     </a> */}
                     <div className='me-0'>
                       <button
-                        onClick={() =>
-                          navigate('/course-subjects-addMarks', {state: {updateUserId}})
-                        }
+                        onClick={navigateCourseSubjectsHandler}
                         className='btn  btn-bg-light btn-active-color-primary'
                         data-kt-menu-trigger='click'
                         data-kt-menu-placement='bottom-end'

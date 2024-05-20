@@ -1,22 +1,32 @@
 import {NavLink, useLocation} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 import {useState} from 'react'
 
 const CourseStudentSubjectMarks = () => {
   const courseSubjectsCtx = useCourseSubjectContext()
   const [activeTab, setActiveTab] = useState(1)
-  console.log(typeof activeTab)
   const location = useLocation()
+  const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
+    location.state.updateUserId.courseName._id
+  )
+
+  const YearandSemesterSets = Array.from(new Set(data?.map((item) => item.semYear) || []))
+  //console.log(YearandSemesterSets)
 
   const handleTabClick = (index) => {
-    //console.log(index)
     setActiveTab(index)
   }
-  console.log(location.state)
-  console.log(courseSubjectsCtx.getCourseSubjectLists.data)
+
+  // Group subjects by semester
+  const groupedSubjects = YearandSemesterSets.reduce((acc, semYear) => {
+    acc[semYear] = data?.filter((subject) => subject.semYear === semYear) || []
+    return acc
+  }, {})
+
+  //console.log(groupedSubjects)
+
   return (
-    <div className={`card`}>
+    <div className='card'>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
@@ -26,38 +36,35 @@ const CourseStudentSubjectMarks = () => {
 
         <div className='card-toolbar'>
           <ul className='nav p-5'>
-            {courseSubjectsCtx.getCourseSubjectLists.data && (
-              <>
-                {courseSubjectsCtx.getCourseSubjectLists.data?.map((itemSubject, i) => (
-                  <li
-                    // className={`nav-item`}
-                    key={i}
-                    style={{borderBottom: activeTab === i + 1 ? '2px solid red' : ''}}
+            {YearandSemesterSets.length > 0 &&
+              YearandSemesterSets.map((itemSubject, i) => (
+                <li key={i} style={{borderBottom: activeTab === i + 1 ? '2px solid red' : ''}}>
+                  <NavLink
+                    className={`nav-link btn btn-sm btn-color-muted btn-active btn-active-light-primary ${
+                      activeTab === i + 1 ? 'active bg-red' : ''
+                    }`}
+                    data-bs-toggle='tab'
+                    to={`#kt_table_widget_5_tab_${i + 1}`}
+                    onClick={() => handleTabClick(i + 1)}
                   >
-                    <NavLink
-                      className={`nav-link btn btn-sm btn-color-muted btn-active btn-active-light-primary active fw-bold px-4 me-1 ${
-                        activeTab === i + 1 ? 'active bg-red' : ''
-                      }`}
-                      data-bs-toggle='tab'
-                      to={`#kt_table_widget_5_tab_${i + 1}`}
-                      onClick={() => handleTabClick(i + 1)}
-                    >
-                      {itemSubject.semYear}
-                    </NavLink>
-                  </li>
-                ))}
-              </>
-            )}
+                    {itemSubject}
+                  </NavLink>
+                </li>
+              ))}
           </ul>
         </div>
       </div>
       {/* end::Header */}
+
       {/* begin::Body */}
-      {
-        <div className='card-body py-3'>
-          {/* begin::Table container */}
-          <div className='table-responsive'>
-            {/* begin::Table */}
+      <div className='card-body py-3'>
+        {/* begin::Table container */}
+        <div className='table-responsive'>
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : error ? (
+            <div>Error loading data</div>
+          ) : (
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
               {/* begin::Table head */}
               <thead>
@@ -77,104 +84,90 @@ const CourseStudentSubjectMarks = () => {
               </thead>
               {/* end::Table head */}
               {/* begin::Table body */}
-              {courseSubjectsCtx.getCourseSubjectLists.data.map(
-                (yearWiseSubject, indexValue) =>
-                  Number(yearWiseSubject.semYear.split(' ')[1]) === activeTab && (
-                    <tbody key={indexValue}>
-                      <tr>
-                        <td>
-                          <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                            {/* <input
-                              className='form-check-input widget-9-check'
-                              type='checkbox'
-                              value='1'
-                            /> */}
+              <tbody>
+                {groupedSubjects[YearandSemesterSets[activeTab - 1]]?.map(
+                  (yearWiseSubject, indexValue) => (
+                    <tr key={indexValue}>
+                      <td>
+                        <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                      </td>
+                      <td>
+                        <div className='d-flex align-items-center'>
+                          <div className='symbol symbol-45px me-5'></div>
+                          <div className='d-flex justify-content-start flex-column'>
+                            <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                              {indexValue + 1}
+                            </span>
                           </div>
-                        </td>
-                        <td>
-                          <div className='d-flex align-items-center'>
-                            <div className='symbol symbol-45px me-5'>
-                              {/* <img src={toAbsoluteUrl('/media/avatars/300-14.jpg')} alt='' /> */}
-                            </div>
-                            <div className='d-flex justify-content-start flex-column'>
-                              <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                {indexValue + 1}
-                              </span>
-                            </div>
+                        </div>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          {yearWiseSubject.subjectName}
+                        </a>
+                      </td>
+                      <td className='text-end'>
+                        <div className='d-flex flex-column w-100 me-2'>
+                          <div className='d-flex flex-stack mb-2'>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>
+                              {yearWiseSubject.subjectCode}
+                            </span>
                           </div>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                            {yearWiseSubject.subjectName}
-                          </a>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.subjectCode}
-                              </span>
-                            </div>
+                        </div>
+                      </td>
+                      <td className='text-end'>
+                        <div className='d-flex flex-column w-100 me-2'>
+                          <div className='d-flex flex-stack mb-2'>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>
+                              {yearWiseSubject.fullMarks}
+                            </span>
                           </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.fullMarks}
-                              </span>
-                            </div>
+                        </div>
+                      </td>
+                      <td className='text-end'>
+                        <div className='d-flex flex-column w-100 me-2'>
+                          <div className='d-flex flex-stack mb-2'>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>
+                              {yearWiseSubject.passMarks}
+                            </span>
                           </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.passMarks}
-                              </span>
-                            </div>
+                        </div>
+                      </td>
+                      <td className='text-end'>
+                        <div className='d-flex flex-column w-100 me-2'>
+                          <div className='d-flex flex-stack mb-2'>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>50</span>
                           </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.passMarks}
-                              </span>
-                            </div>
+                        </div>
+                      </td>
+                      <td className='text-end'>
+                        <div className='d-flex flex-column w-100 me-2'>
+                          <div className='d-flex flex-stack mb-2'>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>50</span>
                           </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.passMarks}
-                              </span>
-                            </div>
+                        </div>
+                      </td>
+                      <td className='text-end'>
+                        <div className='d-flex flex-column w-100 me-2'>
+                          <div className='d-flex flex-stack mb-2'>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>50</span>
                           </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.passMarks}
-                              </span>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
+                        </div>
+                      </td>
+                    </tr>
                   )
-              )}
+                )}
+              </tbody>
               {/* end::Table body */}
             </table>
-            {/* end::Table */}
-          </div>
-          {/* end::Table container */}
+          )}
+          {/* end::Table */}
         </div>
-      }
-      {/* begin::Body */}
+        {/* end::Table container */}
+      </div>
+      {/* end::Body */}
     </div>
   )
 }
+
 export default CourseStudentSubjectMarks

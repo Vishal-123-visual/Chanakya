@@ -91,3 +91,17 @@ export const deleteCourseSubjectController = asyncHandler(
     }
   }
 );
+
+export const getSubjectBasedOnCourseController = asyncHandler(
+  async (req, res) => {
+    try {
+      const courseSubjects = await SubjectModel.find({
+        course: req.params.courseId,
+      });
+      res.status(200).json(courseSubjects);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
