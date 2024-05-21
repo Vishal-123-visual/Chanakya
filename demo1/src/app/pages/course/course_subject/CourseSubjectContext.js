@@ -103,7 +103,8 @@ export const CourseSubjectContextProvider = ({children}) => {
         //alert('Error while updating student...', error)
       } else {
         // console.log('from course subject context ---->> ', data)
-        await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists']})
+        await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists', data._id]})
+        await queryClient.invalidateQueries({queryKey: ['getSubjectsBasedOnCourse', data.courseId]})
       }
     },
   })
