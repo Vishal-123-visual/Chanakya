@@ -63,6 +63,14 @@ const CourseStudentSubjectMarks = () => {
     }
   }
 
+  // Group Subject by Semester
+  const groupSubjectsBySemester = YearandSemesterSets.reduce((acc, semYear) => {
+    acc[semYear] = data.filter((subject) => subject.semYear === semYear) || []
+    return acc
+  }, {})
+
+  //console.log(groupSubjectsBySemester)
+
   return (
     <div className='card'>
       {/* begin::Header */}
@@ -227,9 +235,18 @@ const CourseStudentSubjectMarks = () => {
                 {/* end::Table body */}
               </table>
               <hr />
-              <button onClick={handleSubmit} disabled={isSubmitting} className='btn btn-primary'>
-                {isSubmitting ? 'Marks Added' : 'Submit Marks'}
-              </button>
+              <div className='d-flex align-items-center gap-5'>
+                <button
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className='btn btn-primary text-uppercase'
+                >
+                  {isSubmitting ? 'Marks Added' : 'Submit Marks'}
+                </button>
+                {/* {JSON.stringify(groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]], 4)} */}
+                <button className='btn btn-info text-uppercase '>result</button>
+                <button className='btn btn-danger text-uppercase '>print result</button>
+              </div>{' '}
               <hr />
             </>
           )}
