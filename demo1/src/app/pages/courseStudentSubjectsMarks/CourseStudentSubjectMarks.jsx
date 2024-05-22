@@ -3,6 +3,7 @@ import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectCon
 import {useState} from 'react'
 import {useMutation, useQueryClient} from 'react-query'
 import axios from 'axios'
+import {KTIcon} from '../../../_metronic/helpers'
 const BASE_URL = 'http://your-api-url.com' // Replace with your actual base URL
 
 const CourseStudentSubjectMarks = () => {
@@ -34,6 +35,7 @@ const CourseStudentSubjectMarks = () => {
   const handleTabClick = (index) => {
     setActiveTab(index)
   }
+  console.log(marksData)
 
   const handleInputChange = (e, id) => {
     const {name, value} = e.target
@@ -44,6 +46,23 @@ const CourseStudentSubjectMarks = () => {
         [name]: value,
       },
     }))
+  }
+
+  const handleEditStudentMarks = (marksData2) => {
+    try {
+      courseSubjectsCtx.updateStudentSubjectMarksMutation.mutate({
+        marksId: marksData2._id,
+        subjectId: marksData2.Subjects._id,
+        courseId: marksData2.course._id,
+        studentId: marksData2?.studentInfo._id,
+        theory: marksData[marksData2.Subjects._id]?.theory,
+        practical: marksData[marksData2.Subjects._id]?.practical,
+        totalMarks: marksData[marksData2.Subjects._id]?.totalMarks,
+      })
+      window.alert('Update results marks successfully')
+    } catch (error) {
+      window.alert(error)
+    }
   }
 
   const handleSubmit = () => {
@@ -70,7 +89,7 @@ const CourseStudentSubjectMarks = () => {
       studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
     return acc
   }, {})
-  console.log(groupSubjectsBySemester)
+  //console.log(groupSubjectsBySemester)
 
   return (
     <div className='card'>
@@ -235,6 +254,14 @@ const CourseStudentSubjectMarks = () => {
                                 </span>
                               </div>
                             </div>
+                          </td>
+                          <td>
+                            <button
+                              onClick={() => handleEditStudentMarks(studentMarks)}
+                              className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            >
+                              <KTIcon iconName='pencil' className='fs-3' />
+                            </button>
                           </td>
                         </tr>
                       )

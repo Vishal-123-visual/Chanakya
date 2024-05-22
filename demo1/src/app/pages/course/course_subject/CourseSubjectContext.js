@@ -118,6 +118,27 @@ export const CourseSubjectContextProvider = ({children}) => {
       }
     },
   })
+  const updateStudentSubjectMarksMutation = useMutation({
+    mutationFn: async (updateData) => {
+      // console.log(updateData)
+      return axios
+        .put(
+          `${BASE_URL}/api/subjects/marks/${updateData.studentId}/${updateData.marksId}`,
+          updateData,
+          config
+        ) // Corrected order of arguments
+        .then((res) => res.data)
+    },
+    onSettled: async (_, error, data) => {
+      if (error) {
+        //alert('Error while updating student...', error)
+      } else {
+        // console.log('from course subject context ---->> ', data)
+        // await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists', data._id]})
+        await queryClient.invalidateQueries({queryKey: ['getStudentSubjectsMarksBasedOnCourse']})
+      }
+    },
+  })
 
   // delete subject course
   // Course Types
@@ -147,6 +168,7 @@ export const CourseSubjectContextProvider = ({children}) => {
         useSubjectsBasedOnCourse,
         updateCourseSubjectMarksMutation,
         useGetStudentSubjectsMarksBasedOnCourse,
+        updateStudentSubjectMarksMutation,
       }}
     >
       {children}

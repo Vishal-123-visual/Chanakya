@@ -10,6 +10,7 @@ import { isAdmin, requireSignIn } from "../middlewares/auth.middleware.js";
 import {
   addCourseSubjectMarksController,
   getCourseSubjectMarksController,
+  updateCourseSubjectMarksController,
 } from "../controllers/StudentSubjectMarks.controllers.js";
 const router = Router();
 
@@ -24,6 +25,7 @@ router
 
 router.post("/marks", addCourseSubjectMarksController);
 router.get("/marks/:studentId", getCourseSubjectMarksController);
+router.put("/marks/:studentId/:marksId", updateCourseSubjectMarksController);
 // get subject according to course
 router.get("/:courseId", getSubjectBasedOnCourseController);
 
