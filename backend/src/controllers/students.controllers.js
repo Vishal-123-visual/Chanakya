@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
+import studentSubjectMarksModel from "../models/subject/student.subject.marks.models.js";
 
 const __dirname = path.resolve();
 
@@ -164,6 +165,17 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
       async (studentFeeRecord) => await studentFeeRecord?.deleteOne()
     );
     // Delete the student
+
+    // delete Student Marks Subjects
+    const studentMarksSubjects = await studentSubjectMarksModel.find({
+      studentInfo: req.params.id,
+    });
+
+    console.log(studentMarksSubjects);
+    studentMarksSubjects?.map(
+      async (studentMarksSubject) => await studentMarksSubject?.deleteOne()
+    );
+
     await student.deleteOne();
 
     // Send success response
