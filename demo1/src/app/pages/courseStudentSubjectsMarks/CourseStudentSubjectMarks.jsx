@@ -1,6 +1,6 @@
 import {NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 import {KTIcon} from '../../../_metronic/helpers'
 
@@ -21,7 +21,20 @@ const CourseStudentSubjectMarks = () => {
     error: studentSubjectMarksError,
     isLoading: studentSubjectMarksIsLoading,
   } = courseSubjectsCtx.useGetStudentSubjectsMarksBasedOnCourse(location?.state?.updateUserId?._id)
-  console.log(location?.state?.updateUserId)
+
+  useEffect(() => {
+    if (studentSubjectMarksData) {
+      const initialMarksData = studentSubjectMarksData.reduce((acc, marksData) => {
+        acc[marksData.Subjects._id] = {
+          theory: marksData.theory,
+          practical: marksData.practical,
+          totalMarks: marksData.theory + marksData.practical,
+        }
+        return acc
+      }, {})
+      setMarksData(initialMarksData)
+    }
+  }, [studentSubjectMarksData])
 
   if (location?.state?.updateUserId === undefined) {
     navigate(-1)
@@ -33,20 +46,31 @@ const CourseStudentSubjectMarks = () => {
   const handleTabClick = (index) => {
     setActiveTab(index)
   }
-  //console.log(marksData)
 
   const handleInputChange = (e, id) => {
     const {name, value} = e.target
-    setMarksData((prev) => ({
-      ...prev,
-      [id]: {
-        ...prev[id],
-        [name]: value,
-      },
-    }))
+    const parsedValue = parseInt(value) || 0
+
+    setMarksData((prev) => {
+      const updatedData = {
+        ...prev,
+        [id]: {
+          ...prev[id],
+          [name]: parsedValue,
+        },
+      }
+
+      const theory = updatedData[id]?.theory || 0
+      const practical = updatedData[id]?.practical || 0
+      updatedData[id].totalMarks = theory + practical
+      // console.log(updatedData)
+
+      return updatedData
+    })
   }
 
   const handleEditStudentMarks = (marksData2) => {
+    // console.log(marksData2)
     try {
       courseSubjectsCtx.updateStudentSubjectMarksMutation.mutate({
         marksId: marksData2._id,
@@ -81,17 +105,14 @@ const CourseStudentSubjectMarks = () => {
     }
   }
 
-  // Group subjects by semester
   const groupSubjectsBySemester = YearandSemesterSets.reduce((acc, semYear) => {
     acc[semYear] =
       studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
     return acc
   }, {})
-  //console.log(groupSubjectsBySemester)
 
   return (
     <div className='card'>
-      {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Course Subjects</span>
@@ -118,11 +139,8 @@ const CourseStudentSubjectMarks = () => {
           </ul>
         </div>
       </div>
-      {/* end::Header */}
 
-      {/* begin::Body */}
       <div className='card-body py-3'>
-        {/* begin::Table container */}
         <div className='table-responsive'>
           {isLoading ? (
             <div>Loading...</div>
@@ -131,7 +149,6 @@ const CourseStudentSubjectMarks = () => {
           ) : (
             <>
               <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-                {/* begin::Table head */}
                 <thead>
                   <tr className='fw-bold text-muted'>
                     <th className='w-25px'>
@@ -147,8 +164,6 @@ const CourseStudentSubjectMarks = () => {
                     <th className='min-w-120px'>Total Marks</th>
                   </tr>
                 </thead>
-                {/* end::Table head */}
-                {/* begin::Table body */}
                 <tbody>
                   {data
                     ?.filter((subject) => subject.semYear === YearandSemesterSets[activeTab - 1])
@@ -246,8 +261,12 @@ const CourseStudentSubjectMarks = () => {
                                     name='totalMarks'
                                     className='form-control w-auto'
                                     id={`totalMarks_${yearWiseSubject._id}`}
-                                    defaultValue={studentMarks?.totalMarks}
-                                    onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
+                                    value={
+                                      marksData[yearWiseSubject._id]?.totalMarks ||
+                                      studentMarks?.totalMarks ||
+                                      0
+                                    }
+                                    readOnly
                                   />
                                 </span>
                               </div>
@@ -265,7 +284,6 @@ const CourseStudentSubjectMarks = () => {
                       )
                     })}
                 </tbody>
-                {/* end::Table body */}
               </table>
               <hr />
               <div className='d-flex align-items-center gap-5'>
@@ -283,9 +301,7 @@ const CourseStudentSubjectMarks = () => {
             </>
           )}
         </div>
-        {/* end::Table container */}
       </div>
-      {/* end::Body */}
     </div>
   )
 }
