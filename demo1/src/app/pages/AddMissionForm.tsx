@@ -87,15 +87,18 @@ const AddMissionForm: React.FC = () => {
     const selectedCourseData = courseCtx.getCourseLists.data.find(
       (c) => c.courseName === selectedCourse
     )
-    //console.log(selectedCourseData)
+    //console.log('selected course data ', selectedCourseData)
     setSelectedCourseNameData(selectedCourseData)
     //console.log(selectedCourseData)
     formik.setFieldValue('select_course', selectedCourse)
+    if (updateUserId) {
+      formik.setFieldValue('courseName', selectedCourseData?._id)
+    }
     formik.setFieldValue('course_fees', selectedCourseData?.courseFees)
   }
 
   const handleCourseFeesDiscount = (e) => {
-    console.log(formik)
+    //console.log(formik)
     const amount = updateUserId
       ? Number(updateUserId.course_fees)
       : selectedCourseNameData?.courseFees
@@ -161,6 +164,8 @@ const AddMissionForm: React.FC = () => {
       if (image) {
         formData.append('image', image)
       }
+
+      console.log(selectedCourseNameData)
 
       if (updateUserId) {
         formData.append('id', updateUserId?._id)

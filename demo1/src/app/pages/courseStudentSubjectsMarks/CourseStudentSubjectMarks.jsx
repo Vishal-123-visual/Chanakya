@@ -1,10 +1,8 @@
 import {NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 import {useState} from 'react'
-import {useMutation, useQueryClient} from 'react-query'
-import axios from 'axios'
+
 import {KTIcon} from '../../../_metronic/helpers'
-const BASE_URL = 'http://your-api-url.com' // Replace with your actual base URL
 
 const CourseStudentSubjectMarks = () => {
   const courseSubjectsCtx = useCourseSubjectContext()
@@ -23,7 +21,7 @@ const CourseStudentSubjectMarks = () => {
     error: studentSubjectMarksError,
     isLoading: studentSubjectMarksIsLoading,
   } = courseSubjectsCtx.useGetStudentSubjectsMarksBasedOnCourse(location?.state?.updateUserId?._id)
-  // console.log(studentSubjectMarksData)
+  console.log(location?.state?.updateUserId)
 
   if (location?.state?.updateUserId === undefined) {
     navigate(-1)
@@ -35,7 +33,7 @@ const CourseStudentSubjectMarks = () => {
   const handleTabClick = (index) => {
     setActiveTab(index)
   }
-  console.log(marksData)
+  //console.log(marksData)
 
   const handleInputChange = (e, id) => {
     const {name, value} = e.target
