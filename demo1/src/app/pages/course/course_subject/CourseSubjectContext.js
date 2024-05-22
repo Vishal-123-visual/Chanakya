@@ -71,13 +71,23 @@ export const CourseSubjectContextProvider = ({children}) => {
       enabled: !!courseId, // Only run the query if courseId is provided
     })
   }
+  const useGetStudentSubjectsMarksBasedOnCourse = (studentId) => {
+    return useQuery({
+      queryKey: ['getStudentSubjectsMarksBasedOnCourse'],
+      queryFn: async () => {
+        const response = await axios.get(`${BASE_URL}/api/subjects/marks/${studentId}`, config)
+        // console.log(response)
+        return response.data
+      },
+    })
+  }
 
   // update Course type
   const updateCourseCategoryMutation = useMutation({
     mutationFn: async (updateData) => {
       //console.log(updateData)
       return axios
-        .put(`${BASE_URL}/api/subjects/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .post(`${BASE_URL}/api/subjects/${updateData._id}`, updateData, config) // Corrected order of arguments
         .then((res) => res.data)
     },
     onSettled: async (_, error, data) => {
@@ -95,7 +105,7 @@ export const CourseSubjectContextProvider = ({children}) => {
     mutationFn: async (updateData) => {
       //console.log(updateData)
       return axios
-        .put(`${BASE_URL}/api/subjects/marks/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .post(`${BASE_URL}/api/subjects/marks`, updateData, config) // Corrected order of arguments
         .then((res) => res.data)
     },
     onSettled: async (_, error, data) => {
@@ -103,8 +113,8 @@ export const CourseSubjectContextProvider = ({children}) => {
         //alert('Error while updating student...', error)
       } else {
         // console.log('from course subject context ---->> ', data)
-        await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists', data._id]})
-        await queryClient.invalidateQueries({queryKey: ['getSubjectsBasedOnCourse', data.courseId]})
+        // await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists', data._id]})
+        await queryClient.invalidateQueries({queryKey: ['getStudentSubjectsMarksBasedOnCourse']})
       }
     },
   })
@@ -136,6 +146,7 @@ export const CourseSubjectContextProvider = ({children}) => {
         deleteCourseSubjectMutation,
         useSubjectsBasedOnCourse,
         updateCourseSubjectMarksMutation,
+        useGetStudentSubjectsMarksBasedOnCourse,
       }}
     >
       {children}

@@ -66,42 +66,14 @@ export const updateCourseSubjectController = asyncHandler(
       findSubject.subjectCode = req.body.subjectCode || findSubject.subjectCode;
       findSubject.fullMarks = req.body.fullMarks || findSubject.fullMarks;
       findSubject.passMarks = req.body.passMarks || findSubject.passMarks;
-      findSubject.theory = req.body.theory || findSubject.theory;
-      findSubject.practical = req.body.practical || findSubject.practical;
-      findSubject.totalMarks = req.body.totalMarks || findSubject.totalMarks;
+      // findSubject.theory = req.body.theory || findSubject.theory;
+      // findSubject.practical = req.body.practical || findSubject.practical;
+      // findSubject.totalMarks = req.body.totalMarks || findSubject.totalMarks;
       findSubject.course = req.body.course || findSubject.course;
       findSubject.courseType = req.body.courseType || findSubject.courseType;
       findSubject.semYear = req.body.semYear || findSubject.semYear;
       findSubject.addedBy =
         req.user.fName + " " + req.user.lName || findSubject.addedBy;
-
-      let updatedCourseSubject = await findSubject.save();
-      res.status(200).json(updatedCourseSubject);
-    } catch (error) {
-      res.status(500).json({ success: false, message: error.message });
-    }
-  }
-);
-
-export const updateCourseSubjectMarksController = asyncHandler(
-  async (req, res, next) => {
-    try {
-      // console.log(req.body);
-      const { id } = req.params;
-      const findSubject = await SubjectModel.findById({ _id: id });
-      // console.log(findSubject);
-      //console.log(req.body);
-      if (req.body.theory) {
-        findSubject.theory = req.body.theory || findSubject.theory;
-      }
-
-      if (req.body.practical) {
-        findSubject.practical = req.body.practical || findSubject.practical;
-      }
-
-      if (req.body.totalMarks) {
-        findSubject.totalMarks = req.body.totalMarks || findSubject.totalMarks;
-      }
 
       let updatedCourseSubject = await findSubject.save();
       res.status(200).json(updatedCourseSubject);

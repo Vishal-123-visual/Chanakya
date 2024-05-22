@@ -17,23 +17,25 @@ const CourseStudentSubjectMarks = () => {
     location?.state?.updateUserId?.courseName._id
   )
 
-  // console.log('student id --->>', location?.state?.updateUserId)
+  const {
+    data: studentSubjectMarksData,
+    error: studentSubjectMarksError,
+    isLoading: studentSubjectMarksIsLoading,
+  } = courseSubjectsCtx.useGetStudentSubjectsMarksBasedOnCourse(location?.state?.updateUserId?._id)
+  // console.log(studentSubjectMarksData)
 
   if (location?.state?.updateUserId === undefined) {
     navigate(-1)
     return null
   }
 
-  // console.log(data)
-
-  const YearandSemesterSets = Array.from(new Set(data?.map((item) => item.semYear) || []))
+  const YearandSemesterSets = Array.from(new Set(data?.map((item) => item?.semYear) || []))
 
   const handleTabClick = (index) => {
     setActiveTab(index)
   }
 
   const handleInputChange = (e, id) => {
-    // console.log(id)
     const {name, value} = e.target
     setMarksData((prev) => ({
       ...prev,
@@ -44,16 +46,15 @@ const CourseStudentSubjectMarks = () => {
     }))
   }
 
-  //console.log(marksData)
-
   const handleSubmit = () => {
     try {
       setIsSubmitting(true)
       Object.keys(marksData).forEach((id) => {
         courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
-          _id: id,
+          subjectId: id,
           ...marksData[id],
           courseId: location.state.updateUserId.courseName._id,
+          studentId: location.state.updateUserId._id,
         })
       })
       window.alert('Added marks successfully!')
@@ -63,13 +64,13 @@ const CourseStudentSubjectMarks = () => {
     }
   }
 
-  // Group Subject by Semester
+  // Group subjects by semester
   const groupSubjectsBySemester = YearandSemesterSets.reduce((acc, semYear) => {
-    acc[semYear] = data.filter((subject) => subject.semYear === semYear) || []
+    acc[semYear] =
+      studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
     return acc
   }, {})
-
-  //console.log(groupSubjectsBySemester)
+  console.log(groupSubjectsBySemester)
 
   return (
     <div className='card'>
@@ -134,103 +135,110 @@ const CourseStudentSubjectMarks = () => {
                 <tbody>
                   {data
                     ?.filter((subject) => subject.semYear === YearandSemesterSets[activeTab - 1])
-                    ?.map((yearWiseSubject, indexValue) => (
-                      <tr key={yearWiseSubject._id}>
-                        <td>
-                          <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                        </td>
-                        <td>
-                          <div className='d-flex align-items-center'>
-                            <div className='symbol symbol-45px me-5'></div>
-                            <div className='d-flex justify-content-start flex-column'>
-                              <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                {indexValue + 1}
-                              </span>
+                    ?.map((yearWiseSubject, indexValue) => {
+                      const studentMarks = studentSubjectMarksData?.find(
+                        (singleStudentMarksData) =>
+                          singleStudentMarksData.Subjects._id === yearWiseSubject._id
+                      )
+
+                      return (
+                        <tr key={yearWiseSubject._id}>
+                          <td>
+                            <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                          </td>
+                          <td>
+                            <div className='d-flex align-items-center'>
+                              <div className='symbol symbol-45px me-5'></div>
+                              <div className='d-flex justify-content-start flex-column'>
+                                <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                                  {indexValue + 1}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td>
-                          <button className='btn text-dark fw-bold text-hover-primary d-block fs-6'>
-                            {yearWiseSubject.subjectName}
-                          </button>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.subjectCode}
-                              </span>
+                          </td>
+                          <td>
+                            <button className='btn text-dark fw-bold text-hover-primary d-block fs-6'>
+                              {yearWiseSubject.subjectName}
+                            </button>
+                          </td>
+                          <td className='text-end'>
+                            <div className='d-flex flex-column w-100 me-2'>
+                              <div className='d-flex flex-stack mb-2'>
+                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                  {yearWiseSubject.subjectCode}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.fullMarks}
-                              </span>
+                          </td>
+                          <td className='text-end'>
+                            <div className='d-flex flex-column w-100 me-2'>
+                              <div className='d-flex flex-stack mb-2'>
+                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                  {yearWiseSubject.fullMarks}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                {yearWiseSubject.passMarks}
-                              </span>
+                          </td>
+                          <td className='text-end'>
+                            <div className='d-flex flex-column w-100 me-2'>
+                              <div className='d-flex flex-stack mb-2'>
+                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                  {yearWiseSubject.passMarks}
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                <input
-                                  type='text'
-                                  name='theory'
-                                  className='form-control w-auto'
-                                  id={`theory_${yearWiseSubject._id}`}
-                                  defaultValue={yearWiseSubject?.theory}
-                                  onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
-                                />
-                              </span>
+                          </td>
+                          <td className='text-end'>
+                            <div className='d-flex flex-column w-100 me-2'>
+                              <div className='d-flex flex-stack mb-2'>
+                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                  <input
+                                    type='text'
+                                    name='theory'
+                                    className='form-control w-auto'
+                                    id={`theory_${yearWiseSubject._id}`}
+                                    defaultValue={studentMarks?.theory}
+                                    onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
+                                  />
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                <input
-                                  type='text'
-                                  name='practical'
-                                  className='form-control w-auto'
-                                  id={`practical_${yearWiseSubject._id}`}
-                                  defaultValue={yearWiseSubject?.practical}
-                                  onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
-                                />
-                              </span>
+                          </td>
+                          <td className='text-end'>
+                            <div className='d-flex flex-column w-100 me-2'>
+                              <div className='d-flex flex-stack mb-2'>
+                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                  <input
+                                    type='text'
+                                    name='practical'
+                                    className='form-control w-auto'
+                                    id={`practical_${yearWiseSubject._id}`}
+                                    defaultValue={studentMarks?.practical}
+                                    onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
+                                  />
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td className='text-end'>
-                          <div className='d-flex flex-column w-100 me-2'>
-                            <div className='d-flex flex-stack mb-2'>
-                              <span className='text-muted me-2 fs-7 fw-semibold'>
-                                <input
-                                  type='text'
-                                  name='totalMarks'
-                                  className='form-control w-auto'
-                                  id={`totalMarks_${yearWiseSubject._id}`}
-                                  defaultValue={yearWiseSubject?.totalMarks}
-                                  onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
-                                />
-                              </span>
+                          </td>
+                          <td className='text-end'>
+                            <div className='d-flex flex-column w-100 me-2'>
+                              <div className='d-flex flex-stack mb-2'>
+                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                  <input
+                                    type='text'
+                                    name='totalMarks'
+                                    className='form-control w-auto'
+                                    id={`totalMarks_${yearWiseSubject._id}`}
+                                    defaultValue={studentMarks?.totalMarks}
+                                    onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
+                                  />
+                                </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                          </td>
+                        </tr>
+                      )
+                    })}
                 </tbody>
                 {/* end::Table body */}
               </table>
@@ -243,14 +251,12 @@ const CourseStudentSubjectMarks = () => {
                 >
                   {isSubmitting ? 'Marks Added' : 'Submit Marks'}
                 </button>
-                {/* {JSON.stringify(groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]], 4)} */}
                 <button className='btn btn-info text-uppercase '>result</button>
                 <button className='btn btn-danger text-uppercase '>print result</button>
-              </div>{' '}
+              </div>
               <hr />
             </>
           )}
-          {/* end::Table */}
         </div>
         {/* end::Table container */}
       </div>

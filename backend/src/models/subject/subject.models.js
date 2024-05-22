@@ -18,18 +18,7 @@ const subjectSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    theory: {
-      type: Number,
-      default: 0,
-    },
-    practical: {
-      type: Number,
-      default: 0,
-    },
-    totalMarks: {
-      type: Number,
-      default: 0,
-    },
+
     course: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",
