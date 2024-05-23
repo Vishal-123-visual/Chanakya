@@ -13,6 +13,7 @@ import {Logout, AuthPage, useAuth} from '../modules/auth'
 import {App} from '../App'
 import MyPage from '../pages/MyPage'
 import {Header} from '../../_metronic/layout/components/header/Header'
+import StudentMarksResult from '../pages/courseStudentSubjectsMarks/StudentMarksResult'
 
 /**
  * Base URL of the website.
@@ -32,6 +33,8 @@ const AppRoutes: FC = () => {
           {currentUser ? (
             <>
               <Route path='/*' element={<PrivateRoutes />} />
+              <Route path='/student-result' element={<StudentMarksResult />} />
+
               <Route index element={<Navigate to='/dashboard' />} />
             </>
           ) : (

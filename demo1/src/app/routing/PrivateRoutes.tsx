@@ -44,6 +44,9 @@ const PrivateRoutes = () => {
   const CourseStudentSubjectMarks = lazy(
     () => import('../pages/courseStudentSubjectsMarks/CourseStudentSubjectMarks')
   )
+  const StudentMarksResult = lazy(
+    () => import('../pages/courseStudentSubjectsMarks/StudentMarksResult')
+  )
 
   return (
     <Routes>
@@ -253,6 +256,17 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
+
+        {/******************* Route for the print result ******************** */}
+        {/* <Route
+          path='/student-result'
+          element={
+            <SuspensedView>
+              <StudentMarksResult />
+            </SuspensedView>
+          }
+        /> */}
+
         {/* ------------------------------- Email Template End ----------------------------------- */}
 
         {/* <Route path='/add-user' element={<AddUser />} />

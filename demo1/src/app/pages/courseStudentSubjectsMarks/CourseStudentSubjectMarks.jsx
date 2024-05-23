@@ -2,7 +2,6 @@ import {NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 import {useState, useEffect} from 'react'
 
-import {KTIcon} from '../../../_metronic/helpers'
 import {useAuth} from '../../modules/auth'
 
 const CourseStudentSubjectMarks = () => {
@@ -305,7 +304,16 @@ const CourseStudentSubjectMarks = () => {
                   </button>
                 )}
 
-                <button className='btn btn-info text-uppercase '>result</button>
+                <button
+                  className='btn btn-info text-uppercase'
+                  onClick={() =>
+                    navigate('/student-result', {
+                      state: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                    })
+                  }
+                >
+                  result
+                </button>
                 <button className='btn btn-danger text-uppercase '>print result</button>
               </div>
               <hr />
