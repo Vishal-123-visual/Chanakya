@@ -26,6 +26,7 @@ export const addCourseSubjectMarksController = asyncHandler(
         studentInfo: req.body.studentId,
         Subjects: req.body.subjectId,
         course: req.body.courseId,
+        companyName: req.body.companyName,
       });
 
       await saveStudentSubjectMarks.save();
@@ -42,7 +43,7 @@ export const getCourseSubjectMarksController = asyncHandler(
     try {
       const studentSubjectMarks = await studentSubjectMarksModel
         .find({ studentInfo: req.params.studentId })
-        .populate(["studentInfo", "Subjects", "course"]);
+        .populate(["studentInfo", "Subjects", "course", "companyName"]);
       res.status(200).json(studentSubjectMarks);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });

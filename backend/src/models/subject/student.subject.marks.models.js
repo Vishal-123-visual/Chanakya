@@ -17,6 +17,11 @@ const studentSubjectMarksSchema = new mongoose.Schema(
       ref: "Course",
       required: true,
     },
+    companyName: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
     theory: {
       type: Number,
       default: 0,

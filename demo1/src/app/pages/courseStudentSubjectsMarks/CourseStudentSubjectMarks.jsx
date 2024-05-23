@@ -1,7 +1,6 @@
 import {NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 import {useState, useEffect} from 'react'
-
 import {useAuth} from '../../modules/auth'
 
 const CourseStudentSubjectMarks = () => {
@@ -12,13 +11,10 @@ const CourseStudentSubjectMarks = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const {auth} = useAuth()
-  //console.log(auth.role === 'Admin')
 
   const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
     location?.state?.updateUserId?.courseName._id
   )
-
-  //console.log(location?.state?.updateUserId)
 
   const {
     data: studentSubjectMarksData,
@@ -51,7 +47,7 @@ const CourseStudentSubjectMarks = () => {
     setActiveTab(index)
   }
 
-  const handleInputChange = (e, id) => {
+  const handleInputChange = (e, id, fullMarks) => {
     const {name, value} = e.target
     const parsedValue = parseInt(value) || 0
 
@@ -66,46 +62,36 @@ const CourseStudentSubjectMarks = () => {
 
       const theory = updatedData[id]?.theory || 0
       const practical = updatedData[id]?.practical || 0
-      updatedData[id].totalMarks = theory + practical
-      // console.log(updatedData)
+      if (theory + practical <= fullMarks) {
+        updatedData[id].totalMarks = theory + practical
+      } else {
+        window.alert('Practical and theory marks should be equal to full marks')
+        return prev // Return previous state if validation fails
+      }
 
       return updatedData
     })
   }
 
-  const handleEditStudentMarks = (marksData2) => {
-    // console.log(marksData2)
-    try {
-      courseSubjectsCtx.updateStudentSubjectMarksMutation.mutate({
-        marksId: marksData2._id,
-        subjectId: marksData2.Subjects._id,
-        courseId: marksData2.course._id,
-        studentId: marksData2?.studentInfo._id,
-        theory: marksData[marksData2.Subjects._id]?.theory,
-        practical: marksData[marksData2.Subjects._id]?.practical,
-        totalMarks: marksData[marksData2.Subjects._id]?.totalMarks,
-      })
-      window.alert('Update results marks successfully')
-    } catch (error) {
-      window.alert(error)
-    }
-  }
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
       setIsSubmitting(true)
-      Object.keys(marksData).forEach((id) => {
-        courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
+      const promises = Object.keys(marksData).map((id) =>
+        courseSubjectsCtx.updateCourseSubjectMarksMutation.mutateAsync({
           subjectId: id,
           ...marksData[id],
           courseId: location.state.updateUserId.courseName._id,
           studentId: location.state.updateUserId._id,
+          companyName: location.state.updateUserId.companyName,
         })
-      })
+      )
+      await Promise.all(promises)
       window.alert('Added marks successfully!')
-      setIsSubmitting(false)
     } catch (error) {
       console.log(error)
+      window.alert('Error adding marks')
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -114,9 +100,6 @@ const CourseStudentSubjectMarks = () => {
       studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
     return acc
   }, {})
-
-  // console.log(groupSubjectsBySemester)
-  //console.log(groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]])
 
   return (
     <div className='card'>
@@ -237,7 +220,13 @@ const CourseStudentSubjectMarks = () => {
                                     className='form-control w-auto'
                                     id={`theory_${yearWiseSubject._id}`}
                                     defaultValue={studentMarks?.theory}
-                                    onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        yearWiseSubject._id,
+                                        Number(yearWiseSubject.fullMarks)
+                                      )
+                                    }
                                   />
                                 </span>
                               </div>
@@ -253,7 +242,13 @@ const CourseStudentSubjectMarks = () => {
                                     className='form-control w-auto'
                                     id={`practical_${yearWiseSubject._id}`}
                                     defaultValue={studentMarks?.practical}
-                                    onChange={(e) => handleInputChange(e, yearWiseSubject._id)}
+                                    onChange={(e) =>
+                                      handleInputChange(
+                                        e,
+                                        yearWiseSubject._id,
+                                        Number(yearWiseSubject.fullMarks)
+                                      )
+                                    }
                                   />
                                 </span>
                               </div>
@@ -264,7 +259,7 @@ const CourseStudentSubjectMarks = () => {
                               <div className='d-flex flex-stack mb-2'>
                                 <span className='text-muted me-2 fs-7 fw-semibold'>
                                   <input
-                                    type='text'
+                                    type='number'
                                     name='totalMarks'
                                     className='form-control w-auto'
                                     id={`totalMarks_${yearWiseSubject._id}`}
@@ -294,7 +289,7 @@ const CourseStudentSubjectMarks = () => {
               </table>
               <hr />
               <div className='d-flex align-items-center gap-5'>
-                {auth.role === 'Admin' && 'SuperAdmin' && (
+                {(auth.role === 'Admin' || auth.role === 'SuperAdmin') && (
                   <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
@@ -312,9 +307,9 @@ const CourseStudentSubjectMarks = () => {
                     })
                   }
                 >
-                  result
+                  Result
                 </button>
-                <button className='btn btn-danger text-uppercase '>print result</button>
+                <button className='btn btn-danger text-uppercase'>Print Result</button>
               </div>
               <hr />
             </>

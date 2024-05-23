@@ -7,6 +7,12 @@ const StudentMarksResult = () => {
 
   console.log(data)
 
+  const handlePrint = () => {
+    var actContents = document.body.innerHTML
+    document.body.innerHTML = actContents
+    window.print()
+  }
+
   return (
     <body>
       <div className='main'>
@@ -304,6 +310,7 @@ const StudentMarksResult = () => {
                       <td>10/06/2024</td>
                       <td align='center'>Controller of Examination</td>
                     </tr>
+                    {/* <input value='Print' type='button' onClick={handlePrint} /> */}
                   </tbody>
                 </table>
               </td>
