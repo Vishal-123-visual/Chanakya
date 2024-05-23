@@ -3,6 +3,7 @@ import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectCon
 import {useState, useEffect} from 'react'
 
 import {KTIcon} from '../../../_metronic/helpers'
+import {useAuth} from '../../modules/auth'
 
 const CourseStudentSubjectMarks = () => {
   const courseSubjectsCtx = useCourseSubjectContext()
@@ -11,10 +12,14 @@ const CourseStudentSubjectMarks = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
+  const {auth} = useAuth()
+  //console.log(auth.role === 'Admin')
 
   const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
     location?.state?.updateUserId?.courseName._id
   )
+
+  //console.log(location?.state?.updateUserId)
 
   const {
     data: studentSubjectMarksData,
@@ -110,6 +115,9 @@ const CourseStudentSubjectMarks = () => {
       studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
     return acc
   }, {})
+
+  // console.log(groupSubjectsBySemester)
+  //console.log(groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]])
 
   return (
     <div className='card'>
@@ -272,14 +280,14 @@ const CourseStudentSubjectMarks = () => {
                               </div>
                             </div>
                           </td>
-                          <td>
+                          {/* <td>
                             <button
                               onClick={() => handleEditStudentMarks(studentMarks)}
                               className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                             >
                               <KTIcon iconName='pencil' className='fs-3' />
                             </button>
-                          </td>
+                          </td> */}
                         </tr>
                       )
                     })}
@@ -287,13 +295,16 @@ const CourseStudentSubjectMarks = () => {
               </table>
               <hr />
               <div className='d-flex align-items-center gap-5'>
-                <button
-                  onClick={handleSubmit}
-                  disabled={isSubmitting}
-                  className='btn btn-primary text-uppercase'
-                >
-                  {isSubmitting ? 'Marks Added' : 'Submit Marks'}
-                </button>
+                {auth.role === 'Admin' && 'SuperAdmin' && (
+                  <button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className='btn btn-primary text-uppercase'
+                  >
+                    {isSubmitting ? 'Marks Added' : 'Submit Marks'}
+                  </button>
+                )}
+
                 <button className='btn btn-info text-uppercase '>result</button>
                 <button className='btn btn-danger text-uppercase '>print result</button>
               </div>
