@@ -11,6 +11,7 @@ export const addCourseSubjectMarksController = asyncHandler(
         studentInfo: req.body.studentId,
         Subjects: req.body.subjectId,
         course: req.body.courseId,
+        companyName: req.body.companyName,
       });
 
       if (existingRecord) {

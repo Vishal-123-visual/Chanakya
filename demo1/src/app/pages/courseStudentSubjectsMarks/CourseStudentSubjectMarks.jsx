@@ -16,6 +16,8 @@ const CourseStudentSubjectMarks = () => {
     location?.state?.updateUserId?.courseName._id
   )
 
+  //console.log(location?.state?.updateUserId)
+
   const {
     data: studentSubjectMarksData,
     error: studentSubjectMarksError,
@@ -62,12 +64,8 @@ const CourseStudentSubjectMarks = () => {
 
       const theory = updatedData[id]?.theory || 0
       const practical = updatedData[id]?.practical || 0
-      if (theory + practical <= fullMarks) {
-        updatedData[id].totalMarks = theory + practical
-      } else {
-        window.alert('Practical and theory marks should be equal to full marks')
-        return prev // Return previous state if validation fails
-      }
+
+      updatedData[id].totalMarks = theory + practical
 
       return updatedData
     })
@@ -76,8 +74,8 @@ const CourseStudentSubjectMarks = () => {
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true)
-      const promises = Object.keys(marksData).map((id) =>
-        courseSubjectsCtx.updateCourseSubjectMarksMutation.mutateAsync({
+      Object.keys(marksData).map((id) =>
+        courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
           subjectId: id,
           ...marksData[id],
           courseId: location.state.updateUserId.courseName._id,
@@ -85,7 +83,7 @@ const CourseStudentSubjectMarks = () => {
           companyName: location.state.updateUserId.companyName,
         })
       )
-      await Promise.all(promises)
+
       window.alert('Added marks successfully!')
     } catch (error) {
       console.log(error)
@@ -105,8 +103,10 @@ const CourseStudentSubjectMarks = () => {
     <div className='card'>
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Course Subjects</span>
-          <span className='text-muted mt-1 fw-semibold fs-7'>Over 500 Students</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Course Subjects Results</span>
+          <span className=' mt-1 fw-semibold fs-7'>
+            Student Name : {location?.state?.updateUserId.name}
+          </span>
         </h3>
 
         <div className='card-toolbar'>
