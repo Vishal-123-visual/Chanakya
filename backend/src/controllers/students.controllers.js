@@ -30,6 +30,8 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       return; // Added return to exit the function if student is not found
     }
 
+    console.log("update student", req.body);
+
     const file = req?.file?.filename;
     const {
       rollNumber,
@@ -67,7 +69,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.rollNumber = rollNumber || student.rollNumber;
     student.father_name = father_name || student.father_name;
     student.name = name || student.name;
-    student.courseName = req.body.courseName || student.courseName;
+    student.courseName = req.body.courseName[1] || student.courseName;
     student.mobile_number = mobile_number || student.mobile_number;
     student.phone_number = phone_number || student.phone_number;
     student.present_address = present_address || student.present_address;

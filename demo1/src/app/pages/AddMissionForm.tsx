@@ -61,7 +61,7 @@ const AddMissionForm: React.FC = () => {
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState<any>({})
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  //console.log(updateUserId)
+  console.log(updateUserId)
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
@@ -89,11 +89,9 @@ const AddMissionForm: React.FC = () => {
     )
     //console.log('selected course data ', selectedCourseData)
     setSelectedCourseNameData(selectedCourseData)
-    //console.log(selectedCourseData)
+    console.log('course Id', selectedCourseData?._id)
     formik.setFieldValue('select_course', selectedCourse)
-    if (updateUserId) {
-      formik.setFieldValue('courseName', selectedCourseData?._id)
-    }
+
     formik.setFieldValue('course_fees', selectedCourseData?.courseFees)
   }
 
@@ -169,6 +167,9 @@ const AddMissionForm: React.FC = () => {
 
       if (updateUserId) {
         formData.append('id', updateUserId?._id)
+        formData.append('courseName', updateUserId?.courseName._id)
+        //console.log('course name id ', updateUserId?.courseName._id)
+
         context.updateStudentMutation.mutate(formData)
         setLoading(true)
       } else {
