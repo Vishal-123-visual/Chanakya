@@ -1,30 +1,26 @@
-body {
-  margin: 0px;
-  padding: 0;
-  font-family: 'Times New Roman', sans-serif;
-  color: #833533;
-  font-size: 18px;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  text-decoration: none;
-  list-style: none;
-}
-
-.main {
-  width: 100%;
-  max-width: 820px;
-  border: 3px solid #833533;
-  margin: 1% auto;
-  padding: 1%;
-  background-image: url(https://ims.semt.in/img/bground.jpg);
-  background-repeat: repeat;
-}
-
 .bground {
+  color: #833533;
+  width: 820px;
+  height: 100vh;
+  margin: 5rem auto;
+  border-radius: 5px;
+  padding: 20px;
+  position: relative;
+}
+
+.letterHeadImage {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #833533;
+  width: 820px;
+  z-index: -999;
 }
 
 .logo td {
@@ -43,6 +39,7 @@ body {
   border: 1px solid #833533;
   font-size: 14px;
   height: 45px;
+  text-align: center;
 }
 
 .marks td {
@@ -50,6 +47,7 @@ body {
   height: 45px;
   font-weight: bold;
   text-transform: uppercase;
+  text-align: center;
 }
 
 .foot {
@@ -61,10 +59,12 @@ body {
 
 .line {
   line-height: 15px;
+  text-align: center;
 }
 
 .stu-details {
   margin: 10px 0px;
+  height: 100%;
 }
 
 .stu-details td {

@@ -1,11 +1,15 @@
 import {useLocation} from 'react-router-dom'
+import moment from 'moment'
 import './StudentMarksResult.css' // Assuming you have a CSS file for styling
+import {useState} from 'react'
+
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const StudentMarksResult = () => {
   const location = useLocation()
   const data = location.state
 
-  console.log(data)
+  // console.log(location.state.data)
 
   const handlePrint = () => {
     var actContents = document.body.innerHTML
@@ -13,12 +17,27 @@ const StudentMarksResult = () => {
     window.print()
   }
 
+  const calculateTotalMarks = location.state.data.reduce(
+    (acc, cur) => {
+      return {
+        maxMarksTotals: Number(acc.maxMarksTotals) + Number(cur.Subjects.fullMarks),
+        passMarksTotals: Number(acc.passMarksTotals) + Number(cur.totalMarks),
+      }
+    },
+    {
+      maxMarksTotals: 0,
+      passMarksTotals: 0,
+    }
+  )
+  //console.log(calculateTotalMarks)
+
   return (
-    <body>
-      <div className='main'>
-        <table width='800px' cellPadding='0' cellSpacing='0' className='bground'>
+    <>
+      <div className='bground'>
+        <img src='/letterhead.jpg' className='letterHeadImage' />
+        <table width='800px' cellPadding='0' cellSpacing='0'>
           <tbody>
-            <tr>
+            {/* <tr>
               <td>
                 <table width='800px' cellPadding='0' cellSpacing='0'>
                   <tbody>
@@ -79,8 +98,8 @@ const StudentMarksResult = () => {
                   </tbody>
                 </table>
               </td>
-            </tr>
-            <tr>
+            </tr> */}
+            {/* <tr>
               <td>
                 <table width='100%' cellPadding='0' cellSpacing='0'>
                   <tbody>
@@ -132,33 +151,43 @@ const StudentMarksResult = () => {
                   </tbody>
                 </table>
               </td>
-            </tr>
+            </tr> */}
             <tr>
               <td>
-                <table width='98%' cellPadding='0' cellSpacing='0' className='marks' border='1'>
+                <table
+                  width='98%'
+                  cellPadding='0'
+                  cellSpacing='0'
+                  className='marks'
+                  border='1'
+                  style={{marginTop: '15%'}}
+                >
                   <thead>
                     <tr>
-                      <th>ENROLLMENT NO.</th>
+                      <th>CENTER CODE</th>
                       <th>ROLL NO.</th>
                       <th>EXAM TYPE</th>
-                      <th>REGULAR/PRIVATE</th>
+                      <th>SEMESTER/YEAR</th>
                       <th>CERTIFICATE NO.</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>10110</td>
-                      <td>0101</td>
-                      <td>0201</td>
-                      <td>2443</td>
-                      <td>5566</td>
+                      <td>{location.state.data[0].studentInfo.rollNumber}</td>
+                      <td>{location.state.data[0].studentInfo.rollNumber}</td>
+                      <td>{location.state.courseType}</td>
+                      <td>{location.state.courseType.split(' ')[0]}</td>
+                      <td>
+                        {location.state.data[0].companyName.companyName}-
+                        {location.state.data[0].studentInfo.rollNumber}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
               </td>
             </tr>
             <tr>
-              <td>
+              <td style={{display: 'flex', alignItems: 'center'}}>
                 <table width='100%' cellPadding='0' cellSpacing='0' className='stu-details'>
                   <tbody>
                     <tr>
@@ -167,28 +196,32 @@ const StudentMarksResult = () => {
                     </tr>
                     <tr>
                       <td width='25%'>This is to certify That</td>
-                      <td width='75%'>{data.studentName}</td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <small>Mother's Name</small>
-                      </td>
-                      <td>{data.motherName}</td>
+                      <td width='75%'>{location.state.data[0].studentInfo.name}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Father's Name</small>
                       </td>
-                      <td>{data.fatherName}</td>
+                      <td>{location.state.data[0].studentInfo.father_name}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Date of Birth</small>
                       </td>
-                      <td>{data.dateOfBirth}</td>
+                      <td>
+                        {moment(location.state.data[0].studentInfo.date_of_birth).format(
+                          'DD/MM/YYYY'
+                        )}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
+                <img
+                  style={{marginRight: '30px', borderRadius: '10px'}}
+                  width={100}
+                  src={`${BASE_URL}/api/images/${location.state.data[0].studentInfo.image}`}
+                  alt='student image'
+                />
               </td>
             </tr>
             <tr>
@@ -196,7 +229,7 @@ const StudentMarksResult = () => {
                 <table className='marks' width='98%' cellPadding='0' cellSpacing='0' border='1'>
                   <thead>
                     <tr>
-                      <th width='10%' rowSpan='2' align='center' className='line'>
+                      <th width='15%' rowSpan='2' align='center' className='line'>
                         <br />
                         SUB.
                         <br />
@@ -230,30 +263,36 @@ const StudentMarksResult = () => {
                         <br />
                         TOTAL
                       </th>
-                      <th width='12%' align='center' className='line'>
+                      {/* <th width='12%' align='center' className='line'>
                         <br />
                         POSITIONAL GRADE
-                      </th>
+                      </th> */}
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td align='center'>Math-100</td>
-                      <td align='center'>Math</td>
-                      <td align='center'>100</td>
-                      <td align='center'>40</td>
-                      <td align='center'>40</td>
-                      <td align='center'>80</td>
-                      <td align='center'>A</td>
-                    </tr>
+                    {location.state.data &&
+                      location.state.data.map((marksStudentData) => {
+                        return (
+                          <tr key={marksStudentData._id}>
+                            <td align='center'>{marksStudentData.Subjects.subjectCode}</td>
+                            <td align='center'>{marksStudentData.Subjects.subjectName}</td>
+                            <td align='center'>{marksStudentData.Subjects.fullMarks}</td>
+                            <td align='center'>{marksStudentData.theory}</td>
+                            <td align='center'>{marksStudentData.practical}</td>
+                            <td align='center'>{marksStudentData.totalMarks}</td>
+
+                            {/* <td align='center'>A</td> */}
+                          </tr>
+                        )
+                      })}
                     <tr>
                       <td align='center' colSpan='2'>
                         <strong>Total Marks</strong>
                       </td>
-                      <td align='center'>80</td>
+                      <td align='center'>{calculateTotalMarks.maxMarksTotals}</td>
                       <td align='center'>-</td>
                       <td align='center'>-</td>
-                      <td align='center'>80</td>
+                      <td align='center'>{calculateTotalMarks.passMarksTotals}</td>
                       <td align='center'>-</td>
                     </tr>
                   </tbody>
@@ -272,8 +311,8 @@ const StudentMarksResult = () => {
                       <td width='35%'>&nbsp;</td>
                       <td width='30%' rowSpan='4' align='center' valign='bottom'>
                         <img
-                          src='https://images.pexels.com/photos/1133957/pexels-photo-1133957.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                          width='60%'
+                          src='/signature (1).png'
+                          width='30%'
                           alt='secretary-sign'
                           title='Secretary Sign'
                         />
@@ -297,17 +336,12 @@ const StudentMarksResult = () => {
                         <span className='line'>&nbsp;</span>
                       </td>
                       <td rowSpan='2' align='center'>
-                        <img
-                          src='https://images.pexels.com/photos/1133957/pexels-photo-1133957.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                          width='30%'
-                          alt='qr'
-                          title='Website QR'
-                        />
+                        <img src='/qr code.png' width='20%' alt='qr' title='Website QR' />
                       </td>
                     </tr>
                     <tr>
                       <td className='line'>Dated:</td>
-                      <td>10/06/2024</td>
+                      <td>{moment(Date.now()).format('DD/MM/YYYY')}</td>
                       <td align='center'>Controller of Examination</td>
                     </tr>
                     {/* <input value='Print' type='button' onClick={handlePrint} /> */}
@@ -318,7 +352,7 @@ const StudentMarksResult = () => {
           </tbody>
         </table>
       </div>
-    </body>
+    </>
   )
 }
 

@@ -16,7 +16,7 @@ const CourseStudentSubjectMarks = () => {
     location?.state?.updateUserId?.courseName._id
   )
 
-  //console.log(location?.state?.updateUserId)
+  // console.log(location?.state?.updateUserId)
 
   const {
     data: studentSubjectMarksData,
@@ -98,6 +98,8 @@ const CourseStudentSubjectMarks = () => {
       studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
     return acc
   }, {})
+
+  console.log(YearandSemesterSets[activeTab - 1], groupSubjectsBySemester)
 
   return (
     <div className='card'>
@@ -303,7 +305,10 @@ const CourseStudentSubjectMarks = () => {
                   className='btn btn-info text-uppercase'
                   onClick={() =>
                     navigate('/student-result', {
-                      state: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                      state: {
+                        courseType: YearandSemesterSets[activeTab - 1],
+                        data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                      },
                     })
                   }
                 >
