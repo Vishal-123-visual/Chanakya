@@ -5,7 +5,7 @@
  * components (e.g: `src/app/modules/Auth/pages/AuthPage`, `src/app/BasePage`).
  */
 
-import {FC} from 'react'
+import {FC, lazy} from 'react'
 import {Routes, Route, BrowserRouter, Navigate} from 'react-router-dom'
 import {PrivateRoutes} from './PrivateRoutes'
 import {ErrorsPage} from '../modules/errors/ErrorsPage'
@@ -13,7 +13,6 @@ import {Logout, AuthPage, useAuth} from '../modules/auth'
 import {App} from '../App'
 import MyPage from '../pages/MyPage'
 import {Header} from '../../_metronic/layout/components/header/Header'
-import StudentMarksResult from '../pages/courseStudentSubjectsMarks/StudentMarksResult'
 
 /**
  * Base URL of the website.
@@ -23,6 +22,9 @@ import StudentMarksResult from '../pages/courseStudentSubjectsMarks/StudentMarks
 const {PUBLIC_URL} = process.env
 
 const AppRoutes: FC = () => {
+  const StudentMarksResult = lazy(
+    () => import('../pages/courseStudentSubjectsMarks/StudentMarksResult')
+  )
   const {currentUser} = useAuth()
   return (
     <BrowserRouter>
