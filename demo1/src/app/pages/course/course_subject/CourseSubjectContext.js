@@ -87,7 +87,7 @@ export const CourseSubjectContextProvider = ({children}) => {
     mutationFn: async (updateData) => {
       //console.log(updateData)
       return axios
-        .post(`${BASE_URL}/api/subjects/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .put(`${BASE_URL}/api/subjects/${updateData._id}`, updateData, config) // Corrected order of arguments
         .then((res) => res.data)
     },
     onSettled: async (_, error, data) => {
