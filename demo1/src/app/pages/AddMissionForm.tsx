@@ -61,7 +61,7 @@ const AddMissionForm: React.FC = () => {
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState<any>({})
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  console.log(updateUserId)
+  //console.log(updateUserId)
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
@@ -89,16 +89,20 @@ const AddMissionForm: React.FC = () => {
     )
     //console.log('selected course data ', selectedCourseData)
     setSelectedCourseNameData(selectedCourseData)
-    console.log('course Id', selectedCourseData?._id)
+    //console.log('course Id', selectedCourseData?._id)
     formik.setFieldValue('select_course', selectedCourse)
 
     formik.setFieldValue('course_fees', selectedCourseData?.courseFees)
   }
 
   const handleCourseFeesDiscount = (e) => {
-    //console.log(formik)
+    //console.log(formik.values.course_fees)
+    // const amount = updateUserId
+    //   ? Number(updateUserId.course_fees)
+    //   : selectedCourseNameData?.courseFees
+    formik.setFieldValue('netCourseFees', 0)
     const amount = updateUserId
-      ? Number(updateUserId.course_fees)
+      ? Number(formik.values.course_fees)
       : selectedCourseNameData?.courseFees
     const discount = Number(e.target.value)
     //console.log(amount)
