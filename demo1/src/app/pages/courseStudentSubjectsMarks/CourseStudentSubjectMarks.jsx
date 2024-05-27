@@ -99,7 +99,7 @@ const CourseStudentSubjectMarks = () => {
     return acc
   }, {})
 
-  console.log(YearandSemesterSets[activeTab - 1], groupSubjectsBySemester)
+  //console.log(YearandSemesterSets[activeTab - 1], groupSubjectsBySemester)
 
   return (
     <div className='card'>
@@ -300,7 +300,6 @@ const CourseStudentSubjectMarks = () => {
                     {isSubmitting ? 'Marks Added' : 'Submit Marks'}
                   </button>
                 )}
-
                 <button
                   className='btn btn-info text-uppercase'
                   onClick={() =>
@@ -314,7 +313,7 @@ const CourseStudentSubjectMarks = () => {
                 >
                   Result
                 </button>
-                <button className='btn btn-danger text-uppercase'>Print Result</button>
+                {/* <button className='btn btn-danger text-uppercase'>Print Result</button> */}
               </div>
               <hr />
             </>

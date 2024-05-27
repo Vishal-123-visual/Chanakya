@@ -1,7 +1,7 @@
 .bground {
   color: #833533;
   width: 820px;
-  height: 100vh;
+  height: max-content;
   margin: 5rem auto;
   border-radius: 5px;
   padding: 20px;
