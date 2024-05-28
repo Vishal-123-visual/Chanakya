@@ -1,5 +1,4 @@
 import {Link, useNavigate, useParams} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import React, {useState} from 'react'
 
@@ -16,10 +15,12 @@ const MonthlyCollectionFee = () => {
   const searchContentValueHandler = (e) => {
     e.preventDefault()
     const filteredResults = result.data.filter((data) => {
+      //console.log(data)
       const createdAtMonth = new Date(data.expiration_date).getMonth() + 1
       return (
         createdAtMonth >= Number(searchContentValues.from) &&
-        createdAtMonth <= Number(searchContentValues.to)
+        createdAtMonth <= Number(searchContentValues.to) &&
+        data.studentInfo.companyName === paramsData.id
       )
     })
 
@@ -29,6 +30,7 @@ const MonthlyCollectionFee = () => {
   }
 
   const calculateTotalCollectionFees = (data) => {
+    //console.log(data)
     const totalFees = data.reduce((total, item) => total + item?.installment_amount, 0)
     setTotalCollectionFees(totalFees)
   }
