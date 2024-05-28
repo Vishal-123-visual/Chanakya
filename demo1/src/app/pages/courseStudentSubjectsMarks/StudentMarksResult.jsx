@@ -9,7 +9,7 @@ const StudentMarksResult = () => {
   const location = useLocation()
   const data = location.state
 
-  // console.log(location.state.data)
+  console.log(location.state.data)
 
   const handlePrint = () => {
     var actContents = document.body.innerHTML
@@ -164,7 +164,6 @@ const StudentMarksResult = () => {
                 >
                   <thead>
                     <tr>
-                      <th>CENTER CODE</th>
                       <th>ROLL NO.</th>
                       <th>EXAM TYPE</th>
                       <th>SEMESTER/YEAR</th>
@@ -173,10 +172,13 @@ const StudentMarksResult = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td>{location.state.data[0].studentInfo.rollNumber}</td>
-                      <td>{location.state.data[0].studentInfo.rollNumber}</td>
-                      <td>{location.state.courseType}</td>
-                      <td>{location.state.courseType.split(' ')[0]}</td>
+                      <td style={{borderRight: '1px solid black'}}>
+                        {location.state.data[0].studentInfo.rollNumber}
+                      </td>
+                      <td style={{borderRight: '1px solid black'}}>{location.state.courseType}</td>
+                      <td style={{borderRight: '1px solid black'}}>
+                        {location.state.courseType.split(' ')[0]}
+                      </td>
                       <td>
                         {location.state.data[0].companyName.companyName}-
                         {location.state.data[0].studentInfo.rollNumber}
@@ -197,6 +199,10 @@ const StudentMarksResult = () => {
                     <tr>
                       <td width='25%'>This is to certify That</td>
                       <td width='75%'>{location.state.data[0].studentInfo.name}</td>
+                    </tr>
+                    <tr>
+                      <td width='25%'>Course Name</td>
+                      <td width='75%'>{location.state.data[0].course.courseName}</td>
                     </tr>
                     <tr>
                       <td>
@@ -273,12 +279,22 @@ const StudentMarksResult = () => {
                     {location.state.data &&
                       location.state.data.map((marksStudentData) => {
                         return (
-                          <tr key={marksStudentData._id}>
-                            <td align='center'>{marksStudentData.Subjects.subjectCode}</td>
-                            <td align='center'>{marksStudentData.Subjects.subjectName}</td>
-                            <td align='center'>{marksStudentData.Subjects.fullMarks}</td>
-                            <td align='center'>{marksStudentData.theory}</td>
-                            <td align='center'>{marksStudentData.practical}</td>
+                          <tr key={marksStudentData._id} style={{borderBottom: '1px solid black'}}>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.Subjects.subjectCode}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.Subjects.subjectName}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.Subjects.fullMarks}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.theory}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.practical}
+                            </td>
                             <td align='center'>{marksStudentData.totalMarks}</td>
 
                             {/* <td align='center'>A</td> */}
