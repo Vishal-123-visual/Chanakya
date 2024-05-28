@@ -1,15 +1,15 @@
 import {useLocation} from 'react-router-dom'
 import moment from 'moment'
-import './StudentMarksResult.css' // Assuming you have a CSS file for styling
+import './PrintStudentMarksResult.css' // Assuming you have a CSS file for styling
 import {useState} from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
-const StudentMarksResult = () => {
+const PrintStudentResult = () => {
   const location = useLocation()
   const data = location.state
 
-  console.log(location.state.data)
+  //console.log(location.state.data)
 
   const handlePrint = () => {
     var actContents = document.body.innerHTML
@@ -34,7 +34,8 @@ const StudentMarksResult = () => {
   return (
     <>
       <div className='bground'>
-        <img src='/letterhead.jpg' className='letterHeadImage' />
+        {/* <img src='/letterhead.jpg' className='letterHeadImage' /> */}
+        <div className='letterHeadImage'></div>
         <table width='800px' cellPadding='0' cellSpacing='0'>
           <tbody>
             {/* <tr>
@@ -160,7 +161,7 @@ const StudentMarksResult = () => {
                   cellSpacing='0'
                   className='marks'
                   border='1'
-                  style={{marginTop: '15%'}}
+                  style={{marginTop: '5%'}}
                 >
                   <thead>
                     <tr>
@@ -372,4 +373,4 @@ const StudentMarksResult = () => {
   )
 }
 
-export default StudentMarksResult
+export default PrintStudentResult

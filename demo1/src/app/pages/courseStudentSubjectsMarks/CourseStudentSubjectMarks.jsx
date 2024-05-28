@@ -313,7 +313,19 @@ const CourseStudentSubjectMarks = () => {
                 >
                   Result
                 </button>
-                {/* <button className='btn btn-danger text-uppercase'>Print Result</button> */}
+                <button
+                  className='btn btn-danger text-uppercase'
+                  onClick={() =>
+                    navigate('/print-student-result', {
+                      state: {
+                        courseType: YearandSemesterSets[activeTab - 1],
+                        data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                      },
+                    })
+                  }
+                >
+                  Print Result
+                </button>
               </div>
               <hr />
             </>
