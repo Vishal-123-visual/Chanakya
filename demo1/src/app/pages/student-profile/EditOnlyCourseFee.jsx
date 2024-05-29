@@ -10,7 +10,7 @@ const EditOnlyCourseFee = ({
   setEditStudentCourseFees,
   editStudentCourseFees,
 }) => {
-  console.log(StudentFee)
+  //console.log(StudentFee)
   useEffect(() => {
     setEditStudentCourseFees(StudentFee)
   }, [])
@@ -45,6 +45,7 @@ const EditOnlyCourseFee = ({
             })
           }
           value={editStudentCourseFees.netCourseFees}
+          readOnly
         />
       </td>
       <td>
@@ -77,9 +78,14 @@ const EditOnlyCourseFee = ({
       <td>
         <input
           type='text'
-          readOnly
           value={editStudentCourseFees.reciptNumber}
           className='form-control w-auto'
+          onChange={(e) =>
+            setEditStudentCourseFees({
+              ...editStudentCourseFees,
+              reciptNumber: e.target.value,
+            })
+          }
         />
       </td>
       <td>

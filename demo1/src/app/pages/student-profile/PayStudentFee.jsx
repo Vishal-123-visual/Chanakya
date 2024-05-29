@@ -35,6 +35,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
             setPayStudentFeesAdd({...payStudentFeesAdd, netCourseFees: Number(e.target.value)})
           }
           value={payStudentFeesAdd.netCourseFees}
+          readOnly
         />
       </td>
       <td>

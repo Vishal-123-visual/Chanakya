@@ -56,7 +56,7 @@ const ReadOnlyCourseFee = ({
           >
             <img src='/whatsapp.png' className='img-thumbnail' />
           </button>
-          {auth.role === 'Admin' && (
+          {(auth.role === 'Admin' || auth.role === 'SuperAdmin') && (
             <>
               <button
                 onClick={() => setStudentCourseFeesEditId(StudentFee?._id)}
