@@ -1336,123 +1336,183 @@ async function sendEmail(toEmails, subject, text, html) {
   }
 }
 
+// export const getCourseFeesByStudentIdController = asyncHandler(
+//   async (req, res, next) => {
+//     try {
+//       console.log(req.user.email, req.user.role);
+//       const { studentId } = req.params;
+//       //console.log(studentId);
+//       const studentFees = await CourseFeesModel.find({
+//         studentInfo: studentId,
+//       }).sort({ createdAt: 1 });
+//       if (!studentFees) {
+//         return res.status(404).json({ message: "Student fee not found" });
+//       }
+
+//       const studentInfo = await admissionFormModel
+//         .findById(studentId)
+//         .populate(["courseName", "companyName"]);
+//       //console.log("from ------------>", studentInfo);
+
+//       // now get next payment installment data
+//       let installmentExpireDate =
+//         studentInfo.no_of_installments_expireTimeandAmount;
+//       // const nextInstallmentExpireTimeData =
+//       //   await PaymentInstallmentTimeExpireModel.find({
+//       //     studentInfo: studentId,
+//       //     expiration_date: installmentExpireDate,
+//       //   });
+
+//       // console.log(
+//       //   "next installment fees",
+//       //   installmentExpireDate,
+//       //   nextInstallmentExpireTimeData
+//       // );
+
+//       //console.log("student info data ----------------> ", studentInfo);
+
+//       // // get the old time and current time
+//       let installmentPayTime = new Date(installmentExpireDate).getTime();
+//       let currentTimePaymentInstallment = new Date().getTime();
+
+//       if (installmentPayTime < currentTimePaymentInstallment) {
+//         let numberOfInstallment = studentInfo.no_of_installments;
+//         studentInfo.installmentPaymentSkipMonth += 1;
+//         if (numberOfInstallment > 0) {
+//           studentInfo.no_of_installments = numberOfInstallment - 1;
+//           studentInfo.no_of_installments_amount =
+//             studentInfo.remainingCourseFees / numberOfInstallment - 1;
+//         }
+//         await studentInfo.save();
+//       } else {
+//         let arrayOfCurrentTime = new Date(currentTimePaymentInstallment)
+//           .toDateString()
+//           .split(" ");
+//         let arrayOfPrevTime = new Date(installmentPayTime)
+//           .toDateString()
+//           .split(" ");
+//         let dayMonthDateYearCurrent =
+//           arrayOfCurrentTime[0] +
+//           arrayOfCurrentTime[1] +
+//           arrayOfCurrentTime[2] +
+//           arrayOfCurrentTime[3];
+//         let dayMonthDateYearPrev =
+//           arrayOfPrevTime[0] +
+//           arrayOfPrevTime[1] +
+//           arrayOfPrevTime[2] +
+//           arrayOfPrevTime[3];
+//         //console.log(dayMonthDateYearPrev);
+
+//         if (
+//           arrayOfCurrentTime[0] +
+//             arrayOfCurrentTime[1] +
+//             1 +
+//             arrayOfCurrentTime[3] ===
+//           dayMonthDateYearPrev
+//         ) {
+//           // then send mail to student
+//           sendEmail(
+//             `${req.user.email}, ${studentInfo.email}`,
+//             "Welcome to visual Media Technology",
+//             "Regarding to Fees Installment due in Visual Media Technology"
+//           );
+//         }
+
+//         if (
+//           arrayOfCurrentTime[0] +
+//             arrayOfCurrentTime[1] +
+//             10 +
+//             arrayOfCurrentTime[3] ===
+//           dayMonthDateYearPrev
+//         ) {
+//           // then send mail to student
+//           sendEmail();
+//         }
+//         if (
+//           arrayOfCurrentTime[0] +
+//             arrayOfCurrentTime[1] +
+//             12 +
+//             arrayOfCurrentTime[3] ===
+//           dayMonthDateYearPrev
+//         ) {
+//           // then send mail to student
+//           sendEmail();
+//         }
+//         if (
+//           arrayOfCurrentTime[0] +
+//             arrayOfCurrentTime[1] +
+//             15 +
+//             arrayOfCurrentTime[3] ===
+//           dayMonthDateYearPrev
+//         ) {
+//           // then send mail to student
+//           sendEmail();
+//         }
+//       }
+
+//       res.status(200).json(studentFees);
+//     } catch (error) {
+//       res.status(500).json({ error: error });
+//     }
+//   }
+// );
+
 export const getCourseFeesByStudentIdController = asyncHandler(
   async (req, res, next) => {
     try {
-      console.log(req.user.email, req.user.role);
+      console.log(
+        "this is from student course fees ",
+        req.user.email,
+        req.user.role
+      );
       const { studentId } = req.params;
-      //console.log(studentId);
+
+      // Query the database to find student fees
       const studentFees = await CourseFeesModel.find({
         studentInfo: studentId,
       }).sort({ createdAt: 1 });
-      if (!studentFees) {
+
+      // Check if student fees are not found
+      if (!studentFees || studentFees.length === 0) {
         return res.status(404).json({ message: "Student fee not found" });
       }
 
+      // Fetch additional information about the student
       const studentInfo = await admissionFormModel
         .findById(studentId)
         .populate(["courseName", "companyName"]);
-      //console.log("from ------------>", studentInfo);
 
-      // now get next payment installment data
-      let installmentExpireDate =
+      // Calculate the next payment installment due date
+      const installmentExpireDate =
         studentInfo.no_of_installments_expireTimeandAmount;
-      // const nextInstallmentExpireTimeData =
-      //   await PaymentInstallmentTimeExpireModel.find({
-      //     studentInfo: studentId,
-      //     expiration_date: installmentExpireDate,
-      //   });
+      const currentTime = new Date();
+      const installmentDueDate = new Date(installmentExpireDate);
 
-      // console.log(
-      //   "next installment fees",
-      //   installmentExpireDate,
-      //   nextInstallmentExpireTimeData
-      // );
-
-      //console.log("student info data ----------------> ", studentInfo);
-
-      // // get the old time and current time
-      let installmentPayTime = new Date(installmentExpireDate).getTime();
-      let currentTimePaymentInstallment = new Date().getTime();
-
-      if (installmentPayTime < currentTimePaymentInstallment) {
-        let numberOfInstallment = studentInfo.no_of_installments;
-        studentInfo.installmentPaymentSkipMonth += 1;
-        if (numberOfInstallment > 0) {
-          studentInfo.no_of_installments = numberOfInstallment - 1;
-          studentInfo.no_of_installments_amount =
-            studentInfo.remainingCourseFees / numberOfInstallment - 1;
-        }
-        await studentInfo.save();
-      } else {
-        let arrayOfCurrentTime = new Date(currentTimePaymentInstallment)
-          .toDateString()
-          .split(" ");
-        let arrayOfPrevTime = new Date(installmentPayTime)
-          .toDateString()
-          .split(" ");
-        let dayMonthDateYearCurrent =
-          arrayOfCurrentTime[0] +
-          arrayOfCurrentTime[1] +
-          arrayOfCurrentTime[2] +
-          arrayOfCurrentTime[3];
-        let dayMonthDateYearPrev =
-          arrayOfPrevTime[0] +
-          arrayOfPrevTime[1] +
-          arrayOfPrevTime[2] +
-          arrayOfPrevTime[3];
-        //console.log(dayMonthDateYearPrev);
-
+      // Check if the current time is past the due date
+      if (currentTime > installmentDueDate) {
+        // Send email reminders based on specific dates
+        const daysDifference = Math.floor(
+          (currentTime - installmentDueDate) / (1000 * 60 * 60 * 24)
+        );
         if (
-          arrayOfCurrentTime[0] +
-            arrayOfCurrentTime[1] +
-            1 +
-            arrayOfCurrentTime[3] ===
-          dayMonthDateYearPrev
+          daysDifference === 1 ||
+          daysDifference === 10 ||
+          daysDifference === 12 ||
+          daysDifference === 15
         ) {
-          // then send mail to student
+          // Send reminder email to the student
           sendEmail(
-            `${req.user.email}, ${studentInfo.email}`,
-            "Welcome to visual Media Technology",
-            "Regarding to Fees Installment due in Visual Media Technology"
+            studentInfo.email,
+            "Payment Reminder",
+            "Your payment installment is overdue."
           );
-        }
-
-        if (
-          arrayOfCurrentTime[0] +
-            arrayOfCurrentTime[1] +
-            10 +
-            arrayOfCurrentTime[3] ===
-          dayMonthDateYearPrev
-        ) {
-          // then send mail to student
-          sendEmail();
-        }
-        if (
-          arrayOfCurrentTime[0] +
-            arrayOfCurrentTime[1] +
-            12 +
-            arrayOfCurrentTime[3] ===
-          dayMonthDateYearPrev
-        ) {
-          // then send mail to student
-          sendEmail();
-        }
-        if (
-          arrayOfCurrentTime[0] +
-            arrayOfCurrentTime[1] +
-            15 +
-            arrayOfCurrentTime[3] ===
-          dayMonthDateYearPrev
-        ) {
-          // then send mail to student
-          sendEmail();
         }
       }
 
+      // Return student fees
       res.status(200).json(studentFees);
     } catch (error) {
-      res.status(500).json({ error: error });
+      res.status(500).json({ error: error.message });
     }
   }
 );
