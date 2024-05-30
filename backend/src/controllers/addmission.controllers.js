@@ -31,6 +31,7 @@ export const createAddMissionController = asyncHandler(
       //remainingCourseFees,
       //down_payment,
       date_of_joining,
+      addmissionDate,
       no_of_installments,
     } = req.body;
 
@@ -73,6 +74,12 @@ export const createAddMissionController = asyncHandler(
       case !date_of_birth:
         res.status(400);
         throw new Error("Please provide date of birth field!");
+        return;
+      case !addmissionDate:
+        res.status(400);
+        throw new Error(
+          "Please provide date of Addmission created at field value!"
+        );
         return;
       case !city:
         res.status(400);

@@ -134,6 +134,10 @@ const admissionFormSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    addmissionDate: {
+      type: Date,
+      required: true,
+    },
   },
   {
     timestamps: true,

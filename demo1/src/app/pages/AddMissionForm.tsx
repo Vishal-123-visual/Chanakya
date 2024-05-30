@@ -50,6 +50,7 @@ const addmissionFormSchema = Yup.object().shape({
   //remainingCourseFees: Yup.string().required('Remaining CourseFees is required!'),
 
   date_of_joining: Yup.string().required('Date of joining is required!'),
+  addmissionDate: Yup.string().required('Date of Student created is required !'),
   no_of_installments: Yup.string().required('Number of installments  is required!'),
   no_of_installments_amount: Yup.string(),
 })
@@ -167,7 +168,7 @@ const AddMissionForm: React.FC = () => {
         formData.append('image', image)
       }
 
-      console.log(selectedCourseNameData)
+      //console.log(selectedCourseNameData)
 
       if (updateUserId) {
         formData.append('id', updateUserId?._id)
@@ -465,6 +466,32 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
+                {/* ------------------------------ Start Student Created At ---------------------------- */}
+
+                <div className='col-6'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className='required'>Student Created At Date</span>
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <DatePicker
+                        selected={formik.values.addmissionDate}
+                        onChange={(date) => formik.setFieldValue('addmissionDate', date)}
+                        dateFormat='dd/MM/yyyy'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholderText='DD/MM/YYYY'
+                      />
+
+                      {formik.touched.addmissionDate && formik.errors.addmissionDate && (
+                        <div className='fv-plugins-message-container'>
+                          {/* <div className='fv-help-block'>{formik.errors.addmissionDate}</div> */}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                {/* ------------------------------ End Student Created At ---------------------------- */}
               </div>
               {/* ============================== DOB and Student Status ==================================== */}
 

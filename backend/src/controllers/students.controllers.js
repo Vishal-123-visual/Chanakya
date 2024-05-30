@@ -75,6 +75,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.present_address = present_address || student.present_address;
     //student.permanent_address = permanent_address || student.permanent_address;
     student.date_of_birth = date_of_birth || student.date_of_birth;
+    student.addmissionDate = req.body.addmissionDate || student.addmissionDate;
     student.city = city || student.city;
     student.email = email || student.email;
     student.student_status = student_status || student.student_status;
