@@ -276,8 +276,8 @@ const StudentMarksResult = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {location.state.data &&
-                      location.state.data.map((marksStudentData) => {
+                    {location?.state?.data &&
+                      location?.state?.data?.map((marksStudentData) => {
                         return (
                           <tr key={marksStudentData._id} style={{borderBottom: '1px solid black'}}>
                             <td style={{borderRight: '1px solid black'}} align='center'>

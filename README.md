@@ -14,6 +14,7 @@ window.print()
 }
 
 return (
+
 <body>
 <div className='main'>
 <table width='800px' cellPadding='0' cellSpacing='0' className='bground'>

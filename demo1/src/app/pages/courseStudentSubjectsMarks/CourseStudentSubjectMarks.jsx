@@ -99,7 +99,19 @@ const CourseStudentSubjectMarks = () => {
     return acc
   }, {})
 
-  //console.log(YearandSemesterSets[activeTab - 1], groupSubjectsBySemester)
+  // console.log(YearandSemesterSets[activeTab - 1], groupSubjectsBySemester)
+  // console.log(
+  //   YearandSemesterSets[activeTab - 1],
+  //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length
+  // )
+  //console.log(studentSubjectMarksData)
+
+  const checkStudentMarksFillHandler = () => {
+    if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
+      window.alert(YearandSemesterSets[activeTab - 1] + ' Please add marks for all the subjects')
+      return false
+    }
+  }
 
   return (
     <div className='card'>
@@ -302,27 +314,47 @@ const CourseStudentSubjectMarks = () => {
                 )}
                 <button
                   className='btn btn-info text-uppercase'
-                  onClick={() =>
-                    navigate('/student-result', {
-                      state: {
-                        courseType: YearandSemesterSets[activeTab - 1],
-                        data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
-                      },
-                    })
-                  }
-                >
-                  Result
-                </button>
-                <button
-                  className='btn btn-danger text-uppercase'
-                  onClick={() =>
+                  // disabled={
+                  //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0
+                  // }
+                  onClick={() => {
+                    if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
+                      window.alert(
+                        YearandSemesterSets[activeTab - 1] +
+                          ' Please add marks for all the subjects to Check Result'
+                      )
+                      return false
+                    }
                     navigate('/print-student-result', {
                       state: {
                         courseType: YearandSemesterSets[activeTab - 1],
                         data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
                       },
                     })
-                  }
+                  }}
+                >
+                  Result
+                </button>
+                <button
+                  className='btn btn-danger text-uppercase'
+                  // disabled={
+                  //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0
+                  // }
+                  onClick={() => {
+                    if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
+                      window.alert(
+                        YearandSemesterSets[activeTab - 1] +
+                          ' Please add marks for all the subjects to Print Result'
+                      )
+                      return false
+                    }
+                    navigate('/print-student-result', {
+                      state: {
+                        courseType: YearandSemesterSets[activeTab - 1],
+                        data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                      },
+                    })
+                  }}
                 >
                   Print Result
                 </button>
