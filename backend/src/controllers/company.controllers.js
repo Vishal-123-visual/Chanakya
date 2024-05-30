@@ -5,6 +5,7 @@ import path from "path";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
 import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
+import studentSubjectMarksModel from "../models/subject/student.subject.marks.models.js";
 
 const __dirname = path.resolve();
 
@@ -169,6 +170,18 @@ export const deleteCompanyController = asyncHandler(async (req, res, next) => {
         async (studentFeeRecord) => await studentFeeRecord?.deleteOne()
       );
 
+      // delete student subject marks data
+      const studentMarksSubjects = await studentSubjectMarksModel.find({
+        companyName: company._id,
+      });
+
+      // console.log(
+      //   "Student Marks data from student delete ",
+      //   studentMarksSubjects
+      // );
+      studentMarksSubjects?.map(
+        async (studentMarksSubject) => await studentMarksSubject?.deleteOne()
+      );
       await companyStudent?.deleteOne();
     });
 

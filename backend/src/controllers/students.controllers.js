@@ -173,7 +173,10 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
       studentInfo: req.params.id,
     });
 
-    console.log(studentMarksSubjects);
+    // console.log(
+    //   "Student Marks data from student delete ",
+    //   studentMarksSubjects
+    // );
     studentMarksSubjects?.map(
       async (studentMarksSubject) => await studentMarksSubject?.deleteOne()
     );
