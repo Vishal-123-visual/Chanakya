@@ -325,7 +325,7 @@ const CourseStudentSubjectMarks = () => {
                       )
                       return false
                     }
-                    navigate('/print-student-result', {
+                    navigate('/student-result', {
                       state: {
                         courseType: YearandSemesterSets[activeTab - 1],
                         data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
