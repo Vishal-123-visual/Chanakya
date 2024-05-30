@@ -53,9 +53,9 @@ const AddCourse: React.FC<Props> = ({className}) => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {ctx.getCourseLists.data.length > 0 ? (
-                ctx.getCourseLists.data.map((courseData: any, courseIndex: any) => (
-                  <tr key={courseData._id}>
+              {ctx.getCourseLists?.data?.length > 0 ? (
+                ctx.getCourseLists?.data?.map((courseData: any, courseIndex: any) => (
+                  <tr key={courseData?._id}>
                     <td>
                       <div className='d-flex align-items-center'>
                         <div className='symbol symbol-50px me-5'></div>
@@ -71,7 +71,7 @@ const AddCourse: React.FC<Props> = ({className}) => {
                         href='#'
                         className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
                       >
-                        {courseData.courseName}
+                        {courseData?.courseName}
                       </a>
                     </td>
                     <td>
@@ -87,7 +87,7 @@ const AddCourse: React.FC<Props> = ({className}) => {
                         href='#'
                         className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
                       >
-                        {courseData.courseType.courseType}
+                        {courseData?.courseType?.courseType}
                       </a>
                     </td>
                     <td>
@@ -95,7 +95,7 @@ const AddCourse: React.FC<Props> = ({className}) => {
                         href='#'
                         className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
                       >
-                        {courseData.numberOfYears.numberOfYears}
+                        {courseData?.numberOfYears?.numberOfYears}
                       </a>
                     </td>
                     <td>
@@ -108,7 +108,7 @@ const AddCourse: React.FC<Props> = ({className}) => {
                         href='#'
                         className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
                       >
-                        {courseData.createdBy}
+                        {courseData?.createdBy}
                       </a>
                     </td>
                     <td>
@@ -116,7 +116,7 @@ const AddCourse: React.FC<Props> = ({className}) => {
                         href='#'
                         className='text-dark fw-bold text-hover-primary d-block mb-1 fs-6'
                       >
-                        {moment(courseData.createdAt).format('DD/MM/YYYY')}
+                        {moment(courseData?.createdAt).format('DD/MM/YYYY')}
                       </a>
                     </td>
                     <td className='text-center'>

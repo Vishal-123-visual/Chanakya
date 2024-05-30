@@ -69,16 +69,16 @@ const ViewCourse = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {courseCtx.getCourseLists.data.map((course, index) => (
+              {courseCtx?.getCourseLists?.data.map((course, index) => (
                 <tr key={course._id}>
                   <td></td>
                   <td>{index + 1}</td>
-                  <td>{course.courseName}</td>
-                  <td>{course.courseFees}</td>
-                  <td>{course.courseType.courseType}</td>
-                  <td>{course.numberOfYears.numberOfYears}</td>
-                  <td>{course.category.category}</td>
-                  <td>{course.createdBy}</td>
+                  <td>{course?.courseName}</td>
+                  <td>{course?.courseFees}</td>
+                  <td>{course?.courseType?.courseType}</td>
+                  <td>{course?.numberOfYears?.numberOfYears}</td>
+                  <td>{course?.category?.category}</td>
+                  <td>{course?.createdBy}</td>
                   <td>{moment(course.createdAt).format('DD/MM/YYYY')}</td>
                   <td>
                     <div className='d-flex justify-content-end flex-shrink-0'>
@@ -89,7 +89,7 @@ const ViewCourse = () => {
                         <KTIcon iconName='pencil' className='fs-3' />
                       </button>
                       <button
-                        onClick={() => courseCtx.deleteCourseMutation.mutate(course._id)}
+                        onClick={() => courseCtx.deleteCourseMutation.mutate(course?._id)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <KTIcon iconName='trash' className='fs-3' />
