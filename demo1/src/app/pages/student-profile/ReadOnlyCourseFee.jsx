@@ -19,9 +19,12 @@ const ReadOnlyCourseFee = ({
   //onsole.log(StudentFee.paymentOption)
 
   const sendDataWhatsappAsMessage = () => {
-    let url = `https://web.whatsapp.com/send?phone=+919315207665`
+    let url = `https://web.whatsapp.com/send?phone=+91${studentInfoData.phone_number}`
     // // Appending the message to the URL by encoding it
-    url += `&text=Hello, ${studentInfoData.name} your fess has been submitted successfully ${StudentFee.amountPaid} Rs? &app_absent=0`
+    // url += `&text=Hello, ${studentInfoData.name} your fess has been submitted successfully ${StudentFee.amountPaid} Rs? &app_absent=0`
+    url += `&text=Dear ${studentInfoData.name}, We have successfully received Rs.${StudentFee.amountPaid}/- as your monthly installment.
+Thanks,
+Visual Media Academy`
     window.open(url)
   }
 

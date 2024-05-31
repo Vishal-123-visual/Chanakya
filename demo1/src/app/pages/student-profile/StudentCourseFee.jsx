@@ -64,7 +64,14 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     let url = `https://web.whatsapp.com/send?phone=+91${studentInfoData.phone_number}`
 
     // // Appending the message to the URL by encoding it
-    url += `&text=Hello, ${studentInfoData.name} your fess has been submitted successfully ${payStudentFeesAdd.amountPaid} Rs? &app_absent=0`
+    // url += `&text=Hello, ${studentInfoData.name} your fess has been submitted successfully ${payStudentFeesAdd.amountPaid} Rs? &app_absent=0`
+
+    url += `&text=Dear ${encodeURIComponent(
+      studentInfoData.name
+    )}, We have successfully received Rs.${encodeURIComponent(
+      payStudentFeesAdd.amountPaid
+    )}/- as your monthly installment.\nThanks,\nAVisual Media Academy`
+
     try {
       studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
         ...payStudentFeesAdd,
