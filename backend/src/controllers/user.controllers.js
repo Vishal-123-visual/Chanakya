@@ -265,21 +265,31 @@ export const editUserController = asyncHandler(async (req, res, next) => {
       return res.status(404).json({ error: "User not found." });
     }
 
-    if (user.role === "SuperAdmin") {
-      return res.status(400).json({ error: "Cannot update SuperAdmin user." });
-    }
+    // Check if the user performing the update is either SuperAdmin or the same user
+    if (
+      req.user.role === "SuperAdmin" ||
+      (req.user._id.toString() === req.params.id && req.user.role === "Admin")
+    ) {
+      // SuperAdmin can update anyone, Admin can update non-SuperAdmin users
+      if (user.role === "SuperAdmin" && req.user.role !== "SuperAdmin") {
+        return res
+          .status(400)
+          .json({ error: "Cannot update SuperAdmin user." });
+      }
 
-    if (user._id.toString() === req.user._id.toString()) {
-      let hashPassword = await bcryptjs.hash(password, 10);
+      let hashPassword = password
+        ? await bcryptjs.hash(password, 10)
+        : user.password;
       user.fName = fName || user.fName;
       user.lName = lName || user.lName;
       user.email = email || user.email;
       user.role = role || user.role;
       user.phone = phone || user.phone;
-      user.password = hashPassword || user.password;
-      const token = generateToken(res, user._id);
+      user.password = hashPassword;
 
+      const token = generateToken(res, user._id);
       let updateUser = await user.save();
+
       return res.status(200).json({
         _id: updateUser._id,
         first_name: updateUser.fName,
@@ -290,39 +300,13 @@ export const editUserController = asyncHandler(async (req, res, next) => {
         email_verified_at: updateUser.createdAt,
         updated_at: updateUser.updatedAt,
       });
+    } else {
+      return res
+        .status(403)
+        .json({
+          error: "Forbidden: You don't have permission to perform this action.",
+        });
     }
-
-    // Uncomment the input validation block for better validation
-    /*
-        switch (true) {
-            case !fName:
-                return res.status(400).json({ error: "First Name is required." });
-            // Add similar cases for other required fields
-        }
-        */
-
-    let hashPassword = await bcryptjs.hash(password, 10);
-    user.fName = fName || user.fName;
-    user.lName = lName || user.lName;
-    user.email = email || user.email;
-    user.role = role || user.role;
-    user.phone = phone || user.phone;
-    user.password = hashPassword || user.password;
-    const token = generateToken(res, user._id);
-
-    let updateUser = await user.save();
-    res.status(200).json({
-      _id: updateUser._id,
-      first_name: updateUser.fName,
-      role: updateUser.role,
-      email: updateUser.email,
-      api_token: token,
-      last_name: updateUser.lName,
-      email_verified_at: updateUser.createdAt,
-      updated_at: updateUser.updatedAt,
-    });
-    // let updateUser = await user.save();
-    // res.status(200).json({ success: "User updated successfully." });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

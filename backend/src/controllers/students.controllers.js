@@ -30,7 +30,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       return; // Added return to exit the function if student is not found
     }
 
-    console.log("update student", req.body);
+    //console.log("update student", req.body);
 
     const file = req?.file?.filename;
     const {
