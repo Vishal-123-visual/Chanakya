@@ -55,7 +55,6 @@ export interface AddMissionFormInterface {
   no_of_installments_amount: string | number
   createdAt?: string | Date
   updatedAt?: string | Date
-  addmissionDate?: string | Date
   __v?: string | number
 }
 
@@ -128,7 +127,6 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   no_of_installments: '',
   no_of_installments_amount: '',
   createdAt: '',
-  addmissionDate: '',
   updatedAt: '',
   __v: 0,
 }

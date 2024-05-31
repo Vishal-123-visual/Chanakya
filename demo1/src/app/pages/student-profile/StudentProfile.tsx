@@ -544,33 +544,7 @@ const StudentProfile: React.FC = () => {
                   </div>
                 </div>
 
-                {/* ------------------------------ Start Student Created At ---------------------------- */}
-
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Student Created At Date</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <DatePicker
-                        selected={formik.values.addmissionDate}
-                        onChange={(date) => formik.setFieldValue('addmissionDate', date)}
-                        dateFormat='dd/MM/yyyy'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholderText='DD/MM/YYYY'
-                      />
-
-                      {formik.touched.addmissionDate && formik.errors.addmissionDate && (
-                        <div className='fv-plugins-message-container'>
-                          {/* <div className='fv-help-block'>{formik.errors.addmissionDate}</div> */}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {/* ------------------------------ End Student Created At ---------------------------- */}
-
+              
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label  fw-bold fs-6'>Student Status</label>

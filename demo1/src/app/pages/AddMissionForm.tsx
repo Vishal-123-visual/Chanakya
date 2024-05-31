@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 
 import * as Yup from 'yup'
@@ -14,7 +13,6 @@ import {useAdmissionContext} from '../modules/auth/core/Addmission'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {toAbsoluteUrl} from '../../_metronic/helpers'
 import {useCourseContext} from './course/CourseContext'
-import {useStudentCourseFeesContext} from './courseFees/StudentCourseFeesContext'
 import {useCompanyContext} from './compay/CompanyContext'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -50,7 +48,6 @@ const addmissionFormSchema = Yup.object().shape({
   //remainingCourseFees: Yup.string().required('Remaining CourseFees is required!'),
 
   date_of_joining: Yup.string().required('Date of joining is required!'),
-  addmissionDate: Yup.string().required('Date of Student created is required !'),
   no_of_installments: Yup.string().required('Number of installments  is required!'),
   no_of_installments_amount: Yup.string(),
 })
@@ -466,32 +463,6 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                {/* ------------------------------ Start Student Created At ---------------------------- */}
-
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Student Created At Date</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <DatePicker
-                        selected={formik.values.addmissionDate}
-                        onChange={(date) => formik.setFieldValue('addmissionDate', date)}
-                        dateFormat='dd/MM/yyyy'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholderText='DD/MM/YYYY'
-                      />
-
-                      {formik.touched.addmissionDate && formik.errors.addmissionDate && (
-                        <div className='fv-plugins-message-container'>
-                          {/* <div className='fv-help-block'>{formik.errors.addmissionDate}</div> */}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                {/* ------------------------------ End Student Created At ---------------------------- */}
               </div>
               {/* ============================== DOB and Student Status ==================================== */}
 
