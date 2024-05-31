@@ -38,9 +38,9 @@ export interface AddMissionFormInterface {
   select_course: string
 
   // commision
-  name_of_person_for_commision: string
-  commision_paid: string
-  commision_date: string
+  name_of_person_for_commision?: string
+  commision_paid?: string
+  commision_date?: string | Date
   commision_voucher_number?: string
   // for office use only
   course_fees: string | number
@@ -79,9 +79,9 @@ export interface updateMissionFormInterface {
   // document_attached: string
   select_software: string
   // commision
-  name_of_person_for_commision: string
-  commision_paid: string
-  commision_date: string
+  name_of_person_for_commision?: string
+  commision_paid?: string
+  commision_date?: string | Date
   commision_voucher_number?: string
   // for office use only
   course_fees: string | number

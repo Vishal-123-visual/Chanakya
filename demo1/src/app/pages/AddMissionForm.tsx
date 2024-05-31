@@ -104,7 +104,7 @@ const AddMissionForm: React.FC = () => {
       : selectedCourseNameData?.courseFees
     const discount = Number(e.target.value)
     //console.log(amount)
-    const discountAmount = formik.values.student_status === 'GST' && Number(amount) - discount
+    const discountAmount = Number(amount) - discount
     //console.log(discountAmount)
     formik.setFieldValue('netCourseFees', discountAmount)
   }
@@ -597,7 +597,7 @@ const AddMissionForm: React.FC = () => {
                         className='form-select form-select-solid form-select-lg'
                         onChange={(e) => {
                           formik.getFieldProps('student_status').onChange(e)
-                          studentStatusHandler(e)
+                          // studentStatusHandler(e)
                         }}
                         value={formik.values.student_status}
                         id='student_status'
@@ -697,9 +697,9 @@ const AddMissionForm: React.FC = () => {
                         className='form-control form-control-lg form-control-solid'
                         placeholderText='DD/MM/YYYY'
                       />
-                      {formik.touched.commision_date && formik.errors.commision_date && (
+                      {formik.touched.commision_date && !formik.values.commision_date && (
                         <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.commision_date}</div>
+                          {/* <div className='fv-help-block'>{formik.errors.commision_date}</div> */}
                         </div>
                       )}
                     </div>
@@ -772,36 +772,34 @@ const AddMissionForm: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                  {formik.values.student_status === 'GST' && (
-                    <div className='col-6'>
-                      <div className='row mb-6'>
-                        <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                          <span className='required'>Course Fees Discount</span>
-                        </label>
+                  <div className='col-6'>
+                    <div className='row mb-6'>
+                      <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                        <span className='required'>Course Fees Discount</span>
+                      </label>
 
-                        <div className='col-lg-8 fv-row'>
-                          <input
-                            type='number'
-                            min={0}
-                            className='form-control form-control-lg form-control-solid'
-                            placeholder='Course Fees'
-                            name='discount' // Add name attribute
-                            onChange={(e) => {
-                              formik.getFieldProps('discount').onChange(e)
-                              handleCourseFeesDiscount(e)
-                            }}
-                            value={formik.values.discount}
-                          />
+                      <div className='col-lg-8 fv-row'>
+                        <input
+                          type='number'
+                          min={0}
+                          className='form-control form-control-lg form-control-solid'
+                          placeholder='Course Fees'
+                          name='discount' // Add name attribute
+                          onChange={(e) => {
+                            formik.getFieldProps('discount').onChange(e)
+                            handleCourseFeesDiscount(e)
+                          }}
+                          value={formik.values.discount}
+                        />
 
-                          {formik.touched.discount && formik.errors.discount && (
-                            <div className='fv-plugins-message-container'>
-                              <div className='fv-help-block'>{formik.errors.discount}</div>
-                            </div>
-                          )}
-                        </div>
+                        {formik.touched.discount && formik.errors.discount && (
+                          <div className='fv-plugins-message-container'>
+                            <div className='fv-help-block'>{formik.errors.discount}</div>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
 
                 <div className='row'>
@@ -913,7 +911,8 @@ const AddMissionForm: React.FC = () => {
 
             <div className='card-footer d-flex justify-content-end py-6 px-9'>
               <button type='submit' className='btn btn-primary' disabled={loading}>
-                {!context.createStudentMutation.isLoading && (updateUserId ? 'Edit' : 'Submit')}
+                {!context.createStudentMutation.isLoading &&
+                  (updateUserId ? 'Save Changes' : 'Submit')}
                 {context.createStudentMutation.loading && (
                   <span className='indicator-progress' style={{display: 'block'}}>
                     Please wait...{' '}
