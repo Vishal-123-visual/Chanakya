@@ -66,6 +66,13 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber = student.companyName.reciptNumber;
       }
 
+      const gstAmount =
+        student.student_status === "GST"
+          ? (Number(student.down_payment) * Number(student.companyName.gst)) /
+            100
+          : 0;
+      //console.log("gst amount: " + gstAmount);
+
       if (
         Number(req.body.remainingFees) === 0 &&
         student.installmentPaymentSkipMonth === 0
@@ -96,10 +103,11 @@ export const createCourseFeesController = asyncHandler(
         let companyLogoURL =
           BACKEND_URL + "/api/images/" + student.companyName.logo;
         // Send email asynchronously
+
         if (emailSuggestionsStatus[0].emailSuggestionStatus) {
           sendEmail(
-            `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail},thakurarvindkr10@gmail.com`,
-            "Regarding to Submitted Fees in Visual Media Technology",
+            `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}`,
+            ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
             `Hello ${student.name} you have submitted fees `,
             `<!DOCTYPE html>
         <html>
@@ -239,12 +247,12 @@ export const createCourseFeesController = asyncHandler(
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px">
                   <tr>
                     <td align="center" valign="top" style="padding: 36px 24px">
-                      <a href="https://sendgrid.com" target="_blank" style="display: inline-block">
+                      <a href="http://www.visualmedia.co.in/" target="_blank" style="display: inline-block">
                         <img src=${companyLogoURL} alt="Logo" border="0" width="200px" style="
                                       display: block;
-                                      width: 48px;
-                                      max-width: 48px;
-                                      min-width: 48px;
+                                      width: 350px;
+                                      max-width: 350px;
+                                      min-width: 300px;
                                     " />
                       </a>
                     </td>
@@ -274,15 +282,17 @@ export const createCourseFeesController = asyncHandler(
                                   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
                                   border-top: 3px solid #d4dadf;
                                 ">
-                      <h1 style="
+                      <h6 style="
                                     margin: 0;
                                     font-size: 32px;
                                     font-weight: 700;
                                     letter-spacing: -1px;
                                     line-height: 48px;
                                   ">
-                        Thank you for your Fees Submit ${student.name}!
-                      </h1>
+                                  Thank You, Your Fees Submitted Successfully ${
+                                    student.name
+                                  }!
+                      </h6>
                     </td>
                   </tr>
                 </table>
@@ -317,11 +327,11 @@ export const createCourseFeesController = asyncHandler(
                                         sans-serif;
                                       font-size: 16px;
                                     ">
-                      <p><strong>Student Name</strong></p>
-                      <p><strong>Father Name</strong></p>
-                      <p><strong>Roll Number</strong></p>
-                      <p><strong>Course Name</strong></p>
-                      <p><strong>Payment Method</strong></p>
+                      <span style="display:block; width:max-content;"><strong>Student Name</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Father Name</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Roll Number</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Course Name</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Payment Method</strong></span>
                       
     
                     </td>
@@ -343,20 +353,22 @@ export const createCourseFeesController = asyncHandler(
                                       font-size: 16px;
                                       
                                     ">
-                      <p>${student.name}</p>
-                      <p>
+                      <span style="display:block;width:max-content;">${
+                        student.name
+                      }</span>
+                      <span style="display:block;width:max-content;">
                         ${student.father_name}
-                      </p>
+                      </span>
                       
-                        <p>
+                        <span style="display:block;width:max-content;">
                         ${student.rollNumber}
-                      </p>
-                      <p>
-                      ${student.courseName.courseName} 
-                      </p>
-                      <p>
+                      </span>
+                      <span style="display:block;width:max-content;">
+                      ${student.courseName.courseName?.substring(0, 30)}... 
+                      </span>
+                      <span style="display:block;width:max-content;">
                       ${findPaymentOptionName.name}
-                      </p>
+                      </span>
                       
                     </td>
                   
@@ -381,20 +393,7 @@ export const createCourseFeesController = asyncHandler(
                         <![endif]-->
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px">
                   <!-- start copy -->
-                  <tr>
-                    <td align="left" bgcolor="#ffffff" style="
-                                  padding: 24px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                      <p style="margin: 0">
-                        Here is a summary of your recent recipt. If you have any
-                        questions or concerns about your order, please
-                        <a href="https://sendgrid.com">contact us</a>.
-                      </p>
-                    </td>
-                  </tr>
+                
                   <!-- end copy -->
     
                   <!-- start receipt table -->
@@ -470,60 +469,65 @@ export const createCourseFeesController = asyncHandler(
                             ${lateFees} Rs
                           </td>
                         </tr>
-                        <tr>
-                          <td align="left" width="75%" style="
+                        ${
+                          student?.student_status !== "NOGST"
+                            ? `<tr>
+                              <td
+                                align="left"
+                                width="75%"
+                                style="
+                        padding: 6px 12px;
+                        font-family: 'Source Sans Pro', Helvetica, Arial,
+                          sans-serif;
+                        font-size: 16px;
+                        line-height: 24px;
+                      "
+                              >
+                                GST (${student.companyName.gst} %)
+                              </td>
+  
+                              <td
+                                align="left"
+                                width="25%"
+                                style="
                                   padding: 6px 12px;
                                   font-family: 'Source Sans Pro', Helvetica, Arial,
                                     sans-serif;
                                   font-size: 16px;
                                   line-height: 24px;
-                                ">
-                            GST (${student.companyName.gst} %)
-                          </td>
-                          <td align="left" width="25%" style="
-                                  padding: 6px 12px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial,
-                                    sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                                ${(
-                                  ((Number(lateFees) +
-                                    Number(student.down_payment)) *
-                                    Number(student.companyName.gst)) /
-                                  100
-                                ).toFixed(2)} Rs.
-                          </td>
-                        </tr>
+                                "
+                              >
+                                ${(Number(lateFees) + gstAmount).toFixed(2)}
+                                Rs.
+                              </td>
+                            </tr>`
+                            : ""
+                        }
+                        
                       
                         <tr style='border:2px dotted black;'>
-                          <td align="left" width="75%" style="
-                                  padding: 6px 12px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial,
-                                    sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                            Total Amount
-                          </td>
-                          <td align="left" width="25%" style="
-                                  padding: 6px 12px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial,
-                                    sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                            ${(
-                              Number(lateFees) +
-                              Number(student.down_payment) +
-                              ((Number(lateFees) +
-                                Number(student.down_payment)) *
-                                Number(student.companyName.gst)) /
-                                100
-                            ).toFixed(2)} Rs
-                          </td>
-                        </tr>
-    
+    <td align="left" width="75%" style="
+            padding: 6px 12px;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        ">
+        Total Amount
+    </td>
+    <td align="left" width="25%" style="
+            padding: 6px 12px;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        ">
+        ${(
+          Number(lateFees) +
+          Number(student.down_payment) +
+          (Number(lateFees) + gstAmount)
+        ).toFixed(2)} Rs
+    </td>
+  </tr>
+  
                         <!-- end reeipt table -->
                       </table>
                       <!--[if (gte mso 9)|(IE)]>
@@ -741,14 +745,15 @@ export const createCourseFeesController = asyncHandler(
       const findPaymentOptionName = await PaymentOptionsModel.findById(
         paymentOption
       );
+      console.log("student data from create course fees ", student);
       // console.log(findPaymentOptionName);
       // Send email asynchronously
       let companyLogoURL =
         BACKEND_URL + "/api/images/" + student.companyName.logo;
       if (emailSuggestionsStatus[0].emailSuggestionStatus) {
         sendEmail(
-          `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail},thakurarvindkr10@gmail.com`,
-          "Regarding to Submitted Fees in Visual Media Technology",
+          `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}`,
+          ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
           `Hello ${student.name} you have submitted fees `,
           `<!DOCTYPE html>
         <html>
@@ -888,12 +893,12 @@ export const createCourseFeesController = asyncHandler(
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px">
                   <tr>
                     <td align="center" valign="top" style="padding: 36px 24px">
-                      <a href="https://sendgrid.com" target="_blank" style="display: inline-block">
+                      <a href="http://www.visualmedia.co.in/" target="_blank" style="display: inline-block">
                         <img src=${companyLogoURL} alt="Logo" border="0" width="200px" style="
                                       display: block;
-                                      width: 48px;
-                                      max-width: 48px;
-                                      min-width: 48px;
+                                      width: 350px;
+                                      max-width: 350px;
+                                      min-width: 300px;
                                     " />
                       </a>
                     </td>
@@ -923,15 +928,17 @@ export const createCourseFeesController = asyncHandler(
                                   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
                                   border-top: 3px solid #d4dadf;
                                 ">
-                      <h1 style="
+                      <h6 style="
                                     margin: 0;
                                     font-size: 32px;
                                     font-weight: 700;
                                     letter-spacing: -1px;
                                     line-height: 48px;
                                   ">
-                        Thank you for your Fees Submit ${student.name}!
-                      </h1>
+                                  Thank You, Your Fees Submitted Successfully ${
+                                    student.name
+                                  }!
+                      </h6>
                     </td>
                   </tr>
                 </table>
@@ -966,11 +973,11 @@ export const createCourseFeesController = asyncHandler(
                                         sans-serif;
                                       font-size: 16px;
                                     ">
-                      <p><strong>Student Name</strong></p>
-                      <p><strong>Father Name</strong></p>
-                      <p><strong>Roll Number</strong></p>
-                      <p><strong>Course Name</strong></p>
-                      <p><strong>Payment Method</strong></p>
+                      <span style="display:block; width:max-content;"><strong>Student Name</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Father Name</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Roll Number</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Course Name</strong></span>
+                      <span style="display:block; width:max-content;"><strong>Payment Method</strong></span>
                       
     
                     </td>
@@ -992,20 +999,22 @@ export const createCourseFeesController = asyncHandler(
                                       font-size: 16px;
                                       
                                     ">
-                      <p>${student.name}</p>
-                      <p>
+                      <span style="display:block;width:max-content;">${
+                        student.name
+                      }</span>
+                      <span style="display:block;width:max-content;">
                         ${student.father_name}
-                      </p>
+                      </span>
                       
-                        <p>
+                        <span style="display:block;width:max-content;">
                         ${student.rollNumber}
-                      </p>
-                      <p>
-                      ${student.courseName.courseName} 
-                      </p>
-                      <p>
+                      </span>
+                      <span style="display:block;width:max-content;">
+                      ${student.courseName.courseName?.substring(0, 30)}... 
+                      </span>
+                      <span style="display:block;width:max-content;">
                       ${findPaymentOptionName.name}
-                      </p>
+                      </span>
                       
                     </td>
                   
@@ -1030,20 +1039,7 @@ export const createCourseFeesController = asyncHandler(
                         <![endif]-->
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 600px">
                   <!-- start copy -->
-                  <tr>
-                    <td align="left" bgcolor="#ffffff" style="
-                                  padding: 24px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                      <p style="margin: 0">
-                        Here is a summary of your recent recipt. If you have any
-                        questions or concerns about your order, please
-                        <a href="https://sendgrid.com">contact us</a>.
-                      </p>
-                    </td>
-                  </tr>
+                
                   <!-- end copy -->
     
                   <!-- start receipt table -->
@@ -1119,60 +1115,65 @@ export const createCourseFeesController = asyncHandler(
                             ${lateFees} Rs
                           </td>
                         </tr>
-                        <tr>
-                          <td align="left" width="75%" style="
+                        ${
+                          student?.student_status !== "NOGST"
+                            ? `<tr>
+                              <td
+                                align="left"
+                                width="75%"
+                                style="
+                        padding: 6px 12px;
+                        font-family: 'Source Sans Pro', Helvetica, Arial,
+                          sans-serif;
+                        font-size: 16px;
+                        line-height: 24px;
+                      "
+                              >
+                                GST (${student.companyName.gst} %)
+                              </td>
+  
+                              <td
+                                align="left"
+                                width="25%"
+                                style="
                                   padding: 6px 12px;
                                   font-family: 'Source Sans Pro', Helvetica, Arial,
                                     sans-serif;
                                   font-size: 16px;
                                   line-height: 24px;
-                                ">
-                            GST (${student.companyName.gst} %)
-                          </td>
-                          <td align="left" width="25%" style="
-                                  padding: 6px 12px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial,
-                                    sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                                ${(
-                                  ((Number(lateFees) +
-                                    Number(student.down_payment)) *
-                                    Number(student.companyName.gst)) /
-                                  100
-                                ).toFixed(2)} Rs.
-                          </td>
-                        </tr>
+                                "
+                              >
+                                ${(Number(lateFees) + gstAmount).toFixed(2)}
+                                Rs.
+                              </td>
+                            </tr>`
+                            : ""
+                        }
+                        
                       
                         <tr style='border:2px dotted black;'>
-                          <td align="left" width="75%" style="
-                                  padding: 6px 12px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial,
-                                    sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                            Total Amount
-                          </td>
-                          <td align="left" width="25%" style="
-                                  padding: 6px 12px;
-                                  font-family: 'Source Sans Pro', Helvetica, Arial,
-                                    sans-serif;
-                                  font-size: 16px;
-                                  line-height: 24px;
-                                ">
-                            ${(
-                              Number(lateFees) +
-                              Number(student.down_payment) +
-                              ((Number(lateFees) +
-                                Number(student.down_payment)) *
-                                Number(student.companyName.gst)) /
-                                100
-                            ).toFixed(2)} Rs
-                          </td>
-                        </tr>
-    
+    <td align="left" width="75%" style="
+            padding: 6px 12px;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        ">
+        Total Amount
+    </td>
+    <td align="left" width="25%" style="
+            padding: 6px 12px;
+            font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            line-height: 24px;
+        ">
+        ${(
+          Number(lateFees) +
+          Number(student.down_payment) +
+          (Number(lateFees) + gstAmount)
+        ).toFixed(2)} Rs
+    </td>
+  </tr>
+  
                         <!-- end reeipt table -->
                       </table>
                       <!--[if (gte mso 9)|(IE)]>
