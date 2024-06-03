@@ -364,7 +364,7 @@ export const createCourseFeesController = asyncHandler(
                           ${student.rollNumber}
                         </span>
                         <span style="display:block;width:max-content;">
-                        ${student.courseName.courseName?.substring(0, 30)}... 
+                        ${student.courseName.courseName?.substring(0, 33)}...
                         </span>
                         <span style="display:block;width:max-content;">
                         ${findPaymentOptionName.name}
@@ -1010,7 +1010,7 @@ export const createCourseFeesController = asyncHandler(
                         ${student.rollNumber}
                       </span>
                       <span style="display:block;width:max-content;">
-                      ${student.courseName.courseName?.substring(0, 30)}... 
+                      ${student.courseName.courseName?.substring(0, 33)}... 
                       </span>
                       <span style="display:block;width:max-content;">
                       ${findPaymentOptionName.name}
