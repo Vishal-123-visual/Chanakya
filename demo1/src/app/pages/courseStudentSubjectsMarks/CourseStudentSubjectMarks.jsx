@@ -154,7 +154,7 @@ const CourseStudentSubjectMarks = () => {
             <>
               <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
                 <thead>
-                  <tr className='fw-bold text-muted'>
+                  <tr className='fw-bold '>
                     <th className='w-25px'>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                     </th>
@@ -186,9 +186,7 @@ const CourseStudentSubjectMarks = () => {
                             <div className='d-flex align-items-center'>
                               <div className='symbol symbol-45px me-5'></div>
                               <div className='d-flex justify-content-start flex-column'>
-                                <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                                  {indexValue + 1}
-                                </span>
+                                <span className=' fw-semibold  d-block fs-7'>{indexValue + 1}</span>
                               </div>
                             </div>
                           </td>
@@ -200,7 +198,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                <span className=' me-2 fs-7 fw-semibold'>
                                   {yearWiseSubject.subjectCode}
                                 </span>
                               </div>
@@ -209,7 +207,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                <span className=' me-2 fs-7 fw-semibold'>
                                   {yearWiseSubject.fullMarks}
                                 </span>
                               </div>
@@ -218,7 +216,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                <span className=' me-2 fs-7 fw-semibold'>
                                   {yearWiseSubject.passMarks}
                                 </span>
                               </div>
@@ -227,7 +225,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                <span className=' me-2 fs-7 fw-semibold'>
                                   <input
                                     type='text'
                                     name='theory'
@@ -249,7 +247,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                <span className=' me-2 fs-7 fw-semibold'>
                                   <input
                                     type='text'
                                     name='practical'
@@ -271,7 +269,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className='text-muted me-2 fs-7 fw-semibold'>
+                                <span className=' me-2 fs-7 fw-semibold'>
                                   <input
                                     type='number'
                                     name='totalMarks'

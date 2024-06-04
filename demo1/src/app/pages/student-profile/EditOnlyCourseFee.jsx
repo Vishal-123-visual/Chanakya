@@ -130,9 +130,9 @@ const EditOnlyCourseFee = ({
         <div className='d-flex justify-content-end flex-shrink-0'>
           <button
             type='submit'
-            className='btn btn-success btn btn-success btn-active-color-primary btn-sm me-1 px-5'
+            className='btn btn-success btn btn-success btn-active-color-primary text-white btn-sm me-1 px-5'
           >
-            Edit
+            Save
           </button>
           <button
             type='button'
