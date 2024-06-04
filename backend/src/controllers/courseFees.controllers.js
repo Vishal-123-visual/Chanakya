@@ -282,17 +282,18 @@ export const createCourseFeesController = asyncHandler(
                                     font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
                                     border-top: 3px solid #d4dadf;
                                   ">
-                        <h6 style="
-                                      margin: 0;
-                                      font-size: 32px;
-                                      font-weight: 700;
-                                      letter-spacing: -1px;
-                                      line-height: 48px;
-                                    ">
-                                    Thank You, Your Fees Submitted Successfully ${
-                                      student.name
-                                    }!
-                        </h6>
+                                  <h6 style="
+                                  margin: 0;
+                                  font-size: 27px;
+                                  font-weight: 700;
+                                  letter-spacing: -1px;
+                                  line-height: 30px;
+                                  text-align: center;
+                                ">
+                                Thank You, Your Fees Submitted Successfully ${
+                                  student.name
+                                }!
+                    </h6>
                       </td>
                     </tr>
                   </table>
@@ -325,7 +326,7 @@ export const createCourseFeesController = asyncHandler(
                                         padding-left: 36px;
                                         font-family: 'Source Sans Pro', Helvetica, Arial,
                                           sans-serif;
-                                        font-size: 16px;
+                                        font-size: 12px;
                                       ">
                         <span style="display:block; width:max-content;"><strong>Student Name</strong></span>
                         <span style="display:block; width:max-content;"><strong>Father Name</strong></span>
@@ -350,7 +351,7 @@ export const createCourseFeesController = asyncHandler(
                       <td valign="top" style="
                                         font-family: 'Source Sans Pro', Helvetica, Arial,
                                           sans-serif;
-                                        font-size: 16px;
+                                        font-size: 12px;
                                         
                                       ">
                         <span style="display:block;width:max-content;">${
@@ -364,7 +365,7 @@ export const createCourseFeesController = asyncHandler(
                           ${student.rollNumber}
                         </span>
                         <span style="display:block;width:max-content;">
-                        ${student.courseName.courseName?.substring(0, 33)}... 
+                        ${student.courseName.courseName}
                         </span>
                         <span style="display:block;width:max-content;">
                         ${findPaymentOptionName.name}
@@ -401,7 +402,7 @@ export const createCourseFeesController = asyncHandler(
                       <td align="left" bgcolor="#ffffff" style="
                                     padding: 24px;
                                     font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                    font-size: 16px;
+                                    font-size: 14px;
                                     line-height: 24px;
                                   ">
                         <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -419,7 +420,7 @@ export const createCourseFeesController = asyncHandler(
                                           padding: 12px;
                                           font-family: 'Source Sans Pro', Helvetica, Arial,
                                             sans-serif;
-                                          font-size: 16px;
+                                          font-size: 14px;
                                           line-height: 24px;
                                         ">
                               <strong>${
@@ -432,7 +433,7 @@ export const createCourseFeesController = asyncHandler(
                                           padding: 6px 12px;
                                           font-family: 'Source Sans Pro', Helvetica, Arial,
                                             sans-serif;
-                                          font-size: 16px;
+                                          font-size: 12px;
                                           line-height: 24px;
                                         ">
                               Fees Paid
@@ -441,7 +442,7 @@ export const createCourseFeesController = asyncHandler(
                                           padding: 6px 12px;
                                           font-family: 'Source Sans Pro', Helvetica, Arial,
                                             sans-serif;
-                                          font-size: 16px;
+                                          font-size: 12px;
                                           line-height: 24px;
                                         ">
                               ${student.down_payment} Rs
@@ -456,7 +457,7 @@ export const createCourseFeesController = asyncHandler(
                                     padding: 6px 12px;
                                     font-family: 'Source Sans Pro', Helvetica, Arial,
                                       sans-serif;
-                                    font-size: 16px;
+                                    font-size: 12px;
                                     line-height: 24px;
                                   ">
                               Late Fees
@@ -465,7 +466,7 @@ export const createCourseFeesController = asyncHandler(
                                     padding: 6px 12px;
                                     font-family: 'Source Sans Pro', Helvetica, Arial,
                                       sans-serif;
-                                    font-size: 16px;
+                                    font-size: 12px;
                                     line-height: 24px;
                                   ">
                               ${lateFees} Rs
@@ -481,7 +482,7 @@ export const createCourseFeesController = asyncHandler(
                           padding: 6px 12px;
                           font-family: 'Source Sans Pro', Helvetica, Arial,
                             sans-serif;
-                          font-size: 16px;
+                          font-size: 12px;
                           line-height: 24px;
                         "
                                 >
@@ -495,7 +496,7 @@ export const createCourseFeesController = asyncHandler(
                                     padding: 6px 12px;
                                     font-family: 'Source Sans Pro', Helvetica, Arial,
                                       sans-serif;
-                                    font-size: 16px;
+                                    font-size: 12px;
                                     line-height: 24px;
                                   "
                                 >
@@ -511,7 +512,7 @@ export const createCourseFeesController = asyncHandler(
       <td align="left" width="75%" style="
               padding: 6px 12px;
               font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-              font-size: 16px;
+              font-size: 12px;
               line-height: 24px;
           ">
           Total Amount
@@ -519,7 +520,7 @@ export const createCourseFeesController = asyncHandler(
       <td align="left" width="25%" style="
               padding: 6px 12px;
               font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-              font-size: 16px;
+              font-size: 12px;
               line-height: 24px;
           ">
           ${(
@@ -918,17 +919,18 @@ export const createCourseFeesController = asyncHandler(
                                   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
                                   border-top: 3px solid #d4dadf;
                                 ">
-                      <h6 style="
-                                    margin: 0;
-                                    font-size: 32px;
-                                    font-weight: 700;
-                                    letter-spacing: -1px;
-                                    line-height: 48px;
-                                  ">
-                                  Thank You, Your Fees Submitted Successfully ${
-                                    student.name
-                                  }!
-                      </h6>
+                                <h6 style="
+                                margin: 0;
+                                font-size: 27px;
+                                font-weight: 700;
+                                letter-spacing: -1px;
+                                line-height: 30px;
+                                text-align: center;
+                              ">
+                              Thank You, Your Fees Submitted Successfully ${
+                                student.name
+                              }!
+                  </h6>
                     </td>
                   </tr>
                 </table>
@@ -961,7 +963,7 @@ export const createCourseFeesController = asyncHandler(
                                       padding-left: 36px;
                                       font-family: 'Source Sans Pro', Helvetica, Arial,
                                         sans-serif;
-                                      font-size: 16px;
+                                      font-size: 12px;
                                     ">
                       <span style="display:block; width:max-content;"><strong>Student Name</strong></span>
                       <span style="display:block; width:max-content;"><strong>Father Name</strong></span>
@@ -986,7 +988,7 @@ export const createCourseFeesController = asyncHandler(
                     <td valign="top" style="
                                       font-family: 'Source Sans Pro', Helvetica, Arial,
                                         sans-serif;
-                                      font-size: 16px;
+                                      font-size: 12px;
                                       
                                     ">
                       <span style="display:block;width:max-content;">${
@@ -1000,7 +1002,7 @@ export const createCourseFeesController = asyncHandler(
                         ${student.rollNumber}
                       </span>
                       <span style="display:block;width:max-content;">
-                      ${student.courseName.courseName?.substring(0, 33)}... 
+                      ${student.courseName.courseName}
                       </span>
                       <span style="display:block;width:max-content;">
                       ${findPaymentOptionName.name}
@@ -1037,7 +1039,7 @@ export const createCourseFeesController = asyncHandler(
                     <td align="left" bgcolor="#ffffff" style="
                                   padding: 24px;
                                   font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-                                  font-size: 16px;
+                                  font-size: 14px;
                                   line-height: 24px;
                                 ">
                       <table border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -1055,7 +1057,7 @@ export const createCourseFeesController = asyncHandler(
                                         padding: 12px;
                                         font-family: 'Source Sans Pro', Helvetica, Arial,
                                           sans-serif;
-                                        font-size: 16px;
+                                        font-size: 14px;
                                         line-height: 24px;
                                       ">
                             <strong>${student.companyName.reciptNumber}</strong>
@@ -1066,7 +1068,7 @@ export const createCourseFeesController = asyncHandler(
                                         padding: 6px 12px;
                                         font-family: 'Source Sans Pro', Helvetica, Arial,
                                           sans-serif;
-                                        font-size: 16px;
+                                        font-size: 12px;
                                         line-height: 24px;
                                       ">
                             Fees Paid
@@ -1075,7 +1077,7 @@ export const createCourseFeesController = asyncHandler(
                                         padding: 6px 12px;
                                         font-family: 'Source Sans Pro', Helvetica, Arial,
                                           sans-serif;
-                                        font-size: 16px;
+                                        font-size: 12px;
                                         line-height: 24px;
                                       ">
                             ${student.down_payment} Rs
@@ -1090,7 +1092,7 @@ export const createCourseFeesController = asyncHandler(
                                   padding: 6px 12px;
                                   font-family: 'Source Sans Pro', Helvetica, Arial,
                                     sans-serif;
-                                  font-size: 16px;
+                                  font-size: 12px;
                                   line-height: 24px;
                                 ">
                             Late Fees
@@ -1099,7 +1101,7 @@ export const createCourseFeesController = asyncHandler(
                                   padding: 6px 12px;
                                   font-family: 'Source Sans Pro', Helvetica, Arial,
                                     sans-serif;
-                                  font-size: 16px;
+                                  font-size: 12px;
                                   line-height: 24px;
                                 ">
                             ${lateFees} Rs
@@ -1115,7 +1117,7 @@ export const createCourseFeesController = asyncHandler(
                         padding: 6px 12px;
                         font-family: 'Source Sans Pro', Helvetica, Arial,
                           sans-serif;
-                        font-size: 16px;
+                        font-size: 12px;
                         line-height: 24px;
                       "
                               >
@@ -1129,7 +1131,7 @@ export const createCourseFeesController = asyncHandler(
                                   padding: 6px 12px;
                                   font-family: 'Source Sans Pro', Helvetica, Arial,
                                     sans-serif;
-                                  font-size: 16px;
+                                  font-size: 12px;
                                   line-height: 24px;
                                 "
                               >
@@ -1145,7 +1147,7 @@ export const createCourseFeesController = asyncHandler(
     <td align="left" width="75%" style="
             padding: 6px 12px;
             font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-            font-size: 16px;
+            font-size: 12px;
             line-height: 24px;
         ">
         Total Amount
@@ -1153,7 +1155,7 @@ export const createCourseFeesController = asyncHandler(
     <td align="left" width="25%" style="
             padding: 6px 12px;
             font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
-            font-size: 16px;
+            font-size: 12px;
             line-height: 24px;
         ">
         ${(
