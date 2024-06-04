@@ -3,6 +3,7 @@ import React from 'react'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useAuth} from '../../modules/auth/core/Auth'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {Link} from 'react-router-dom'
 const ReadOnlyCourseFee = ({
   studentInfoData,
   StudentFee,
@@ -10,7 +11,7 @@ const ReadOnlyCourseFee = ({
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
-  //console.log(StudentFee)
+  console.log(StudentFee)
   const {auth} = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()
@@ -52,6 +53,17 @@ Visual Media Academy`
 
       <td>
         <div className='d-flex justify-content-end flex-shrink-0 gap-4 '>
+          <Link
+            to={'/print-student-fees-recipt'}
+            target='_blank'
+            type='button'
+            onClick={() =>
+              localStorage.setItem('print-student-fees-recipt', JSON.stringify(StudentFee))
+            }
+            className='btn btn-bg-light btn-active-color-primary btn-sm me-1'
+          >
+            Print Recipt
+          </Link>
           <button
             onClick={() => sendDataWhatsappAsMessage()}
             type='button'

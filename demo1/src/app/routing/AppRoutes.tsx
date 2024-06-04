@@ -11,6 +11,7 @@ import {PrivateRoutes} from './PrivateRoutes'
 import {ErrorsPage} from '../modules/errors/ErrorsPage'
 import {Logout, AuthPage, useAuth} from '../modules/auth'
 import {App} from '../App'
+
 /**
  * Base URL of the website.
  *
@@ -25,6 +26,9 @@ const AppRoutes: FC = () => {
   const PrintStudentResult = lazy(
     () => import('../pages/courseStudentSubjectsMarks/PrintStudentResult')
   )
+  const PrintStudentFeesRecipt = lazy(
+    () => import('../pages/print-student-fee-recipt/PrintStudentFeesRecipt')
+  )
   const {currentUser} = useAuth()
   return (
     <BrowserRouter>
@@ -37,6 +41,7 @@ const AppRoutes: FC = () => {
               <Route path='/*' element={<PrivateRoutes />} />
               <Route path='/student-result' element={<StudentMarksResult />} />
               <Route path='/print-student-result' element={<PrintStudentResult />} />
+              <Route path='/print-student-fees-recipt' element={<PrintStudentFeesRecipt />} />
 
               <Route index element={<Navigate to='/dashboard' />} />
             </>

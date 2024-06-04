@@ -106,7 +106,7 @@ export const createCourseFeesController = asyncHandler(
 
         if (emailSuggestionsStatus[0].emailSuggestionStatus) {
           sendEmail(
-            `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}`,
+            `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}, visualmediatechnology@gmail.com`,
             ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
             `Hello ${student.name} you have submitted fees `,
             `<!DOCTYPE html>
@@ -288,11 +288,9 @@ export const createCourseFeesController = asyncHandler(
                                   font-weight: 700;
                                   letter-spacing: -1px;
                                   line-height: 30px;
-                                  text-align: center;
+                                  text-align: left;
                                 ">
-                                Thank You, Your Fees Submitted Successfully ${
-                                  student.name
-                                }!
+                                Thank You, Your Fees Submitted Successfully
                     </h6>
                       </td>
                     </tr>
@@ -313,17 +311,10 @@ export const createCourseFeesController = asyncHandler(
             <tr>
               <td align="center" valign="top" style="font-size: 0;">
       
-                <div style="
-                                  display: inline-block;
-                                  width: 100%;
-                                  max-width: 50%;
-                                  min-width: 240px;
-                                  vertical-align: top;
-                                ">
+                <div style="display:inline-block;width:100%;max-width: 30%;vertical-align:top;margin-top: 10px;">
                   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
                     <tr>
                       <td valign="top" style="
-                                        padding-left: 36px;
                                         font-family: 'Source Sans Pro', Helvetica, Arial,
                                           sans-serif;
                                         font-size: 12px;
@@ -333,19 +324,11 @@ export const createCourseFeesController = asyncHandler(
                         <span style="display:block; width:max-content;"><strong>Roll Number</strong></span>
                         <span style="display:block; width:max-content;"><strong>Course Name</strong></span>
                         <span style="display:block; width:max-content;"><strong>Payment Method</strong></span>
-                        
-      
                       </td>
                     </tr>
                   </table>
                 </div>
-                <div style="
-                                  display: inline-block;
-                                  width: 100%;
-                                  max-width: 50%;
-                                  min-width: 240px;
-                                  vertical-align: top;
-                                ">
+                <div style="display:inline-block;width:100%;max-width: 50%;vertical-align:top;margin-top: 10px;">
                   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
                     <tr>
                       <td valign="top" style="
@@ -743,7 +726,7 @@ export const createCourseFeesController = asyncHandler(
         BACKEND_URL + "/api/images/" + student.companyName.logo;
       if (emailSuggestionsStatus[0].emailSuggestionStatus) {
         sendEmail(
-          `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}`,
+          `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}, visualmediatechnology@gmail.com`,
           ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
           `Hello ${student.name} you have submitted fees `,
           `<!DOCTYPE html>
@@ -925,11 +908,9 @@ export const createCourseFeesController = asyncHandler(
                                 font-weight: 700;
                                 letter-spacing: -1px;
                                 line-height: 30px;
-                                text-align: center;
+                                text-align: left;
                               ">
-                              Thank You, Your Fees Submitted Successfully ${
-                                student.name
-                              }!
+                              Thank You, Your Fees Submitted Successfully
                   </h6>
                     </td>
                   </tr>
@@ -950,17 +931,10 @@ export const createCourseFeesController = asyncHandler(
           <tr>
             <td align="center" valign="top" style="font-size: 0;">
     
-              <div style="
-                                display: inline-block;
-                                width: 100%;
-                                max-width: 50%;
-                                min-width: 240px;
-                                vertical-align: top;
-                              ">
+              <div style="display:inline-block;width:100%;max-width: 30%;vertical-align:top;margin-top: 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
                   <tr>
                     <td valign="top" style="
-                                      padding-left: 36px;
                                       font-family: 'Source Sans Pro', Helvetica, Arial,
                                         sans-serif;
                                       font-size: 12px;
@@ -970,19 +944,11 @@ export const createCourseFeesController = asyncHandler(
                       <span style="display:block; width:max-content;"><strong>Roll Number</strong></span>
                       <span style="display:block; width:max-content;"><strong>Course Name</strong></span>
                       <span style="display:block; width:max-content;"><strong>Payment Method</strong></span>
-                      
-    
                     </td>
                   </tr>
                 </table>
               </div>
-              <div style="
-                                display: inline-block;
-                                width: 100%;
-                                max-width: 50%;
-                                min-width: 240px;
-                                vertical-align: top;
-                              ">
+              <div style="display:inline-block;width:100%;max-width: 50%;vertical-align:top;margin-top: 10px;">
                 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px" cellspacing="0">
                   <tr>
                     <td valign="top" style="
@@ -1456,17 +1422,25 @@ async function sendEmail(toEmails, subject, text, html) {
 export const getCourseFeesByStudentIdController = asyncHandler(
   async (req, res, next) => {
     try {
-      console.log(
-        "this is from student course fees ",
-        req.user.email,
-        req.user.role
-      );
+      // console.log(
+      //   "this is from student course fees ",
+      //   req.user.email,
+      //   req.user.role
+      // );
       const { studentId } = req.params;
 
       // Query the database to find student fees
       const studentFees = await CourseFeesModel.find({
         studentInfo: studentId,
-      }).sort({ createdAt: 1 });
+      })
+        .sort({ createdAt: 1 })
+        .populate([
+          "courseName",
+          "companyName",
+          "studentInfo",
+          "paymentOption",
+        ]);
+      console.log("from student fees controllers ", studentFees);
 
       let adminEmail, superAdminEmail;
       const adminUser = await userModel.find({});
@@ -1501,18 +1475,6 @@ export const getCourseFeesByStudentIdController = asyncHandler(
 
       // get email remainder data
       const emailRemainderData = await EmailRemainderModel.find({});
-      // console.log("email remainder data", emailRemainderData);
-      // email remainder data [
-      //     {
-      //       _id: new ObjectId('665581fe4a7621159e32004d'),
-      //       firstRemainder: '235 E Warner Rd Ste 108, Gilbert, AZ 85296, United States\n',
-      //       secondRemainder: '2483 S Market St Ste 101, Gilbert, AZ 85296, United States\n',
-      //       thirdRemainder: '3341 E Queen Creek Rd Suite 101, Gilbert, AZ 85298, United States\n',
-      //       createdAt: 2024-05-28T07:04:30.968Z,
-      //       updatedAt: 2024-05-28T07:04:30.968Z,
-      //       __v: 0
-      //     }
-      //   ]
 
       // Check if the current time is past the due date
       if (currentTime > installmentDueDate) {
@@ -1573,8 +1535,9 @@ export const getSingleStudentCourseFeesController = asyncHandler(
   async (req, res, next) => {
     try {
       const courseFees = await CourseFeesModel.findById(req.params.id).populate(
-        ["courseName", "studentInfo", "PaymentOptions"]
+        ["courseName", "companyName", "studentInfo", "paymentOption"]
       );
+      console.log("course fees ->>>>>>>> ", courseFees);
 
       if (!courseFees) {
         return res.status(404).json({ message: "Student fee not found" });
