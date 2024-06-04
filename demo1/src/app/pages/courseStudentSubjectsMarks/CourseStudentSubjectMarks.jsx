@@ -1,4 +1,4 @@
-import {NavLink, useLocation, useNavigate} from 'react-router-dom'
+import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 import {useState, useEffect} from 'react'
 import {useAuth} from '../../modules/auth'
@@ -310,7 +310,9 @@ const CourseStudentSubjectMarks = () => {
                     {isSubmitting ? 'Marks Added' : 'Submit Marks'}
                   </button>
                 )}
-                <button
+                <Link
+                  to={'/student-result'}
+                  target='_blank'
                   className='btn btn-info text-uppercase'
                   // disabled={
                   //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0
@@ -323,18 +325,23 @@ const CourseStudentSubjectMarks = () => {
                       )
                       return false
                     }
-                    navigate('/student-result', {
-                      state: {
-                        courseType: YearandSemesterSets[activeTab - 1],
-                        data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
-                      },
-                    })
+                    localStorage.setItem(
+                      'student-result',
+                      JSON.stringify({
+                        state: {
+                          courseType: YearandSemesterSets[activeTab - 1],
+                          data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                        },
+                      })
+                    )
                   }}
                 >
                   Result
-                </button>
-                <button
-                  className='btn btn-danger text-uppercase'
+                </Link>
+                <Link
+                  to={'/print-student-result'}
+                  target='_blank'
+                  className='btn btn-info text-uppercase'
                   // disabled={
                   //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0
                   // }
@@ -342,20 +349,23 @@ const CourseStudentSubjectMarks = () => {
                     if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
                       window.alert(
                         YearandSemesterSets[activeTab - 1] +
-                          ' Please add marks for all the subjects to Print Result'
+                          ' Please add marks for all the subjects to Check Result'
                       )
                       return false
                     }
-                    navigate('/print-student-result', {
-                      state: {
-                        courseType: YearandSemesterSets[activeTab - 1],
-                        data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
-                      },
-                    })
+                    localStorage.setItem(
+                      'print-student-result',
+                      JSON.stringify({
+                        state: {
+                          courseType: YearandSemesterSets[activeTab - 1],
+                          data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                        },
+                      })
+                    )
                   }}
                 >
                   Print Result
-                </button>
+                </Link>
               </div>
               <hr />
             </>

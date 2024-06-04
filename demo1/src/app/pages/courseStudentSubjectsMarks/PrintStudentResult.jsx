@@ -6,18 +6,17 @@ import {useState} from 'react'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const PrintStudentResult = () => {
-  const location = useLocation()
-  const data = location.state
-
-  //console.log(location.state.data)
-
+  const [studentMarksResultData, setStudentMarksResultData] = useState(
+    JSON.parse(localStorage.getItem('print-student-result')) || {}
+  )
+  //console.log(studentMarksResultData)
   const handlePrint = () => {
     var actContents = document.body.innerHTML
     document.body.innerHTML = actContents
     window.print()
   }
 
-  const calculateTotalMarks = location.state.data.reduce(
+  const calculateTotalMarks = studentMarksResultData.state.data.reduce(
     (acc, cur) => {
       return {
         maxMarksTotals: Number(acc.maxMarksTotals) + Number(cur.Subjects.fullMarks),
@@ -174,15 +173,17 @@ const PrintStudentResult = () => {
                   <tbody>
                     <tr>
                       <td style={{borderRight: '1px solid black'}}>
-                        {location.state.data[0].studentInfo.rollNumber}
+                        {studentMarksResultData.state.data[0].studentInfo.rollNumber}
                       </td>
-                      <td style={{borderRight: '1px solid black'}}>{location.state.courseType}</td>
                       <td style={{borderRight: '1px solid black'}}>
-                        {location.state.courseType.split(' ')[0]}
+                        {studentMarksResultData.state.courseType}
+                      </td>
+                      <td style={{borderRight: '1px solid black'}}>
+                        {studentMarksResultData.state.courseType.split(' ')[0]}
                       </td>
                       <td>
-                        {location.state.data[0].companyName.companyName}-
-                        {location.state.data[0].studentInfo.rollNumber}
+                        {studentMarksResultData.state.data[0].companyName.companyName}-
+                        {studentMarksResultData.state.data[0].studentInfo.rollNumber}
                       </td>
                     </tr>
                   </tbody>
@@ -199,26 +200,26 @@ const PrintStudentResult = () => {
                     </tr>
                     <tr>
                       <td width='25%'>This is to certify That</td>
-                      <td width='75%'>{location.state.data[0].studentInfo.name}</td>
+                      <td width='75%'>{studentMarksResultData.state.data[0].studentInfo.name}</td>
                     </tr>
                     <tr>
                       <td width='25%'>Course Name</td>
-                      <td width='75%'>{location.state.data[0].course.courseName}</td>
+                      <td width='75%'>{studentMarksResultData.state.data[0].course.courseName}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Father's Name</small>
                       </td>
-                      <td>{location.state.data[0].studentInfo.father_name}</td>
+                      <td>{studentMarksResultData.state.data[0].studentInfo.father_name}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Date of Birth</small>
                       </td>
                       <td>
-                        {moment(location.state.data[0].studentInfo.date_of_birth).format(
-                          'DD/MM/YYYY'
-                        )}
+                        {moment(
+                          studentMarksResultData.state.data[0].studentInfo.date_of_birth
+                        ).format('DD/MM/YYYY')}
                       </td>
                     </tr>
                   </tbody>
@@ -226,7 +227,7 @@ const PrintStudentResult = () => {
                 <img
                   style={{marginRight: '30px', borderRadius: '10px'}}
                   width={100}
-                  src={`${BASE_URL}/api/images/${location.state.data[0].studentInfo.image}`}
+                  src={`${BASE_URL}/api/images/${studentMarksResultData.state.data[0].studentInfo.image}`}
                   alt='student image'
                 />
               </td>
@@ -277,8 +278,8 @@ const PrintStudentResult = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {location.state.data &&
-                      location.state.data.map((marksStudentData) => {
+                    {studentMarksResultData.state.data &&
+                      studentMarksResultData.state.data.map((marksStudentData) => {
                         return (
                           <tr key={marksStudentData._id} style={{borderBottom: '1px solid black'}}>
                             <td style={{borderRight: '1px solid black'}} align='center'>
