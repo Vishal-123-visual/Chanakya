@@ -364,7 +364,7 @@ export const createCourseFeesController = asyncHandler(
                           ${student.rollNumber}
                         </span>
                         <span style="display:block;width:max-content;">
-                        ${student.courseName.courseName?.substring(0, 33)}...
+                        ${student.courseName.courseName?.substring(0, 33)}... 
                         </span>
                         <span style="display:block;width:max-content;">
                         ${findPaymentOptionName.name}
@@ -558,7 +558,7 @@ export const createCourseFeesController = asyncHandler(
                         <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%"
                           style="max-width: 600px">
                           <tr>
-                            <td align="center" valign="top" style="font-size: 0; border-bottom: 3px solid #d4dadf">
+                            <td align="center" valign="top" style=" border-bottom: 3px solid #d4dadf">
                               <!--[if (gte mso 9)|(IE)]>
                                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
                                 <tr>
@@ -572,35 +572,25 @@ export const createCourseFeesController = asyncHandler(
                               <div style="
                                       display: inline-block;
                                       width: 100%;
-                                      max-width: 50%;
-                                      min-width: 240px;
+                                      
                                       vertical-align: top;
                                     ">
-                                    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
-                                    <tr>
-                                          <td valign="top" style="text-align: center; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                                          ${student.companyName.companyAddress}
-                                          <span style='display:block;'>Contact Us : ${
-                                            student.companyName.companyPhone
-                                          } </span>
-                                          </td>
-                                      </tr>
-                                      <tr>
-                                          <td valign="top" style="text-align: center; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 20px;">
-                                          <span style='display:block;'>website : ${
-                                            student.companyName.companyWebsite
-                                          } 
-                                          </span>
-                                          <span style='display:block;'>E-mail: ${
-                                            student.companyName.email
-                                          }</span>
-                                        
-                                          </td>
-                                      </tr>
-                                      
-                                  </table>
-      
-                                
+                                   <p>
+                                   ${student.companyName.companyAddress}
+                                   </p> 
+                                   <p>
+                                   Contact Us : ${
+                                     student.companyName.companyPhone
+                                   }
+                                   </p> 
+                                   <p>
+                                   website : ${
+                                     student.companyName.companyWebsite
+                                   } 
+                                   E-mail: ${student.companyName.email}
+                               </p> 
+                              
+                               
                               </div>
                               <!--[if (gte mso 9)|(IE)]>
                                 </td>
@@ -1202,7 +1192,7 @@ export const createCourseFeesController = asyncHandler(
                       <table align="center" bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%"
                         style="max-width: 600px">
                         <tr>
-                          <td align="center" valign="top" style="font-size: 0; border-bottom: 3px solid #d4dadf">
+                          <td align="center" valign="top" style=" border-bottom: 3px solid #d4dadf">
                             <!--[if (gte mso 9)|(IE)]>
                               <table align="center" border="0" cellpadding="0" cellspacing="0" width="600">
                               <tr>
@@ -1216,35 +1206,25 @@ export const createCourseFeesController = asyncHandler(
                             <div style="
                                     display: inline-block;
                                     width: 100%;
-                                    max-width: 50%;
-                                    min-width: 240px;
+                                    
                                     vertical-align: top;
                                   ">
-                                  <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 300px">
-                                  <tr>
-                                        <td valign="top" style="text-align: center; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
-                                        ${student.companyName.companyAddress}
-                                        <span style='display:block;'>Contact Us : ${
-                                          student.companyName.companyPhone
-                                        } </span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td valign="top" style="text-align: center; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 20px;">
-                                        <span style='display:block;'>website : ${
-                                          student.companyName.companyWebsite
-                                        } 
-                                        </span>
-                                        <span style='display:block;'>E-mail: ${
-                                          student.companyName.email
-                                        }</span>
-                                      
-                                        </td>
-                                    </tr>
-                                    
-                                </table>
-    
-                              
+                                 <p>
+                                 ${student.companyName.companyAddress}
+                                 </p> 
+                                 <p>
+                                 Contact Us : ${
+                                   student.companyName.companyPhone
+                                 }
+                                 </p> 
+                                 <p>
+                                 website : ${
+                                   student.companyName.companyWebsite
+                                 } 
+                                 E-mail: ${student.companyName.email}
+                             </p> 
+                            
+                             
                             </div>
                             <!--[if (gte mso 9)|(IE)]>
                               </td>
