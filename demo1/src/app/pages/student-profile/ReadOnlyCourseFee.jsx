@@ -44,7 +44,7 @@ Visual Media Academy`
       <td>
         {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
           <React.Fragment key={paymentOpt._id}>
-            {StudentFee.paymentOption === paymentOpt._id && paymentOpt.name}
+            {StudentFee.paymentOption._id === paymentOpt._id && paymentOpt.name}
           </React.Fragment>
         ))}
       </td>

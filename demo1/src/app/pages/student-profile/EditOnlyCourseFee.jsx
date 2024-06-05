@@ -10,9 +10,13 @@ const EditOnlyCourseFee = ({
   setEditStudentCourseFees,
   editStudentCourseFees,
 }) => {
-  //console.log(StudentFee)
+  // console.log(StudentFee)
   useEffect(() => {
     setEditStudentCourseFees(StudentFee)
+    setEditStudentCourseFees((prev) => ({
+      ...prev,
+      paymentOption: StudentFee.paymentOption._id,
+    }))
   }, [])
 
   const remainingFeesHandler = (e) => {
