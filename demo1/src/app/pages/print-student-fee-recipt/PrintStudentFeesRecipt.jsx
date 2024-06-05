@@ -9,7 +9,7 @@ const PrintStudentFeesRecipt = () => {
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
-  console.log(studentInfoData)
+  //console.log(studentInfoData)
 
   const gstAmount =
     studentInfoData.studentInfo.student_status === 'GST'
@@ -31,7 +31,7 @@ const PrintStudentFeesRecipt = () => {
               style={{maxWidth: '600px'}}
             >
               <tr>
-                <td align='center' valign='top' style={{padding: '5px 20px'}}>
+                <td align='center' valign='top' style={{padding: '36px 24px'}}>
                   <a
                     href='http://www.visualmedia.co.in/'
                     target='_blank'
@@ -75,7 +75,7 @@ const PrintStudentFeesRecipt = () => {
                 <td
                   bgcolor='#ffffff'
                   style={{
-                    padding: '5px 16px',
+                    padding: '36px 24px 0',
                     fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                     borderTop: '3px solid #d4dadf',
                   }}
@@ -241,7 +241,7 @@ const PrintStudentFeesRecipt = () => {
                         bgcolor='white'
                         width='75%'
                         style={{
-                          padding: '0 12px',
+                          padding: '12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '16px',
                           lineHeight: '24px',
@@ -254,7 +254,7 @@ const PrintStudentFeesRecipt = () => {
                         bgcolor='white'
                         width='25%'
                         style={{
-                          padding: '0 12px',
+                          padding: '12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '14px',
                           lineHeight: '24px',
@@ -268,7 +268,7 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='75%'
                         style={{
-                          padding: '0px 12px',
+                          padding: '6px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
@@ -280,7 +280,7 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='25%'
                         style={{
-                          padding: '0px 12px',
+                          padding: '6px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
@@ -294,7 +294,7 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='75%'
                         style={{
-                          padding: '0px 12px',
+                          padding: '6px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
@@ -306,7 +306,7 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='25%'
                         style={{
-                          padding: '0px 12px',
+                          padding: '6px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
@@ -321,7 +321,7 @@ const PrintStudentFeesRecipt = () => {
                           align='left'
                           width='75%'
                           style={{
-                            padding: '0px 12px',
+                            padding: '6px 12px',
                             fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                             fontSize: '12px',
                             lineHeight: '24px',
@@ -333,7 +333,7 @@ const PrintStudentFeesRecipt = () => {
                           align='left'
                           width='25%'
                           style={{
-                            padding: '0px 12px',
+                            padding: '6px 12px',
                             fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                             fontSize: '12px',
                             lineHeight: '24px',
@@ -384,10 +384,10 @@ const PrintStudentFeesRecipt = () => {
                 <td
                   bgcolor='#ffffff'
                   style={{
-                    padding: '0 20px',
-                    fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
+                    padding: '24px',
                     fontSize: '14px',
-                    lineHeight: '17px',
+                    lineHeight: '24px',
+                    fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                     borderBottom: '3px solid #d4dadf',
                   }}
                 >
