@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import moment from 'moment'
 import './studentFeesRecipt.css'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -16,12 +17,12 @@ const PrintStudentFeesRecipt = () => {
       : 0
 
   return (
-    <div style={{backgroundColor: '#d2c7ba', height: '100%'}}>
+    <div style={{backgroundColor: 'white', height: '100%'}}>
       {/* Start body */}
       <table border='0' cellPadding='0' cellSpacing='0' width='100%'>
         {/* Start logo */}
         <tr>
-          <td align='center' bgcolor='#D2C7BA'>
+          <td align='center' bgcolor='white'>
             <table
               border='0'
               cellPadding='0'
@@ -30,7 +31,7 @@ const PrintStudentFeesRecipt = () => {
               style={{maxWidth: '600px'}}
             >
               <tr>
-                <td align='center' valign='top' style={{padding: '36px 24px'}}>
+                <td align='center' valign='top' style={{padding: '5px 20px'}}>
                   <a
                     href='http://www.visualmedia.co.in/'
                     target='_blank'
@@ -43,6 +44,8 @@ const PrintStudentFeesRecipt = () => {
                       border='0'
                       width='200px'
                       style={{
+                        border: '1px solid black',
+                        borderRadius: '5px',
                         display: 'block',
                         width: '200px',
                         height: '200px',
@@ -60,7 +63,7 @@ const PrintStudentFeesRecipt = () => {
 
         {/* Start hero */}
         <tr>
-          <td align='center' bgcolor='#D2C7BA'>
+          <td align='center' bgcolor='white'>
             <table
               border='0'
               cellPadding='0'
@@ -70,10 +73,9 @@ const PrintStudentFeesRecipt = () => {
             >
               <tr>
                 <td
-                  align='left'
                   bgcolor='#ffffff'
                   style={{
-                    padding: '36px 24px 0',
+                    padding: '5px 16px',
                     fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                     borderTop: '3px solid #d4dadf',
                   }}
@@ -99,7 +101,7 @@ const PrintStudentFeesRecipt = () => {
 
         {/* Start student info block */}
         <tr>
-          <td align='center' bgcolor='#D2C7BA' valign='top' width='100%'>
+          <td align='center' bgcolor='white' valign='top' width='100%'>
             <table
               align='center'
               bgcolor='#ffffff'
@@ -150,6 +152,9 @@ const PrintStudentFeesRecipt = () => {
                           <span style={{display: 'block', width: 'max-content'}}>
                             <strong>Payment Method</strong>
                           </span>
+                          <span style={{display: 'block', width: 'max-content'}}>
+                            <strong>Payment Date</strong>
+                          </span>
                         </td>
                       </tr>
                     </table>
@@ -193,6 +198,9 @@ const PrintStudentFeesRecipt = () => {
                           <span style={{display: 'block', width: 'max-content'}}>
                             {studentInfoData.paymentOption.name}
                           </span>
+                          <span style={{display: 'block', width: 'max-content'}}>
+                            {moment(+studentInfoData.amountDate).format('DD-MM-YYYY')}
+                          </span>
                         </td>
                       </tr>
                     </table>
@@ -206,7 +214,7 @@ const PrintStudentFeesRecipt = () => {
 
         {/* Start copy block */}
         <tr>
-          <td align='center' bgcolor='#D2C7BA'>
+          <td align='center' bgcolor='white'>
             <table
               border='0'
               cellPadding='0'
@@ -220,7 +228,7 @@ const PrintStudentFeesRecipt = () => {
                   align='left'
                   bgcolor='#ffffff'
                   style={{
-                    padding: '24px',
+                    padding: '5px 20px',
                     fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                     fontSize: '14px',
                     lineHeight: '24px',
@@ -230,10 +238,10 @@ const PrintStudentFeesRecipt = () => {
                     <tr>
                       <td
                         align='left'
-                        bgcolor='#D2C7BA'
+                        bgcolor='white'
                         width='75%'
                         style={{
-                          padding: '12px',
+                          padding: '0 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '16px',
                           lineHeight: '24px',
@@ -243,10 +251,10 @@ const PrintStudentFeesRecipt = () => {
                       </td>
                       <td
                         align='left'
-                        bgcolor='#D2C7BA'
+                        bgcolor='white'
                         width='25%'
                         style={{
-                          padding: '12px',
+                          padding: '0 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '14px',
                           lineHeight: '24px',
@@ -260,7 +268,7 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='75%'
                         style={{
-                          padding: '6px 12px',
+                          padding: '0px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
@@ -272,13 +280,13 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='25%'
                         style={{
-                          padding: '6px 12px',
+                          padding: '0px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
                         }}
                       >
-                        {studentInfoData.amountPaid} Rs
+                        Rs {studentInfoData.amountPaid}
                       </td>
                     </tr>
                     <tr>
@@ -286,7 +294,7 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='75%'
                         style={{
-                          padding: '6px 12px',
+                          padding: '0px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
@@ -298,13 +306,13 @@ const PrintStudentFeesRecipt = () => {
                         align='left'
                         width='25%'
                         style={{
-                          padding: '6px 12px',
+                          padding: '0px 12px',
                           fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                           fontSize: '12px',
                           lineHeight: '24px',
                         }}
                       >
-                        {studentInfoData.lateFees} Rs
+                        Rs {studentInfoData.lateFees}
                       </td>
                     </tr>
                     {studentInfoData.studentInfo?.student_status !== 'NOGST' && (
@@ -313,7 +321,7 @@ const PrintStudentFeesRecipt = () => {
                           align='left'
                           width='75%'
                           style={{
-                            padding: '6px 12px',
+                            padding: '0px 12px',
                             fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                             fontSize: '12px',
                             lineHeight: '24px',
@@ -325,13 +333,13 @@ const PrintStudentFeesRecipt = () => {
                           align='left'
                           width='25%'
                           style={{
-                            padding: '6px 12px',
+                            padding: '0px 12px',
                             fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                             fontSize: '12px',
                             lineHeight: '24px',
                           }}
                         >
-                          {(Number(studentInfoData.lateFees) + gstAmount).toFixed(2)} Rs.
+                          Rs {(Number(studentInfoData.lateFees) + gstAmount).toFixed(2)}
                         </td>
                       </tr>
                     )}
@@ -346,7 +354,7 @@ const PrintStudentFeesRecipt = () => {
                           lineHeight: '24px',
                         }}
                       >
-                        Total Amount
+                        Total
                       </td>
                       <td
                         align='left'
@@ -358,12 +366,12 @@ const PrintStudentFeesRecipt = () => {
                           lineHeight: '24px',
                         }}
                       >
+                        Rs{' '}
                         {(
                           Number(studentInfoData.lateFees) +
                           Number(studentInfoData.amountPaid) +
                           (Number(studentInfoData.lateFees) + gstAmount)
                         ).toFixed(2)}{' '}
-                        Rs.
                       </td>
                     </tr>
                   </table>
@@ -374,20 +382,40 @@ const PrintStudentFeesRecipt = () => {
               {/* Start copy */}
               <tr>
                 <td
-                  align='left'
                   bgcolor='#ffffff'
                   style={{
-                    padding: '24px',
+                    padding: '0 20px',
                     fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                     fontSize: '14px',
-                    lineHeight: '24px',
+                    lineHeight: '17px',
                     borderBottom: '3px solid #d4dadf',
                   }}
                 >
-                  <p style={{margin: 0}}>
-                    If you have any questions, just reply to this email—we're always happy to help
-                    out.
+                  <p style={{margin: 0}}>{studentInfoData.companyName.companyAddress}</p>
+                  <p style={{textAlign: 'center'}}>
+                    Contact Us : +91 {studentInfoData.companyName.companyPhone}
                   </p>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '5px',
+                    }}
+                  >
+                    <p>
+                      Email :{' '}
+                      <a href={studentInfoData.companyName.email} target='_blank'>
+                        {studentInfoData.companyName.email} |
+                      </a>{' '}
+                    </p>
+                    <p>
+                      Website :{' '}
+                      <a href={studentInfoData.companyName.companyWebsite} target='_blank'>
+                        {studentInfoData.companyName.companyWebsite}
+                      </a>
+                    </p>
+                  </div>
                 </td>
               </tr>
               {/* End copy */}
@@ -398,7 +426,7 @@ const PrintStudentFeesRecipt = () => {
 
         {/* Start footer */}
         <tr>
-          <td align='center' bgcolor='#D2C7BA' style={{padding: '24px'}}>
+          <td align='center' bgcolor='white'>
             <table
               border='0'
               cellPadding='0'
@@ -410,18 +438,26 @@ const PrintStudentFeesRecipt = () => {
               <tr>
                 <td
                   align='center'
-                  bgcolor='#D2C7BA'
+                  bgcolor='white'
                   style={{
-                    padding: '12px 24px',
                     fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
                     fontSize: '12px',
-                    lineHeight: '20px',
                     color: '#666',
                   }}
                 >
-                  <p style={{margin: 0}}>
-                    You received this email because we received a request for registration for your
-                    account. If you didn't request registration, you can safely delete this email.
+                  <b> Important Note : </b>
+                  <p>
+                    CHEQUES SUBJECT TO REALISATION <br />
+                    THE RECEIPT MUST BE PRODUCED WHEN DEMANDED FEES <br /> ONCE FEES PAID ARE NOT
+                    REFUNDABLE <br /> To stop receiving these emails, you can{' '}
+                    <a
+                      href='http://www.visualmedia.co.in/'
+                      target='_blank'
+                      style={{textDecoration: 'underline'}}
+                    >
+                      unsubscribe
+                    </a>{' '}
+                    at any time
                   </p>
                 </td>
               </tr>
