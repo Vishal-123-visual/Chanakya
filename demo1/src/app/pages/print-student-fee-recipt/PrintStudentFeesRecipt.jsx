@@ -48,7 +48,6 @@ const PrintStudentFeesRecipt = () => {
                         borderRadius: '5px',
                         display: 'block',
                         width: '200px',
-                        height: '200px',
                         maxWidth: '200px',
                         minWidth: '200px',
                       }}
