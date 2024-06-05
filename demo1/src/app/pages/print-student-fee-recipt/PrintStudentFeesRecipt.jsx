@@ -411,8 +411,10 @@ const PrintStudentFeesRecipt = () => {
                       </a>{' '}
                     </span>
                     <span>
-                      Website :{' '}
-                      <a href={studentInfoData.companyName.companyWebsite} target='_blank'>
+                      <a
+                        href={'http://' + studentInfoData.companyName.companyWebsite}
+                        target='_blank'
+                      >
                         {studentInfoData.companyName.companyWebsite}
                       </a>
                     </span>
