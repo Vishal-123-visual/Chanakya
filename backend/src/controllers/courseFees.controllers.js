@@ -428,7 +428,7 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 12px;
                                           line-height: 24px;
                                         ">
-                              ${student.down_payment} Rs
+                            Rs  ${student.down_payment} 
                             </td>
                           </tr>
       
@@ -452,7 +452,7 @@ export const createCourseFeesController = asyncHandler(
                                     font-size: 12px;
                                     line-height: 24px;
                                   ">
-                              ${lateFees} Rs
+                             Rs ${lateFees} 
                             </td>
                           </tr>
                           ${
@@ -483,8 +483,8 @@ export const createCourseFeesController = asyncHandler(
                                     line-height: 24px;
                                   "
                                 >
-                                  ${(Number(lateFees) + gstAmount).toFixed(2)}
-                                  Rs.
+                                Rs ${gstAmount.toFixed(2)}
+                                  
                                 </td>
                               </tr>`
                               : ""
@@ -506,11 +506,15 @@ export const createCourseFeesController = asyncHandler(
               font-size: 12px;
               line-height: 24px;
           ">
-          ${(
-            Number(lateFees) +
-            Number(student.down_payment) +
-            (Number(lateFees) + gstAmount)
-          ).toFixed(2)} Rs
+          Rs ${
+            student?.student_status === "NOGST"
+              ? (Number(lateFees) + Number(student.down_payment)).toFixed(2)
+              : (
+                  Number(lateFees) +
+                  Number(student.down_payment) +
+                  gstAmount
+                ).toFixed(2)
+          } 
       </td>
     </tr>
     
@@ -1046,7 +1050,7 @@ export const createCourseFeesController = asyncHandler(
                                         font-size: 12px;
                                         line-height: 24px;
                                       ">
-                            ${student.down_payment} Rs
+                          Rs  ${student.down_payment} 
                           </td>
                         </tr>
     
@@ -1070,7 +1074,7 @@ export const createCourseFeesController = asyncHandler(
                                   font-size: 12px;
                                   line-height: 24px;
                                 ">
-                            ${lateFees} Rs
+                           Rs ${lateFees} 
                           </td>
                         </tr>
                         ${
@@ -1101,8 +1105,8 @@ export const createCourseFeesController = asyncHandler(
                                   line-height: 24px;
                                 "
                               >
-                                ${(Number(lateFees) + gstAmount).toFixed(2)}
-                                Rs.
+                              Rs ${gstAmount.toFixed(2)}
+                                
                               </td>
                             </tr>`
                             : ""
@@ -1124,11 +1128,15 @@ export const createCourseFeesController = asyncHandler(
             font-size: 12px;
             line-height: 24px;
         ">
-        ${(
-          Number(lateFees) +
-          Number(student.down_payment) +
-          (Number(lateFees) + gstAmount)
-        ).toFixed(2)} Rs
+        Rs ${
+          student?.student_status === "NOGST"
+            ? (Number(lateFees) + Number(student.down_payment)).toFixed(2)
+            : (
+                Number(lateFees) +
+                Number(student.down_payment) +
+                gstAmount
+              ).toFixed(2)
+        } 
     </td>
   </tr>
   

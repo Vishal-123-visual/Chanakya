@@ -9,7 +9,7 @@ const PrintStudentFeesRecipt = () => {
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
-  console.log(studentInfoData)
+  //console.log(studentInfoData)
 
   const gstAmount =
     studentInfoData.studentInfo.student_status === 'GST'
@@ -347,7 +347,7 @@ const PrintStudentFeesRecipt = () => {
                             lineHeight: '24px',
                           }}
                         >
-                          Rs {(Number(studentInfoData.lateFees) + gstAmount).toFixed(2)}
+                          Rs {gstAmount}
                         </td>
                       </tr>
                     )}
@@ -365,23 +365,41 @@ const PrintStudentFeesRecipt = () => {
                       >
                         Total
                       </td>
-                      <td
-                        align='left'
-                        width='25%'
-                        style={{
-                          padding: '6px 12px',
-                          fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
-                          fontSize: '16px',
-                          lineHeight: '24px',
-                        }}
-                      >
-                        Rs{' '}
-                        {(
-                          Number(studentInfoData.lateFees) +
-                          Number(studentInfoData.amountPaid) +
-                          (Number(studentInfoData.lateFees) + gstAmount)
-                        ).toFixed(2)}{' '}
-                      </td>
+                      {studentInfoData.studentInfo?.student_status === 'NOGST' ? (
+                        <td
+                          align='left'
+                          width='25%'
+                          style={{
+                            padding: '6px 12px',
+                            fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
+                            fontSize: '16px',
+                            lineHeight: '24px',
+                          }}
+                        >
+                          Rs{' '}
+                          {(
+                            Number(studentInfoData.lateFees) + Number(studentInfoData.amountPaid)
+                          ).toFixed(2)}{' '}
+                        </td>
+                      ) : (
+                        <td
+                          align='left'
+                          width='25%'
+                          style={{
+                            padding: '6px 12px',
+                            fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
+                            fontSize: '16px',
+                            lineHeight: '24px',
+                          }}
+                        >
+                          Rs{' '}
+                          {(
+                            Number(studentInfoData.lateFees) +
+                            Number(studentInfoData.amountPaid) +
+                            gstAmount
+                          ).toFixed(2)}{' '}
+                        </td>
+                      )}
                     </tr>
                   </table>
                 </td>
