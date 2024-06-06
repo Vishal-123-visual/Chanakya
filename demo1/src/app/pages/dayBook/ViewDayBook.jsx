@@ -6,16 +6,27 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 
 const ViewDayBook = () => {
-  const [fromDate, setFromDate] = useState()
-  const [toDate, setToDate] = useState()
-  // console.log(fromDate)
+  const [fromDate, setFromDate] = useState(new Date())
+  const [toDate, setToDate] = useState(new Date())
 
-  const studentCourseFessCtx = useStudentCourseFeesContext()
-  const totalFeesAmount = studentCourseFessCtx.getAllStudentsCourseFees?.data.reduce(
+  const studentCourseFeesCtx = useStudentCourseFeesContext()
+  const totalFeesAmount = studentCourseFeesCtx.getAllStudentsCourseFees?.data.reduce(
     (acc, cur) => acc + cur.amountPaid + cur.lateFees,
     0
   )
   let balance = 0
+
+  const filteredData =
+    studentCourseFeesCtx.getAllStudentsCourseFees?.data.filter((filterOne) => {
+      const createdAt = moment(filterOne.createdAt).startOf('day')
+      if (fromDate && toDate) {
+        const startDate = moment(fromDate).startOf('day')
+        const endDate = moment(toDate).endOf('day')
+        return createdAt.isBetween(startDate, endDate, null, '[]')
+      } else {
+        return createdAt.isSame(moment().startOf('day'))
+      }
+    }) || []
 
   return (
     <div className={`card`}>
@@ -23,55 +34,36 @@ const ViewDayBook = () => {
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Day Book</span>
-          <span className=' mt-1 fw-semibold fs-7'>fees and Expense, Income</span>
+          <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
         </h3>
-        <div
-          className='card-toolbar'
-          data-bs-toggle='tooltip'
-          data-bs-placement='top'
-          data-bs-trigger='hover'
-          title='Click to add a user'
-        >
-          <div className='d-flex gap-5'>
-            <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
-              From
-              <div className='fv-row'>
-                <DatePicker
-                  selected={fromDate}
-                  onChange={(date) => setFromDate(date)}
-                  dateFormat='dd/MM/yyyy'
-                  className='form-control form-control-lg form-control-solid'
-                  placeholderText='DD/MM/YYYY'
-                />
-              </div>
-            </label>
-            <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
-              To
-              <div className='fv-row'>
-                <DatePicker
-                  selected={toDate}
-                  onChange={(date) => setToDate(date)}
-                  dateFormat='dd/MM/yyyy'
-                  className='form-control form-control-lg form-control-solid'
-                  placeholderText='DD/MM/YYYY'
-                />
-              </div>
-            </label>
-          </div>
+        <div className='d-flex gap-5'>
+          <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
+            From
+            <div className='fv-row'>
+              <DatePicker
+                selected={fromDate}
+                onChange={(date) => setFromDate(date)}
+                dateFormat='dd/MM/yyyy'
+                className='form-control form-control-lg form-control-solid'
+                placeholderText='DD/MM/YYYY'
+              />
+            </div>
+          </label>
+          <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
+            To
+            <div className='fv-row'>
+              <DatePicker
+                selected={toDate}
+                onChange={(date) => setToDate(date)}
+                dateFormat='dd/MM/yyyy'
+                className='form-control form-control-lg form-control-solid'
+                placeholderText='DD/MM/YYYY'
+              />
+            </div>
+          </label>
         </div>
-        <div
-          className='card-toolbar'
-          data-bs-toggle='tooltip'
-          data-bs-placement='top'
-          data-bs-trigger='hover'
-          title='Click to add a user'
-        >
-          <a
-            href='#'
-            className='btn btn-sm btn-light-primary'
-            // data-bs-toggle='modal'
-            // data-bs-target='#kt_modal_invite_friends'
-          >
+        <div className='card-toolbar'>
+          <a href='#' className='btn btn-sm btn-light-primary' title='Click to add a user'>
             <KTIcon iconName='plus' className='fs-3' />
             New Member
           </a>
@@ -102,89 +94,71 @@ const ViewDayBook = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
 
-            {studentCourseFessCtx.getAllStudentsCourseFees.isLoading ? (
+            {studentCourseFeesCtx.getAllStudentsCourseFees.isLoading ? (
               <tbody>
-                <tr className=''>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
+                <tr>
+                  <td colSpan='10' className='text-center'>
                     <h1>Loading...</h1>
                   </td>
                 </tr>
               </tbody>
             ) : (
               <tbody>
-                {studentCourseFessCtx.getAllStudentsCourseFees.data
-                  .filter((filterOne) => {
-                    return (
-                      moment(filterOne.createdAt).format('DD-MM-YYYY') ===
-                        moment(new Date()).format('DD-MM-YYYY') ||
-                      (moment(filterOne.createdAt).format('DD-MM-YYYY') ===
-                        moment(fromDate).format('DD-MM-YYYY') &&
-                        moment(filterOne.createdAt).format('DD-MM-YYYY') ===
-                          moment(toDate).format('DD-MM-YYYY'))
-                    )
-                  })
-                  .map((studentFeesData, index) => {
-                    balance += studentFeesData.amountPaid + studentFeesData.lateFees
-                    return (
-                      <tr>
-                        <td>
-                          <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                            {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
-                          </div>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {index + 1}
-                          </a>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {moment(studentFeesData.createdAt).format('DD-MM-YYYY')}
-                          </a>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {studentFeesData.studentInfo.rollNumber}
-                          </a>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {studentFeesData.studentInfo.name}
-                          </a>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {studentFeesData.reciptNumber}
-                          </a>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            0
-                          </a>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {studentFeesData.amountPaid}
-                          </a>
-                        </td>
-                        <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {studentFeesData.lateFees}
-                          </a>
-                        </td>
-                        <td className='text-center'>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {balance}
-                          </a>
-                        </td>
-                      </tr>
-                    )
-                  })}
+                {filteredData.map((studentFeesData, index) => {
+                  balance += studentFeesData.amountPaid + studentFeesData.lateFees
+                  return (
+                    <tr key={index}>
+                      <td>
+                        <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {index + 1}
+                        </a>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {moment(studentFeesData.createdAt).format('DD-MM-YYYY')}
+                        </a>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {studentFeesData.studentInfo.rollNumber}
+                        </a>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {studentFeesData.studentInfo.name}
+                        </a>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {studentFeesData.reciptNumber}
+                        </a>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          0
+                        </a>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {studentFeesData.amountPaid}
+                        </a>
+                      </td>
+                      <td>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {studentFeesData.lateFees}
+                        </a>
+                      </td>
+                      <td className='text-center'>
+                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                          {balance}
+                        </a>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             )}
             {/* end::Table body */}
@@ -193,7 +167,7 @@ const ViewDayBook = () => {
         </div>
         {/* end::Table container */}
       </div>
-      {/* begin::Body */}
+      {/* end::Body */}
     </div>
   )
 }
