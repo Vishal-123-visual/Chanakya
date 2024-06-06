@@ -9,6 +9,8 @@ import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 
 const PrivateRoutes = () => {
+  const ViewDayBook = lazy(() => import('../pages/dayBook/ViewDayBook'))
+  const AddAccountDayBook = lazy(() => import('../pages/dayBook/AddAccountDayBook'))
   const UpdateCompany = lazy(() => import('../pages/compay/UpdateCompany'))
   const AddCompany = lazy(() => import('../pages/compay/AddCompany'))
   const Company = lazy(() => import('../pages/compay/Company'))
@@ -53,6 +55,25 @@ const PrivateRoutes = () => {
       <Route element={<MasterLayout />}>
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
+
+        {/* ================================  DayBook Start Here ============================== */}
+        <Route
+          path='/daybook/viewDaybook'
+          element={
+            <SuspensedView>
+              <ViewDayBook />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/daybook/addAccount'
+          element={
+            <SuspensedView>
+              <AddAccountDayBook />
+            </SuspensedView>
+          }
+        />
+        {/* ================================  DayBook End Here ============================== */}
 
         {/* ====================Start Course Here ==================== */}
         <Route

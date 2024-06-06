@@ -199,6 +199,18 @@ const SidebarMenuMain = () => {
       </SidebarMenuItemWithSub>
       {/* *************************************  Manage Company End ******************************** */}
 
+      {/* ------------------------------------ Start Day Book here ---------------------------------- */}
+      <SidebarMenuItemWithSub
+        to='/apps/chat'
+        title='Day Book'
+        fontIcon='bi-chat-left'
+        icon='message-text-2'
+      >
+        <SidebarMenuItem to='/daybook/viewDaybook' title='View DayBook' hasBullet={true} />
+        <SidebarMenuItem to='/daybook/addAccount' title='Add Account' hasBullet={true} />
+      </SidebarMenuItemWithSub>
+      {/* ------------------------------------ End Day Book here ---------------------------------- */}
+
       <SidebarMenuItem
         to='/apps/user-management/users'
         icon='abstract-28'

@@ -159,6 +159,18 @@ export const StudentCourseFeesContextProvider = ({children}) => {
       }
     },
   })
+  // get all students course fees
+  const getAllStudentsCourseFees = useQuery({
+    queryKey: ['getStudentCourseFeesLists'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/courseFees/allCourseFess`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data:' + error.message)
+      }
+    },
+  })
 
   return (
     <StudentCourseFeeContext.Provider
@@ -170,6 +182,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
         updateStudentSingleCourseFeesMutation,
         useGetStudentMonthlyCourseFeesCollection,
         useGetStudentMonthlyCourseFeesCollectionExpireationInstallment,
+        getAllStudentsCourseFees,
       }}
     >
       {children}

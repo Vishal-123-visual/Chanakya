@@ -1619,10 +1619,9 @@ export const getAllCourseFeesController = asyncHandler(
       // const allCourseFees = await CourseFeesModel.find({})
       //   .populate(["studentInfo", "courseName"])
       //   .sort("courseName");
-      const nextInstallmentCourseFees =
-        await PaymentInstallmentTimeExpireModel.find({})
-          .populate(["studentInfo", "courseName"])
-          .sort("courseName");
+      const nextInstallmentCourseFees = await CourseFeesModel.find({}).populate(
+        ["studentInfo", "courseName"]
+      );
       //console.log(nextInstallmentCourseFees);
       res.status(200).json(nextInstallmentCourseFees);
     } catch (error) {
