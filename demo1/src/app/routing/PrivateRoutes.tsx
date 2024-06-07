@@ -7,6 +7,7 @@ import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
+import ViewDayBookAccount from '../pages/dayBook/ViewDayBookAccount'
 
 const PrivateRoutes = () => {
   const ViewDayBook = lazy(() => import('../pages/dayBook/ViewDayBook'))
@@ -70,6 +71,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <AddAccountDayBook />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/daybook/viewAccount'
+          element={
+            <SuspensedView>
+              <ViewDayBookAccount />
             </SuspensedView>
           }
         />

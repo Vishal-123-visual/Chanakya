@@ -10,6 +10,7 @@ import courseFeesRoutes from "./routes/courseFees.routes.js";
 import paymentOptionsRoutes from "./routes/paymentOptions.routes.js";
 import companyRoutes from "./routes/company.routes.js";
 import emailRemainderRoutes from "./routes/emailRemainder.routes.js";
+import dayBookRoutes from "./routes/dayBook.routes.js";
 import { BACKEND_URL, FRONTEND_URL } from "./config/config.js";
 
 const app = express();
@@ -29,6 +30,7 @@ app.use("/api/courseFees", courseFeesRoutes);
 app.use("/api/paymentOptions", paymentOptionsRoutes);
 app.use("/api/company", companyRoutes);
 app.use("/api/emailRemainder", emailRemainderRoutes);
+app.use("/api/dayBook", dayBookRoutes);
 const __dirname = path.resolve();
 app.use("/api/images", express.static(path.join(__dirname + "/images")));
 app.use(express.static(path.join(__dirname, "./build")));

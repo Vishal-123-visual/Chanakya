@@ -1,5 +1,5 @@
-import {useState} from 'react'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
+import React, {useState} from 'react'
+import {KTIcon} from '../../../_metronic/helpers'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
@@ -14,17 +14,18 @@ const ViewDayBook = () => {
     (acc, cur) => acc + cur.amountPaid + cur.lateFees,
     0
   )
+  console.log(totalFeesAmount)
   let balance = 0
 
   const filteredData =
     studentCourseFeesCtx.getAllStudentsCourseFees?.data.filter((filterOne) => {
-      const createdAt = moment(filterOne.createdAt).startOf('day')
+      const createdAt = moment(filterOne.createdAt)
       if (fromDate && toDate) {
         const startDate = moment(fromDate).startOf('day')
         const endDate = moment(toDate).endOf('day')
         return createdAt.isBetween(startDate, endDate, null, '[]')
       } else {
-        return createdAt.isSame(moment().startOf('day'))
+        return createdAt.isSame(moment(), 'day')
       }
     }) || []
 
@@ -35,6 +36,7 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
+          <span className=' mt-1 fw-semibold fs-7'>Saving Amount : {totalFeesAmount}</span>
         </h3>
         <div className='d-flex gap-5'>
           <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
@@ -93,7 +95,6 @@ const ViewDayBook = () => {
             </thead>
             {/* end::Table head */}
             {/* begin::Table body */}
-
             {studentCourseFeesCtx.getAllStudentsCourseFees.isLoading ? (
               <tbody>
                 <tr>
@@ -171,4 +172,5 @@ const ViewDayBook = () => {
     </div>
   )
 }
+
 export default ViewDayBook

@@ -87,6 +87,64 @@ export const PaymentOptionContextProvider = ({children}) => {
     },
   })
 
+  // ------------------------------------- Starting Day Book Context goes start here --------------------------------
+  const createDayBookAccountMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/dayBook/addAccount`, data, config).then((res) => res.data)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Student  Course fee  Successfully!')
+      //console.log('success')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getDayBookAccountsLists'],
+        })
+      }
+    },
+  })
+
+  const getDayBookAccountsLists = useQuery({
+    queryKey: ['getDayBookAccountsLists'],
+    queryFn: async () => {
+      return axios.get(`${BASE_URL}/api/dayBook`, config).then((res) => res.data)
+    },
+  })
+
+  const deleteDayBooksAccountMutation = useMutation({
+    mutationFn: async (id) => {
+      if (!window.confirm('Are you sure you want to delete')) {
+        return
+      }
+      return axios.delete(`${BASE_URL}/api/dayBook/${id}`, config).then((res) => res.data)
+    },
+
+    onSettled: async (_, error) => {
+      if (error) {
+        alert(error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getDayBookAccountsLists']})
+      }
+    },
+  })
+
+  // ------------------------------------- Starting Day Book Context goes end here ----------------------------------
+
   return (
     <PaymentOptionContext.Provider
       value={{
@@ -94,6 +152,11 @@ export const PaymentOptionContextProvider = ({children}) => {
         createNewPaymentOptionMutation,
         updatePaymentOptionsMutation,
         getPaymentOptionsData,
+        // ----------- Day Book Account ----------------
+        createDayBookAccountMutation,
+        getDayBookAccountsLists,
+        deleteDayBooksAccountMutation,
+        // ----------- Day Book Account ----------------
       }}
     >
       {children}

@@ -1,0 +1,67 @@
+import asyncHandler from "../../middlewares/asyncHandler.js";
+import DayBookAccountModel from "../../models/day-book/DayBookAccounts.models.js";
+
+export const addDayBookAccountController = asyncHandler(
+  async (req, res, next) => {
+    const { accountName, accountType } = req.body;
+    try {
+      switch (true) {
+        case !accountName:
+          return res.status(400).json({ error: "Account name is required" });
+        case !accountType:
+          return res.status(400).json({ error: "Account name is required" });
+      }
+
+      const existingAccountName = await DayBookAccountModel.find({
+        accountName,
+      });
+
+      if (!existingAccountName) {
+        return res
+          .status(400)
+          .json({ error: "DayBook Account already exists" });
+      }
+
+      const newDayBookAccount = new DayBookAccountModel({
+        accountName,
+        accountType,
+      });
+      await newDayBookAccount.save();
+      res.status(201).json(newDayBookAccount);
+    } catch (error) {
+      res.status(500).json({
+        error: "Error while creating account in daybook" || error.message,
+      });
+    }
+  }
+);
+
+export const getDayBookAccountsListsController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const daybookAccounts = await DayBookAccountModel.find({});
+      res.status(200).json(daybookAccounts);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Error while getting day book accounts lists" });
+    }
+  }
+);
+
+export const deleteDayBookAccountsListDataController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const daybookAccount = await DayBookAccountModel.findById(req.params.id);
+      if (!daybookAccount) {
+        return res.status(404).json({ error: "Not found day book account" });
+      }
+      await daybookAccount.deleteOne();
+      res.status(200).json({ message: "Day book account deleted" });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ error: "Error while getting day book accounts lists" });
+    }
+  }
+);

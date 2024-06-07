@@ -208,6 +208,7 @@ const SidebarMenuMain = () => {
       >
         <SidebarMenuItem to='/daybook/viewDaybook' title='View DayBook' hasBullet={true} />
         <SidebarMenuItem to='/daybook/addAccount' title='Add Account' hasBullet={true} />
+        <SidebarMenuItem to='/daybook/viewAccount' title='View Account' hasBullet={true} />
       </SidebarMenuItemWithSub>
       {/* ------------------------------------ End Day Book here ---------------------------------- */}
 
