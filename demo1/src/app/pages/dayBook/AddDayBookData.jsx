@@ -1,0 +1,77 @@
+import React, {useState} from 'react'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+
+const AddDayBookData = () => {
+  const [formData, setFormData] = useState({dayBookDatadate: null})
+  const dayBookAccountCtx = usePaymentOptionContextContext()
+
+  const handleDateChange = (date) => {
+    setFormData({...formData, dayBookDatadate: date})
+  }
+
+  return (
+    <tr>
+      <td>
+        <div className='form-check form-check-sm form-check-custom form-check-solid'>
+          {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
+        </div>
+      </td>
+      <td></td>
+
+      <td>
+        <DatePicker
+          selected={formData.dayBookDatadate}
+          onChange={handleDateChange}
+          dateFormat='dd/MM/yyyy'
+          className='form-control form-control-lg form-control-solid'
+          placeholderText='DD/MM/YYYY'
+        />
+      </td>
+      <td>
+        <input type='text' className='form-control' placeholder='Enter' />
+      </td>
+      <td>
+        <select className='form-control'>
+          <option>-select-</option>
+          {dayBookAccountCtx.getDayBookAccountsLists.data.map((item) => (
+            <option key={item._id} value={item._id}>
+              {item.accountName}-{item.accountType}
+            </option>
+          ))}
+        </select>
+      </td>
+
+      <td>
+        <input type='text' className='form-control' placeholder='Enter' />
+      </td>
+      <td>
+        <input type='text' className='form-control' placeholder='Enter' />
+      </td>
+      <td>
+        <input type='text' className='form-control' placeholder='Enter' />
+      </td>
+
+      <td className='text-center'>
+        <input type='text' className='form-control' placeholder='Enter' />
+      </td>
+      <td className='text-center'>
+        <input type='text' className='form-control' placeholder='Enter' />
+      </td>
+
+      <td>
+        <div className='d-flex justify-content-end flex-shrink-0'>
+          <button
+            type='submit'
+            className='btn btn-success btn-active-color-primary btn-sm me-1 px-5'
+          >
+            Add
+          </button>
+        </div>
+      </td>
+    </tr>
+  )
+}
+
+export default AddDayBookData

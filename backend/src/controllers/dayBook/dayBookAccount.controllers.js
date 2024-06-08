@@ -65,3 +65,22 @@ export const deleteDayBookAccountsListDataController = asyncHandler(
     }
   }
 );
+
+export const updateDayBookAccountController = asyncHandler(
+  async (req, res, next) => {
+    const { accountName, accountType } = req.body;
+    try {
+      const dayBookAccount = await DayBookAccountModel.findById(req.params.id);
+      dayBookAccount.accountName = accountName || dayBookAccount.accountName;
+      dayBookAccount.accountType = accountType || dayBookAccount.accountType;
+      await dayBookAccount.save();
+      res
+        .status(200)
+        .json({ message: "Day Book Account updated successfully" });
+    } catch (error) {
+      res.status(500).json({
+        error: "Error while updating the day book account" || error.message,
+      });
+    }
+  }
+);

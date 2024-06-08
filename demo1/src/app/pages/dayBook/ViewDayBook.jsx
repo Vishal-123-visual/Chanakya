@@ -4,6 +4,7 @@ import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContex
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import AddDayBookData from './AddDayBookData'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(new Date())
@@ -105,6 +106,7 @@ const ViewDayBook = () => {
               </tbody>
             ) : (
               <tbody>
+                <AddDayBookData />
                 {filteredData.map((studentFeesData, index) => {
                   balance += studentFeesData.amountPaid + studentFeesData.lateFees
                   return (

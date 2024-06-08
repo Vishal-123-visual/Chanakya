@@ -91,7 +91,14 @@ const ViewDayBookAccount = () => {
 
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
-                            <button className='btn  btn-bg-light btn-active-color-primary btn-sm me-1'>
+                            <button
+                              onClick={() =>
+                                navigate(`/daybook/editAccount/${dayBookAccountData._id}`, {
+                                  state: dayBookAccountData,
+                                })
+                              }
+                              className='btn  btn-bg-light btn-active-color-primary btn-sm me-1'
+                            >
                               <KTIcon iconName='pencil' className='fs-3' />
                             </button>
                             <button
