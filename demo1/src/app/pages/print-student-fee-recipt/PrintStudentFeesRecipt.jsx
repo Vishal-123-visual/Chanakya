@@ -9,7 +9,7 @@ const PrintStudentFeesRecipt = () => {
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
-  //console.log(studentInfoData)
+  console.log(studentInfoData)
 
   const gstAmount =
     studentInfoData.studentInfo.student_status === 'GST'
@@ -198,7 +198,7 @@ const PrintStudentFeesRecipt = () => {
                             {studentInfoData.paymentOption.name}
                           </span>
                           <span style={{display: 'block', width: 'max-content'}}>
-                            {moment(studentInfoData.createdAt).format('DD-MM-YYYY')}
+                            {moment(studentInfoData?.amountDate).format('DD-MM-YYYY')}
                           </span>
                         </td>
                       </tr>
