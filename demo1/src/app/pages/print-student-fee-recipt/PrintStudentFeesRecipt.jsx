@@ -205,11 +205,11 @@ const PrintStudentFeesRecipt = () => {
                             {studentInfoData.paymentOption.name}
                           </span>
                           <span style={{display: 'block', width: 'max-content'}}>
-                            {formatDate(
+                            {moment(
                               studentInfoData?.amountDate.length < 24
                                 ? studentInfoData?.amountDate
                                 : new Date(studentInfoData?.amountDate)
-                            )}
+                            ).format('DD-MM-YYYY')}
                           </span>
                         </td>
                       </tr>
