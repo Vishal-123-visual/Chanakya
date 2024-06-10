@@ -49,7 +49,7 @@ Visual Media Academy`
         {moment(
           StudentFee?.amountDate.length === 13
             ? new Date(StudentFee?.amountDate)
-            : StudentFee?.amountDate
+            : new Date(StudentFee?.amountDate)
         ).format('DD-MM-YYYY')}
       </td>
       <td>{StudentFee?.reciptNumber}</td>

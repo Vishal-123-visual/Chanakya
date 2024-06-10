@@ -206,8 +206,8 @@ const PrintStudentFeesRecipt = () => {
                           </span>
                           <span style={{display: 'block', width: 'max-content'}}>
                             {moment(
-                              studentInfoData?.amountDate.length < 24
-                                ? studentInfoData?.amountDate
+                              studentInfoData?.amountDate.length === 13
+                                ? new Date(Number(studentInfoData?.amountDate))
                                 : new Date(studentInfoData?.amountDate)
                             ).format('DD-MM-YYYY')}
                           </span>
