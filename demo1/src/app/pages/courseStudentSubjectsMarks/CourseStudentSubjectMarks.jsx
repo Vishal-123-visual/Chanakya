@@ -317,13 +317,14 @@ const CourseStudentSubjectMarks = () => {
                   // disabled={
                   //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0
                   // }
-                  onClick={() => {
+                  onClick={(e) => {
                     if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
                       window.alert(
                         YearandSemesterSets[activeTab - 1] +
                           ' Please add marks for all the subjects to Check Result'
                       )
-                      return false
+                      e.preventDefault() // This will stop the navigation
+                      return // This will stop the function execution here
                     }
                     localStorage.setItem(
                       'student-result',
@@ -342,17 +343,16 @@ const CourseStudentSubjectMarks = () => {
                   to={'/print-student-result'}
                   target='_blank'
                   className='btn btn-info text-uppercase'
-                  // disabled={
-                  //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0
-                  // }
-                  onClick={() => {
+                  onClick={(e) => {
                     if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
                       window.alert(
                         YearandSemesterSets[activeTab - 1] +
                           ' Please add marks for all the subjects to Check Result'
                       )
-                      return false
+                      e.preventDefault() // This will stop the navigation
+                      return // This will stop the function execution here
                     }
+
                     localStorage.setItem(
                       'print-student-result',
                       JSON.stringify({
