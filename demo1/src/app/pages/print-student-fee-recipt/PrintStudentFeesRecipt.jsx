@@ -16,6 +16,13 @@ const PrintStudentFeesRecipt = () => {
       ? (Number(studentInfoData.amountPaid) * Number(studentInfoData.companyName.gst)) / 100
       : 0
 
+  const formatDate = (date) => {
+    console.log('1717140043978'.length)
+    // if (!date) return 'Invalid date'
+    const parsedDate = moment(date, ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'], true)
+    return parsedDate.isValid() ? parsedDate.format('DD-MM-YYYY') : 'Invalid date'
+  }
+
   return (
     <div style={{backgroundColor: 'white', height: '100%'}}>
       {/* Start body */}
@@ -198,7 +205,11 @@ const PrintStudentFeesRecipt = () => {
                             {studentInfoData.paymentOption.name}
                           </span>
                           <span style={{display: 'block', width: 'max-content'}}>
-                            {moment(studentInfoData?.amountDate).format('DD-MM-YYYY')}
+                            {formatDate(
+                              studentInfoData?.amountDate.length < 24
+                                ? studentInfoData?.amountDate
+                                : new Date(studentInfoData?.amountDate)
+                            )}
                           </span>
                         </td>
                       </tr>
@@ -423,7 +434,7 @@ const PrintStudentFeesRecipt = () => {
                     {studentInfoData.companyName.companyPhone} <br />
                     <span>
                       Email :{' '}
-                      <a href={studentInfoData.companyName.email} target='_blank'>
+                      <a href={`mailto:${studentInfoData.companyName.email}`} target='_blank'>
                         {studentInfoData.companyName.email} |
                       </a>{' '}
                     </span>

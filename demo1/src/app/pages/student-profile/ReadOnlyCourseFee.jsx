@@ -11,7 +11,7 @@ const ReadOnlyCourseFee = ({
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
-  console.log(StudentFee)
+  //console.log(StudentFee)
   const {auth} = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()
@@ -29,6 +29,13 @@ Visual Media Academy`
     window.open(url)
   }
 
+  const formatDate = (date) => {
+    // console.log('1717140043978'.length)
+    // if (!date) return 'Invalid date'
+    const parsedDate = moment(date, ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'], true)
+    return parsedDate.isValid() ? parsedDate.format('DD-MM-YYYY') : 'Invalid date'
+  }
+
   return (
     <tr key={StudentFee._id}>
       <td>
@@ -38,7 +45,13 @@ Visual Media Academy`
       <td>{StudentFee?.netCourseFees}</td>
       <td>{StudentFee?.amountPaid}</td>
       <td>{StudentFee?.remainingFees}</td>
-      <td>{moment(new Date(StudentFee?.amountDate)).format('DD/MM/YYYY')}</td>
+      <td>
+        {formatDate(
+          StudentFee?.amountDate.length < 24
+            ? StudentFee?.amountDate
+            : new Date(StudentFee?.amountDate)
+        )}
+      </td>
       <td>{StudentFee?.reciptNumber}</td>
 
       <td>
