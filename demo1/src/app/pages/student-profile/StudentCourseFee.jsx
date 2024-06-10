@@ -49,7 +49,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       netCourseFees: initialAmountPaid,
       remainingFees: Number(studentInfoData?.remainingCourseFees).toFixed(2),
       amountPaid: '',
-      amountDate: Date.now(),
+      amountDate: '',
       paymentOption: '',
       lateFees: 0,
     })
