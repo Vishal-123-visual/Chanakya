@@ -14,12 +14,11 @@ const ViewDayBook = () => {
   const studentCourseFeesCtx = useStudentCourseFeesContext()
   const dayBookDataCtx = usePaymentOptionContextContext()
 
-  const [totalFeesAmount, setTotalFeesAmount] = useState(
+  const totalFeesAmount =
     studentCourseFeesCtx.getAllStudentsCourseFees?.data?.reduce(
       (acc, cur) => acc + cur.amountPaid + cur.lateFees,
       0
     ) || 0
-  )
 
   let balance = 0
 
@@ -46,7 +45,6 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
-          <span className=' mt-1 fw-semibold fs-7'>Saving Amount: {totalFeesAmount}</span>
         </h3>
         <div className='d-flex gap-5'>
           <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
@@ -111,7 +109,7 @@ const ViewDayBook = () => {
                 balance = dayBookEntry.debit
                   ? balance + dayBookEntry.debit
                   : balance - dayBookEntry.credit
-                setTotalFeesAmount((prev) => prev + balance)
+
                 return (
                   <tr key={index}>
                     <td>
