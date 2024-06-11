@@ -98,30 +98,30 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     naretion,
   } = req.body;
   try {
-    switch (true) {
-      case !accountName:
-        return res.status(400).json({ error: "Account name is required" });
-      case !dayBookAccountId:
-        return res
-          .status(400)
-          .json({ error: "Day Book Account Id is required" });
-      case !dayBookDatadate:
-        return res.status(400).json({ error: "Date is required" });
-      case !debit:
-        return res
-          .status(404)
-          .json({ error: "Day Book Data debit is required" });
-      case !credit:
-        return res
-          .status(404)
-          .json({ error: "Day Book Data credit is required" });
-      case !naretion:
-        return res
-          .status(404)
-          .json({ error: "Day Book Data naretion is required" });
-      default:
-        break;
-    }
+    // switch (true) {
+    //   case !accountName:
+    //     return res.status(400).json({ error: "Account name is required" });
+    //   case !dayBookAccountId:
+    //     return res
+    //       .status(400)
+    //       .json({ error: "Day Book Account Id is required" });
+    //   case !dayBookDatadate:
+    //     return res.status(400).json({ error: "Date is required" });
+    //   case !debit:
+    //     return res
+    //       .status(404)
+    //       .json({ error: "Day Book Data debit is required" });
+    //   case !credit:
+    //     return res
+    //       .status(404)
+    //       .json({ error: "Day Book Data credit is required" });
+    //   case !naretion:
+    //     return res
+    //       .status(404)
+    //       .json({ error: "Day Book Data naretion is required" });
+    //   default:
+    //     break;
+    // }
 
     const newDayBookData = new DayBookDataModel(req.body);
     await newDayBookData.save();

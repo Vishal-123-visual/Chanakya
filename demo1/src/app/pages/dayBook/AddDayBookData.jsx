@@ -45,6 +45,14 @@ const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
       // Optionally update totalAmount
 
       dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
+      setFormData({
+        dayBookDatadate: new Date(),
+        accountName: '',
+        naretion: '',
+        debit: 0,
+        credit: 0,
+        dayBookAccountId: '',
+      })
     } catch (error) {
       console.log(error)
     }
