@@ -3,12 +3,51 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
-const AddDayBookData = () => {
-  const [formData, setFormData] = useState({dayBookDatadate: null})
+const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
+  const [formData, setFormData] = useState({
+    dayBookDatadate: new Date(),
+    accountName: '',
+    naretion: '',
+    debit: 0,
+    credit: 0,
+    dayBookAccountId: '',
+  })
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
     setFormData({...formData, dayBookDatadate: date})
+  }
+
+  const handleAccountNameChange = (event) => {
+    const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data.find(
+      (item) => item.accountName === event.target.value
+    )
+    setFormData({
+      ...formData,
+      accountName: event.target.value,
+      dayBookAccountId: selectedAccount ? selectedAccount._id : '',
+    })
+  }
+
+  const handleInputChange = (event) => {
+    const {name, value} = event.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    })
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    try {
+      // Handle form submission, e.g., send data to the server or update state
+      //console.log(formData)
+      // Optionally update totalAmount
+
+      dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -29,35 +68,55 @@ const AddDayBookData = () => {
           placeholderText='DD/MM/YYYY'
         />
       </td>
+
       <td>
-        <input type='text' className='form-control' placeholder='Enter' />
-      </td>
-      <td>
-        <select className='form-control'>
-          <option>-select-</option>
+        <input
+          type='search'
+          className='form-control'
+          value={formData.accountName}
+          onChange={handleAccountNameChange}
+          list='accountNameOptions'
+          placeholder='Search account'
+        />
+        <datalist id='accountNameOptions'>
           {dayBookAccountCtx.getDayBookAccountsLists.data.map((item) => (
-            <option key={item._id} value={item._id}>
-              {item.accountName}-{item.accountType}
+            <option key={item._id} value={item.accountName}>
+              {item.accountName} - {item.accountType}
             </option>
           ))}
-        </select>
+        </datalist>
       </td>
 
       <td>
-        <input type='text' className='form-control' placeholder='Enter' />
-      </td>
-      <td>
-        <input type='text' className='form-control' placeholder='Enter' />
-      </td>
-      <td>
-        <input type='text' className='form-control' placeholder='Enter' />
+        <input
+          type='text'
+          className='form-control'
+          name='naretion'
+          placeholder='Enter naretion'
+          value={formData.naretion}
+          onChange={handleInputChange}
+        />
       </td>
 
-      <td className='text-center'>
-        <input type='text' className='form-control' placeholder='Enter' />
+      <td>
+        <input
+          type='number'
+          className='form-control'
+          name='debit'
+          placeholder='Enter debit'
+          value={formData.debit}
+          onChange={handleInputChange}
+        />
       </td>
-      <td className='text-center'>
-        <input type='text' className='form-control' placeholder='Enter' />
+      <td>
+        <input
+          type='number'
+          className='form-control'
+          name='credit'
+          placeholder='Enter credit'
+          value={formData.credit}
+          onChange={handleInputChange}
+        />
       </td>
 
       <td>
@@ -65,6 +124,7 @@ const AddDayBookData = () => {
           <button
             type='submit'
             className='btn btn-success btn-active-color-primary btn-sm me-1 px-5'
+            onClick={handleSubmit}
           >
             Add
           </button>

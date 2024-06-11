@@ -159,6 +159,45 @@ export const PaymentOptionContextProvider = ({children}) => {
       }
     },
   })
+  //  ************************* Day Book Data Start here ************************
+  //  add day book data
+  const createDayBookDataMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/dayBook/addData`, data, config).then((res) => res.data)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Student  Course fee  Successfully!')
+      //console.log('success')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getDayBookDataLists'],
+        })
+      }
+    },
+  })
+
+  const getDayBookDataQuery = useQuery({
+    queryKey: ['getDayBookDataLists'],
+    queryFn: async () => {
+      return axios.get(`${BASE_URL}/api/dayBook/data`, config).then((res) => res.data)
+    },
+  })
 
   // ------------------------------------- Starting Day Book Context goes end here ----------------------------------
 
@@ -175,6 +214,10 @@ export const PaymentOptionContextProvider = ({children}) => {
         deleteDayBooksAccountMutation,
         updateDayBookAccountsMutation,
         // ----------- Day Book Account ----------------
+        // ----------- Day Book DATA ----------------
+        createDayBookDataMutation,
+        getDayBookDataQuery,
+        // ----------- Day Book DATA ----------------
       }}
     >
       {children}

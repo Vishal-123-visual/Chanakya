@@ -1,33 +1,42 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {KTIcon} from '../../../_metronic/helpers'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(new Date())
   const [toDate, setToDate] = useState(new Date())
 
   const studentCourseFeesCtx = useStudentCourseFeesContext()
-  const totalFeesAmount = studentCourseFeesCtx.getAllStudentsCourseFees?.data.reduce(
-    (acc, cur) => acc + cur.amountPaid + cur.lateFees,
-    0
+  const dayBookDataCtx = usePaymentOptionContextContext()
+
+  const [totalFeesAmount, setTotalFeesAmount] = useState(
+    studentCourseFeesCtx.getAllStudentsCourseFees?.data?.reduce(
+      (acc, cur) => acc + cur.amountPaid + cur.lateFees,
+      0
+    ) || 0
   )
-  console.log(totalFeesAmount)
+
   let balance = 0
 
   const filteredData =
-    studentCourseFeesCtx.getAllStudentsCourseFees?.data.filter((filterOne) => {
-      const createdAt = moment(filterOne.createdAt)
-      if (fromDate && toDate) {
-        const startDate = moment(fromDate).startOf('day')
-        const endDate = moment(toDate).endOf('day')
-        return createdAt.isBetween(startDate, endDate, null, '[]')
-      } else {
-        return createdAt.isSame(moment(), 'day')
-      }
+    studentCourseFeesCtx.getAllStudentsCourseFees?.data?.filter((item) => {
+      const createdAt = moment(item.amountDate)
+      const startDate = moment(fromDate).startOf('day')
+      const endDate = moment(toDate).endOf('day')
+      return createdAt.isBetween(startDate, endDate, null, '[]')
+    }) || []
+
+  const filteredDayBookData =
+    dayBookDataCtx.getDayBookDataQuery?.data?.filter((item) => {
+      const createdAt = moment(item.dayBookDatadate)
+      const startDate = moment(fromDate).startOf('day')
+      const endDate = moment(toDate).endOf('day')
+      return createdAt.isBetween(startDate, endDate, null, '[]')
     }) || []
 
   return (
@@ -37,7 +46,7 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
-          <span className=' mt-1 fw-semibold fs-7'>Saving Amount : {totalFeesAmount}</span>
+          <span className=' mt-1 fw-semibold fs-7'>Saving Amount: {totalFeesAmount}</span>
         </h3>
         <div className='d-flex gap-5'>
           <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
@@ -85,85 +94,120 @@ const ViewDayBook = () => {
                 <th className='w-25px'></th>
                 <th className='min-w-150px'>ID</th>
                 <th className='min-w-140px'>Date</th>
-                <th className='min-w-120px'>RollNo</th>
                 <th className='min-w-120px'>Particulars</th>
-                <th className='min-w-120px'>R.NO</th>
+                <th className='min-w-120px'>Naretion</th>
                 <th className='min-w-120px'>Debit</th>
                 <th className='min-w-120px'>Credit</th>
-                <th className='min-w-120px'>LateFees</th>
                 <th className='min-w-100px text-center'>Balance</th>
               </tr>
             </thead>
             {/* end::Table head */}
             {/* begin::Table body */}
-            {studentCourseFeesCtx.getAllStudentsCourseFees.isLoading ? (
-              <tbody>
-                <tr>
-                  <td colSpan='10' className='text-center'>
-                    <h1>Loading...</h1>
-                  </td>
-                </tr>
-              </tbody>
-            ) : (
-              <tbody>
-                <AddDayBookData />
-                {filteredData.map((studentFeesData, index) => {
-                  balance += studentFeesData.amountPaid + studentFeesData.lateFees
-                  return (
-                    <tr key={index}>
-                      <td>
-                        <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {index + 1}
-                        </a>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {moment(studentFeesData.createdAt).format('DD-MM-YYYY')}
-                        </a>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {studentFeesData.studentInfo.rollNumber}
-                        </a>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {studentFeesData.studentInfo.name}
-                        </a>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {studentFeesData.reciptNumber}
-                        </a>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          0
-                        </a>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {studentFeesData.amountPaid}
-                        </a>
-                      </td>
-                      <td>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {studentFeesData.lateFees}
-                        </a>
-                      </td>
-                      <td className='text-center'>
-                        <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                          {balance}
-                        </a>
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            )}
+            <tbody>
+              <AddDayBookData totalAmount={totalFeesAmount} />
+
+              {/* Day Book Data */}
+              {filteredDayBookData.map((dayBookEntry, index) => {
+                balance = dayBookEntry.debit
+                  ? balance + dayBookEntry.debit
+                  : balance - dayBookEntry.credit
+                setTotalFeesAmount((prev) => prev + balance)
+                return (
+                  <tr key={index}>
+                    <td>
+                      <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                    </td>
+                    <td>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {index + 1}
+                      </a>
+                    </td>
+                    <td>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {dayBookEntry.accountName}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {dayBookEntry.naretion}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {dayBookEntry.debit}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {dayBookEntry.credit}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {balance}
+                      </a>
+                    </td>
+                  </tr>
+                )
+              })}
+
+              {/* Student Course Fees Data */}
+              {filteredData.map((studentFeesData, index) => {
+                balance += studentFeesData.amountPaid + studentFeesData.lateFees
+                return (
+                  <tr key={index}>
+                    <td>
+                      <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                    </td>
+                    <td>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {filteredDayBookData.length + index + 1}
+                      </a>
+                    </td>
+                    <td>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {moment(studentFeesData.amountDate).format('DD-MM-YYYY')}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {studentFeesData.studentInfo.name}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        RollNo- {studentFeesData.studentInfo.rollNumber}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {studentFeesData.amountPaid}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        0
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {studentFeesData.lateFees}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {balance}
+                      </a>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
             {/* end::Table body */}
           </table>
           {/* end::Table */}
