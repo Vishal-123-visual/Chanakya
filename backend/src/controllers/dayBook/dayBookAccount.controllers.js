@@ -134,12 +134,6 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     //     break;
     // }
 
-    if (req.body.accountType === "Income") {
-      req.body.debit = 0;
-    } else {
-      req.body.credit = 0;
-    }
-
     const newDayBookData = new DayBookDataModel(req.body);
     await newDayBookData.save();
     res.status(201).json(newDayBookData);
@@ -152,7 +146,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
-    const dayBookData = await DayBookDataModel.find({}).sort({ createdAt: -1 });
+    const dayBookData = await DayBookDataModel.find({}).sort({ createdAt: 1 });
     res.status(200).json(dayBookData);
   } catch (error) {
     res.status(500).json({

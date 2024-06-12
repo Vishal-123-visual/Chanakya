@@ -15,8 +15,9 @@ const MonthlyCollectionFee = () => {
   const searchContentValueHandler = (e) => {
     e.preventDefault()
     const filteredResults = result.data.filter((data) => {
-      //console.log(data)
-      const createdAtMonth = new Date(data.expiration_date).getMonth() + 1
+      // console.log(data)
+      const createdAtMonth = new Date(data.amountDate).getMonth() + 1
+      // console.log(createdAtMonth)
       return (
         createdAtMonth >= Number(searchContentValues.from) &&
         createdAtMonth <= Number(searchContentValues.to) &&
@@ -30,29 +31,30 @@ const MonthlyCollectionFee = () => {
   }
 
   const calculateTotalCollectionFees = (data) => {
-    //console.log(data)
-    const totalFees = data.reduce((total, item) => total + item?.installment_amount, 0)
+    console.log(data)
+    const totalFees = data.reduce((total, item) => total + item?.amountPaid, 0)
+    console.log(totalFees)
     setTotalCollectionFees(totalFees)
   }
 
   const navigate = useNavigate()
 
-  const compareTimeInstallment = (t1) => {
-    let resDate = new Date(t1).getTime()
-    let currDate = new Date().getTime()
+  // const compareTimeInstallment = (t1) => {
+  //   let resDate = new Date(t1).getTime()
+  //   let currDate = new Date().getTime()
 
-    //console.log(resDate, currDate)
+  //   //console.log(resDate, currDate)
 
-    if (currDate > resDate) {
-      return 'Month Skipped'
-    } else {
-      // console.log(
-      //   Number(new Date(resDate).toString().split(' ')[2]),
-      //   Number(new Date(currDate).toString().split(' ')[2])
-      // )
-      return '0 Month Skipped'
-    }
-  }
+  //   if (currDate > resDate) {
+  //     return 'Month Skipped'
+  //   } else {
+  //     // console.log(
+  //     //   Number(new Date(resDate).toString().split(' ')[2]),
+  //     //   Number(new Date(currDate).toString().split(' ')[2])
+  //     // )
+  //     return '0 Month Skipped'
+  //   }
+  // }
 
   // const compareTimeInstallment = (t1) => {
   //   let resDate = new Date(t1)
@@ -73,6 +75,7 @@ const MonthlyCollectionFee = () => {
   //     return 'No Month Skipped'
   //   }
   // }
+  console.log(filteredData)
 
   return (
     <div className={`card`}>
@@ -81,7 +84,7 @@ const MonthlyCollectionFee = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Monthly Collection</span>
           <p className=' mt-1 fw-semibold fs-7'>
-            Total Collection Fees Rs :: {totalCollectionFees.toFixed(2)}
+            Total Collection Fees Rs :: {Number(totalCollectionFees)}
           </p>
         </h3>
         <div className='d-flex justify-content-center align-items-center gap-5 '>
@@ -262,7 +265,7 @@ const MonthlyCollectionFee = () => {
                           </td>
                           <td>
                             <div className='d-flex justify-content-end flex-shrink-0'>
-                              {data?.installment_amount.toFixed(2)}
+                              {Number(data?.amountPaid)?.toFixed(2)}
                             </div>
                           </td>
                         </tr>

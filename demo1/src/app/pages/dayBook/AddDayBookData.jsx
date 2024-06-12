@@ -19,8 +19,6 @@ const AddDayBookData = ({totalBalance}) => {
     setFormData({...formData, dayBookDatadate: date})
   }
 
-  console.log(typeof +formData.debit)
-
   const handleAccountNameChange = (event) => {
     const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data.find(
       (item) => item.accountName === event.target.value
@@ -105,7 +103,7 @@ const AddDayBookData = ({totalBalance}) => {
         <datalist id='accountNameOptions'>
           {dayBookAccountCtx.getDayBookAccountsLists.data.map((item) => (
             <option key={item._id} value={item.accountName}>
-              {item.accountName} - {item.accountType}
+              {item.accountName}
             </option>
           ))}
         </datalist>
@@ -130,7 +128,7 @@ const AddDayBookData = ({totalBalance}) => {
           placeholder='Enter debit'
           value={formData.debit}
           onChange={handleInputChange}
-          readOnly={formData.accountType === 'Income'}
+          readOnly={+formData.credit !== 0}
         />
       </td>
       <td>
@@ -141,7 +139,7 @@ const AddDayBookData = ({totalBalance}) => {
           placeholder='Enter credit'
           value={formData.credit}
           onChange={handleInputChange}
-          readOnly={formData.accountType === 'Expense'}
+          readOnly={+formData.debit !== 0}
         />
       </td>
 
