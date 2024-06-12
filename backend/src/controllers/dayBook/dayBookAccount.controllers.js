@@ -97,6 +97,17 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     credit,
     naretion,
   } = req.body;
+
+  console.log(req.body);
+  // {
+  //   [0]   dayBookDatadate: '2024-06-12T06:11:30.407Z',
+  //   [0]   accountName: 'Rent Account',
+  //   [0]   naretion: 'buy some tablet ',
+  //   [0]   debit: 0,
+  //   [0]   credit: '50000',
+  //   [0]   dayBookAccountId: '66693bf21b3d5c9cb44c8c94',
+  //   [0]   accountType: 'Income'
+  //   [0] }
   try {
     // switch (true) {
     //   case !accountName:
@@ -123,6 +134,12 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     //     break;
     // }
 
+    if (req.body.accountType === "Income") {
+      req.body.debit = 0;
+    } else {
+      req.body.credit = 0;
+    }
+
     const newDayBookData = new DayBookDataModel(req.body);
     await newDayBookData.save();
     res.status(201).json(newDayBookData);
@@ -135,7 +152,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
-    const dayBookData = await DayBookDataModel.find({});
+    const dayBookData = await DayBookDataModel.find({}).sort({ createdAt: -1 });
     res.status(200).json(dayBookData);
   } catch (error) {
     res.status(500).json({

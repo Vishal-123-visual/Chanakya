@@ -11,6 +11,9 @@ import ViewDayBookAccount from '../pages/dayBook/ViewDayBookAccount'
 import EditDayBookAccount from '../pages/dayBook/EditDayBookAccount'
 
 const PrivateRoutes = () => {
+  const ShowSingleAccountDayBookData = lazy(
+    () => import('../pages/dayBook/ShowSingleAccountDayBookData')
+  )
   const ViewDayBook = lazy(() => import('../pages/dayBook/ViewDayBook'))
   const AddAccountDayBook = lazy(() => import('../pages/dayBook/AddAccountDayBook'))
   const UpdateCompany = lazy(() => import('../pages/compay/UpdateCompany'))
@@ -72,6 +75,14 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <AddAccountDayBook />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/daybook/singleAccount/:id'
+          element={
+            <SuspensedView>
+              <ShowSingleAccountDayBookData />
             </SuspensedView>
           }
         />

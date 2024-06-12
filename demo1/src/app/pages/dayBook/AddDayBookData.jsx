@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
-const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
+const AddDayBookData = ({totalBalance}) => {
   const [formData, setFormData] = useState({
     dayBookDatadate: new Date(),
     accountName: '',
@@ -11,12 +11,15 @@ const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
     debit: 0,
     credit: 0,
     dayBookAccountId: '',
+    accountType: '',
   })
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
     setFormData({...formData, dayBookDatadate: date})
   }
+
+  console.log(typeof +formData.debit)
 
   const handleAccountNameChange = (event) => {
     const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data.find(
@@ -25,6 +28,7 @@ const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
     setFormData({
       ...formData,
       accountName: event.target.value,
+      accountType: selectedAccount ? selectedAccount.accountType : '',
       dayBookAccountId: selectedAccount ? selectedAccount._id : '',
     })
   }
@@ -43,7 +47,18 @@ const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
       // Handle form submission, e.g., send data to the server or update state
       //console.log(formData)
       // Optionally update totalAmount
-
+      if (totalBalance < Number(formData.debit)) {
+        alert(`Your total balance is less than to do debit ${formData.debit}`)
+        setFormData({
+          dayBookDatadate: new Date(),
+          accountName: '',
+          naretion: '',
+          debit: 0,
+          credit: 0,
+          dayBookAccountId: '',
+        })
+        return
+      }
       dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
       setFormData({
         dayBookDatadate: new Date(),
@@ -76,6 +91,7 @@ const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
           placeholderText='DD/MM/YYYY'
         />
       </td>
+      <td></td>
 
       <td>
         <input
@@ -114,6 +130,7 @@ const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
           placeholder='Enter debit'
           value={formData.debit}
           onChange={handleInputChange}
+          readOnly={formData.accountType === 'Income'}
         />
       </td>
       <td>
@@ -124,6 +141,7 @@ const AddDayBookData = ({totalAmount, setTotalFeesAmount}) => {
           placeholder='Enter credit'
           value={formData.credit}
           onChange={handleInputChange}
+          readOnly={formData.accountType === 'Expense'}
         />
       </td>
 
