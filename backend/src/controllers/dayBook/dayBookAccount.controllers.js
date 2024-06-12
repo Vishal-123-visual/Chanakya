@@ -154,5 +154,21 @@ export const getDayBookDataController = asyncHandler(async (req, res, next) => {
     });
   }
 });
+export const getSingleDayBookDataController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const dayBookData = await DayBookDataModel.find({
+        dayBookAccountId: req.params.id,
+      }).sort({
+        createdAt: 1,
+      });
+      res.status(200).json(dayBookData);
+    } catch (error) {
+      res.status(500).json({
+        error: "Error: while getting the day book data " || error.message,
+      });
+    }
+  }
+);
 
 //  Day Book Data Controller End here -------------------------------------------------

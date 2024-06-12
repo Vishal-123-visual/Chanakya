@@ -199,6 +199,16 @@ export const PaymentOptionContextProvider = ({children}) => {
     },
   })
 
+  const getSingleDayBookAccountNameDataQuery = (id) => {
+    const result = useQuery({
+      queryKey: ['getDayBookDataLists'],
+      queryFn: async () => {
+        return axios.get(`${BASE_URL}/api/dayBook/data/${id}`, config).then((res) => res.data)
+      },
+    })
+    return result
+  }
+
   // ------------------------------------- Starting Day Book Context goes end here ----------------------------------
 
   return (
@@ -217,6 +227,8 @@ export const PaymentOptionContextProvider = ({children}) => {
         // ----------- Day Book DATA ----------------
         createDayBookDataMutation,
         getDayBookDataQuery,
+        getSingleDayBookAccountNameDataQuery,
+
         // ----------- Day Book DATA ----------------
       }}
     >

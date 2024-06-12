@@ -1,13 +1,19 @@
+import {useParams} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const ShowSingleAccountDayBookData = () => {
+  const dayBookAccountCtx = usePaymentOptionContextContext()
+  const {id} = useParams()
+  console.log(id)
+  console.log(dayBookAccountCtx.getSingleDayBookAccountNameDataQuery(id))
   return (
     <div className={`card`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Members Statistics</span>
-          <span className='text-muted mt-1 fw-semibold fs-7'>Over 500 members</span>
+          <span className='card-label fw-bold fs-3 mb-1'></span>
+          <span className='text-muted mt-1 fw-semibold fs-7'></span>
         </h3>
         <div
           className='card-toolbar'

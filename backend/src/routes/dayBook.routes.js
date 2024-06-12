@@ -8,6 +8,7 @@ import {
   //  day book data controller start here
   addDayBookDataController,
   getDayBookDataController,
+  getSingleDayBookDataController,
 } from "../controllers/dayBook/dayBookAccount.controllers.js";
 
 const router = Router();
@@ -25,5 +26,6 @@ router.post("/addAccount", requireSignIn, isAdmin, addDayBookAccountController);
 // day Book Data Start here ................................
 router.post("/addData", requireSignIn, isAdmin, addDayBookDataController);
 router.get("/data", requireSignIn, getDayBookDataController);
+router.get("/data/:id", requireSignIn, getSingleDayBookDataController);
 
 export default router;

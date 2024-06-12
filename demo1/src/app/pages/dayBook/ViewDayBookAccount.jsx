@@ -79,14 +79,24 @@ const ViewDayBookAccount = () => {
                           </a>
                         </td>
                         <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          <button
+                            onClick={() =>
+                              navigate('/daybook/singleAccount/' + dayBookAccountData._id)
+                            }
+                            className='btn  btn-active-color-primary btn-sm text-dark fw-bold text-hover-primary d-block fs-6'
+                          >
                             {dayBookAccountData?.accountName}
-                          </a>
+                          </button>
                         </td>
                         <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          <button
+                            onClick={() =>
+                              navigate('/daybook/singleAccount/' + dayBookAccountData._id)
+                            }
+                            className='btn  btn-active-color-primary btn-sm text-dark fw-bold text-hover-primary d-block fs-6'
+                          >
                             {dayBookAccountData?.accountType}
-                          </a>
+                          </button>
                         </td>
 
                         <td>
