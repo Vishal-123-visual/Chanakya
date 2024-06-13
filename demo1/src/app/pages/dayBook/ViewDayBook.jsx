@@ -23,6 +23,9 @@ const ViewDayBook = () => {
     }, 0) || 0
 
   let balance = 0
+  let lateFineStudent = 0
+  let debitDayBookAmount = 0
+  let creditDayBookAmount = 0
 
   const filteredData =
     studentFeesData?.filter((item) => {
@@ -47,7 +50,7 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
-          <span className=' mt-1 fw-semibold fs-7'>
+          <span className=' mt-1'>
             Total Amount : 💰 {totalAmountDayBookData + totalAmountStudentFees}
           </span>
         </h3>
@@ -124,6 +127,9 @@ const ViewDayBook = () => {
                   ? balance - dayBookEntry.debit
                   : balance + dayBookEntry.credit
 
+                debitDayBookAmount = debitDayBookAmount + dayBookEntry.debit
+                creditDayBookAmount = creditDayBookAmount + dayBookEntry.credit
+
                 return (
                   <tr key={index}>
                     <td>
@@ -179,6 +185,7 @@ const ViewDayBook = () => {
               {/* Student Course Fees Data */}
               {filteredData.map((studentFeesData, index) => {
                 balance += studentFeesData.amountPaid + studentFeesData.lateFees
+                lateFineStudent += studentFeesData.lateFees
                 return (
                   <tr key={index}>
                     <td>
@@ -232,14 +239,26 @@ const ViewDayBook = () => {
                 )
               })}
 
-              {/* <tr className=''>
-                <td className='bg-secondary text-center p-4' colspan='8'>
-                  <h1>Total Amount </h1>
+              <tr className=''>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td className='text-center'>
+                  <h4>{debitDayBookAmount}</h4>
                 </td>
-                <td className='bg-secondary text-center p-4'>
-                  <h1>{balance}</h1>
+                <td className='text-center'>
+                  <h4>{creditDayBookAmount}</h4>
                 </td>
-              </tr> */}
+                <td className='text-center'>
+                  <h4>{lateFineStudent}</h4>
+                </td>
+                <td className='text-center'>
+                  <h4>{balance}</h4>
+                </td>
+              </tr>
             </tbody>
             {/* end::Table body */}
           </table>
