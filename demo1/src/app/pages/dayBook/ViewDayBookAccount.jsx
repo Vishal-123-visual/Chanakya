@@ -6,6 +6,10 @@ const ViewDayBookAccount = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
 
+  const navigateHandler = (accountId) => {
+    navigate('/daybook/singleAccount/' + accountId)
+  }
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -80,9 +84,7 @@ const ViewDayBookAccount = () => {
                         </td>
                         <td>
                           <button
-                            onClick={() =>
-                              navigate('/daybook/singleAccount/' + dayBookAccountData._id)
-                            }
+                            onClick={() => navigateHandler(dayBookAccountData._id)}
                             className='btn  btn-active-color-primary btn-sm text-dark fw-bold text-hover-primary d-block fs-6'
                           >
                             {dayBookAccountData?.accountName}
@@ -90,9 +92,7 @@ const ViewDayBookAccount = () => {
                         </td>
                         <td>
                           <button
-                            onClick={() =>
-                              navigate('/daybook/singleAccount/' + dayBookAccountData._id)
-                            }
+                            onClick={() => navigateHandler(dayBookAccountData._id)}
                             className='btn  btn-active-color-primary btn-sm text-dark fw-bold text-hover-primary d-block fs-6'
                           >
                             {dayBookAccountData?.accountType}

@@ -15,9 +15,9 @@ const ViewDayBook = () => {
   const {dayBookData, studentFeesData} = dayBookDataCtx.getDayBookDataQuery?.data
 
   const totalAmountStudentFees =
-    studentFeesData.reduce((acc, cur) => acc + cur.amountPaid + cur.lateFees, 0) || 0
+    studentFeesData?.reduce((acc, cur) => acc + cur.amountPaid + cur.lateFees, 0) || 0
   const totalAmountDayBookData =
-    dayBookData.reduce((acc, cur) => {
+    dayBookData?.reduce((acc, cur) => {
       acc = cur.debit ? acc - cur.debit : acc + cur.credit
       return acc
     }, 0) || 0

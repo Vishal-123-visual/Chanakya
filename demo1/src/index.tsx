@@ -29,6 +29,8 @@ import {CourseSubjectContextProvider} from './app/pages/course/course_subject/Co
 import {StudentCourseFeesContextProvider} from './app/pages/courseFees/StudentCourseFeesContext'
 import {PaymentOptionContextProvider} from './app/pages/payment_option/PaymentOption.Context'
 import {CompanyContextProvider} from './app/pages/compay/CompanyContext'
+import {ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 setupAxios(axios)
 Chart.register(...registerables)
@@ -61,6 +63,7 @@ if (container) {
           </CourseContextProvider>
         </AuthProvider>
       </MetronicI18nProvider>
+      <ToastContainer />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   )

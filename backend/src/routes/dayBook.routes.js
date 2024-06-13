@@ -24,8 +24,12 @@ router.put("/:id", requireSignIn, isAdmin, updateDayBookAccountController);
 router.post("/addAccount", requireSignIn, isAdmin, addDayBookAccountController);
 
 // day Book Data Start here ................................
+router.get(
+  "/singleAccountDayBookLists/:id",
+  requireSignIn,
+  getSingleDayBookDataController
+);
 router.post("/addData", requireSignIn, isAdmin, addDayBookDataController);
 router.get("/data", requireSignIn, getDayBookDataController);
-router.get("/data/:id", requireSignIn, getSingleDayBookDataController);
 
 export default router;

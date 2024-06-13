@@ -1,21 +1,30 @@
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import moment from 'moment'
+import {toast} from 'react-toastify'
 
 const ShowSingleAccountDayBookData = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
+  const navigate = useNavigate()
   const {id} = useParams()
-  console.log(id)
-  console.log(dayBookAccountCtx.getSingleDayBookAccountNameDataQuery(id))
+  const {data, isLoading} = dayBookAccountCtx.useGetSingleDayBookAccountNameDataQuery(id)
+  // console.log('data from single day book account ', data, isLoading)
+  let debitAmount = 0
+  let creditAmount = 0
+  if (data?.length === 0) {
+    toast('You did not added data to this account. please add then check')
+    navigate('/daybook/viewDaybook')
+  }
   return (
     <div className={`card`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'></span>
+          <span className='card-label fw-bold fs-3 mb-1'>Day Book Single Account Details</span>
           <span className='text-muted mt-1 fw-semibold fs-7'></span>
         </h3>
-        <div
+        {/* <div
           className='card-toolbar'
           data-bs-toggle='tooltip'
           data-bs-placement='top'
@@ -31,7 +40,7 @@ const ShowSingleAccountDayBookData = () => {
             <KTIcon iconName='plus' className='fs-3' />
             New Member
           </a>
-        </div>
+        </div> */}
       </div>
       {/* end::Header */}
       {/* begin::Body */}
@@ -42,353 +51,85 @@ const ShowSingleAccountDayBookData = () => {
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
             {/* begin::Table head */}
             <thead>
-              <tr className='fw-bold text-muted'>
+              <tr className='fw-bold'>
                 <th className='w-25px'>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    <input
-                      className='form-check-input'
-                      type='checkbox'
-                      value='1'
-                      data-kt-check='true'
-                      data-kt-check-target='.widget-9-check'
-                    />
-                  </div>
+                  <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                 </th>
-                <th className='min-w-150px'>Authors</th>
-                <th className='min-w-140px'>Company</th>
-                <th className='min-w-120px'>Progress</th>
-                <th className='min-w-100px text-end'>Actions</th>
+                <th className='min-w-150px'>SR.NO</th>
+                <th className='min-w-100px'>Created At</th>
+                <th className='min-w-150px'>Account Name</th>
+                <th className='min-w-140px'>Naretion</th>
+                <th className='min-w-120px'>Credit</th>
+                <th className='min-w-120px'>Debit</th>
               </tr>
             </thead>
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
+              {isLoading ? (
+                <tr>
+                  <td className='text-center' colSpan={5}>
+                    <h1 className=' fw-semibold'>Loading....</h1>
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  {data?.map((dayBookAccountData, index) => {
+                    debitAmount = debitAmount + dayBookAccountData?.debit
+                    creditAmount = creditAmount + dayBookAccountData?.credit
+                    return (
+                      <tr>
+                        <td>
+                          <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                            {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
+                          </div>
+                        </td>
+                        <td className='fw-bold'>{index + 1}</td>
+                        <td>
+                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                            {moment(dayBookAccountData?.dayBookDatadate).format('DD-MM-YYYY')}
+                          </a>
+                        </td>
+                        <td>
+                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                            {dayBookAccountData?.accountName}
+                          </a>
+                        </td>
+                        <td>
+                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                            {dayBookAccountData?.naretion}
+                          </a>
+                        </td>
+                        <td>
+                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                            {dayBookAccountData?.credit}
+                          </a>
+                        </td>
+                        <td>
+                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                            {dayBookAccountData?.debit}
+                          </a>
+                        </td>
+                      </tr>
+                    )
+                  })}
+                </>
+              )}
               <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 <td>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    <input className='form-check-input widget-9-check' type='checkbox' value='1' />
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex align-items-center'>
-                    <div className='symbol symbol-45px me-5'>
-                      <img src={toAbsoluteUrl('/media/avatars/300-14.jpg')} alt='' />
-                    </div>
-                    <div className='d-flex justify-content-start flex-column'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        Ana Simmons
-                      </a>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        HTML, JS, ReactJS
-                      </span>
-                    </div>
-                  </div>
+                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                    {creditAmount}
+                  </a>
                 </td>
                 <td>
                   <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                    Intertico
+                    {debitAmount}
                   </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                    Web, UI/UX Design
-                  </span>
-                </td>
-                <td className='text-end'>
-                  <div className='d-flex flex-column w-100 me-2'>
-                    <div className='d-flex flex-stack mb-2'>
-                      <span className='text-muted me-2 fs-7 fw-semibold'>50%</span>
-                    </div>
-                    <div className='progress h-6px w-100'>
-                      <div
-                        className='progress-bar bg-primary'
-                        role='progressbar'
-                        style={{width: '50%'}}
-                      ></div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex justify-content-end flex-shrink-0'>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='switch' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='pencil' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                    >
-                      <KTIcon iconName='trash' className='fs-3' />
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    <input className='form-check-input widget-9-check' type='checkbox' value='1' />
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex align-items-center'>
-                    <div className='symbol symbol-45px me-5'>
-                      <img src={toAbsoluteUrl('/media/avatars/300-2.jpg')} alt='' />
-                    </div>
-                    <div className='d-flex justify-content-start flex-column'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        Jessie Clarcson
-                      </a>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        C#, ASP.NET, MS SQL
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                    Agoda
-                  </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                    Houses &amp; Hotels
-                  </span>
-                </td>
-                <td className='text-end'>
-                  <div className='d-flex flex-column w-100 me-2'>
-                    <div className='d-flex flex-stack mb-2'>
-                      <span className='text-muted me-2 fs-7 fw-semibold'>70%</span>
-                    </div>
-                    <div className='progress h-6px w-100'>
-                      <div
-                        className='progress-bar bg-danger'
-                        role='progressbar'
-                        style={{width: '70%'}}
-                      ></div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex justify-content-end flex-shrink-0'>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='switch' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='pencil' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                    >
-                      <KTIcon iconName='trash' className='fs-3' />
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    <input className='form-check-input widget-9-check' type='checkbox' value='1' />
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex align-items-center'>
-                    <div className='symbol symbol-45px me-5'>
-                      <img src={toAbsoluteUrl('/media/avatars/300-5.jpg')} alt='' />
-                    </div>
-                    <div className='d-flex justify-content-start flex-column'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        Lebron Wayde
-                      </a>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        PHP, Laravel, VueJS
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                    RoadGee
-                  </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                    Transportation
-                  </span>
-                </td>
-                <td className='text-end'>
-                  <div className='d-flex flex-column w-100 me-2'>
-                    <div className='d-flex flex-stack mb-2'>
-                      <span className='text-muted me-2 fs-7 fw-semibold'>60%</span>
-                    </div>
-                    <div className='progress h-6px w-100'>
-                      <div
-                        className='progress-bar bg-success'
-                        role='progressbar'
-                        style={{width: '60%'}}
-                      ></div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex justify-content-end flex-shrink-0'>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='switch' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='pencil' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                    >
-                      <KTIcon iconName='trash' className='fs-3' />
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    <input className='form-check-input widget-9-check' type='checkbox' value='1' />
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex align-items-center'>
-                    <div className='symbol symbol-45px me-5'>
-                      <img src={toAbsoluteUrl('/media/avatars/300-20.jpg')} alt='' />
-                    </div>
-                    <div className='d-flex justify-content-start flex-column'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        Natali Goodwin
-                      </a>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        Python, PostgreSQL, ReactJS
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                    The Hill
-                  </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>Insurance</span>
-                </td>
-                <td className='text-end'>
-                  <div className='d-flex flex-column w-100 me-2'>
-                    <div className='d-flex flex-stack mb-2'>
-                      <span className='text-muted me-2 fs-7 fw-semibold'>50%</span>
-                    </div>
-                    <div className='progress h-6px w-100'>
-                      <div
-                        className='progress-bar bg-warning'
-                        role='progressbar'
-                        style={{width: '50%'}}
-                      ></div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex justify-content-end flex-shrink-0'>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='switch' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='pencil' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                    >
-                      <KTIcon iconName='trash' className='fs-3' />
-                    </a>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    <input className='form-check-input widget-9-check' type='checkbox' value='1' />
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex align-items-center'>
-                    <div className='symbol symbol-45px me-5'>
-                      <img src={toAbsoluteUrl('/media/avatars/300-23.jpg')} alt='' />
-                    </div>
-                    <div className='d-flex justify-content-start flex-column'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        Kevin Leonard
-                      </a>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        HTML, JS, ReactJS
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                    RoadGee
-                  </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                    Art Director
-                  </span>
-                </td>
-                <td className='text-end'>
-                  <div className='d-flex flex-column w-100 me-2'>
-                    <div className='d-flex flex-stack mb-2'>
-                      <span className='text-muted me-2 fs-7 fw-semibold'>90%</span>
-                    </div>
-                    <div className='progress h-6px w-100'>
-                      <div
-                        className='progress-bar bg-info'
-                        role='progressbar'
-                        style={{width: '90%'}}
-                      ></div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex justify-content-end flex-shrink-0'>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='switch' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='pencil' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                    >
-                      <KTIcon iconName='trash' className='fs-3' />
-                    </a>
-                  </div>
                 </td>
               </tr>
             </tbody>

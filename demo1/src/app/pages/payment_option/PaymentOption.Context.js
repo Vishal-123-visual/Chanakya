@@ -199,11 +199,14 @@ export const PaymentOptionContextProvider = ({children}) => {
     },
   })
 
-  const getSingleDayBookAccountNameDataQuery = (id) => {
+  const useGetSingleDayBookAccountNameDataQuery = (id) => {
+    //  console.log(id)
     const result = useQuery({
-      queryKey: ['getDayBookDataLists'],
+      queryKey: ['getDayBookDataLists', id],
       queryFn: async () => {
-        return axios.get(`${BASE_URL}/api/dayBook/data/${id}`, config).then((res) => res.data)
+        return axios
+          .get(`${BASE_URL}/api/dayBook/singleAccountDayBookLists/${id}`, config)
+          .then((res) => res.data)
       },
     })
     return result
@@ -227,7 +230,7 @@ export const PaymentOptionContextProvider = ({children}) => {
         // ----------- Day Book DATA ----------------
         createDayBookDataMutation,
         getDayBookDataQuery,
-        getSingleDayBookAccountNameDataQuery,
+        useGetSingleDayBookAccountNameDataQuery,
 
         // ----------- Day Book DATA ----------------
       }}
