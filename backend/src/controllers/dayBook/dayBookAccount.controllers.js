@@ -1,4 +1,5 @@
 import asyncHandler from "../../middlewares/asyncHandler.js";
+import CourseFeesModel from "../../models/courseFees/courseFees.models.js";
 import DayBookAccountModel from "../../models/day-book/DayBookAccounts.models.js";
 import DayBookDataModel from "../../models/day-book/DayBookData.models.js";
 
@@ -146,8 +147,13 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
-    const dayBookData = await DayBookDataModel.find({}).sort({ createdAt: 1 });
-    res.status(200).json(dayBookData);
+    const dayBookData = await DayBookDataModel.find({}).sort({ createdAt: -1 });
+    const studentFeesData = await CourseFeesModel.find({})
+      .sort({
+        createdAt: 1,
+      })
+      .populate("studentInfo");
+    res.status(200).json({ dayBookData, studentFeesData });
   } catch (error) {
     res.status(500).json({
       error: "Error: while getting the day book data " || error.message,
