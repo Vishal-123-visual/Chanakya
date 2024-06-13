@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useCompanyContext} from './CompanyContext'
+import {toast} from 'react-toastify'
 
 const CourseSchema = Yup.object().shape({
   companyName: Yup.string().required('Company Name is required'),
@@ -68,6 +69,12 @@ const AddCompany = () => {
       }
       companyCTX.createAddCompanyMutation.mutate(formData)
       navigate('/company')
+      toast('Company created successfully!', {
+        type: 'success',
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
     },
   })
   return (

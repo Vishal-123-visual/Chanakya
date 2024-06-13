@@ -13,7 +13,12 @@ const ShowSingleAccountDayBookData = () => {
   let debitAmount = 0
   let creditAmount = 0
   if (data?.length === 0) {
-    toast('You did not added data to this account. please add then check')
+    toast('You did not added data to this account. please add then check', {
+      type: 'error',
+      bodyStyle: {
+        fontSize: '18px',
+      },
+    })
     navigate('/daybook/viewDaybook')
   }
   return (

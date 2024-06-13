@@ -2,6 +2,7 @@ import {createContext, useContext, useState} from 'react'
 import axios from 'axios'
 import {useQueryClient, useMutation, useQuery} from 'react-query'
 import {useAuth} from './Auth'
+import {toast} from 'react-toastify'
 
 const AdmissionContext = createContext()
 const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -46,7 +47,13 @@ export const AdmissionContextProvider = ({children}) => {
     },
 
     onSuccess: () => {
-      alert('Addmission done success 😊')
+      toast('Addmission done success 😊', {
+        type: 'success',
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
+
       //console.log('success')
     },
 
@@ -54,8 +61,15 @@ export const AdmissionContextProvider = ({children}) => {
       //console.log('settled')
       if (error) {
         //console.log(error)
-        alert(
-          'Something went wrong I think with your email admission done please try another email address then it will work 😊😊'
+
+        toast(
+          `Something went wrong I think with your email admission done please try another email address then it will work 😊😊`,
+          {
+            type: 'error',
+            bodyStyle: {
+              fontSize: '18px',
+            },
+          }
         )
       } else {
         await queryClient.invalidateQueries({queryKey: ['getStudents']})
@@ -69,7 +83,12 @@ export const AdmissionContextProvider = ({children}) => {
       return axios.delete(`${BASE_URL}/api/students/${id}`, config).then((res) => res.data)
     },
     onSuccess: () => {
-      alert('Student deleted successfully')
+      toast(`Student deleted Successfully`, {
+        type: 'success',
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
     },
     onSettled: async (_, error) => {
       if (error) {
@@ -90,7 +109,12 @@ export const AdmissionContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        alert('Error while updating student...', error)
+        toast(`Error while updating student... ${error}`, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
       } else {
         await queryClient.invalidateQueries({queryKey: ['getStudents']})
       }

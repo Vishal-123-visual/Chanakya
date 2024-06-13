@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {toast} from 'react-toastify'
 
 const AddDayBookData = ({totalBalance}) => {
   const [formData, setFormData] = useState({
@@ -46,7 +47,12 @@ const AddDayBookData = ({totalBalance}) => {
       //console.log(formData)
       // Optionally update totalAmount
       if (totalBalance < Number(formData.debit)) {
-        alert(`Your total balance is less than to do debit ${formData.debit}`)
+        toast(`Your total balance is less than to do debit ${formData.debit}`, {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
         setFormData({
           dayBookDatadate: new Date(),
           accountName: '',
@@ -58,6 +64,12 @@ const AddDayBookData = ({totalBalance}) => {
         return
       }
       dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
+      toast('Day Account Data added successfully!', {
+        type: 'success',
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
       setFormData({
         dayBookDatadate: new Date(),
         accountName: '',

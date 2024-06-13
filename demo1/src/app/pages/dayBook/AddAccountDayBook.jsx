@@ -3,6 +3,7 @@ import {useNavigate} from 'react-router-dom'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {toast} from 'react-toastify'
 
 const addAccountSchema = Yup.object().shape({
   accountName: Yup.string().required('Account Name is required'),
@@ -28,6 +29,12 @@ const AddAccountDayBook = () => {
       formik.setFieldValue('accountName', '')
       formik.setFieldValue('accountType', '--select--')
       navigate('/daybook/viewAccount')
+      toast(`Day Book Account Created Successfully!!`, {
+        type: 'success',
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
     },
   })
   return (

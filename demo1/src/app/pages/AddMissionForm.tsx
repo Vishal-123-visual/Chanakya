@@ -14,6 +14,7 @@ import {useLocation, useNavigate} from 'react-router-dom'
 import {toAbsoluteUrl} from '../../_metronic/helpers'
 import {useCourseContext} from './course/CourseContext'
 import {useCompanyContext} from './compay/CompanyContext'
+import {toast} from 'react-toastify'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
@@ -174,10 +175,22 @@ const AddMissionForm: React.FC = () => {
 
         context.updateStudentMutation.mutate(formData)
         setLoading(true)
+        toast(`Student Updated Successfully`, {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
       } else {
         formData.append('courseName', selectedCourseNameData._id)
         context.createStudentMutation.mutate(formData)
         setLoading(true)
+        toast(`Student Created Successfully`, {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
       }
 
       navigate(`/students/${values?.companyName}`)
