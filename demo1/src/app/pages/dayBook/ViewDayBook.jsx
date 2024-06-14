@@ -22,11 +22,6 @@ const ViewDayBook = () => {
       return acc
     }, 0) || 0
 
-  let balance = 0
-  let lateFineStudent = 0
-  let debitDayBookAmount = 0
-  let creditDayBookAmount = 0
-
   const filteredData =
     studentFeesData?.filter((item) => {
       const createdAt = moment(item.amountDate)
@@ -42,6 +37,25 @@ const ViewDayBook = () => {
       const endDate = moment(toDate).endOf('day')
       return createdAt.isBetween(startDate, endDate, null, '[]')
     }) || []
+
+  const filteredStudentFeesAmount = filteredData?.reduce(
+    (acc, cur) => acc + cur.amountPaid + cur.lateFees,
+    0
+  )
+
+  const filteredDayBookAmountData =
+    filteredDayBookData?.reduce((acc, cur) => {
+      acc = cur.debit ? acc - cur.debit : acc + cur.credit
+      return acc
+    }, 0) || 0
+
+  let balance =
+    totalAmountStudentFees +
+    totalAmountDayBookData -
+    (filteredStudentFeesAmount + filteredDayBookAmountData)
+  let lateFineStudent = 0
+  let debitDayBookAmount = 0
+  let creditDayBookAmount = 0
 
   return (
     <div className={`card`}>
