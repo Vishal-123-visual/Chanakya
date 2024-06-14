@@ -128,7 +128,7 @@ const ViewDayBook = () => {
                     </td>
                     <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.naretion || dayBookEntry.StudentName}
+                        {dayBookEntry.naretion || '--'}
                       </a>
                     </td>
                     <td className='text-center'>
