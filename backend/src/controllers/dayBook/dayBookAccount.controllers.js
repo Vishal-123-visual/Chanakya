@@ -100,42 +100,17 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
   } = req.body;
 
   console.log(req.body);
-  // {
-  //   [0]   dayBookDatadate: '2024-06-12T06:11:30.407Z',
-  //   [0]   accountName: 'Rent Account',
-  //   [0]   naretion: 'buy some tablet ',
-  //   [0]   debit: 0,
-  //   [0]   credit: '50000',
-  //   [0]   dayBookAccountId: '66693bf21b3d5c9cb44c8c94',
-  //   [0]   accountType: 'Income'
-  //   [0] }
   try {
-    // switch (true) {
-    //   case !accountName:
-    //     return res.status(400).json({ error: "Account name is required" });
-    //   case !dayBookAccountId:
-    //     return res
-    //       .status(400)
-    //       .json({ error: "Day Book Account Id is required" });
-    //   case !dayBookDatadate:
-    //     return res.status(400).json({ error: "Date is required" });
-    //   case !debit:
-    //     return res
-    //       .status(404)
-    //       .json({ error: "Day Book Data debit is required" });
-    //   case !credit:
-    //     return res
-    //       .status(404)
-    //       .json({ error: "Day Book Data credit is required" });
-    //   case !naretion:
-    //     return res
-    //       .status(404)
-    //       .json({ error: "Day Book Data naretion is required" });
-    //   default:
-    //     break;
-    // }
-
-    const newDayBookData = new DayBookDataModel(req.body);
+    const existingDataModel = await DayBookDataModel.find({}).sort({
+      createdAt: -1,
+    });
+    const newDayBookData = new DayBookDataModel({
+      ...req.body,
+      balance:
+        Number(credit) > 0
+          ? existingDataModel[0].balance + Number(credit)
+          : existingDataModel[0].balance - Number(debit),
+    });
     await newDayBookData.save();
     res.status(201).json(newDayBookData);
   } catch (error) {
@@ -148,12 +123,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
     const dayBookData = await DayBookDataModel.find({}).sort({ createdAt: -1 });
-    const studentFeesData = await CourseFeesModel.find({})
-      .sort({
-        createdAt: 1,
-      })
-      .populate("studentInfo");
-    res.status(200).json({ dayBookData, studentFeesData });
+    res.status(200).json(dayBookData);
   } catch (error) {
     res.status(500).json({
       error: "Error: while getting the day book data " || error.message,

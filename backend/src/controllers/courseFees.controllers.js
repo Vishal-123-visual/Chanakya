@@ -12,10 +12,11 @@ import CompanyModels from "../models/company/company.models.js";
 import EmailSuggestionModel from "../models/email-remainder/EmailSuggestions.models.js";
 import EmailRemainderModel from "../models/email-remainder/email.remainder.models.js";
 import { userModel } from "../models/user.models.js";
+import DayBookDataModel from "../models/day-book/DayBookData.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    //console.log("from create course fees ->>>>", req.body);
+    console.log("from create course fees ->>>>", req.body);
     try {
       const {
         studentInfo,
@@ -44,6 +45,26 @@ export const createCourseFeesController = asyncHandler(
       if (!student) {
         return res.status(404).json({ message: "Student not found" });
       }
+      //console.log("from student create fees", student);
+      const existingDataModel = await DayBookDataModel.find({}).sort({
+        createdAt: -1,
+      });
+      console.log("day book data model", existingDataModel);
+
+      const newDayBookData = new DayBookDataModel({
+        studentInfo: student._id,
+        rollNo: student.rollNumber,
+        StudentName: student.name,
+        studentLateFees: lateFees,
+        dayBookDatadate: amountDate,
+        credit: amountPaid,
+        balance:
+          (existingDataModel[0]?.balance || 0) +
+          Number(amountPaid) +
+          Number(lateFees),
+      });
+
+      await newDayBookData.save();
 
       //console.log(BACKEND_URL + "/api/images/" + student.companyName.logo);
 
@@ -51,7 +72,7 @@ export const createCourseFeesController = asyncHandler(
       let adminEmail, superAdminEmail;
       const adminUser = await userModel.find({});
       adminUser.forEach((user) => {
-        console.log(user);
+        //sconsole.log(user);
         if (user.role === "Admin") {
           adminEmail = user.email;
         }

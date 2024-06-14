@@ -2,6 +2,22 @@ import mongoose from "mongoose";
 
 const dayBookDataSchema = new mongoose.Schema(
   {
+    studentInfo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Students",
+    },
+    rollNo: {
+      type: String,
+    },
+    StudentName: {
+      type: String,
+    },
+
+    studentLateFees: {
+      type: Number,
+      default: 0,
+    },
+
     dayBookDatadate: {
       type: Date,
       default: Date.now(),
@@ -23,7 +39,10 @@ const dayBookDataSchema = new mongoose.Schema(
     dayBookAccountId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "DayBookAccount",
-      required: true,
+    },
+    balance: {
+      type: Number,
+      default: 0,
     },
   },
   {

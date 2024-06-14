@@ -12,50 +12,17 @@ const ViewDayBook = () => {
   const [toDate, setToDate] = useState(new Date())
 
   const dayBookDataCtx = usePaymentOptionContextContext()
-  const {dayBookData, studentFeesData} = dayBookDataCtx.getDayBookDataQuery?.data
-
-  const totalAmountStudentFees =
-    studentFeesData?.reduce((acc, cur) => acc + cur.amountPaid + cur.lateFees, 0) || 0
-  const totalAmountDayBookData =
-    dayBookData?.reduce((acc, cur) => {
-      acc = cur.debit ? acc - cur.debit : acc + cur.credit
-      return acc
-    }, 0) || 0
+  // console.log(dayBookDataCtx.getDayBookDataQuery?.data)
 
   const filteredData =
-    studentFeesData?.filter((item) => {
-      const createdAt = moment(item.amountDate)
-      const startDate = moment(fromDate).startOf('day')
-      const endDate = moment(toDate).endOf('day')
-      return createdAt.isBetween(startDate, endDate, null, '[]')
-    }) || []
-
-  const filteredDayBookData =
-    dayBookData?.filter((item) => {
+    dayBookDataCtx.getDayBookDataQuery?.data?.filter((item) => {
       const createdAt = moment(item.dayBookDatadate)
       const startDate = moment(fromDate).startOf('day')
       const endDate = moment(toDate).endOf('day')
       return createdAt.isBetween(startDate, endDate, null, '[]')
     }) || []
 
-  const filteredStudentFeesAmount = filteredData?.reduce(
-    (acc, cur) => acc + cur.amountPaid + cur.lateFees,
-    0
-  )
-
-  const filteredDayBookAmountData =
-    filteredDayBookData?.reduce((acc, cur) => {
-      acc = cur.debit ? acc - cur.debit : acc + cur.credit
-      return acc
-    }, 0) || 0
-
-  let balance =
-    totalAmountStudentFees +
-    totalAmountDayBookData -
-    (filteredStudentFeesAmount + filteredDayBookAmountData)
-  let lateFineStudent = 0
-  let debitDayBookAmount = 0
-  let creditDayBookAmount = 0
+  //console.log(filteredData[0].balance)
 
   return (
     <div className={`card`}>
@@ -64,9 +31,6 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
-          <span className=' mt-1'>
-            Total Amount : 💰 {totalAmountDayBookData + totalAmountStudentFees}
-          </span>
         </h3>
         <div className='d-flex gap-5'>
           <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
@@ -94,12 +58,12 @@ const ViewDayBook = () => {
             </div>
           </label>
         </div>
-        <div className='card-toolbar'>
+        {/* <div className='card-toolbar'>
           <a href='#' className='btn btn-sm btn-light-primary' title='Click to add a user'>
             <KTIcon iconName='plus' className='fs-3' />
             New Member
           </a>
-        </div>
+        </div> */}
       </div>
       {/* end::Header */}
       {/* begin::Body */}
@@ -127,7 +91,7 @@ const ViewDayBook = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <AddDayBookData totalBalance={totalAmountDayBookData + totalAmountStudentFees} />
+              <AddDayBookData totalBalance={filteredData[0]?.balance} />
 
               {/* <tr className=''>
                 <td className='bg-secondary text-center p-4' colspan='9'>
@@ -136,14 +100,7 @@ const ViewDayBook = () => {
               </tr> */}
 
               {/* Day Book Data */}
-              {filteredDayBookData.map((dayBookEntry, index) => {
-                balance = dayBookEntry.debit
-                  ? balance - dayBookEntry.debit
-                  : balance + dayBookEntry.credit
-
-                debitDayBookAmount = debitDayBookAmount + dayBookEntry.debit
-                creditDayBookAmount = creditDayBookAmount + dayBookEntry.credit
-
+              {filteredData.map((dayBookEntry, index) => {
                 return (
                   <tr key={index}>
                     <td>
@@ -160,16 +117,18 @@ const ViewDayBook = () => {
                       </a>
                     </td>
                     <td>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'></a>
-                    </td>
-                    <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.accountName}
+                        {dayBookEntry.rollNo}
                       </a>
                     </td>
                     <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.naretion}
+                        {dayBookEntry.accountName || dayBookEntry.StudentName}
+                      </a>
+                    </td>
+                    <td className='text-center'>
+                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
+                        {dayBookEntry.naretion || dayBookEntry.StudentName}
                       </a>
                     </td>
                     <td className='text-center'>
@@ -184,76 +143,19 @@ const ViewDayBook = () => {
                     </td>
                     <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        0
+                        {dayBookEntry?.studentLateFees || 0}
                       </a>
                     </td>
                     <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {balance}
+                        {dayBookEntry.balance}
                       </a>
                     </td>
                   </tr>
                 )
               })}
 
-              {/* Student Course Fees Data */}
-              {filteredData.map((studentFeesData, index) => {
-                balance += studentFeesData.amountPaid + studentFeesData.lateFees
-                lateFineStudent += studentFeesData.lateFees
-                return (
-                  <tr key={index}>
-                    <td>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                    </td>
-                    <td>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {filteredDayBookData.length + index + 1}
-                      </a>
-                    </td>
-                    <td>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {moment(studentFeesData.amountDate).format('DD-MM-YYYY')}
-                      </a>
-                    </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        RollNo- {studentFeesData.studentInfo.rollNumber}
-                      </a>
-                    </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {studentFeesData.studentInfo.name}
-                      </a>
-                    </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'></a>
-                    </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        0
-                      </a>
-                    </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {studentFeesData.amountPaid}
-                      </a>
-                    </td>
-
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {studentFeesData.lateFees}
-                      </a>
-                    </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {balance}
-                      </a>
-                    </td>
-                  </tr>
-                )
-              })}
-
-              <tr className=''>
+              {/* <tr className=''>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -272,7 +174,7 @@ const ViewDayBook = () => {
                 <td className='text-center'>
                   <h4>{balance}</h4>
                 </td>
-              </tr>
+              </tr> */}
             </tbody>
             {/* end::Table body */}
           </table>
