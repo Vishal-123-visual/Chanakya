@@ -22,7 +22,7 @@ const ViewDayBook = () => {
       return createdAt.isBetween(startDate, endDate, null, '[]')
     }) || []
 
-  //console.log(filteredData[0].balance)
+  //console.log(moment())
 
   return (
     <div className={`card`}>
@@ -82,8 +82,8 @@ const ViewDayBook = () => {
                 <th className='min-w-120px'>Particulars</th>
                 <th className='min-w-120px'>Naretion</th>
 
-                <th className='min-w-120px'>Debit</th>
                 <th className='min-w-120px'>Credit</th>
+                <th className='min-w-120px'>Debit</th>
                 <th className='min-w-120px'>late Fees</th>
                 <th className='min-w-100px text-center'>Balance</th>
               </tr>
@@ -133,14 +133,15 @@ const ViewDayBook = () => {
                     </td>
                     <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.debit}
+                        {dayBookEntry.credit}
                       </a>
                     </td>
                     <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.credit}
+                        {dayBookEntry.debit}
                       </a>
                     </td>
+
                     <td className='text-center'>
                       <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
                         {dayBookEntry?.studentLateFees || 0}

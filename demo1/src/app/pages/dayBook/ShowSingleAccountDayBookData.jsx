@@ -29,23 +29,6 @@ const ShowSingleAccountDayBookData = () => {
           <span className='card-label fw-bold fs-3 mb-1'>Day Book Single Account Details</span>
           <span className='text-muted mt-1 fw-semibold fs-7'></span>
         </h3>
-        {/* <div
-          className='card-toolbar'
-          data-bs-toggle='tooltip'
-          data-bs-placement='top'
-          data-bs-trigger='hover'
-          title='Click to add a user'
-        >
-          <a
-            href='#'
-            className='btn btn-sm btn-light-primary'
-            // data-bs-toggle='modal'
-            // data-bs-target='#kt_modal_invite_friends'
-          >
-            <KTIcon iconName='plus' className='fs-3' />
-            New Member
-          </a>
-        </div> */}
       </div>
       {/* end::Header */}
       {/* begin::Body */}
@@ -60,12 +43,12 @@ const ShowSingleAccountDayBookData = () => {
                 <th className='w-25px'>
                   <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                 </th>
-                <th className='min-w-150px'>SR.NO</th>
-                <th className='min-w-100px'>Created At</th>
-                <th className='min-w-150px'>Account Name</th>
-                <th className='min-w-140px'>Naretion</th>
-                <th className='min-w-120px'>Credit</th>
-                <th className='min-w-120px'>Debit</th>
+                <th className='min-w-50px'>SR.NO</th>
+                <th className='min-w-50px'>Created At</th>
+                <th className='min-w-80px'>Account Name</th>
+                <th className='min-w-200px'>Naretion</th>
+                <th className='min-w-50px'>Credit</th>
+                <th className='min-w-50px'>Debit</th>
               </tr>
             </thead>
             {/* end::Table head */}
@@ -134,6 +117,11 @@ const ShowSingleAccountDayBookData = () => {
                 <td>
                   <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
                     {debitAmount}
+                  </a>
+                </td>
+                <td>
+                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                    {creditAmount - debitAmount}
                   </a>
                 </td>
               </tr>
