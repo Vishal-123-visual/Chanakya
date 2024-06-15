@@ -9,7 +9,7 @@ const PrintStudentFeesRecipt = () => {
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
-  console.log(studentInfoData)
+  //console.log(studentInfoData)
 
   const gstAmount =
     studentInfoData.studentInfo.student_status === 'GST'
@@ -17,7 +17,7 @@ const PrintStudentFeesRecipt = () => {
       : 0
 
   const formatDate = (date) => {
-    console.log('1717140043978'.length)
+    //console.log('1717140043978'.length)
     // if (!date) return 'Invalid date'
     const parsedDate = moment(date, ['YYYY-MM-DD', 'DD-MM-YYYY', 'MM-DD-YYYY'], true)
     return parsedDate.isValid() ? parsedDate.format('DD-MM-YYYY') : 'Invalid date'

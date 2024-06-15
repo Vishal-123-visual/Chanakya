@@ -2,6 +2,7 @@ import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 import {useState, useEffect} from 'react'
 import {useAuth} from '../../modules/auth'
+import {toast} from 'react-toastify'
 
 const CourseStudentSubjectMarks = () => {
   const courseSubjectsCtx = useCourseSubjectContext()
@@ -84,10 +85,18 @@ const CourseStudentSubjectMarks = () => {
         })
       )
 
-      window.alert('Added marks successfully!')
+      toast.success('Added marks successfully!', {
+        style: {
+          fontSize: '16px',
+        },
+      })
     } catch (error) {
       console.log(error)
-      window.alert('Error adding marks')
+      toast.error('Error adding marks', {
+        style: {
+          fontSize: '16px',
+        },
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -319,7 +328,7 @@ const CourseStudentSubjectMarks = () => {
                   // }
                   onClick={(e) => {
                     if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
-                      window.alert(
+                      toast.error(
                         YearandSemesterSets[activeTab - 1] +
                           ' Please add marks for all the subjects to Check Result'
                       )
@@ -345,7 +354,7 @@ const CourseStudentSubjectMarks = () => {
                   className='btn btn-info text-uppercase'
                   onClick={(e) => {
                     if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
-                      window.alert(
+                      toast.error(
                         YearandSemesterSets[activeTab - 1] +
                           ' Please add marks for all the subjects to Check Result'
                       )

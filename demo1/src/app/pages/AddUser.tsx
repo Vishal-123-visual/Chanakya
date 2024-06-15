@@ -6,6 +6,7 @@ import {
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {useMutation} from 'react-query'
+import {toast} from 'react-toastify'
 
 const addUserSchema = Yup.object().shape({
   fName: Yup.string().required('First name is required'),
@@ -40,7 +41,7 @@ const AddUser: React.FC = () => {
       }
 
       // console.log('Data posted successfully', response);
-      alert('user created successfully!')
+      toast.success('user created successfully!')
       return response.json()
     } catch (error) {
       console.error('Error in postAddUserDataHandler:', error)

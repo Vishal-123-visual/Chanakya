@@ -2,6 +2,7 @@ import {createContext, useContext, useState} from 'react'
 import axios from 'axios'
 import {useQueryClient, useMutation, useQuery} from 'react-query'
 import {useAuth} from '../../../modules/auth'
+import {toast} from 'react-toastify'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const CourseTypesContext = createContext()
@@ -44,7 +45,7 @@ export const CourseTypesContextProvider = ({children}) => {
     },
 
     onSuccess: () => {
-      alert('Add Course Type Successfully!')
+      toast.success('Add Course Type Successfully!')
       //console.log('success')
     },
 
@@ -52,7 +53,7 @@ export const CourseTypesContextProvider = ({children}) => {
       //console.log('settled')
       if (error) {
         //console.log(error)
-        alert('There is Course Type Error You have existed course type !')
+        toast.error('There is Course Type Error You have existed course type !')
       } else {
         await queryClient.invalidateQueries({queryKey: ['getCourseTypes']})
       }
@@ -67,7 +68,7 @@ export const CourseTypesContextProvider = ({children}) => {
         .then((res) => res.data)
     },
     onSuccess: () => {
-      alert('Course Types deleted successfully')
+      toast.success('Course Types deleted successfully')
     },
     onSettled: async (_, error) => {
       if (error) {
@@ -88,7 +89,7 @@ export const CourseTypesContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        alert('Error while updating student...', error)
+        toast.error('Error while updating student...', error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getCourseTypes']})
       }
