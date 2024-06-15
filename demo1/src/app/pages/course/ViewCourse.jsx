@@ -14,7 +14,7 @@ const ViewCourse = () => {
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Courses Lists</span>
-          <span className='text-muted mt-1 fw-semibold fs-7'></span>
+          <span className=' mt-1 fw-semibold fs-7'></span>
         </h3>
         <div
           className='card-toolbar'
@@ -43,7 +43,7 @@ const ViewCourse = () => {
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
             {/* begin::Table head */}
             <thead>
-              <tr className='fw-bold text-muted'>
+              <tr className='fw-bold '>
                 <th className='w-25px'>
                   <div className='form-check form-check-sm form-check-custom form-check-solid'>
                     {/* <input
@@ -72,14 +72,14 @@ const ViewCourse = () => {
               {courseCtx?.getCourseLists?.data.map((course, index) => (
                 <tr key={course._id}>
                   <td></td>
-                  <td>{index + 1}</td>
-                  <td>{course?.courseName}</td>
-                  <td>{course?.courseFees}</td>
-                  <td>{course?.courseType?.courseType}</td>
-                  <td>{course?.numberOfYears?.numberOfYears}</td>
-                  <td>{course?.category?.category}</td>
-                  <td>{course?.createdBy}</td>
-                  <td>{moment(course.createdAt).format('DD/MM/YYYY')}</td>
+                  <td className='fw-bold fs-5'>{index + 1}</td>
+                  <td className='fw-bold fs-5'>{course?.courseName}</td>
+                  <td className='fw-bold fs-5'>{course?.courseFees}</td>
+                  <td className='fw-bold fs-5'>{course?.courseType?.courseType}</td>
+                  <td className='fw-bold fs-5'>{course?.numberOfYears?.numberOfYears}</td>
+                  <td className='fw-bold fs-5'>{course?.category?.category}</td>
+                  <td className='fw-bold fs-5'>{course?.createdBy}</td>
+                  <td className='fw-bold fs-5'>{moment(course.createdAt).format('DD/MM/YYYY')}</td>
                   <td>
                     <div className='d-flex justify-content-end flex-shrink-0'>
                       <button

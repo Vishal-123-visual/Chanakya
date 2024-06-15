@@ -17,10 +17,10 @@ const ReadPaymentOptionOnly = ({
           {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
         </div>
       </td>
-      <td>{index + 1}</td>
-      <td>{paymentOption.name}</td>
-      <td>{paymentOption.createdBy}</td>
-      <td>{moment(paymentOption.date).format('DD/MM/YYYY')}</td>
+      <td className='fw-bold fs-5'>{index + 1}</td>
+      <td className='fw-bold fs-5'>{paymentOption.name}</td>
+      <td className='fw-bold fs-5'>{paymentOption.createdBy}</td>
+      <td className='fw-bold fs-5'>{moment(paymentOption.date).format('DD/MM/YYYY')}</td>
 
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>
