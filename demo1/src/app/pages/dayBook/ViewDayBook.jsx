@@ -6,13 +6,14 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {useNavigate} from 'react-router-dom'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(moment().subtract(6, 'days').toDate())
   const [toDate, setToDate] = useState(new Date())
+  const navigate = useNavigate()
 
   const dayBookDataCtx = usePaymentOptionContextContext()
-  // console.log(dayBookDataCtx.getDayBookDataQuery?.data)
 
   const filteredData =
     dayBookDataCtx.getDayBookDataQuery?.data?.filter((item) => {
@@ -22,7 +23,13 @@ const ViewDayBook = () => {
       return createdAt.isBetween(startDate, endDate, null, '[]')
     }) || []
 
-  //console.log(moment())
+  //console.table(filteredData)
+
+  const navigateHandler = (accountId, accountName) => {
+    if (accountName) {
+      navigate(`/daybook/singleAccount/${accountId}`)
+    }
+  }
 
   return (
     <div className={`card`}>
@@ -106,51 +113,36 @@ const ViewDayBook = () => {
                     <td>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                     </td>
-                    <td>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {index + 1}
-                      </a>
+                    <td className='text-dark fw-bold text-hover-primary fs-6'>{index + 1}</td>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 '>
+                      {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
                     </td>
-                    <td>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
-                      </a>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                      {dayBookEntry.rollNo}
                     </td>
-                    <td>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.rollNo}
-                      </a>
+                    <td
+                      className='text-dark fw-bold text-hover-primary fs-6 text-center'
+                      onClick={() =>
+                        navigateHandler(dayBookEntry.dayBookAccountId, dayBookEntry.accountName)
+                      }
+                    >
+                      {dayBookEntry.accountName || dayBookEntry.StudentName}
                     </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.accountName || dayBookEntry.StudentName}
-                      </a>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                      {dayBookEntry.naretion || '--'}
                     </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.naretion || '--'}
-                      </a>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                      {dayBookEntry.credit}
                     </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.credit}
-                      </a>
-                    </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.debit}
-                      </a>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                      {dayBookEntry.debit}
                     </td>
 
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry?.studentLateFees || 0}
-                      </a>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                      {dayBookEntry?.studentLateFees || 0}
                     </td>
-                    <td className='text-center'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        {dayBookEntry.balance}
-                      </a>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                      {dayBookEntry.balance}
                     </td>
                   </tr>
                 )

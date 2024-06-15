@@ -121,7 +121,7 @@ const ShowSingleAccountDayBookData = () => {
                 </td>
                 <td>
                   <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                    {creditAmount - debitAmount}
+                    {creditAmount > 0 ? creditAmount - debitAmount : null}
                   </a>
                 </td>
               </tr>
