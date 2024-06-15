@@ -8,7 +8,7 @@ import AddDayBookData from './AddDayBookData'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const ViewDayBook = () => {
-  const [fromDate, setFromDate] = useState(new Date())
+  const [fromDate, setFromDate] = useState(moment().subtract(6, 'days').toDate())
   const [toDate, setToDate] = useState(new Date())
 
   const dayBookDataCtx = usePaymentOptionContextContext()
