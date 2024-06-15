@@ -176,17 +176,6 @@ const SidebarMenuMain = () => {
       </SidebarMenuItemWithSub> */}
       {/********************** Manage Monthy Collection of Student Course Fees Installment End***********************  */}
 
-      {/* ************* Manage Payment Option Start   ****************** */}
-      <SidebarMenuItemWithSub
-        to='/apps/chat'
-        title='Manage Payment Options'
-        fontIcon='bi-chat-left'
-        icon='message-text-2'
-      >
-        <SidebarMenuItem to='/payment-option' title='Add Payment Option' hasBullet={true} />
-      </SidebarMenuItemWithSub>
-      {/* ************* Manage Payment Option END   ****************** */}
-
       {/* ************************************* Manage Company Start ******************************** */}
       <SidebarMenuItemWithSub
         to='/apps/chat'
@@ -228,6 +217,7 @@ const SidebarMenuMain = () => {
       >
         <SidebarMenuItem to='/email-template' title='Email Template' hasBullet={true} />
         <SidebarMenuItem to='/email-suggesstions' title='Send Email Suggestion' hasBullet={true} />
+        <SidebarMenuItem to='/payment-option' title='Add Payment Option' hasBullet={true} />
       </SidebarMenuItemWithSub>
 
       {/* ------------------------------ Settings Page End ------------------------------------------- */}

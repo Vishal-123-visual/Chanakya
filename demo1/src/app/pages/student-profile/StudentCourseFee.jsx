@@ -9,6 +9,7 @@ import {useAuth} from '../../modules/auth'
 import {useNavigate} from 'react-router-dom'
 import ReadOnlyCourseFee from './ReadOnlyCourseFee'
 import EditOnlyCourseFee from './EditOnlyCourseFee'
+import {toast} from 'react-toastify'
 const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentInfoData)
   const navigate = useNavigate()
@@ -61,6 +62,22 @@ const StudentCourseFee = ({className, studentInfoData}) => {
 
   const payStudentFeesAddHandler = (e) => {
     e.preventDefault()
+    // amountDate
+    // amountPaid
+    // lateFees
+    // paymentOption
+
+    if (payStudentFeesAdd.amountPaid === '') {
+      toast.error('Please enter the amount paid', {bodyStyle: {fontSize: '18px'}})
+      return
+    } else if (payStudentFeesAdd.amountDate === '') {
+      toast.error('Please enter the Date', {bodyStyle: {fontSize: '18px'}})
+      return
+    } else if (payStudentFeesAdd.paymentOption === '') {
+      toast.error('Please select the payment option', {bodyStyle: {fontSize: '18px'}})
+      return
+    }
+
     let url = `https://web.whatsapp.com/send?phone=+91${studentInfoData.phone_number}`
 
     // // Appending the message to the URL by encoding it

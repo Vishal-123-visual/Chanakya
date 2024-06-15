@@ -49,15 +49,15 @@ export const createCourseFeesController = asyncHandler(
       const existingDataModel = await DayBookDataModel.find({}).sort({
         createdAt: -1,
       });
-      console.log("day book data model", existingDataModel);
+      //console.log("day book data model", existingDataModel);
 
       const newDayBookData = new DayBookDataModel({
         studentInfo: student._id,
         rollNo: student.rollNumber,
         StudentName: student.name,
-        studentLateFees: lateFees,
+        studentLateFees: +lateFees,
         dayBookDatadate: amountDate,
-        credit: amountPaid,
+        credit: +amountPaid,
         balance:
           (existingDataModel[0]?.balance || 0) +
           Number(amountPaid) +
@@ -89,8 +89,7 @@ export const createCourseFeesController = asyncHandler(
 
       const gstAmount =
         student.student_status === "GST"
-          ? (Number(student.down_payment) * Number(student.companyName.gst)) /
-            100
+          ? (Number(amountPaid) * Number(student.companyName.gst)) / 100
           : 0;
       //console.log("gst amount: " + gstAmount);
 
@@ -449,7 +448,7 @@ export const createCourseFeesController = asyncHandler(
                                           font-size: 12px;
                                           line-height: 24px;
                                         ">
-                            Rs  ${student.down_payment} 
+                            Rs  ${Number(amountPaid)} 
                             </td>
                           </tr>
       
@@ -529,12 +528,8 @@ export const createCourseFeesController = asyncHandler(
           ">
           Rs ${
             student?.student_status === "NOGST"
-              ? (Number(lateFees) + Number(student.down_payment)).toFixed(2)
-              : (
-                  Number(lateFees) +
-                  Number(student.down_payment) +
-                  gstAmount
-                ).toFixed(2)
+              ? (Number(lateFees) + Number(amountPaid)).toFixed(2)
+              : (Number(lateFees) + Number(amountPaid) + gstAmount).toFixed(2)
           } 
       </td>
     </tr>
@@ -1071,7 +1066,7 @@ export const createCourseFeesController = asyncHandler(
                                         font-size: 12px;
                                         line-height: 24px;
                                       ">
-                          Rs  ${student.down_payment} 
+                          Rs  ${Number(amountPaid)} 
                           </td>
                         </tr>
     
@@ -1151,12 +1146,8 @@ export const createCourseFeesController = asyncHandler(
         ">
         Rs ${
           student?.student_status === "NOGST"
-            ? (Number(lateFees) + Number(student.down_payment)).toFixed(2)
-            : (
-                Number(lateFees) +
-                Number(student.down_payment) +
-                gstAmount
-              ).toFixed(2)
+            ? (Number(lateFees) + Number(amountPaid)).toFixed(2)
+            : (Number(lateFees) + Number(amountPaid) + gstAmount).toFixed(2)
         } 
     </td>
   </tr>
