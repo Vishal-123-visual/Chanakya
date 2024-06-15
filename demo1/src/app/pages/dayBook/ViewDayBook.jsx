@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(moment().subtract(6, 'days').toDate())
@@ -113,35 +113,53 @@ const ViewDayBook = () => {
                     <td>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                     </td>
-                    <td className='text-dark fw-bold text-hover-primary fs-6'>{index + 1}</td>
-                    <td className='text-dark fw-bold text-hover-primary fs-6 '>
+                    <td className='text-dark fw-bold text-hover-primary fs-6 '>{index + 1}</td>
+                    <td
+                      className='text-dark fw-bold text-hover-primary fs-6 '
+                      style={{background: '#f2f2ff'}}
+                    >
                       {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
                     </td>
-                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                    <td className='text-dark fw-bold text-hover-primary fs-6'>
                       {dayBookEntry.rollNo}
                     </td>
-                    <td
-                      className='text-dark fw-bold text-hover-primary fs-6 text-center'
-                      onClick={() =>
-                        navigateHandler(dayBookEntry.dayBookAccountId, dayBookEntry.accountName)
-                      }
-                    >
-                      {dayBookEntry.accountName || dayBookEntry.StudentName}
+                    <td className='' style={{background: '#f2f2ff'}}>
+                      <Link
+                        className={
+                          dayBookEntry.accountName
+                            ? 'text-dark fw-bold text-hover-primary fs-6'
+                            : 'text-dark fw-bold text-hover-primary fs-6'
+                        }
+                        target={dayBookEntry.accountName && '_blank'}
+                        to={
+                          dayBookEntry.accountName
+                            ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
+                            : '/daybook/viewDaybook'
+                        }
+                      >
+                        {dayBookEntry.accountName || dayBookEntry.StudentName}
+                      </Link>
                     </td>
-                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                    <td className='text-dark fw-bold text-hover-primary fs-6'>
                       {dayBookEntry.naretion || '--'}
                     </td>
-                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                    <td
+                      className='text-dark fw-bold text-hover-primary fs-6 '
+                      style={{background: '#f2f2ff'}}
+                    >
                       {dayBookEntry.credit}
                     </td>
-                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                    <td className='text-dark fw-bold text-hover-primary fs-6'>
                       {dayBookEntry.debit}
                     </td>
 
-                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                    <td
+                      style={{background: '#f2f2ff'}}
+                      className='text-dark fw-bold text-hover-primary fs-6'
+                    >
                       {dayBookEntry?.studentLateFees || 0}
                     </td>
-                    <td className='text-dark fw-bold text-hover-primary fs-6 text-center'>
+                    <td className='text-dark fw-bold text-hover-primary fs-6'>
                       {dayBookEntry.balance}
                     </td>
                   </tr>
