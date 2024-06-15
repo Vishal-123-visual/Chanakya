@@ -5,7 +5,6 @@ import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Co
 import {toast} from 'react-toastify'
 
 const AddDayBookData = ({totalBalance}) => {
-  //console.log(totalBalance)
   const [formData, setFormData] = useState({
     dayBookDatadate: new Date(),
     accountName: '',
@@ -15,7 +14,7 @@ const AddDayBookData = ({totalBalance}) => {
     dayBookAccountId: '',
     accountType: '',
   })
-  console.log(formData)
+
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
@@ -42,38 +41,27 @@ const AddDayBookData = ({totalBalance}) => {
     })
   }
 
-  console.log(totalBalance < Number(formData.debit))
-
   const handleSubmit = (event) => {
     event.preventDefault()
-    try {
-      // Handle form submission, e.g., send data to the server or update state
-      //console.log(formData)
-      // Optionally update totalAmount
-      if (totalBalance < Number(formData.debit)) {
-        toast(`Your total balance is less than to do debit ${formData.debit}`, {
-          type: 'success',
-          bodyStyle: {
-            fontSize: '18px',
-          },
-        })
-        setFormData({
-          dayBookDatadate: new Date(),
-          accountName: '',
-          naretion: '',
-          debit: 0,
-          credit: 0,
-          dayBookAccountId: '',
-        })
-        return
-      }
-      dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
-      toast('Day Account Data added successfully!', {
-        type: 'success',
-        bodyStyle: {
-          fontSize: '18px',
-        },
+    if (formData.accountName === '') {
+      toast.error('Please select account name', {bodyStyle: {fontSize: '18px'}})
+      return
+    } else if (formData.naretion === '') {
+      toast.error('Please enter naretion', {bodyStyle: {fontSize: '18px'}})
+      return
+    } else if (formData.credit === 0 && formData.debit === 0) {
+      toast.error('Please enter either credit or debit', {bodyStyle: {fontSize: '18px'}})
+      return
+    } else if (totalBalance < Number(formData.debit)) {
+      toast.error(`Your total balance is less than the debit amount ${formData.debit}`, {
+        bodyStyle: {fontSize: '18px'},
       })
+      return
+    }
+
+    try {
+      dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
+      toast.success('Day Account Data added successfully!', {bodyStyle: {fontSize: '18px'}})
       setFormData({
         dayBookDatadate: new Date(),
         accountName: '',
@@ -81,9 +69,10 @@ const AddDayBookData = ({totalBalance}) => {
         debit: 0,
         credit: 0,
         dayBookAccountId: '',
+        accountType: '',
       })
     } catch (error) {
-      console.log(error)
+      console.error(error)
     }
   }
 
@@ -95,7 +84,6 @@ const AddDayBookData = ({totalBalance}) => {
         </div>
       </td>
       <td></td>
-
       <td>
         <DatePicker
           selected={formData.dayBookDatadate}
@@ -106,7 +94,6 @@ const AddDayBookData = ({totalBalance}) => {
         />
       </td>
       <td></td>
-
       <td>
         <input
           type='search'
@@ -124,7 +111,6 @@ const AddDayBookData = ({totalBalance}) => {
           ))}
         </datalist>
       </td>
-
       <td>
         <input
           type='text'
@@ -133,18 +119,6 @@ const AddDayBookData = ({totalBalance}) => {
           placeholder='Enter naretion'
           value={formData.naretion}
           onChange={handleInputChange}
-        />
-      </td>
-
-      <td>
-        <input
-          type='number'
-          className='form-control'
-          name='debit'
-          placeholder='Enter debit'
-          value={formData.debit}
-          onChange={handleInputChange}
-          readOnly={+formData.credit !== 0}
         />
       </td>
       <td>
@@ -158,7 +132,17 @@ const AddDayBookData = ({totalBalance}) => {
           readOnly={+formData.debit !== 0}
         />
       </td>
-
+      <td>
+        <input
+          type='number'
+          className='form-control'
+          name='debit'
+          placeholder='Enter debit'
+          value={formData.debit}
+          onChange={handleInputChange}
+          readOnly={+formData.credit !== 0}
+        />
+      </td>
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>
           <button

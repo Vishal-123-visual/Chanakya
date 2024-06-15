@@ -185,12 +185,6 @@ const AddMissionForm: React.FC = () => {
         formData.append('courseName', selectedCourseNameData._id)
         context.createStudentMutation.mutate(formData)
         setLoading(true)
-        toast(`Student Created Successfully`, {
-          type: 'success',
-          bodyStyle: {
-            fontSize: '18px',
-          },
-        })
       }
 
       navigate(`/students/${values?.companyName}`)
