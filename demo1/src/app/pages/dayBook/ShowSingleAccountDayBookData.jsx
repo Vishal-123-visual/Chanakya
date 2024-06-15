@@ -73,7 +73,7 @@ const ShowSingleAccountDayBookData = () => {
                           </div>
                         </td>
                         <td className='fw-bold'>{index + 1}</td>
-                        <td>
+                        <td style={{background: '#f2f2ff'}}>
                           <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {moment(dayBookAccountData?.dayBookDatadate).format('DD-MM-YYYY')}
                           </a>
@@ -83,7 +83,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.accountName}
                           </a>
                         </td>
-                        <td>
+                        <td style={{background: '#f2f2ff'}}>
                           <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.naretion}
                           </a>
@@ -93,7 +93,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.credit}
                           </a>
                         </td>
-                        <td>
+                        <td style={{background: '#f2f2ff'}}>
                           <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.debit}
                           </a>
