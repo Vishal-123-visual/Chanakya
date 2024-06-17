@@ -1,81 +1,20 @@
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import React, {useState} from 'react'
+import moment from 'moment'
+
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 const MonthlyCollectionFee = () => {
+  const [fromDate, setFromDate] = useState(new Date())
+  const [toDate, setToDate] = useState(new Date())
+  console.log(fromDate, toDate)
   const ctx = useStudentCourseFeesContext()
   const result = ctx.useGetStudentMonthlyCourseFeesCollection()
   const paramsData = useParams()
-  //console.log(paramsData.id)
-  // console.log(result.data)
-  const [searchContentValues, setSearchContentValues] = useState({from: '', to: ''})
-  const [filteredData, setFilteredData] = useState([])
-  const [totalCollectionFees, setTotalCollectionFees] = useState(0)
-
-  const searchContentValueHandler = (e) => {
-    e.preventDefault()
-    const filteredResults = result.data.filter((data) => {
-      // console.log(data)
-      const createdAtMonth = new Date(data.amountDate).getMonth() + 1
-      // console.log(createdAtMonth)
-      return (
-        createdAtMonth >= Number(searchContentValues.from) &&
-        createdAtMonth <= Number(searchContentValues.to) &&
-        data.studentInfo.companyName === paramsData.id
-      )
-    })
-
-    //console.log(filteredResults)
-    setFilteredData(filteredResults)
-    calculateTotalCollectionFees(filteredResults)
-  }
-
-  const calculateTotalCollectionFees = (data) => {
-    console.log(data)
-    const totalFees = data.reduce((total, item) => total + item?.amountPaid, 0)
-    console.log(totalFees)
-    setTotalCollectionFees(totalFees)
-  }
 
   const navigate = useNavigate()
-
-  // const compareTimeInstallment = (t1) => {
-  //   let resDate = new Date(t1).getTime()
-  //   let currDate = new Date().getTime()
-
-  //   //console.log(resDate, currDate)
-
-  //   if (currDate > resDate) {
-  //     return 'Month Skipped'
-  //   } else {
-  //     // console.log(
-  //     //   Number(new Date(resDate).toString().split(' ')[2]),
-  //     //   Number(new Date(currDate).toString().split(' ')[2])
-  //     // )
-  //     return '0 Month Skipped'
-  //   }
-  // }
-
-  // const compareTimeInstallment = (t1) => {
-  //   let resDate = new Date(t1)
-  //   let currDate = new Date()
-
-  //   // Get the month of the expiration date
-  //   let resMonth = resDate.getTime()
-
-  //   // Get the month of the current date
-  //   let currMonth = currDate.getTime()
-  //   console.log(currMonth > resMonth)
-
-  //   if (resMonth === currMonth) {
-  //     return '0 Month Skipped'
-  //   } else if (currMonth > resMonth) {
-  //     return 'Month Skipped'
-  //   } else {
-  //     return 'No Month Skipped'
-  //   }
-  // }
-  console.log(filteredData)
 
   return (
     <div className={`card`}>
@@ -83,114 +22,33 @@ const MonthlyCollectionFee = () => {
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Monthly Collection</span>
-          <p className=' mt-1 fw-semibold fs-7'>
-            Total Collection Fees Rs :: {Number(totalCollectionFees)}
-          </p>
+          <p className=' mt-1 fw-semibold fs-7'>Total Collection Fees Rs ::</p>
         </h3>
-        <div className='d-flex justify-content-center align-items-center gap-5 '>
-          <label htmlFor='From'>
-            From{' '}
-            <select
-              value={searchContentValues.from}
-              onChange={(e) => setSearchContentValues((prev) => ({...prev, from: e.target.value}))}
-              type='text'
-              name='From'
-              id='From'
-              className='form-control w-auto'
-            >
-              <option value=''>select month</option>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
-                <option key={month} value={month}>
-                  {(() => {
-                    switch (month) {
-                      case 1:
-                        return 'Jan'
-                      case 2:
-                        return 'Feb'
-                      case 3:
-                        return 'Mar'
-                      case 4:
-                        return 'Apr'
-                      case 5:
-                        return 'May'
-                      case 6:
-                        return 'Jun'
-                      case 7:
-                        return 'Jul'
-                      case 8:
-                        return 'Aug'
-                      case 9:
-                        return 'Sep'
-                      case 10:
-                        return 'Oct'
-                      case 11:
-                        return 'Nov'
-                      case 12:
-                        return 'Dec'
-                      default:
-                        return ''
-                    }
-                  })()}
-                </option>
-              ))}
-            </select>
+        <div className='d-flex gap-5'>
+          <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
+            From
+            <div className='fv-row'>
+              <DatePicker
+                selected={fromDate}
+                onChange={(date) => setFromDate(date)}
+                dateFormat='dd/MM/yyyy'
+                className='form-control form-control-lg form-control-solid'
+                placeholderText='DD/MM/YYYY'
+              />
+            </div>
           </label>
-
-          <label htmlFor='To'>
-            To{' '}
-            <select
-              value={searchContentValues.to}
-              onChange={(e) => setSearchContentValues((prev) => ({...prev, to: e.target.value}))}
-              type='text'
-              name='To'
-              id='To'
-              className='form-control w-auto'
-            >
-              <option value=''>select month</option>
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
-                <option key={month} value={month}>
-                  {(() => {
-                    switch (month) {
-                      case 1:
-                        return 'Jan'
-                      case 2:
-                        return 'Feb'
-                      case 3:
-                        return 'Mar'
-                      case 4:
-                        return 'Apr'
-                      case 5:
-                        return 'May'
-                      case 6:
-                        return 'Jun'
-                      case 7:
-                        return 'Jul'
-                      case 8:
-                        return 'Aug'
-                      case 9:
-                        return 'Sep'
-                      case 10:
-                        return 'Oct'
-                      case 11:
-                        return 'Nov'
-                      case 12:
-                        return 'Dec'
-                      default:
-                        return ''
-                    }
-                  })()}
-                </option>
-              ))}
-            </select>
+          <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
+            To
+            <div className='fv-row'>
+              <DatePicker
+                selected={toDate}
+                onChange={(date) => setToDate(date)}
+                dateFormat='dd/MM/yyyy'
+                className='form-control form-control-lg form-control-solid'
+                placeholderText='DD/MM/YYYY'
+              />
+            </div>
           </label>
-
-          <button
-            onClick={searchContentValueHandler}
-            type='submit'
-            className='btn btn-sm btn-light-primary'
-          >
-            Search
-          </button>
         </div>
       </div>
       {/* end::Header */}
@@ -218,61 +76,34 @@ const MonthlyCollectionFee = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {filteredData.length === 0 ? (
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <h2>Loading.....</h2>
-                  </td>
-                  <td></td>
-                  <td></td>
-                </tr>
-              ) : (
-                filteredData
-                  ?.filter(
-                    (companyDataId) => companyDataId?.studentInfo?.companyName === paramsData.id
-                  )
-                  .map((data) => (
-                    <React.Fragment key={data._id}>
-                      {data.studentInfo !== null && (
-                        <tr key={data._id}>
-                          <td>
-                            <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                          </td>
-                          <td>
-                            <button
-                              className='btn btn-link'
-                              onClick={() =>
-                                navigate(`/student/${data.studentInfo._id}`, {
-                                  state: data.studentInfo,
-                                })
-                              }
-                            >
-                              {}
-                              {data?.studentInfo?.rollNumber}
-                            </button>
-                          </td>
-                          <td>{data?.studentInfo?.name}</td>
+              <tr>
+                <td>
+                  <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                </td>
+                <td>
+                  <button
+                    className='btn btn-link'
+                    onClick={() =>
+                      navigate(`/student/1`, {
+                        state: 1,
+                      })
+                    }
+                  >
+                    {}
+                    1233
+                  </button>
+                </td>
+                <td>Hello Ram</td>
 
-                          <td>{data?.courseName?.courseName}</td>
-                          <td>{data.studentInfo?.installmentPaymentSkipMonth} Month Skipped</td>
-                          <td>
-                            <div className='d-flex justify-content-end flex-shrink-0'>
-                              {data?.studentInfo?.phone_number}
-                            </div>
-                          </td>
-                          <td>
-                            <div className='d-flex justify-content-end flex-shrink-0'>
-                              {Number(data?.amountPaid)?.toFixed(2)}
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  ))
-              )}
+                <td>English Speaking</td>
+                <td>1</td>
+                <td>
+                  <div className='d-flex justify-content-end flex-shrink-0'>1234567890</div>
+                </td>
+                <td>
+                  <div className='d-flex justify-content-end flex-shrink-0'>12344</div>
+                </td>
+              </tr>
             </tbody>
             {/* end::Table body */}
           </table>
