@@ -6,6 +6,10 @@ const installmentExpireTimeSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Students",
     },
+    companyName: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+    },
     courseName: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Course",

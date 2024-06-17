@@ -33,12 +33,15 @@ export const StudentCourseFeesContextProvider = ({children}) => {
 
     return result
   }
-  function useGetStudentMonthlyCourseFeesCollection(searchData) {
+  function useGetStudentMonthlyCourseFeesCollection(companyId) {
     const result = useQuery({
       queryKey: ['getStudentCourseFeesLists'],
       queryFn: async () => {
         try {
-          const response = await axios.get(`${BASE_URL}/api/courseFees/allCourseFess`, config)
+          const response = await axios.get(
+            `${BASE_URL}/api/courseFees/paymentInstallmentFees/${companyId}`,
+            config
+          )
           return response.data
         } catch (error) {
           throw new Error('Error fetching student data: ' + error.message)

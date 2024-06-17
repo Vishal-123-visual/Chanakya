@@ -13,6 +13,7 @@ import EmailSuggestionModel from "../models/email-remainder/EmailSuggestions.mod
 import EmailRemainderModel from "../models/email-remainder/email.remainder.models.js";
 import { userModel } from "../models/user.models.js";
 import DayBookDataModel from "../models/day-book/DayBookData.models.js";
+import moment from "moment";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -705,41 +706,56 @@ export const createCourseFeesController = asyncHandler(
       student.no_of_installments -= 1;
 
       // Calculate and store new installment expiration times
-      let expirationDate = new Date();
+      let expirationDate = moment();
       if (student.no_of_installments_expireTimeandAmount) {
         // Get the expiration date of the last installment
-        const lastExpirationDate = new Date(
+        const lastExpirationDate = moment(
           student.no_of_installments_expireTimeandAmount
         );
         // Set the expiration date of the next installment to be one month after the last one
-        expirationDate = new Date(lastExpirationDate);
-        expirationDate.setMonth(expirationDate.getMonth() + 1);
+        expirationDate = lastExpirationDate.add(1, "months");
       } else {
         // If there are no previous installments, set the expiration date to be one month from now
-        expirationDate.setMonth(expirationDate.getMonth() + 1);
+        expirationDate = moment().add(1, "months");
       }
 
       const nextInstallment = Number(req.body.no_of_installments) - 1;
+      const installmentAmount = Math.floor(
+        Number(req.body.remainingFees) / nextInstallment
+      );
 
-      const installmentExpiration = new PaymentInstallmentTimeExpireModel({
+      console.log("Installment amount :  ".installmentAmount);
+
+      // Create the entry for the current due installment
+      const currentInstallmentExpiration =
+        new PaymentInstallmentTimeExpireModel({
+          studentInfo,
+          companyName: student.companyName._id,
+          courseName: req.body.courseName,
+          expiration_date: moment().toDate(), // Set to current date
+          installment_number: req.body.no_of_installments, // Current installment number
+          installment_amount: installmentAmount,
+        });
+
+      // Create the entry for the next installment
+      const nextInstallmentExpiration = new PaymentInstallmentTimeExpireModel({
         studentInfo,
+        companyName: student.companyName._id,
         courseName: req.body.courseName,
-        expiration_date: expirationDate,
+        expiration_date: expirationDate.toDate(), // Convert moment object to Date
         installment_number: nextInstallment,
-        installment_amount: Number(
-          Math.floor(Number(req.body.remainingFees)) / nextInstallment
-        ),
+        installment_amount: installmentAmount,
       });
 
-      await installmentExpiration.save();
+      await currentInstallmentExpiration.save();
+      await nextInstallmentExpiration.save();
 
-      student.no_of_installments_expireTimeandAmount = expirationDate;
-
+      student.no_of_installments_expireTimeandAmount = expirationDate.toDate(); // Convert moment object to Date
       await student.save();
       const findPaymentOptionName = await PaymentOptionsModel.findById(
         paymentOption
       );
-      console.log("student data from create course fees ", student);
+      //console.log("student data from create course fees ", student);
       // console.log(findPaymentOptionName);
       // Send email asynchronously
       let companyLogoURL =
@@ -1318,135 +1334,9 @@ async function sendEmail(toEmails, subject, text, html) {
   }
 }
 
-// export const getCourseFeesByStudentIdController = asyncHandler(
-//   async (req, res, next) => {
-//     try {
-//       console.log(req.user.email, req.user.role);
-//       const { studentId } = req.params;
-//       //console.log(studentId);
-//       const studentFees = await CourseFeesModel.find({
-//         studentInfo: studentId,
-//       }).sort({ createdAt: 1 });
-//       if (!studentFees) {
-//         return res.status(404).json({ message: "Student fee not found" });
-//       }
-
-//       const studentInfo = await admissionFormModel
-//         .findById(studentId)
-//         .populate(["courseName", "companyName"]);
-//       //console.log("from ------------>", studentInfo);
-
-//       // now get next payment installment data
-//       let installmentExpireDate =
-//         studentInfo.no_of_installments_expireTimeandAmount;
-//       // const nextInstallmentExpireTimeData =
-//       //   await PaymentInstallmentTimeExpireModel.find({
-//       //     studentInfo: studentId,
-//       //     expiration_date: installmentExpireDate,
-//       //   });
-
-//       // console.log(
-//       //   "next installment fees",
-//       //   installmentExpireDate,
-//       //   nextInstallmentExpireTimeData
-//       // );
-
-//       //console.log("student info data ----------------> ", studentInfo);
-
-//       // // get the old time and current time
-//       let installmentPayTime = new Date(installmentExpireDate).getTime();
-//       let currentTimePaymentInstallment = new Date().getTime();
-
-//       if (installmentPayTime < currentTimePaymentInstallment) {
-//         let numberOfInstallment = studentInfo.no_of_installments;
-//         studentInfo.installmentPaymentSkipMonth += 1;
-//         if (numberOfInstallment > 0) {
-//           studentInfo.no_of_installments = numberOfInstallment - 1;
-//           studentInfo.no_of_installments_amount =
-//             studentInfo.remainingCourseFees / numberOfInstallment - 1;
-//         }
-//         await studentInfo.save();
-//       } else {
-//         let arrayOfCurrentTime = new Date(currentTimePaymentInstallment)
-//           .toDateString()
-//           .split(" ");
-//         let arrayOfPrevTime = new Date(installmentPayTime)
-//           .toDateString()
-//           .split(" ");
-//         let dayMonthDateYearCurrent =
-//           arrayOfCurrentTime[0] +
-//           arrayOfCurrentTime[1] +
-//           arrayOfCurrentTime[2] +
-//           arrayOfCurrentTime[3];
-//         let dayMonthDateYearPrev =
-//           arrayOfPrevTime[0] +
-//           arrayOfPrevTime[1] +
-//           arrayOfPrevTime[2] +
-//           arrayOfPrevTime[3];
-//         //console.log(dayMonthDateYearPrev);
-
-//         if (
-//           arrayOfCurrentTime[0] +
-//             arrayOfCurrentTime[1] +
-//             1 +
-//             arrayOfCurrentTime[3] ===
-//           dayMonthDateYearPrev
-//         ) {
-//           // then send mail to student
-//           sendEmail(
-//             `${req.user.email}, ${studentInfo.email}`,
-//             "Welcome to visual Media Technology",
-//             "Regarding to Fees Installment due in Visual Media Technology"
-//           );
-//         }
-
-//         if (
-//           arrayOfCurrentTime[0] +
-//             arrayOfCurrentTime[1] +
-//             10 +
-//             arrayOfCurrentTime[3] ===
-//           dayMonthDateYearPrev
-//         ) {
-//           // then send mail to student
-//           sendEmail();
-//         }
-//         if (
-//           arrayOfCurrentTime[0] +
-//             arrayOfCurrentTime[1] +
-//             12 +
-//             arrayOfCurrentTime[3] ===
-//           dayMonthDateYearPrev
-//         ) {
-//           // then send mail to student
-//           sendEmail();
-//         }
-//         if (
-//           arrayOfCurrentTime[0] +
-//             arrayOfCurrentTime[1] +
-//             15 +
-//             arrayOfCurrentTime[3] ===
-//           dayMonthDateYearPrev
-//         ) {
-//           // then send mail to student
-//           sendEmail();
-//         }
-//       }
-
-//       res.status(200).json(studentFees);
-//     } catch (error) {
-//       res.status(500).json({ error: error });
-//     }
-//   }
-// );
-
 export const getCourseFeesByStudentIdController = asyncHandler(
   async (req, res, next) => {
     try {
-      // console.log(
-      //   "this is from student course fees ",
-      //   req.user.email,
-      //   req.user.role
-      // );
       const { studentId } = req.params;
 
       // Query the database to find student fees
@@ -1460,7 +1350,7 @@ export const getCourseFeesByStudentIdController = asyncHandler(
           "studentInfo",
           "paymentOption",
         ]);
-      console.log("from student fees controllers ", studentFees);
+      //console.log("from student fees controllers ", studentFees);
 
       let adminEmail, superAdminEmail;
       const adminUser = await userModel.find({});
@@ -1473,7 +1363,6 @@ export const getCourseFeesByStudentIdController = asyncHandler(
           superAdminEmail = user.email;
         }
       });
-      //console.log("Get admin user data", adminEmail, superAdminEmail);
 
       // Check if student fees are not found
       if (!studentFees || studentFees.length === 0) {
@@ -1485,60 +1374,37 @@ export const getCourseFeesByStudentIdController = asyncHandler(
         .findById(studentId)
         .populate(["courseName", "companyName"]);
 
-      //console.log(req.user);
-
       // Calculate the next payment installment due date
-      const installmentExpireDate =
-        studentInfo.no_of_installments_expireTimeandAmount;
-      const currentTime = new Date();
-      const installmentDueDate = new Date(installmentExpireDate);
+      const installmentExpireDate = moment(
+        studentInfo.no_of_installments_expireTimeandAmount
+      );
+      const currentTime = moment();
 
-      // get email remainder data
+      // Get email remainder data
       const emailRemainderData = await EmailRemainderModel.find({});
 
       // Check if the current time is past the due date
-      if (currentTime > installmentDueDate) {
-        // Send email reminders based on specific dates
-        const daysDifference = Math.floor(
-          (currentTime - installmentDueDate) / (1000 * 60 * 60 * 24)
-        );
-        // if (
-        //   daysDifference === 1 ||
-        //   daysDifference === 10 ||
-        //   daysDifference === 12 ||
-        //   daysDifference === 15
-        // ) {
-        //   // Send reminder email to the student
-        // sendEmail(
-        //   studentInfo.email,
-        //   "Payment Reminder",
-        //   "Your payment installment is overdue."
-        // );
-        // }
+      if (currentTime.isAfter(installmentExpireDate)) {
+        // Calculate the difference in days
+        const daysDifference = currentTime.diff(installmentExpireDate, "days");
 
+        // Send email reminders based on specific dates
+        let emailContent;
         if (daysDifference === 1) {
-          sendEmail(
-            ` ${req.user.email}, ${studentInfo.email} ${studentInfo.companyName.email},thakurarvindkr10@gmail.com,${adminEmail},${superAdminEmail}`,
-            "Installment Payment Reminder",
-            emailRemainderData[0].firstRemainder
-          );
+          emailContent = emailRemainderData[0].firstRemainder;
         } else if (daysDifference === 10) {
-          sendEmail(
-            ` ${req.user.email}, ${studentInfo.email} ${studentInfo.companyName.email},thakurarvindkr10@gmail.com,${adminEmail},${superAdminEmail}`,
-            "Installment Payment Reminder",
-            emailRemainderData[0].secondRemainder
-          );
+          emailContent = emailRemainderData[0].secondRemainder;
         } else if (daysDifference === 12) {
-          sendEmail(
-            ` ${req.user.email}, ${studentInfo.email} ${studentInfo.companyName.email},thakurarvindkr10@gmail.com,${adminEmail},${superAdminEmail}`,
-            "Installment Payment Reminder",
-            emailRemainderData[0].thirdRemainder
-          );
+          emailContent = emailRemainderData[0].thirdRemainder;
         } else if (daysDifference === 15) {
+          emailContent = emailRemainderData[0].firstRemainder;
+        }
+
+        if (emailContent) {
           sendEmail(
-            ` ${req.user.email}, ${studentInfo.email} ${studentInfo.companyName.email},thakurarvindkr10@gmail.com,${adminEmail},${superAdminEmail}`,
+            `${req.user.email}, ${studentInfo.email}, ${studentInfo.companyName.email}, thakurarvindkr10@gmail.com, ${adminEmail}, ${superAdminEmail}`,
             "Installment Payment Reminder",
-            emailRemainderData[0].firstRemainder
+            emailContent
           );
         }
       }
@@ -1557,7 +1423,7 @@ export const getSingleStudentCourseFeesController = asyncHandler(
       const courseFees = await CourseFeesModel.findById(req.params.id).populate(
         ["courseName", "companyName", "studentInfo", "paymentOption"]
       );
-      console.log("course fees ->>>>>>>> ", courseFees);
+      //console.log("course fees ->>>>>>>> ", courseFees);
 
       if (!courseFees) {
         return res.status(404).json({ message: "Student fee not found" });
@@ -1639,5 +1505,12 @@ export const getAllCourseFeesController = asyncHandler(
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }
+  }
+);
+
+export const getCollectionFeesAccordingToCompanyIdController = asyncHandler(
+  async () => {
+    try {
+    } catch (error) {}
   }
 );

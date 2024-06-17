@@ -10,9 +10,10 @@ const MonthlyCollectionFee = () => {
   const [fromDate, setFromDate] = useState(new Date())
   const [toDate, setToDate] = useState(new Date())
   console.log(fromDate, toDate)
-  const ctx = useStudentCourseFeesContext()
-  const result = ctx.useGetStudentMonthlyCourseFeesCollection()
   const paramsData = useParams()
+  const ctx = useStudentCourseFeesContext()
+  const result = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData.id)
+  console.log(result)
 
   const navigate = useNavigate()
 

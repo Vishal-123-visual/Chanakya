@@ -8,10 +8,18 @@ import {
   deleteSingleStudentCourseFeesController,
   getCourseFeesByStudentIdController,
   //getAllStudentCourseFeesNextInstallmentController,
+  getCollectionFeesAccordingToCompanyIdController,
 } from "../controllers/courseFees.controllers.js";
 const router = Router();
 
 router.post("/", requireSignIn, createCourseFeesController);
+
+router.get(
+  "/paymentInstallmentFees/:companyId",
+  requireSignIn,
+  getCollectionFeesAccordingToCompanyIdController
+);
+
 router
   .route("/allCourseFess")
   .get(requireSignIn, isAdmin, getAllCourseFeesController);
