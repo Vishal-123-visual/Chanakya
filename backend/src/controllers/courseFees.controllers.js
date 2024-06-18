@@ -14,6 +14,7 @@ import EmailRemainderModel from "../models/email-remainder/email.remainder.model
 import { userModel } from "../models/user.models.js";
 import DayBookDataModel from "../models/day-book/DayBookData.models.js";
 import moment from "moment";
+import SubjectModel from "../models/subject/subject.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -1380,6 +1381,16 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       );
       const currentTime = moment();
 
+      // console.log(
+      //   "check the student installment time available",
+      //   moment(currentTime).isSame(installmentExpireDate)
+      // );
+
+      if (moment(currentTime).isSame(installmentExpireDate)) {
+        studentInfo.installmentPaymentSkipMonth += 1;
+      }
+
+      await studentInfo.save();
       // Get email remainder data
       const emailRemainderData = await EmailRemainderModel.find({});
 
@@ -1387,6 +1398,7 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       if (currentTime.isAfter(installmentExpireDate)) {
         // Calculate the difference in days
         const daysDifference = currentTime.diff(installmentExpireDate, "days");
+        //console.log("Day difference time ", daysDifference);
 
         // Send email reminders based on specific dates
         let emailContent;
@@ -1423,7 +1435,7 @@ export const getSingleStudentCourseFeesController = asyncHandler(
       const courseFees = await CourseFeesModel.findById(req.params.id).populate(
         ["courseName", "companyName", "studentInfo", "paymentOption"]
       );
-      //console.log("course fees ->>>>>>>> ", courseFees);
+      console.log("get single student course fees ->>>>>>>> ", courseFees);
 
       if (!courseFees) {
         return res.status(404).json({ message: "Student fee not found" });
@@ -1509,8 +1521,17 @@ export const getAllCourseFeesController = asyncHandler(
 );
 
 export const getCollectionFeesAccordingToCompanyIdController = asyncHandler(
-  async () => {
+  async (req, res, next) => {
     try {
-    } catch (error) {}
+      const { companyId } = req.params;
+      const collectionFees = await PaymentInstallmentTimeExpireModel.find({
+        companyName: companyId,
+      })
+        .populate(["courseName", "companyName", "studentInfo"])
+        .sort({ createdAt: 1 });
+      res.status(200).json(collectionFees);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
   }
 );

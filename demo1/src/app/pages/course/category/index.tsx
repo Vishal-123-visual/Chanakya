@@ -55,9 +55,9 @@ const CourseCategory: React.FC<Props> = ({className}) => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {ctx.getCourseCategoryLists.data.length > 0 ? (
-                ctx.getCourseCategoryLists.data.map((category: any) => (
-                  <tr key={category._id}>
+              {ctx.getCourseCategoryLists?.data?.length > 0 ? (
+                ctx.getCourseCategoryLists?.data?.map((category: any) => (
+                  <tr key={category?._id}>
                     <td>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'>
                         {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
@@ -70,21 +70,21 @@ const CourseCategory: React.FC<Props> = ({className}) => {
                         </div>
                         <div className='d-flex justify-content-start flex-column'>
                           <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {category.category}
+                            {category?.category}
                           </a>
                         </div>
                       </div>
                     </td>
                     <td>
                       <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                        {category.createdBy}
+                        {category?.createdBy}
                       </a>
                     </td>
                     <td className='text-end'>
                       <div className='d-flex flex-column w-100 me-2'>
                         <div className='d-flex flex-stack mb-2'>
                           <span className='text-muted me-2 fs-7 fw-semibold'>
-                            {moment(category.createdAt).format('DD/MM/YYYY')}
+                            {moment(category?.createdAt).format('DD/MM/YYYY')}
                           </span>
                         </div>
                       </div>

@@ -3,7 +3,7 @@ import studentSubjectMarksModel from "../models/subject/student.subject.marks.mo
 
 export const addCourseSubjectMarksController = asyncHandler(
   async (req, res, next) => {
-    console.log("Received request to add marks:", req.body);
+    //console.log("Received request to add marks:", req.body);
 
     try {
       // Check if a record already exists for the student, subject, and course combination
@@ -51,21 +51,6 @@ export const getCourseSubjectMarksController = asyncHandler(
     }
   }
 );
-
-// [0] {
-//   [0]   studentId: '664d8d28cb62c3ba16c74ee3',
-//   [0]   marksId: '664d96c8d087e739a75798bd'
-//   [0] }
-
-// {
-//   "marksId": "664d96c8d087e739a75798bd",
-//   "subjectId": "664c85da9cc4726b0a5428e4",
-//   "courseId": "664c85c49cc4726b0a540fec",
-//   "studentId": "664d8d28cb62c3ba16c74ee3",
-//   "theory": "60",
-//   "practical": "50",
-//   "totalMarks": "60"
-// }
 
 export const updateCourseSubjectMarksController = asyncHandler(
   async (req, res, next) => {

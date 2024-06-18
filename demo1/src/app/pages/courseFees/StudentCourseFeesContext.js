@@ -35,7 +35,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
   }
   function useGetStudentMonthlyCourseFeesCollection(companyId) {
     const result = useQuery({
-      queryKey: ['getStudentCourseFeesLists'],
+      queryKey: ['getPaymentInstallmentCollectionFees'],
       queryFn: async () => {
         try {
           const response = await axios.get(
