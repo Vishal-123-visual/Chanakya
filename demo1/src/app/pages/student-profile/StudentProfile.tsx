@@ -135,6 +135,7 @@ const StudentProfile: React.FC = () => {
 
   const navigateCourseSubjectsHandler = () => {
     //console.log('data of subjects based on course', data)
+    // console.log('navigating to the course subject page !!!', updateUserId)
     navigate('/course-subjects-addMarks', {state: {updateUserId}})
   }
 

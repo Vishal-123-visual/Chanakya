@@ -42,7 +42,7 @@ const CourseCategory: React.FC<Props> = ({className}) => {
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
             {/* begin::Table head */}
             <thead>
-              <tr className='fw-bold text-muted'>
+              <tr className='fw-bold'>
                 <th className='w-25px'>
                   <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                 </th>
@@ -83,7 +83,7 @@ const CourseCategory: React.FC<Props> = ({className}) => {
                     <td className='text-end'>
                       <div className='d-flex flex-column w-100 me-2'>
                         <div className='d-flex flex-stack mb-2'>
-                          <span className='text-muted me-2 fs-7 fw-semibold'>
+                          <span className=' me-2 fs-7 fw-semibold'>
                             {moment(category?.createdAt).format('DD/MM/YYYY')}
                           </span>
                         </div>

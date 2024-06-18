@@ -13,7 +13,7 @@ const MonthlyCollectionFee = () => {
   const paramsData = useParams()
   const ctx = useStudentCourseFeesContext()
   const {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData.id)
-  console.log(data)
+  // console.log(data)
 
   const filteredData =
     data?.filter((item) => {
@@ -24,7 +24,7 @@ const MonthlyCollectionFee = () => {
     }) || []
 
   const collectionFeesBalance = filteredData.reduce((acc, cur) => acc + cur.installment_amount, 0)
-  //console.log(collectionFeesBalance)
+  console.log(filteredData)
 
   const navigate = useNavigate()
 
@@ -114,7 +114,10 @@ const MonthlyCollectionFee = () => {
                           className='btn btn-link'
                           onClick={() =>
                             navigate(`/student/${collectionFees.studentInfo._id}`, {
-                              state: collectionFees.studentInfo,
+                              state: {
+                                ...collectionFees.studentInfo,
+                                courseName: collectionFees.courseName,
+                              },
                             })
                           }
                         >
