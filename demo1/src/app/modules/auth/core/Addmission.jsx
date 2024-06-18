@@ -10,7 +10,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 export const AdmissionContextProvider = ({children}) => {
   const [studentId, setStudentId] = useState('')
   const queryClient = useQueryClient()
-  const {auth} = useAuth()
+  let {auth} = useAuth()
   const [admissionFormData, setAdmissionFormData] = useState([])
   let config = {
     headers: {
