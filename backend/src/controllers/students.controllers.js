@@ -50,10 +50,10 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       select_course,
       // document_attached,
       // select_software,
-      name_of_person_for_commision,
-      commision_paid,
-      commision_date,
-      commision_voucher_number,
+      // name_of_person_for_commision,
+      // commision_paid,
+      // commision_date,
+      // commision_voucher_number,
       course_fees,
       discount,
       netCourseFees,
@@ -85,12 +85,12 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.select_course = select_course || student.select_course;
     // student.document_attached = document_attached || student.document_attached;
     // student.select_software = select_software || student.select_software;
-    student.name_of_person_for_commision =
-      name_of_person_for_commision || student.name_of_person_for_commision;
-    student.commision_paid = commision_paid || student.commision_paid;
-    student.commision_date = commision_date || student.commision_date;
-    student.commision_voucher_number =
-      commision_voucher_number || student.commision_voucher_number;
+    // student.name_of_person_for_commision =
+    //   name_of_person_for_commision || student.name_of_person_for_commision;
+    // student.commision_paid = commision_paid || student.commision_paid;
+    // student.commision_date = commision_date || student.commision_date;
+    // student.commision_voucher_number =
+    //   commision_voucher_number || student.commision_voucher_number;
     student.course_fees = course_fees || student.course_fees;
     student.discount = discount || student.discount;
     student.netCourseFees = netCourseFees || student.netCourseFees;

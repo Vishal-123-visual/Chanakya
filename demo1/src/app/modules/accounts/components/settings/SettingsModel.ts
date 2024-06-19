@@ -38,10 +38,10 @@ export interface AddMissionFormInterface {
   select_course: string
 
   // commision
-  name_of_person_for_commision?: string
-  commision_paid?: string
-  commision_date?: string | Date
-  commision_voucher_number?: string
+  // name_of_person_for_commision?: string
+  // commision_paid?: string
+  // commision_date?: string | Date
+  // commision_voucher_number?: string
   // for office use only
   course_fees: string | number
 
@@ -79,10 +79,10 @@ export interface updateMissionFormInterface {
   // document_attached: string
   select_software: string
   // commision
-  name_of_person_for_commision?: string
-  commision_paid?: string
-  commision_date?: string | Date
-  commision_voucher_number?: string
+  // name_of_person_for_commision?: string
+  // commision_paid?: string
+  // commision_date?: string | Date
+  // commision_voucher_number?: string
   // for office use only
   course_fees: string | number
   register_fee: string | number
@@ -114,10 +114,10 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   select_course: '',
   //document_attached: '',
   //select_software: '',
-  name_of_person_for_commision: '',
-  commision_paid: '',
-  commision_date: '',
-  commision_voucher_number: '',
+  // name_of_person_for_commision: '',
+  // commision_paid: '',
+  // commision_date: '',
+  // commision_voucher_number: '',
   course_fees: '',
   discount: '',
   netCourseFees: '',

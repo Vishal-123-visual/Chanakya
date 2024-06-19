@@ -36,10 +36,10 @@ const addmissionFormSchema = Yup.object().shape({
   student_status: Yup.string(),
   education_qualification: Yup.string(),
   select_course: Yup.string(),
-  name_of_person_for_commision: Yup.string(),
-  commision_paid: Yup.string(),
-  commision_date: Yup.string(),
-  commision_voucher_number: Yup.string(),
+  // name_of_person_for_commision: Yup.string(),
+  // commision_paid: Yup.string(),
+  // commision_date: Yup.string(),
+  // commision_voucher_number: Yup.string(),
   course_fees: Yup.string(),
   down_payment: Yup.string(),
   date_of_joining: Yup.string(),
@@ -683,126 +683,12 @@ const StudentProfile: React.FC = () => {
                 </div>
               </div>
 
-              <div className='row'>
-                <div
-                  className='card-header border-1 cursor-pointer'
-                  role='button'
-                  // data-bs-toggle='collapse'
-                  // data-bs-target='#kt_account_profile_details'
-                  aria-expanded='true'
-                  aria-controls='kt_account_profile_details'
-                >
-                  <div className='card-title m-0'>
-                    <h3 className='fw-bolder m-0'>Commision</h3>
-                  </div>
-                </div>
-
-                <div className='col-6 mt-5'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className=''>Name of Person for Commision</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        readOnly
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Name of Person For Commision'
-                        {...formik.getFieldProps('name_of_person_for_commision')}
-                      />
-                      {formik.touched.name_of_person_for_commision &&
-                        formik.errors.name_of_person_for_commision && (
-                          <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>
-                              {formik.errors.name_of_person_for_commision}
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* ---------------------------COURSE END HERE ----------------------- */}
               {/* ---------------------------Commision Start HERE ----------------------- */}
 
               {/* ---------------------------Commision End HERE ----------------------- */}
-              <div className='row'>
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className=''>Commision Com. Paid</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        readOnly
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Commision Com. Paid'
-                        {...formik.getFieldProps('commision_paid')}
-                      />
-                      {formik.touched.commision_paid && formik.errors.commision_paid && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.commision_paid}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className=''>Commision Date</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <DatePicker
-                        readOnly
-                        selected={formik.values.commision_date}
-                        onChange={(date) => formik.setFieldValue('commision_date', date)}
-                        dateFormat='dd/MM/yyyy'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholderText='DD/MM/YYYY'
-                      />
-                      {formik.touched.commision_date && formik.errors.commision_date && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.commision_date}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <div className='row'>
-                <div className='col-6'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span>Commision Voucher No</span>
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <input
-                        readOnly
-                        type='text'
-                        className='form-control form-control-lg form-control-solid'
-                        placeholder='Commision Voucher No'
-                        {...formik.getFieldProps('commision_voucher_number')}
-                      />
-                      {formik.touched.commision_voucher_number &&
-                        formik.errors.commision_voucher_number && (
-                          <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>
-                              {formik.errors.commision_voucher_number}
-                            </div>
-                          </div>
-                        )}
-                    </div>
-                  </div>
-                </div>
-
                 <div
                   className='card-header border-1 cursor-pointer'
                   role='button'
@@ -891,29 +777,6 @@ const StudentProfile: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
-                  {/* <div className='col-6'>
-                    <div className='row mb-6'>
-                      <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className=''>Down Payment</span>
-                      </label>
-
-                      <div className='col-lg-8 fv-row'>
-                        <input
-                          type='number'
-                          className='form-control form-control-lg form-control-solid'
-                          placeholder='Down Payment'
-                          readOnly
-                          {...formik.getFieldProps('down_payment')}
-                        />
-                        {formik.touched.down_payment && formik.errors.down_payment && (
-                          <div className='fv-plugins-message-container'>
-                            <div className='fv-help-block'>{formik.errors.down_payment}</div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div> */}
 
                   <div className='col-6'>
                     <div className='row mb-6'>
