@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
 import studentSubjectMarksModel from "../models/subject/student.subject.marks.models.js";
+import StudentComissionModel from "../models/student-comission/student.comission.models.js";
 
 const __dirname = path.resolve();
 
@@ -227,6 +228,58 @@ export const getStudentsAccordingToCompanyController = asyncHandler(
     try {
       const students = await admissionFormModel.find({});
       res.status(200).json(students);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+
+export const addStudentComissionController = asyncHandler(
+  async (req, res, next) => {
+    const {
+      studentName,
+      commissionPersonName,
+      voucherNumber,
+      commissionAmount,
+      commissionDate,
+      commissionNaretion,
+      studentID,
+    } = req.body;
+    try {
+      switch (true) {
+        case !studentName:
+          return res
+            .status(400)
+            .json({ success: false, message: "Student name is required!" });
+        case !commissionPersonName:
+          return res.status(400).json({
+            success: false,
+            message: "Commission person name is required!",
+          });
+        case !commissionAmount:
+          return res.status(400).json({
+            success: false,
+            message: "Commission amount is required!",
+          });
+        case !commissionDate:
+          return res
+            .status(400)
+            .json({ success: false, message: "Commission date is required!" });
+        case !commissionNaretion:
+          return res.status(400).json({
+            success: false,
+            message: "Commission Naretion is required!",
+          });
+      }
+
+      const commissionStudent = new StudentComissionModel({
+        ...req.body,
+        studentInfo: studentID,
+      });
+      const savedCommissionStudent = await commissionStudent.save();
+      res
+        .status(200)
+        .json({ message: "Student commission created successfully" });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }
