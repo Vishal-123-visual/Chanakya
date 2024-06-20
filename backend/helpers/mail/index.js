@@ -1,6 +1,3 @@
 import fs from "fs";
 
-export const MailHTML = () => `
-
-
-`;
+export const MailHTML = () => ``;

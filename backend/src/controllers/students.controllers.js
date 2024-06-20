@@ -220,3 +220,15 @@ export const getAllStudentsMonthlyCollectionFeesController = asyncHandler(
     }
   }
 );
+
+export const getStudentsAccordingToCompanyController = asyncHandler(
+  async (req, res, next) => {
+    const { companyId } = req.params;
+    try {
+      const students = await admissionFormModel.find({});
+      res.status(200).json(students);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);

@@ -123,6 +123,11 @@ const SidebarMenuMain = () => {
             title='Monthly Collections'
             hasBullet={true}
           />
+          <SidebarMenuItem
+            to={`/student/commission/${CompanyListData?._id}`}
+            title='Commission'
+            hasBullet={true}
+          />
           <SidebarMenuItem to='/addmission-form' title='Admission Form' hasBullet={true} />
         </SidebarMenuItemWithSub>
       ))}

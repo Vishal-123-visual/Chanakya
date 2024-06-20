@@ -6,10 +6,14 @@ import {
   deleteStudentController,
   getSingleStudentDetailsController,
   getAllStudentsMonthlyCollectionFeesController,
+  getStudentsAccordingToCompanyController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 
 const router = Router();
+
+// get the student According to company wise
+router.get("/company/:companyId", getStudentsAccordingToCompanyController);
 
 // get all students
 router.route("/").get(requireSignIn, getAllStudentsController);

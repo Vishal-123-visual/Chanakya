@@ -163,6 +163,21 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  // ************************************ Get Students According to Company Wise ********************************
+  const useGetStudentsAccordingToCompanyQuery = (companyId) => {
+    return useQuery({
+      queryKey: ['getStudents', companyId],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/students/company/${companyId}`, config)
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
+
   return (
     <CompanyContext.Provider
       value={{
@@ -173,6 +188,7 @@ export const CompanyContextProvider = ({children}) => {
         postEmailRemainderText,
         postEmailSuggestionStatus,
         getEmailSuggestionStatus,
+        useGetStudentsAccordingToCompanyQuery,
       }}
     >
       {children}

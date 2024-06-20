@@ -7,10 +7,11 @@ import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
-import ViewDayBookAccount from '../pages/dayBook/ViewDayBookAccount'
-import EditDayBookAccount from '../pages/dayBook/EditDayBookAccount'
 
 const PrivateRoutes = () => {
+  const ViewDayBookAccount = lazy(() => import('../pages/dayBook/ViewDayBookAccount'))
+  const EditDayBookAccount = lazy(() => import('../pages/dayBook/EditDayBookAccount'))
+  const StudentCommission = lazy(() => import('../pages/student-commission/StudentCommission'))
   const ShowSingleAccountDayBookData = lazy(
     () => import('../pages/dayBook/ShowSingleAccountDayBookData')
   )
@@ -146,6 +147,16 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
+
+        <Route
+          path='/student/commission/:companyId'
+          element={
+            <SuspensedView>
+              <StudentCommission />
+            </SuspensedView>
+          }
+        />
+
         {/* ======================================Add Number Of Years Course Type Start ============================================= */}
         <Route
           path='/course/no_of_years_course'
