@@ -8,6 +8,7 @@ import {
   getAllStudentsMonthlyCollectionFeesController,
   getStudentsAccordingToCompanyController,
   addStudentComissionController,
+  getStudentCommissionListsController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 
@@ -20,6 +21,7 @@ router.post(
   isAdmin,
   addStudentComissionController
 );
+router.get("/commission/:data", getStudentCommissionListsController);
 // Student Commission End here ---------------------------------------
 
 // get the student According to company wise

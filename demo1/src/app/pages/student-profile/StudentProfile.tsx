@@ -18,6 +18,7 @@ import {useCourseContext} from '../course/CourseContext'
 import StudentCourseFee from './StudentCourseFee'
 import {useCompanyContext} from '../compay/CompanyContext'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
+import StudentCommissionLists from '../student-commission/StudentCommissionLists'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -887,6 +888,7 @@ const StudentProfile: React.FC = () => {
           </form>
         </div>
       </div>
+      <StudentCommissionLists studentInfoData={updateUserId} />
       <StudentCourseFee className={''} studentInfoData={updateUserId} />
     </>
   )

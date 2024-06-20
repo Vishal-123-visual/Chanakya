@@ -37,26 +37,13 @@ const StudentCommission = () => {
     initialValues,
     validationSchema: CourseSchema,
     onSubmit: async (values) => {
-      setLoading(true)
-      console.log(values)
-
-      //console.log(values)
-
-      // Append each field of values to formData
-      // Object.entries(values).forEach(([key, value]) => {
-      //   formData.append(key, value) // Ensure value is a string, adjust if needed
-      // })
-
-      // Append the image to formData
-
-      // companyCTX.createAddCompanyMutation.mutate(formData)
-      // navigate('/company')
-      // toast('Company created successfully!', {
-      //   type: 'success',
-      //   bodyStyle: {
-      //     fontSize: '18px',
-      //   },
-      // })
+      try {
+        setLoading(true)
+        studentCTX.createStudentCommissionMutation.mutate(values)
+        navigate(`/students/${params.companyId}`)
+      } catch (error) {
+        console.log(error)
+      }
     },
   })
 
@@ -70,9 +57,9 @@ const StudentCommission = () => {
 
     return (
       <datalist id='accountNameOptions'>
-        {filteredStudents.map((student) => (
-          <option key={student._id} value={`${student.name}-${student.rollNumber}`} />
-        ))}
+        {filteredStudents.map((student) => {
+          return <option key={student._id} value={`${student.name}-${student.rollNumber}`}></option>
+        })}
       </datalist>
     )
   }

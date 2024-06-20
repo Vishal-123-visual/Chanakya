@@ -8,6 +8,7 @@ import { dirname, join } from "node:path";
 import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpireTime/StudentCourseFeesInstallments.models.js";
 import studentSubjectMarksModel from "../models/subject/student.subject.marks.models.js";
 import StudentComissionModel from "../models/student-comission/student.comission.models.js";
+import DayBookDataModel from "../models/day-book/DayBookData.models.js";
 
 const __dirname = path.resolve();
 
@@ -243,7 +244,6 @@ export const addStudentComissionController = asyncHandler(
       commissionAmount,
       commissionDate,
       commissionNaretion,
-      studentID,
     } = req.body;
     try {
       switch (true) {
@@ -274,12 +274,50 @@ export const addStudentComissionController = asyncHandler(
 
       const commissionStudent = new StudentComissionModel({
         ...req.body,
-        studentInfo: studentID,
       });
+
+      const existingDataModel = await DayBookDataModel.find({}).sort({
+        createdAt: -1,
+      });
+      //console.log("day book data model", existingDataModel);
+
+      if ((existingDataModel[0]?.balance || 0) < Number(commissionAmount)) {
+        return res.status(401).json({
+          error:
+            `Your day Book is Balance ${existingDataModel[0]?.balance} is less than your commission amount ` +
+            commissionAmount,
+        });
+      }
+
+      const newDayBookData = new DayBookDataModel({
+        rollNo: studentName.split("-")[1],
+        StudentName: studentName.split("-")[0],
+        dayBookDatadate: commissionDate,
+        debit: +commissionAmount,
+        naretion: commissionNaretion,
+        balance:
+          (existingDataModel[0]?.balance || 0) - Number(commissionAmount),
+      });
+
+      await newDayBookData.save();
+
       const savedCommissionStudent = await commissionStudent.save();
       res
         .status(200)
         .json({ message: "Student commission created successfully" });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+
+export const getStudentCommissionListsController = asyncHandler(
+  async (req, res) => {
+    try {
+      const studentCommissionLists = await StudentComissionModel.find({
+        studentName: req.params.data,
+      });
+      res.status(200).json(studentCommissionLists);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }

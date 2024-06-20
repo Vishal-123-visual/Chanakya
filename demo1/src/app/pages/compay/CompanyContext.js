@@ -3,6 +3,7 @@ import axios from 'axios'
 import {useQueryClient, useMutation, useQuery} from 'react-query'
 import {useAuth} from '../../modules/auth'
 import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
 
 const CompanyContext = createContext()
 
@@ -178,6 +179,66 @@ export const CompanyContextProvider = ({children}) => {
     })
   }
 
+  // student commission start here --------------------------------------------------
+  const createStudentCommissionMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/students/commission`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async () => {
+      toast(`Student Commission created successfully!`, {
+        type: 'success',
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getDayBookDataLists'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getDayBookDataLists', 'getStudentCommissionLists'],
+        })
+      }
+    },
+  })
+
+  const useGetStudentCommissionDataQuery = async (data) => {
+    return useQuery({
+      queryKey: ['getStudentCommissionLists', data],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/students/commission/${data}`, config)
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
+
+  // student commission end here --------------------------------------------------
+
   return (
     <CompanyContext.Provider
       value={{
@@ -189,6 +250,8 @@ export const CompanyContextProvider = ({children}) => {
         postEmailSuggestionStatus,
         getEmailSuggestionStatus,
         useGetStudentsAccordingToCompanyQuery,
+        createStudentCommissionMutation,
+        useGetStudentCommissionDataQuery,
       }}
     >
       {children}

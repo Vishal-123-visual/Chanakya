@@ -2,11 +2,6 @@ import mongoose from "mongoose";
 
 const commissionSchema = new mongoose.Schema(
   {
-    studentInfo: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Students",
-      required: true,
-    },
     studentName: {
       type: String,
       required: true,
