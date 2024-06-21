@@ -24,7 +24,7 @@ const MonthlyCollectionFee = () => {
     }) || []
 
   const collectionFeesBalance = filteredData.reduce((acc, cur) => acc + cur.installment_amount, 0)
-  console.log(filteredData)
+  // console.log(filteredData)
 
   const navigate = useNavigate()
 
