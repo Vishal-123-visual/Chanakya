@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {toast} from 'react-toastify'
@@ -19,13 +19,15 @@ const CourseSchema = Yup.object().shape({
 const StudentCommission = () => {
   const [loading, setLoading] = useState(false)
   const params = useParams()
+  const location = useLocation()
+  //console.log(location.state.name)
   // console.log(params)
   const studentCTX = useCompanyContext()
   const {data} = studentCTX.useGetStudentsAccordingToCompanyQuery(params.companyId)
 
   const navigate = useNavigate()
   let initialValues = {
-    studentName: '',
+    studentName: location?.state?.name ? location?.state?.name : '',
     commissionPersonName: '',
     voucherNumber: '',
     commissionAmount: '',

@@ -27,7 +27,13 @@ const StudentCommissionLists = ({studentInfoData}) => {
           title='Click to add a Student Commission'
         >
           <button
-            onClick={() => navigate(`/student/commission/${studentInfoData.companyName}`)}
+            onClick={() =>
+              navigate(`/student/commission/${studentInfoData.companyName}`, {
+                state: {
+                  name: studentInfoData?.name + '-' + studentInfoData.rollNumber,
+                },
+              })
+            }
             className='btn btn-sm btn-light-primary'
             // data-bs-toggle='modal'
             // data-bs-target='#kt_modal_invite_friends'
