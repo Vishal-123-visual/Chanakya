@@ -57,8 +57,8 @@ const NumberOfYearsCourse: React.FC<Props> = ({className}) => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {ctx.numberOfCourseYearsTypesLists.data.length > 0 ? (
-                ctx.numberOfCourseYearsTypesLists.data.map((ele) => (
+              {ctx.numberOfCourseYearsTypesLists.data?.length > 0 ? (
+                ctx.numberOfCourseYearsTypesLists?.data?.map((ele: any) => (
                   <tr>
                     <td>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
@@ -67,22 +67,22 @@ const NumberOfYearsCourse: React.FC<Props> = ({className}) => {
                       <div className='d-flex align-items-center'>
                         <div className='symbol symbol-45px me-5'></div>
                         <div className='d-flex justify-content-start flex-column'>
-                          <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                            {ele.numberOfYears}
+                          <a className='text-dark fw-bold text-hover-primary fs-6'>
+                            {ele?.numberOfYears}
                           </a>
                         </div>
                       </div>
                     </td>
                     <td>
-                      <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                        {ele.createdBy}
+                      <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                        {ele?.createdBy}
                       </a>
                     </td>
                     <td className='text-end'>
                       <div className='d-flex flex-column w-100 me-2'>
                         <div className='d-flex flex-stack mb-2'>
                           <span className='text-muted me-2 fs-7 fw-semibold'>
-                            {moment(ele.createdAt).format('DD-MM-YYYY')}
+                            {moment(ele?.createdAt).format('DD-MM-YYYY')}
                           </span>
                         </div>
                       </div>
@@ -98,7 +98,7 @@ const NumberOfYearsCourse: React.FC<Props> = ({className}) => {
                         <button
                           onClick={() => {
                             if (window.confirm('Are you sure do you want to delete')) {
-                              ctx.deleteNumberOfYearsCourseTypeMutation.mutate(ele._id)
+                              ctx?.deleteNumberOfYearsCourseTypeMutation.mutate(ele?._id)
                             }
                           }}
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
