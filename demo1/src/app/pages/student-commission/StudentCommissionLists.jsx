@@ -1,16 +1,16 @@
 import {useNavigate} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useCompanyContext} from '../compay/CompanyContext'
+import moment from 'moment'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const StudentCommissionLists = ({studentInfoData}) => {
   const navigate = useNavigate()
   const studentCTX = useCompanyContext()
-  let studentName = studentInfoData?.name.split(' ').join('') + '-' + studentInfoData.rollNumber
-  console.log(studentName)
+  let studentName = studentInfoData?.name.split(' ').join('_') + '-' + studentInfoData.rollNumber
 
-  console.log(studentCTX.useGetStudentCommissionDataQuery(studentName))
+  const {data, isLoading} = studentCTX.useGetStudentCommissionDataQuery(studentName)
   return (
     <div className={`card my-10`}>
       {/* begin::Header */}
@@ -61,78 +61,74 @@ const StudentCommissionLists = ({studentInfoData}) => {
                 <th className='min-w-150px'>Student Name</th>
                 <th className='min-w-140px'>Commission Person Name</th>
                 <th className='min-w-120px'>Commission Amount</th>
-                <th className='min-w-100px text-end'>Commission Date</th>
+                <th className='min-w-100px'>Commission Date</th>
               </tr>
             </thead>
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <tr>
-                <td>
-                  <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                    {/* < input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex align-items-center'>
-                    <div className='symbol symbol-45px me-5'>
-                      <img src={BASE_URL_Image + '/' + studentInfoData.image} alt='' />
-                    </div>
-                    <div className='d-flex justify-content-start flex-column'>
-                      <a href='#' className='text-dark fw-bold text-hover-primary fs-6'>
-                        Ana Simmons
-                      </a>
-                      <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        HTML, JS, ReactJS
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                    Intertico
-                  </a>
-                  <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                    Web, UI/UX Design
-                  </span>
-                </td>
-                <td className='text-end'>
-                  <div className='d-flex flex-column w-100 me-2'>
-                    <div className='d-flex flex-stack mb-2'>
-                      <span className='text-muted me-2 fs-7 fw-semibold'>50%</span>
-                    </div>
-                    <div className='progress h-6px w-100'>
-                      <div
-                        className='progress-bar bg-primary'
-                        role='progressbar'
-                        style={{width: '50%'}}
-                      ></div>
-                    </div>
-                  </div>
-                </td>
-                <td>
-                  <div className='d-flex justify-content-end flex-shrink-0'>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='switch' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                    >
-                      <KTIcon iconName='pencil' className='fs-3' />
-                    </a>
-                    <a
-                      href='#'
-                      className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                    >
-                      <KTIcon iconName='trash' className='fs-3' />
-                    </a>
-                  </div>
-                </td>
-              </tr>
+              {data?.length === 0 && (
+                <tr>
+                  <td colSpan={5} className='text-center'>
+                    <h2>No Commission Amount Added</h2>
+                  </td>
+                </tr>
+              )}
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className='text-center'>
+                    <h2>Loading....</h2>
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  {data?.map((studentCommissionData) => (
+                    <tr key={studentCommissionData._id}>
+                      <td>
+                        <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                          {/* < input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
+                        </div>
+                      </td>
+                      <td>
+                        <div className='d-flex align-items-center'>
+                          <div className='symbol symbol-45px me-5'>
+                            <img src={BASE_URL_Image + '/' + studentInfoData.image} alt='' />
+                          </div>
+                          <div className='d-flex justify-content-start flex-column'>
+                            <a className='text-dark fw-bold text-hover-primary fs-6'>
+                              {studentCommissionData.studentName.split('-')[0]}
+                            </a>
+                            <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                              RollNum : {studentCommissionData.studentName.split('-')[1]}
+                            </span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          {studentCommissionData.commissionPersonName}
+                        </a>
+                        <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                          {studentCommissionData.commissionNaretion}
+                        </span>
+                      </td>
+                      <td>
+                        <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          {studentCommissionData.commissionAmount}
+                        </a>
+                        <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                          V.C {studentCommissionData.voucherNumber}
+                        </span>
+                      </td>
+                      <td>
+                        <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          {moment(studentCommissionData.commissionDate).format('DD-MM-YYYY')}
+                        </a>
+                      </td>
+                    </tr>
+                  ))}
+                </>
+              )}
             </tbody>
             {/* end::Table body */}
           </table>

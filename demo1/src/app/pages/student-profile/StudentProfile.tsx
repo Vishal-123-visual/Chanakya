@@ -888,8 +888,8 @@ const StudentProfile: React.FC = () => {
           </form>
         </div>
       </div>
-      <StudentCommissionLists studentInfoData={updateUserId} />
       <StudentCourseFee className={''} studentInfoData={updateUserId} />
+      <StudentCommissionLists studentInfoData={updateUserId} />
     </>
   )
 }
