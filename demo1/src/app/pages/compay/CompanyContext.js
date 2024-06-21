@@ -223,13 +223,13 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
-  const useGetStudentCommissionDataQuery = async (data) => {
+  const useGetStudentCommissionDataQuery = (data) => {
     return useQuery({
       queryKey: ['getStudentCommissionLists', data],
       queryFn: async () => {
         try {
           const response = await axios.get(`${BASE_URL}/api/students/commission/${data}`, config)
-          return response.data
+          return response.data // Return the data fetched from the API
         } catch (error) {
           throw new Error('Error fetching student data: ' + error.message)
         }

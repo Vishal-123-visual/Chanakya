@@ -315,7 +315,7 @@ export const getStudentCommissionListsController = asyncHandler(
   async (req, res) => {
     try {
       const studentCommissionLists = await StudentComissionModel.find({
-        studentName: req.params.data,
+        studentName: req.params.data.split("_").join(" "),
       });
       res.status(200).json(studentCommissionLists);
     } catch (error) {
