@@ -10,7 +10,7 @@ const EditOnlyCourseFee = ({
   setEditStudentCourseFees,
   editStudentCourseFees,
 }) => {
-  // console.log(StudentFee)
+  //console.log(StudentFee)
   useEffect(() => {
     setEditStudentCourseFees(StudentFee)
     setEditStudentCourseFees((prev) => ({
@@ -41,7 +41,7 @@ const EditOnlyCourseFee = ({
       <td>
         <input
           type='text'
-          className='form-control w-auto'
+          className='form-control w-min-150px'
           onChange={(e) =>
             setEditStudentCourseFees({
               ...editStudentCourseFees,
@@ -55,35 +55,35 @@ const EditOnlyCourseFee = ({
       <td>
         <input
           type='text'
-          className='form-control w-auto'
+          className='form-control w-min-150px'
           onChange={remainingFeesHandler}
           value={editStudentCourseFees.amountPaid}
         />
       </td>
       <td>
         <input
-          className='form-control w-auto'
+          className='form-control w-min-150px'
           type='text'
           value={editStudentCourseFees.remainingFees}
           readOnly
         />
       </td>
       <td>
-        {/* <DatePicker
-          selected={moment(Date(StudentFee?.amountDate)).format('DD/MM/YYYY')}
+        <DatePicker
+          selected={editStudentCourseFees.amountDate} // Should match the structure of editStudentCourseFees
           onChange={(date) =>
             setEditStudentCourseFees({...editStudentCourseFees, amountDate: date})
           }
           dateFormat='dd/MM/yyyy'
-          className='form-control form-control-lg form-control-solid'
+          className='form-control form-control-lg form-control-solid w-min-100px'
           placeholderText='DD/MM/YYYY'
-        /> */}
+        />
       </td>
       <td>
         <input
           type='text'
           value={editStudentCourseFees.reciptNumber}
-          className='form-control w-auto'
+          className='form-control w-min-150px'
           onChange={(e) =>
             setEditStudentCourseFees({
               ...editStudentCourseFees,
@@ -120,7 +120,7 @@ const EditOnlyCourseFee = ({
       <td>
         <input
           type='text'
-          className='form-control w-auto'
+          className='form-control w-min-150px'
           value={editStudentCourseFees.lateFees}
           onChange={(e) =>
             setEditStudentCourseFees({

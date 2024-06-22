@@ -24,13 +24,13 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
   return (
     <tr>
       <td>
-        <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+        {/* <div className='form-check form-check-sm form-check-custom form-check-solid'></div> */}
       </td>
       <td></td>
       <td>
         <input
           type='text'
-          className='form-control w-auto '
+          className='form-control min-w-150px'
           onChange={(e) =>
             setPayStudentFeesAdd({...payStudentFeesAdd, netCourseFees: Number(e.target.value)})
           }
@@ -41,14 +41,14 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       <td>
         <input
           type='number'
-          className='form-control w-auto '
+          className='form-control min-w-150px '
           onChange={remainingFeesHandler}
           value={payStudentFeesAdd.amountPaid}
         />
       </td>
       <td>
         <input
-          className='form-control w-auto '
+          className='form-control min-w-150px '
           type='text'
           value={payStudentFeesAdd.remainingFees}
           readOnly
@@ -59,7 +59,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
           selected={payStudentFeesAdd.amountDate}
           onChange={(date) => setPayStudentFeesAdd({...payStudentFeesAdd, amountDate: date})}
           dateFormat='dd/MM/yyyy'
-          className='form-control form-control-lg form-control-solid'
+          className='form-control form-control-lg form-control-solid min-w-150px'
           placeholderText='DD/MM/YYYY'
         />
       </td>
@@ -71,10 +71,10 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
           className='form-control w-auto '
         />
       </td> */}
-      <td></td>
+      <td className='min-w-0px'></td>
       <td>
         <select
-          className='form-select form-select-solid form-select-lg'
+          className='form-select form-select-solid form-select-lg min-w-150px'
           value={payStudentFeesAdd.paymentOption}
           onChange={(e) =>
             setPayStudentFeesAdd({...payStudentFeesAdd, paymentOption: e.target.value})
@@ -94,7 +94,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       <td>
         <input
           type='text'
-          className='form-control w-auto '
+          className='form-control w-min-100px'
           value={payStudentFeesAdd.lateFees}
           onChange={(e) =>
             setPayStudentFeesAdd({...payStudentFeesAdd, lateFees: Number(e.target.value)})

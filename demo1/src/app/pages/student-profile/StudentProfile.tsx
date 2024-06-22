@@ -253,7 +253,7 @@ const StudentProfile: React.FC = () => {
                       <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                         <div className='d-flex align-items-center'>
                           <KTIcon iconName='arrow-up' className='fs-3 text-success me-2' />
-                          <div className='fs-2 fw-bolder'>Rs.{updateUserId?.course_fees}</div>
+                          <div className='fs-2 fw-bolder'>Rs.{updateUserId?.netCourseFees}</div>
                         </div>
 
                         <div className='fw-bold fs-6 text-gray-400'>Total Fee</div>

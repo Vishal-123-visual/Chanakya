@@ -161,6 +161,16 @@ const AddMissionForm: React.FC = () => {
         formData.append(key, value as string) // Ensure value is a string, adjust if needed
       })
 
+      if (!image) {
+        toast(`Please select image`, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+        return
+      }
+
       // Append the image to formData
       if (image) {
         formData.append('image', image)
