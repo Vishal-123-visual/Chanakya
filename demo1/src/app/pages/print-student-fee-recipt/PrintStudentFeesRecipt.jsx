@@ -11,7 +11,7 @@ const PrintStudentFeesRecipt = () => {
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
-  console.log(studentInfoData?.gst_percentage)
+  // console.log(studentInfoData?.gst_percentage)
 
   const gstAmount =
     studentInfoData.studentInfo.student_status === 'GST'
