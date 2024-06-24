@@ -50,6 +50,10 @@ const courseFeesSchema = new mongoose.Schema(
     lateFees: {
       type: Number,
     },
+    gst_percentage: {
+      type: Number,
+      required: true,
+    },
   },
   { timestamps: true }
 );

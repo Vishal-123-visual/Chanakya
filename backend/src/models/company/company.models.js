@@ -31,8 +31,7 @@ const companySchema = new mongoose.Schema(
       required: true,
     },
     gst: {
-      type: Number,
-      required: true,
+      type: String,
     },
   },
   { timestamps: true }

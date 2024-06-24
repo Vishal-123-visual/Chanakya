@@ -220,10 +220,11 @@ const SidebarMenuMain = () => {
         fontIcon='bi-chat-left'
         icon='abstract-29'
       >
-        <SidebarMenuItem to='/email-template' title='Email Template' hasBullet={true} />
-        <SidebarMenuItem to='/email-suggesstions' title='Send Email Suggestion' hasBullet={true} />
-        <SidebarMenuItem to='/payment-option' title='Add Payment Option' hasBullet={true} />
+        <SidebarMenuItem to='/general-settings' title='General Settings' hasBullet={true} />
       </SidebarMenuItemWithSub>
+      {/* <SidebarMenuItem to='/email-template' title='Email Template' hasBullet={true} />
+      <SidebarMenuItem to='/email-suggesstions' title='Send Email Suggestion' hasBullet={true} />
+      <SidebarMenuItem to='/payment-option' title='Add Payment Option' hasBullet={true} /> */}
 
       {/* ------------------------------ Settings Page End ------------------------------------------- */}
 

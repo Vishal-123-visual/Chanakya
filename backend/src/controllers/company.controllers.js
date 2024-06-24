@@ -39,8 +39,7 @@ export const createCompanyController = asyncHandler(async (req, res, next) => {
           .json({ message: "Company Address name is required" });
       case !reciptNumber:
         return res.status(401).json({ message: "Recipt Number  is required" });
-      case !gst:
-        return res.status(401).json({ message: "GSt Number is required" });
+
       default:
         break;
     }

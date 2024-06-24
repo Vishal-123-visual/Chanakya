@@ -164,6 +164,46 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  const postStudentGSTSuggestionStatus = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/student-gst-suggestions/add`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getStudentGSTSuggesstions']})
+      }
+    },
+  })
+
+  const getStudentGSTSuggestionStatus = useQuery({
+    queryKey: ['getStudentGSTSuggesstions'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/student-gst-suggestions`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
   // ************************************ Get Students According to Company Wise ********************************
   const useGetStudentsAccordingToCompanyQuery = (companyId) => {
     return useQuery({
@@ -252,6 +292,10 @@ export const CompanyContextProvider = ({children}) => {
         useGetStudentsAccordingToCompanyQuery,
         createStudentCommissionMutation,
         useGetStudentCommissionDataQuery,
+        /* ***************************** Student GSt ----------------------  */
+        postStudentGSTSuggestionStatus,
+        getStudentGSTSuggestionStatus,
+        /* ***************************** Student GSt ----------------------  */
       }}
     >
       {children}

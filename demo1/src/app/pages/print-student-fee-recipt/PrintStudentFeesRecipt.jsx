@@ -1,19 +1,25 @@
 import {useState} from 'react'
 import moment from 'moment'
 import './studentFeesRecipt.css'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const PrintStudentFeesRecipt = () => {
+  const studentGST_statusCTX = useCompanyContext()
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
-  //console.log(studentInfoData)
+  console.log(studentInfoData?.gst_percentage)
 
   const gstAmount =
     studentInfoData.studentInfo.student_status === 'GST'
-      ? (Number(studentInfoData.amountPaid) * Number(studentInfoData.companyName.gst)) / 100
+      ? (Number(studentInfoData.amountPaid) *
+          Number(
+            studentInfoData?.gst_percentage === undefined ? 0 : studentInfoData?.gst_percentage
+          )) /
+        100
       : 0
 
   const formatDate = (date) => {

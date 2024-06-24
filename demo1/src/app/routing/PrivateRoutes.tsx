@@ -9,6 +9,7 @@ import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 
 const PrivateRoutes = () => {
+  const GstSuggesstion = lazy(() => import('../pages/email-template/GstSuggesstion'))
   const ViewDayBookAccount = lazy(() => import('../pages/dayBook/ViewDayBookAccount'))
   const EditDayBookAccount = lazy(() => import('../pages/dayBook/EditDayBookAccount'))
   const StudentCommission = lazy(() => import('../pages/student-commission/StudentCommission'))
@@ -61,7 +62,6 @@ const PrivateRoutes = () => {
       <Route element={<MasterLayout />}>
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
-
         {/* ================================  DayBook Start Here ============================== */}
         <Route
           path='/daybook/viewDaybook'
@@ -104,7 +104,6 @@ const PrivateRoutes = () => {
           }
         />
         {/* ================================  DayBook End Here ============================== */}
-
         {/* ====================Start Course Here ==================== */}
         <Route
           path='/course/course-type'
@@ -130,7 +129,6 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-
         <Route
           path='/course/category'
           element={
@@ -147,7 +145,6 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-
         <Route
           path='/student/commission/:companyId'
           element={
@@ -156,7 +153,6 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-
         {/* ======================================Add Number Of Years Course Type Start ============================================= */}
         <Route
           path='/course/no_of_years_course'
@@ -207,9 +203,7 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-
         {/* ====================End Course Here ==================== */}
-
         <Route
           path='/my-page'
           element={
@@ -242,7 +236,6 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-
         {/* *************************************** Monthly Collection fees start here.. ******************************************* */}
         <Route
           path='/monthlyCollectionFees/:id'
@@ -254,16 +247,8 @@ const PrivateRoutes = () => {
         />
         {/* *************************************** Monthly Collection fees End here.. ******************************************* */}
         {/* *************************************** Payment Option start here.. ******************************************* */}
-        <Route
-          path='/payment-option'
-          element={
-            <SuspensedView>
-              <AddPaymentOption />
-            </SuspensedView>
-          }
-        />
-        {/* *************************************** Payment Option End here.. ******************************************* */}
 
+        {/* *************************************** Payment Option End here.. ******************************************* */}
         {/* ******************************......... Manage Company start here.....***************************** */}
         <Route
           path='/company'
@@ -290,21 +275,17 @@ const PrivateRoutes = () => {
           }
         />
         {/* ******************************................ Manage Company start here..............******************************************* */}
-
         {/* ------------------------------- Email Template Start ----------------------------------- */}
         <Route
-          path='/email-template'
+          path='/general-settings'
           element={
             <SuspensedView>
-              <EmailTemplate />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/email-suggesstions'
-          element={
-            <SuspensedView>
-              <SendEmailSuggestion />
+              <div className='d-flex flex-column gap-10'>
+                <SendEmailSuggestion />
+                <GstSuggesstion />
+                <AddPaymentOption />
+                <EmailTemplate />
+              </div>
             </SuspensedView>
           }
         />
@@ -317,7 +298,6 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         />
-
         {/******************* Route for the print result ******************** */}
         {/* <Route
           path='/student-result'
@@ -327,9 +307,7 @@ const PrivateRoutes = () => {
             </SuspensedView>
           }
         /> */}
-
         {/* ------------------------------- Email Template End ----------------------------------- */}
-
         {/* <Route path='/add-user' element={<AddUser />} />
         <Route path='/user-list' element={<UserList />} /> */}
         {/* Pages */}

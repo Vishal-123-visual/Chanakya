@@ -15,6 +15,7 @@ import { userModel } from "../models/user.models.js";
 import DayBookDataModel from "../models/day-book/DayBookData.models.js";
 import moment from "moment";
 import SubjectModel from "../models/subject/subject.models.js";
+import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Suggestion.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -39,6 +40,15 @@ export const createCourseFeesController = asyncHandler(
       //   "email suggestions status ->>>>>>>>>",
       //   emailSuggestionsStatus
       // );
+      // get the status of student GST
+
+      //console.log(studentGSTStatus[0].studentGST_Guggestion);
+      // const gstAmount =
+      //   student.student_status === "GST"
+      //     ? (Number(amountPaid) *
+      //         (studentGSTStatus[0].studentGST_Guggestion === true ? 18 : 0)) /
+      //       100
+      //     : 0;
 
       // Fetch student and validate remaining fees
       const student = await admissionFormModel
@@ -89,9 +99,11 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber = student.companyName.reciptNumber;
       }
 
+      const studentGSTStatus = await StudentGST_GuggestionModel.find();
+      //console.log(studentGSTStatus[0].studentGST_Guggestion);
       const gstAmount =
         student.student_status === "GST"
-          ? (Number(amountPaid) * Number(student.companyName.gst)) / 100
+          ? (Number(amountPaid) * studentGSTStatus[0].gst_percentage) / 100
           : 0;
       //console.log("gst amount: " + gstAmount);
 
@@ -105,6 +117,7 @@ export const createCourseFeesController = asyncHandler(
           ...req.body,
           reciptNumber,
           companyName: student.companyName._id,
+          gst_percentage: studentGSTStatus[0].gst_percentage,
         });
 
         const savedCourseFees = await newCourseFees.save();
@@ -685,6 +698,7 @@ export const createCourseFeesController = asyncHandler(
         ...req.body,
         reciptNumber,
         companyName: student.companyName._id,
+        gst_percentage: studentGSTStatus[0].gst_percentage,
       });
       let reciptNumberString = Number(reciptNumber.split("-")[1]) + 1;
       const savedCourseFees = await newCourseFees.save();
@@ -1435,7 +1449,7 @@ export const getSingleStudentCourseFeesController = asyncHandler(
       const courseFees = await CourseFeesModel.findById(req.params.id).populate(
         ["courseName", "companyName", "studentInfo", "paymentOption"]
       );
-      console.log("get single student course fees ->>>>>>>> ", courseFees);
+      // console.log("get single student course fees ->>>>>>>> ", courseFees);
 
       if (!courseFees) {
         return res.status(404).json({ message: "Student fee not found" });

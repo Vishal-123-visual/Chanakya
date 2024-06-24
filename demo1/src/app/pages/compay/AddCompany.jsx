@@ -13,11 +13,10 @@ const CourseSchema = Yup.object().shape({
   companyPhone: Yup.string().required('Company Phone Number is required'),
   companyWebsite: Yup.string().required('Company Website is required'),
   reciptNumber: Yup.string().required('Company recipt number'),
-  gst: Yup.number(),
+  gst: Yup.string(),
 })
 
 const AddCompany = () => {
-  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const [preview, setPreview] = useState('')
   const [logo, setLogo] = useState(null)
@@ -54,7 +53,6 @@ const AddCompany = () => {
     initialValues,
     validationSchema: CourseSchema,
     onSubmit: async (values) => {
-      setLoading(true)
       let formData = new FormData()
       //console.log(values)
 
@@ -62,6 +60,16 @@ const AddCompany = () => {
       Object.entries(values).forEach(([key, value]) => {
         formData.append(key, value) // Ensure value is a string, adjust if needed
       })
+
+      if (!logo) {
+        toast.error('Please select a company logo!', {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+        return
+      }
 
       // Append the image to formData
       if (logo) {
@@ -224,14 +232,13 @@ const AddCompany = () => {
                   </div>
                 </label>
                 <label className='col-6 col-form-label fw-bold fs-6'>
-                  GST{' '}
+                  GST
                   <div className='fv-row mt-5 '>
                     <input
-                      type='number'
+                      type='text'
                       className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
-                      placeholder='Enter GST number'
+                      placeholder='Enter GST '
                       {...formik.getFieldProps('gst')}
-                      min={0}
                     />
                     {formik.touched.gst && formik.errors.gst && (
                       <div className='fv-plugins-message-container'>
@@ -244,15 +251,8 @@ const AddCompany = () => {
             </div>
 
             <div className='card-footer d-flex justify-content-end py-6 px-9'>
-              <button type='submit' className='btn btn-primary' disabled={loading}>
-                {!loading && 'Save Changes'}
-                {loading && (
-                  <span className='indicator-progress' style={{display: 'block'}}>
-                    {/* Please wait...{' '} */}
-                    Added
-                    {/* <span className='spinner-border spinner-border-sm align-middle ms-2'></span> */}
-                  </span>
-                )}
+              <button type='submit' className='btn btn-primary'>
+                Save Changes
               </button>
             </div>
           </form>
