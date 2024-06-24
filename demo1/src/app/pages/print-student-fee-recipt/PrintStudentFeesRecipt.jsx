@@ -15,11 +15,7 @@ const PrintStudentFeesRecipt = () => {
 
   const gstAmount =
     studentInfoData.studentInfo.student_status === 'GST'
-      ? (Number(studentInfoData.amountPaid) *
-          Number(
-            studentInfoData?.gst_percentage === undefined ? 0 : studentInfoData?.gst_percentage
-          )) /
-        100
+      ? (Number(studentInfoData.amountPaid) * Number(studentInfoData?.gst_percentage)) / 100
       : 0
 
   const formatDate = (date) => {
