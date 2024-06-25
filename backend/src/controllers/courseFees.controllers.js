@@ -504,9 +504,7 @@ export const createCourseFeesController = asyncHandler(
                           line-height: 24px;
                         "
                                 >
-                                  GST (${studentGSTStatus[0]?.gst_percentage?.toFixed(
-                                    2
-                                  )} %)
+                                  GST (${studentGSTStatus[0]?.gst_percentage} %)
                                 </td>
     
                                 <td
@@ -1140,9 +1138,7 @@ export const createCourseFeesController = asyncHandler(
                         line-height: 24px;
                       "
                               >
-                                GST (${studentGSTStatus[0]?.gst_percentage.toFixed(
-                                  2
-                                )} %)
+                                GST (${studentGSTStatus[0]?.gst_percentage} %)
                               </td>
   
                               <td
