@@ -128,7 +128,11 @@ const SidebarMenuMain = () => {
             title='Commission'
             hasBullet={true}
           />
-          <SidebarMenuItem to='/addmission-form' title='Admission Form' hasBullet={true} />
+          <SidebarMenuItem
+            to={`/addmission-form/${CompanyListData?._id}`}
+            title='Admission Form'
+            hasBullet={true}
+          />
         </SidebarMenuItemWithSub>
       ))}
       {/* ----------------------------- Company Menu END Here ............................... */}

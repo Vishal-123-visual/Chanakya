@@ -3,6 +3,7 @@ import {KTIcon} from '../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
 import moment from 'moment'
+import {useCompanyContext} from './compay/CompanyContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
@@ -12,17 +13,20 @@ type Props = {
 const BASE_URL_Image = `${BASE_URL}/api/images`
 const StudentsList: React.FC<Props> = ({className}) => {
   const ctx = useAdmissionContext()
-  const navigate = useNavigate()
-  // console.log(ctx.studentsLists.data.users)
-  // console.log(new Date(ctx.studentsLists.data.users[0].commision_date).toLocaleDateString())
+  const companyCTX = useCompanyContext()
   const params = useParams()
+  const navigate = useNavigate()
+  const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(params?.id)
+  // console.log(data)
+  // console.log(new Date(ctx.studentsLists.data.users[0].commision_date).toLocaleDateString())
+  // console.log(params)
   //console.log(params.id)
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Students</span>
+          <span className='card-label fw-bold fs-3 mb-1'>{singleComapnyData?.companyName}</span>
           <span className='text-muted mt-1 fw-semibold fs-7'>All Over World</span>
         </h3>
         <div
@@ -34,7 +38,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
         >
           <button
             className='btn btn-sm btn-light-primary'
-            onClick={() => navigate('/addmission-form')}
+            onClick={() => navigate(`/addmission-form/${singleComapnyData?._id}`)}
             // data-bs-toggle='modal'
             // data-bs-target='#kt_modal_invite_friends'
           >

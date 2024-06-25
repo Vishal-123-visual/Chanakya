@@ -24,6 +24,10 @@ const StudentCommission = () => {
   // console.log(params)
   const studentCTX = useCompanyContext()
   const {data} = studentCTX.useGetStudentsAccordingToCompanyQuery(params.companyId)
+  const companyData = studentCTX.useGetSingleCompanyData(params.companyId)
+  console.log(companyData?.data?.companyName)
+
+  // console.log(data)
 
   const navigate = useNavigate()
   let initialValues = {
@@ -78,7 +82,7 @@ const StudentCommission = () => {
           aria-controls='kt_account_profile_details'
         >
           <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0'>Add Student Commission</h3>
+            <h3 className='fw-bolder m-0'>{companyData?.data?.companyName}</h3>
           </div>
         </div>
 

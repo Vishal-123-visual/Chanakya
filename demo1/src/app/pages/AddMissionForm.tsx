@@ -10,7 +10,7 @@ import {
   addMissionFormInitialValues as initialValues,
 } from '../modules/accounts/components/settings/SettingsModel'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
-import {useLocation, useNavigate} from 'react-router-dom'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
 import {toAbsoluteUrl} from '../../_metronic/helpers'
 import {useCourseContext} from './course/CourseContext'
 import {useCompanyContext} from './compay/CompanyContext'
@@ -64,6 +64,9 @@ const AddMissionForm: React.FC = () => {
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
+
+  const params = useParams()
+  const {companyName} = companyCTX.useGetSingleCompanyData(params.id)?.data
   //console.log(companyCTX.getCompanyLists.data)
   // console.log(selectedCourseNameData)
 
@@ -221,7 +224,9 @@ const AddMissionForm: React.FC = () => {
         >
           <div className='card-title m-0'>
             <h3 className='fw-bolder m-0'>
-              {updateUserId ? 'Edit Student Information' : 'Student Information'}
+              {updateUserId
+                ? `${companyName} -> Edit Student Information`
+                : `${companyName} ->  Student Information`}
             </h3>
           </div>
         </div>

@@ -12,7 +12,7 @@ const GstSuggesstion = () => {
   const navigate = useNavigate()
   const studentGSTCTX = useCompanyContext()
   let initialValues = {
-    gstNumber: studentGSTCTX.getStudentGSTSuggestionStatus.data[0].gst_percentage,
+    gstNumber: studentGSTCTX?.getStudentGSTSuggestionStatus?.data[0]?.gst_percentage,
   }
 
   // console.log(typeof studentGSTCTX.getStudentGSTSuggestionStatus.data[0].gst_percentage)
@@ -22,7 +22,7 @@ const GstSuggesstion = () => {
     validationSchema: addGSTSchema,
     onSubmit: async (values) => {
       //console.log(values)
-      studentGSTCTX.postStudentGSTSuggestionStatus.mutate(values)
+      studentGSTCTX?.postStudentGSTSuggestionStatus?.mutate(values)
       // formik.setFieldValue('gstNumber', '')
     },
   })
@@ -73,7 +73,7 @@ const GstSuggesstion = () => {
               <button
                 type='submit'
                 className='btn btn-primary'
-                disabled={studentGSTCTX.postStudentGSTSuggestionStatus.isLoading}
+                disabled={studentGSTCTX?.postStudentGSTSuggestionStatus?.isLoading}
               >
                 Add
               </button>

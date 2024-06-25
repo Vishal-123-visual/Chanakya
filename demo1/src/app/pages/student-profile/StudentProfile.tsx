@@ -66,6 +66,8 @@ const StudentProfile: React.FC = () => {
   const [updateUserId, setUpdateUserId] = useState<any>(location?.state)
   //console.log(updateUserId)
 
+  const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(updateUserId?.companyName)
+  //console.log(singleComapnyData)
   // if (updateUserId === null) {
   //   setUpdateUserId(location?.state)
   // }
@@ -154,7 +156,7 @@ const StudentProfile: React.FC = () => {
           <div className='card-title m-0'>
             <h3 className='fw-bolder m-0'>
               {/* {updateUserId ? 'Edit Student Information' : 'Student Information'} */}
-              Student Profile
+              {singleComapnyData?.companyName} =: Student Profile
             </h3>
           </div>
         </div>

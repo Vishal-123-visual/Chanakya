@@ -5,6 +5,7 @@ import {
   getAllCompanyListsController,
   updateCompanyController,
   deleteCompanyController,
+  getSingleCompanyDataController,
 } from "../controllers/company.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 
@@ -17,6 +18,7 @@ router
 
 router
   .route("/:id")
+  .get(requireSignIn, getSingleCompanyDataController)
   .put(requireSignIn, isAdmin, upload.single("logo"), updateCompanyController)
   .delete(requireSignIn, isAdmin, deleteCompanyController);
 

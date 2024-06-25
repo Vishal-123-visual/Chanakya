@@ -213,7 +213,7 @@ const PrivateRoutes = () => {
           }
         />
         <Route
-          path='/addmission-form'
+          path='/addmission-form/:id'
           element={
             <SuspensedView>
               <AddMissionForm />

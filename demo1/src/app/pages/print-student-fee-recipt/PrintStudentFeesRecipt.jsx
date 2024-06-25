@@ -348,7 +348,7 @@ const PrintStudentFeesRecipt = () => {
                             lineHeight: '24px',
                           }}
                         >
-                          GST ({studentInfoData.companyName.gst} %)
+                          GST ({studentInfoData?.gst_percentage} %)
                         </td>
                         <td
                           align='left'
@@ -360,7 +360,7 @@ const PrintStudentFeesRecipt = () => {
                             lineHeight: '24px',
                           }}
                         >
-                          Rs {gstAmount}
+                          Rs {gstAmount?.toFixed(2)}
                         </td>
                       </tr>
                     )}

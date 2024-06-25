@@ -70,6 +70,20 @@ export const getAllCompanyListsController = asyncHandler(
     }
   }
 );
+
+// get single company data
+export const getSingleCompanyDataController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const sigleCompany = await CompanyModels.findById(req.params.id);
+      res.status(200).json(sigleCompany);
+    } catch (error) {
+      console.log("Error : while getting single company data");
+      res.status(500).json({ message: error.message });
+    }
+  }
+);
+
 export const updateCompanyController = asyncHandler(async (req, res, next) => {
   try {
     const company = await CompanyModels.findById(req.params.id);

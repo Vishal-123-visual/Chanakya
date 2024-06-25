@@ -29,6 +29,19 @@ export const CompanyContextProvider = ({children}) => {
       }
     },
   })
+  const useGetSingleCompanyData = (companyId) => {
+    return useQuery({
+      queryKey: ['getCompanyLists', companyId],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/company/${companyId}`, config)
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
   const getEmailSuggestionStatus = useQuery({
     queryKey: ['getEmailRemainderSuggesstions'],
     queryFn: async () => {
@@ -284,6 +297,7 @@ export const CompanyContextProvider = ({children}) => {
       value={{
         createAddCompanyMutation,
         getCompanyLists,
+        useGetSingleCompanyData,
         deleteCompanyMutation,
         updateCompanyMutation,
         postEmailRemainderText,

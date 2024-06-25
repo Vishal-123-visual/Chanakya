@@ -103,7 +103,7 @@ export const createCourseFeesController = asyncHandler(
       //console.log(studentGSTStatus[0].studentGST_Guggestion);
       const gstAmount =
         student.student_status === "GST"
-          ? (Number(amountPaid) * studentGSTStatus[0].gst_percentage) / 100
+          ? (Number(amountPaid) * studentGSTStatus[0]?.gst_percentage) / 100
           : 0;
       //console.log("gst amount: " + gstAmount);
 
@@ -117,7 +117,7 @@ export const createCourseFeesController = asyncHandler(
           ...req.body,
           reciptNumber,
           companyName: student.companyName._id,
-          gst_percentage: studentGSTStatus[0].gst_percentage,
+          gst_percentage: studentGSTStatus[0]?.gst_percentage,
         });
 
         const savedCourseFees = await newCourseFees.save();
@@ -504,7 +504,9 @@ export const createCourseFeesController = asyncHandler(
                           line-height: 24px;
                         "
                                 >
-                                  GST (${student.companyName.gst} %)
+                                  GST (${studentGSTStatus[0]?.gst_percentage?.toFixed(
+                                    2
+                                  )} %)
                                 </td>
     
                                 <td
@@ -698,7 +700,7 @@ export const createCourseFeesController = asyncHandler(
         ...req.body,
         reciptNumber,
         companyName: student.companyName._id,
-        gst_percentage: studentGSTStatus[0].gst_percentage,
+        gst_percentage: studentGSTStatus[0]?.gst_percentage,
       });
       let reciptNumberString = Number(reciptNumber.split("-")[1]) + 1;
       const savedCourseFees = await newCourseFees.save();
@@ -739,7 +741,7 @@ export const createCourseFeesController = asyncHandler(
         Number(req.body.remainingFees) / nextInstallment
       );
 
-      console.log("Installment amount :  ".installmentAmount);
+      //console.log("Installment amount :  ".installmentAmount);
 
       // Create the entry for the current due installment
       const currentInstallmentExpiration =
@@ -1138,7 +1140,9 @@ export const createCourseFeesController = asyncHandler(
                         line-height: 24px;
                       "
                               >
-                                GST (${student.companyName.gst} %)
+                                GST (${studentGSTStatus[0]?.gst_percentage.toFixed(
+                                  2
+                                )} %)
                               </td>
   
                               <td
