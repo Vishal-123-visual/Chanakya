@@ -101,10 +101,12 @@ export const createCourseFeesController = asyncHandler(
 
       const studentGSTStatus = await StudentGST_GuggestionModel.find();
       //console.log(studentGSTStatus[0].studentGST_Guggestion);
-      const gstAmount =
+      let gstAmount =
         student.student_status === "GST"
-          ? (Number(amountPaid) * studentGSTStatus[0]?.gst_percentage) / 100
+          ? (Number(amountPaid) / (studentGSTStatus[0]?.gst_percentage + 100)) *
+            100
           : 0;
+      let cutGSTAmount = amountPaid - gstAmount;
       //console.log("gst amount: " + gstAmount);
 
       if (
@@ -456,15 +458,39 @@ export const createCourseFeesController = asyncHandler(
                                         ">
                               Fees Paid
                             </td>
-                            <td align="left" width="25%" style="
+                           
+                           
+                            ${
+                              student.student_status === "GST"
+                                ? ` <td
+                                  align="left"
+                                  width="25%"
+                                  style="
+                              padding: 6px 12px;
+                              font-family: 'Source Sans Pro', Helvetica, Arial,
+                                sans-serif;
+                              font-size: 12px;
+                              line-height: 24px;
+                            "
+                                >
+                                  Rs ${Number(gstAmount.toFixed(2))}
+                                </td>`
+                                : ` <td
+                                  align="left"
+                                  width="25%"
+                                  style="
                                           padding: 6px 12px;
                                           font-family: 'Source Sans Pro', Helvetica, Arial,
                                             sans-serif;
                                           font-size: 12px;
                                           line-height: 24px;
-                                        ">
-                            Rs  ${Number(amountPaid)} 
-                            </td>
+                                        "
+                                >
+                                  Rs ${Number(amountPaid)}
+                                </td>`
+                            }
+                            
+                            
                           </tr>
       
       
@@ -518,7 +544,7 @@ export const createCourseFeesController = asyncHandler(
                                     line-height: 24px;
                                   "
                                 >
-                                Rs ${gstAmount.toFixed(2)}
+                                Rs ${cutGSTAmount.toFixed(2)}
                                   
                                 </td>
                               </tr>`
@@ -544,7 +570,7 @@ export const createCourseFeesController = asyncHandler(
           Rs ${
             student?.student_status === "NOGST"
               ? (Number(lateFees) + Number(amountPaid)).toFixed(2)
-              : (Number(lateFees) + Number(amountPaid) + gstAmount).toFixed(2)
+              : (Number(lateFees) + Number(gstAmount + cutGSTAmount)).toFixed(2)
           } 
       </td>
     </tr>
@@ -1090,15 +1116,39 @@ export const createCourseFeesController = asyncHandler(
                                       ">
                             Fees Paid
                           </td>
-                          <td align="left" width="25%" style="
+                         
+                         
+                          ${
+                            student.student_status === "GST"
+                              ? ` <td
+                                align="left"
+                                width="25%"
+                                style="
+                            padding: 6px 12px;
+                            font-family: 'Source Sans Pro', Helvetica, Arial,
+                              sans-serif;
+                            font-size: 12px;
+                            line-height: 24px;
+                          "
+                              >
+                                Rs ${Number(gstAmount.toFixed(2))}
+                              </td>`
+                              : ` <td
+                                align="left"
+                                width="25%"
+                                style="
                                         padding: 6px 12px;
                                         font-family: 'Source Sans Pro', Helvetica, Arial,
                                           sans-serif;
                                         font-size: 12px;
                                         line-height: 24px;
-                                      ">
-                          Rs  ${Number(amountPaid)} 
-                          </td>
+                                      "
+                              >
+                                Rs ${Number(amountPaid)}
+                              </td>`
+                          }
+                          
+                          
                         </tr>
     
     
@@ -1152,7 +1202,7 @@ export const createCourseFeesController = asyncHandler(
                                   line-height: 24px;
                                 "
                               >
-                              Rs ${gstAmount.toFixed(2)}
+                              Rs ${cutGSTAmount.toFixed(2)}
                                 
                               </td>
                             </tr>`
@@ -1178,7 +1228,7 @@ export const createCourseFeesController = asyncHandler(
         Rs ${
           student?.student_status === "NOGST"
             ? (Number(lateFees) + Number(amountPaid)).toFixed(2)
-            : (Number(lateFees) + Number(amountPaid) + gstAmount).toFixed(2)
+            : (Number(lateFees) + Number(gstAmount + cutGSTAmount)).toFixed(2)
         } 
     </td>
   </tr>
