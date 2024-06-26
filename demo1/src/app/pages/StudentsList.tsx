@@ -120,7 +120,11 @@ const StudentsList: React.FC<Props> = ({className}) => {
                     <td className='text-end'>
                       <div className='d-flex flex-column w-100 me-2'>
                         <div
-                          onClick={() => navigate(`/student/${student._id}`, {state: student})}
+                          onClick={() =>
+                            navigate(`/student/${student._id}`, {
+                              state: student,
+                            })
+                          }
                           style={{cursor: 'pointer'}}
                           className='d-flex flex-stack mb-2'
                         >
@@ -133,7 +137,9 @@ const StudentsList: React.FC<Props> = ({className}) => {
                     <td>
                       <div className='d-flex justify-content-end flex-shrink-0'>
                         <button
-                          onClick={() => navigate('/addmission-form', {state: student})}
+                          onClick={() =>
+                            navigate(`/addmission-form/${student._id}`, {state: student})
+                          }
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                         >
                           <KTIcon iconName='pencil' className='fs-3' />

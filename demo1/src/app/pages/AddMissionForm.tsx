@@ -66,7 +66,10 @@ const AddMissionForm: React.FC = () => {
   const companyCTX = useCompanyContext()
 
   const params = useParams()
-  const {companyName} = companyCTX.useGetSingleCompanyData(params.id)?.data
+  //console.log(params)
+  const {companyName} = companyCTX.useGetSingleCompanyData(
+    updateUserId === null ? params.id : updateUserId?.companyName
+  )?.data
   //console.log(companyCTX.getCompanyLists.data)
   // console.log(selectedCourseNameData)
 
@@ -164,15 +167,15 @@ const AddMissionForm: React.FC = () => {
         formData.append(key, value as string) // Ensure value is a string, adjust if needed
       })
 
-      if (!image) {
-        toast(`Please select image`, {
-          type: 'error',
-          bodyStyle: {
-            fontSize: '18px',
-          },
-        })
-        return
-      }
+      // if (!image) {
+      //   toast(`Please select image`, {
+      //     type: 'error',
+      //     bodyStyle: {
+      //       fontSize: '18px',
+      //     },
+      //   })
+      //   return
+      // }
 
       // Append the image to formData
       if (image) {
@@ -201,11 +204,6 @@ const AddMissionForm: React.FC = () => {
       }
 
       navigate(`/students/${values?.companyName}`)
-      // companyCTX.getCompanyLists.data.forEach((companyId) => {
-      //    if(companyId===values.companyName){
-
-      //    }
-      // })
     },
   })
 
