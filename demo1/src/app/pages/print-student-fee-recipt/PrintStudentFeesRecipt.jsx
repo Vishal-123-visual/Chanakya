@@ -18,12 +18,7 @@ const PrintStudentFeesRecipt = () => {
       ? (Number(studentInfoData.amountPaid) / Number(studentInfoData?.gst_percentage + 100)) * 100
       : 0
   const cutWithGstAmountPaid = studentInfoData.amountPaid - gstAmount
-  const lateFeesGstAmount =
-    studentInfoData.studentInfo.student_status === 'GST'
-      ? (Number(studentInfoData.lateFees) / Number(studentInfoData?.gst_percentage + 100)) * 100
-      : 0
-  const cutWithGstLateFees = studentInfoData.lateFees - lateFeesGstAmount
-  console.log(lateFeesGstAmount, cutWithGstLateFees)
+  // console.log(lateFeesGstAmount, cutWithGstLateFees)
   //console.log(cutWithGstAmountPaid.toFixed(2))
   //console.log(gstAmount)
 
@@ -346,64 +341,20 @@ const PrintStudentFeesRecipt = () => {
                       >
                         Late Fees
                       </td>
-                      {studentInfoData.studentInfo.student_status === 'GST' ? (
-                        <td
-                          align='left'
-                          width='25%'
-                          style={{
-                            padding: '6px 12px',
-                            fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                          }}
-                        >
-                          Rs {lateFeesGstAmount.toFixed(2)}
-                        </td>
-                      ) : (
-                        <td
-                          align='left'
-                          width='25%'
-                          style={{
-                            padding: '6px 12px',
-                            fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                          }}
-                        >
-                          Rs {studentInfoData.lateFees}
-                        </td>
-                      )}
+                      <td
+                        align='left'
+                        width='25%'
+                        style={{
+                          padding: '6px 12px',
+                          fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
+                          fontSize: '16px',
+                          lineHeight: '24px',
+                        }}
+                      >
+                        Rs {studentInfoData.lateFees.toFixed(2)}
+                      </td>
                     </tr>
 
-                    {studentInfoData.studentInfo?.student_status !== 'NOGST' && (
-                      <tr style={{border: '2px dotted black'}}>
-                        <td
-                          align='left'
-                          width='75%'
-                          style={{
-                            border: '2px dotted black',
-                            padding: '6px 12px',
-                            fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                          }}
-                        >
-                          Late Fees GST ({studentInfoData?.gst_percentage} %)
-                        </td>
-                        <td
-                          align='left'
-                          width='25%'
-                          style={{
-                            padding: '6px 12px',
-                            fontFamily: "'Source Sans Pro', Helvetica, Arial, sans-serif",
-                            fontSize: '16px',
-                            lineHeight: '24px',
-                          }}
-                        >
-                          Rs {cutWithGstLateFees?.toFixed(2)}
-                        </td>
-                      </tr>
-                    )}
                     {studentInfoData.studentInfo?.student_status !== 'NOGST' && (
                       <tr style={{border: '2px dotted black'}}>
                         <td
@@ -478,8 +429,7 @@ const PrintStudentFeesRecipt = () => {
                           {(
                             gstAmount +
                             cutWithGstAmountPaid +
-                            lateFeesGstAmount +
-                            cutWithGstLateFees
+                            Number(studentInfoData.lateFees)
                           ).toFixed(2)}{' '}
                         </td>
                       )}
