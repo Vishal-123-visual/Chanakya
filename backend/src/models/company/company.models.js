@@ -33,6 +33,10 @@ const companySchema = new mongoose.Schema(
     gst: {
       type: String,
     },
+    isGstBased: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

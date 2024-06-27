@@ -12,7 +12,8 @@ const CourseSchema = Yup.object().shape({
   companyPhone: Yup.string().required('Company Phone Number is required'),
   companyWebsite: Yup.string().required('Company Website is required'),
   reciptNumber: Yup.string().required('Company recipt number'),
-  gst: Yup.number(),
+  isGstBased: Yup.string().required('Is Gst Based Company Field is required'),
+  gst: Yup.string(),
 })
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -47,6 +48,7 @@ const UpdateCompany = () => {
     gst: updatedCompanyData?.gst,
     logo: updatedCompanyData?.logo,
     email: updatedCompanyData?.email,
+    isGstBased: updatedCompanyData?.isGstBased,
   }
   //console.log(logo)
 
@@ -66,7 +68,7 @@ const UpdateCompany = () => {
     initialValues,
     validationSchema: CourseSchema,
     onSubmit: async (values) => {
-      // console.log(values)
+      console.log(values)
       setLoading(true)
       let formData = new FormData()
       //console.log(values)
@@ -237,6 +239,24 @@ const UpdateCompany = () => {
                     {formik.touched.gst && formik.errors.gst && (
                       <div className='fv-plugins-message-container'>
                         <div className='fv-help-block'>{formik.errors?.gst}</div>
+                      </div>
+                    )}
+                  </div>
+                </label>
+                <label className='col-6 col-form-label required fw-bold fs-6'>
+                  Is GST Based
+                  <div className='fv-row mt-5 '>
+                    <select
+                      className='form-select form-select-solid form-select-lg'
+                      {...formik.getFieldProps('isGstBased')}
+                    >
+                      <option value=''>--select--</option>
+                      <option value={'Yes'}>Yes</option>
+                      <option value={'No'}>No</option>
+                    </select>
+                    {formik.touched.isGstBased && formik.errors.isGstBased && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors.isGstBased}</div>
                       </div>
                     )}
                   </div>

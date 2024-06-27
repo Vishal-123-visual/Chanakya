@@ -18,6 +18,7 @@ export const createCompanyController = asyncHandler(async (req, res, next) => {
     reciptNumber,
     gst,
     email,
+    isGstBased,
   } = req.body;
   const file = req?.file?.filename;
   // console.log(file);
@@ -37,6 +38,10 @@ export const createCompanyController = asyncHandler(async (req, res, next) => {
         return res
           .status(401)
           .json({ message: "Company Address name is required" });
+      case !isGstBased:
+        return res
+          .status(401)
+          .json({ message: "Company is GST Based field is required" });
       case !reciptNumber:
         return res.status(401).json({ message: "Recipt Number  is required" });
 
@@ -51,6 +56,7 @@ export const createCompanyController = asyncHandler(async (req, res, next) => {
       reciptNumber,
       gst,
       email,
+      isGstBased,
       logo: file,
     });
     const savedCompany = await newCompany.save();
@@ -99,6 +105,7 @@ export const updateCompanyController = asyncHandler(async (req, res, next) => {
     company.companyAddress = req.body.companyAddress || company.companyAddress;
     company.reciptNumber = req.body.reciptNumber || company.reciptNumber;
     company.email = req.body.email || company.email;
+    company.isGstBased = req.body.isGstBased || company.isGstBased;
     company.gst = req.body.gst || company.gst;
     // company.logo = file || company.logo;
 

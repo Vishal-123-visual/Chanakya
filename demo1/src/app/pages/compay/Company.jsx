@@ -49,6 +49,7 @@ const Company = () => {
                 <th className='min-w-140px'>Address</th>
                 <th className='min-w-120px'>Recipt No</th>
                 <th className='min-w-120px'>GST</th>
+                <th className='min-w-120px'>Is GST Based</th>
                 <th className='min-w-100px text-end'>Actions</th>
               </tr>
             </thead>
@@ -97,6 +98,12 @@ const Company = () => {
                   <td className=''>
                     <p className='text-dark fw-bold text-hover-primary fs-6'>{companyData.gst}</p>
                   </td>
+                  <td className=''>
+                    <p className='text-dark fw-bold text-hover-primary fs-6'>
+                      {companyData?.isGstBased}
+                    </p>
+                  </td>
+
                   <td>
                     <div className='d-flex justify-content-end flex-shrink-0'>
                       <button
