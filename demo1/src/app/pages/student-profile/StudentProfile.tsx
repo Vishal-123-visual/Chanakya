@@ -64,14 +64,18 @@ const StudentProfile: React.FC = () => {
   }
 
   const [updateUserId, setUpdateUserId] = useState<any>(location?.state)
+
+  const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(updateUserId?.companyName)
+  // console.log(singleComapnyData)
   //console.log(companyCTX.getStudentGSTSuggestionStatus.data[0]?.gst_percentage + 100)
 
   let cutWithGSTAmount =
-    (Number(updateUserId?.totalPaid) /
-      (companyCTX.getStudentGSTSuggestionStatus.data[0]?.gst_percentage + 100)) *
-    100
+    singleComapnyData?.isGstBased === 'Yes'
+      ? (Number(updateUserId?.totalPaid) /
+          (companyCTX.getStudentGSTSuggestionStatus.data[0]?.gst_percentage + 100)) *
+        100
+      : Number(updateUserId?.totalPaid)
 
-  const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(updateUserId?.companyName)
   //console.log(singleComapnyData)
   // if (updateUserId === null) {
   //   setUpdateUserId(location?.state)
@@ -266,42 +270,60 @@ const StudentProfile: React.FC = () => {
                         <div className='fw-bold fs-6 text-gray-400'>Total Fee</div>
                       </div>
 
-                      <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
-                        <div className='d-flex align-items-center'>
-                          <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
-                          <div className='fs-2 fw-bolder'>
-                            Rs.
-                            {cutWithGSTAmount.toFixed(2)}
-                          </div>
-                        </div>
+                      {singleComapnyData?.isGstBased === 'Yes' ? (
+                        <>
+                          <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                            <div className='d-flex align-items-center'>
+                              <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
+                              <div className='fs-2 fw-bolder'>
+                                Rs.
+                                {cutWithGSTAmount.toFixed(2)}
+                              </div>
+                            </div>
 
-                        <div className='fw-bold fs-6 text-gray-400'>Cut GST Amount Fees Paid</div>
-                      </div>
-                      <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
-                        <div className='d-flex align-items-center'>
-                          <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
-                          <div className='fs-2 fw-bolder'>
-                            Rs.
-                            {(Number(updateUserId?.totalPaid) - cutWithGSTAmount).toFixed(2)}
+                            <div className='fw-bold fs-6 text-gray-400'>
+                              Cut GST Amount Fees Paid
+                            </div>
                           </div>
-                        </div>
+                          <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                            <div className='d-flex align-items-center'>
+                              <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
+                              <div className='fs-2 fw-bolder'>
+                                Rs.
+                                {(Number(updateUserId?.totalPaid) - cutWithGSTAmount).toFixed(2)}
+                              </div>
+                            </div>
 
-                        <div className='fw-bold fs-6 text-gray-400'>GST Paid</div>
-                      </div>
-                      <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
-                        <div className='d-flex align-items-center'>
-                          <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
-                          <div className='fs-2 fw-bolder'>
-                            Rs.
-                            {(
-                              cutWithGSTAmount +
-                              (Number(updateUserId?.totalPaid) - cutWithGSTAmount)
-                            ).toFixed(2)}
+                            <div className='fw-bold fs-6 text-gray-400'>GST Paid</div>
                           </div>
-                        </div>
+                          <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                            <div className='d-flex align-items-center'>
+                              <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
+                              <div className='fs-2 fw-bolder'>
+                                Rs.
+                                {(
+                                  cutWithGSTAmount +
+                                  (Number(updateUserId?.totalPaid) - cutWithGSTAmount)
+                                ).toFixed(2)}
+                              </div>
+                            </div>
 
-                        <div className='fw-bold fs-6 text-gray-400'>total Paid</div>
-                      </div>
+                            <div className='fw-bold fs-6 text-gray-400'>total Paid</div>
+                          </div>
+                        </>
+                      ) : (
+                        <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
+                          <div className='d-flex align-items-center'>
+                            <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
+                            <div className='fs-2 fw-bolder'>
+                              Rs.
+                              {Number(updateUserId?.totalPaid).toFixed(2)}
+                            </div>
+                          </div>
+
+                          <div className='fw-bold fs-6 text-gray-400'>total Paid</div>
+                        </div>
+                      )}
 
                       <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                         <div className='d-flex align-items-center'>
