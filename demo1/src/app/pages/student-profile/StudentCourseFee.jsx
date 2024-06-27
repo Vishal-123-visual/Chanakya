@@ -37,7 +37,10 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   }
 
   const delelteStudentCourseFeesHandler = (id) => {
-    studentPayFeeCtx.useDeleteSingleStudentCourseFees.mutate(id)
+    if (window.confirm('Are you sure you want to delete this student course fee?')) {
+      studentPayFeeCtx.useDeleteSingleStudentCourseFees.mutate(id)
+    }
+    return
   }
   const [payStudentFeesAdd, setPayStudentFeesAdd] = useState()
   useEffect(() => {
@@ -59,6 +62,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   // console.log(result?.data[result?.data?.length - 1])
 
   //console.log(payStudentFeesAdd)
+  //console.log(studentPayFeeCtx.createStudentCourseFeesMutation)
 
   const payStudentFeesAddHandler = (e) => {
     e.preventDefault()
@@ -116,8 +120,15 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const editStudentCourseFessHandler = (e) => {
     // console.log(editStudentCourseFees)
     e.preventDefault()
-    studentPayFeeCtx.updateStudentSingleCourseFeesMutation.mutate(editStudentCourseFees)
-    setStudentCourseFeesEditId(null)
+    if (
+      window.confirm(
+        'Are you sure you want to Edit this student course fee? just edit recipt number and or date if you want to do not update amount ? if you update amount then you have change this student calculation manually from database.'
+      )
+    ) {
+      studentPayFeeCtx.updateStudentSingleCourseFeesMutation.mutate(editStudentCourseFees)
+      setStudentCourseFeesEditId(null)
+    }
+    return
   }
 
   // console.log(payStudentFeesAdd)
