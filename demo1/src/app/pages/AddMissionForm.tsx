@@ -32,7 +32,7 @@ const addmissionFormSchema = Yup.object().shape({
   date_of_birth: Yup.string().required('Date of birth is required!'),
   city: Yup.string().required('city is required!'),
   email: Yup.string().required('email is required!'),
-  student_status: Yup.string().required('Student status is required!'),
+  // student_status: Yup.string().required('Student status is required!'),
   education_qualification: Yup.string().required('Education qualification is required!'),
   //professional_qualification: Yup.string().required('Professional Qualification is required!'),
   select_course: Yup.string().required('select course is required!'),
@@ -124,9 +124,23 @@ const AddMissionForm: React.FC = () => {
   }
 
   const setProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
+
     if (e.target.files && e.target.files.length > 0) {
-      setImage(e.target.files[0])
+      const selectedFile = e.target.files[0]
+      if (!allowedTypes.includes(selectedFile.type)) {
+        toast.error('Only PNG, JPG, and JPEG images are allowed')
+        setImage(null)
+        setPreview('')
+      } else {
+        setImage(selectedFile)
+        // Optionally, setPreview(selectedFile); if you want to show a preview
+      }
     }
+
+    // if (e.target.files && e.target.files.length > 0) {
+    //   setImage(e.target.files[0])
+    // }
   }
 
   //console.log(updateUserId)
@@ -606,7 +620,7 @@ const AddMissionForm: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='col-6 mt-5'>
+                {/* <div className='col-6 mt-5'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label required fw-bold fs-6'>
                       Student Status
@@ -634,7 +648,7 @@ const AddMissionForm: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* ---------------------------COURSE END HERE ----------------------- */}

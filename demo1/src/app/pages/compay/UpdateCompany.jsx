@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useCompanyContext} from './CompanyContext'
+import {toast} from 'react-toastify'
 
 const CourseSchema = Yup.object().shape({
   companyName: Yup.string().required('Company Name is required'),
@@ -32,9 +33,22 @@ const UpdateCompany = () => {
   //console.log(getCourseCategoryLists)
 
   const setProfile = (e) => {
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
+
     if (e.target.files && e.target.files.length > 0) {
-      setLogo(e.target.files[0])
+      const selectedFile = e.target.files[0]
+      if (!allowedTypes.includes(selectedFile.type)) {
+        toast.error('Only PNG, JPG, and JPEG images are allowed')
+        setLogo(null)
+        setPreview('')
+      } else {
+        setLogo(selectedFile)
+        // Optionally, setPreview(selectedFile); if you want to show a preview
+      }
     }
+    // if (e.target.files && e.target.files.length > 0) {
+    //   setLogo(e.target.files[0])
+    // }
     //console.log(logo)
   }
 

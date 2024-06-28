@@ -102,10 +102,10 @@ export const createCourseFeesController = asyncHandler(
       const studentGSTStatus = await StudentGST_GuggestionModel.find();
       //console.log(studentGSTStatus[0].studentGST_Guggestion);
       let gstAmount =
-        student.student_status === "GST"
+        student.companyName.isGstBased === "Yes"
           ? (Number(amountPaid) / (studentGSTStatus[0]?.gst_percentage + 100)) *
             100
-          : 0;
+          : Number(amountPaid);
       let cutGSTAmount = amountPaid - gstAmount;
       //console.log("gst amount: " + gstAmount);
 
@@ -130,7 +130,7 @@ export const createCourseFeesController = asyncHandler(
         student.down_payment = amountPaid;
         student.remainingCourseFees = remainingFees;
         student.totalPaid += amountPaid;
-        student.no_of_installments -= 1;
+        student.no_of_installments = 0;
         const findPaymentOptionName = await PaymentOptionsModel.findById(
           paymentOption
         );
@@ -461,7 +461,7 @@ export const createCourseFeesController = asyncHandler(
                            
                            
                             ${
-                              student.student_status === "GST"
+                              student.companyName.isGstBased === "Yes"
                                 ? ` <td
                                   align="left"
                                   width="25%"
@@ -517,7 +517,7 @@ export const createCourseFeesController = asyncHandler(
                             </td>
                           </tr>
                           ${
-                            student?.student_status !== "NOGST"
+                            student.companyName.isGstBased === "Yes"
                               ? `<tr>
                                 <td
                                   align="left"
@@ -568,7 +568,7 @@ export const createCourseFeesController = asyncHandler(
               line-height: 24px;
           ">
           Rs ${
-            student?.student_status === "NOGST"
+            student.companyName.isGstBased === "No"
               ? (Number(lateFees) + Number(amountPaid)).toFixed(2)
               : (Number(lateFees) + Number(gstAmount + cutGSTAmount)).toFixed(2)
           } 
@@ -1119,7 +1119,7 @@ export const createCourseFeesController = asyncHandler(
                          
                          
                           ${
-                            student.student_status === "GST"
+                            student.companyName.isGstBased === "Yes"
                               ? ` <td
                                 align="left"
                                 width="25%"
@@ -1175,7 +1175,7 @@ export const createCourseFeesController = asyncHandler(
                           </td>
                         </tr>
                         ${
-                          student?.student_status !== "NOGST"
+                          student.companyName.isGstBased === "Yes"
                             ? `<tr>
                               <td
                                 align="left"
@@ -1226,7 +1226,7 @@ export const createCourseFeesController = asyncHandler(
             line-height: 24px;
         ">
         Rs ${
-          student?.student_status === "NOGST"
+          student.companyName.isGstBased === "No"
             ? (Number(lateFees) + Number(amountPaid)).toFixed(2)
             : (Number(lateFees) + Number(gstAmount + cutGSTAmount)).toFixed(2)
         } 

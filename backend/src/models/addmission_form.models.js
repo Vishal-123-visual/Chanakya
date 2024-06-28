@@ -54,7 +54,6 @@ const admissionFormSchema = new mongoose.Schema(
     },
     student_status: {
       type: String,
-      required: true,
     },
     education_qualification: {
       type: String,

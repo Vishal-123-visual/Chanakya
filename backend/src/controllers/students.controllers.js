@@ -79,7 +79,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.date_of_birth = date_of_birth || student.date_of_birth;
     student.city = city || student.city;
     student.email = email || student.email;
-    student.student_status = student_status || student.student_status;
+    // student.student_status = student_status || student.student_status;
     student.education_qualification =
       education_qualification || student.education_qualification;
     // student.professional_qualification =

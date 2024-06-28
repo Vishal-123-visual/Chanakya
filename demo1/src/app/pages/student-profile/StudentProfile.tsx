@@ -34,7 +34,7 @@ const addmissionFormSchema = Yup.object().shape({
   date_of_birth: Yup.string(),
   city: Yup.string(),
   email: Yup.string(),
-  student_status: Yup.string(),
+  // student_status: Yup.string(),
   education_qualification: Yup.string(),
   select_course: Yup.string(),
   // name_of_person_for_commision: Yup.string(),
@@ -601,7 +601,7 @@ const StudentProfile: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='col-6'>
+                {/* <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label  fw-bold fs-6'>Student Status</label>
 
@@ -622,7 +622,7 @@ const StudentProfile: React.FC = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               {/* ============================== DOB and Student Status ==================================== */}
 

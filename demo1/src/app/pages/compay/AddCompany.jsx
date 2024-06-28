@@ -26,12 +26,20 @@ const AddCompany = () => {
   //console.log(getCourseCategoryLists)
 
   const setProfile = (e) => {
-    if (e.target.files && e.target.files.length > 0) {
-      setLogo(e.target.files[0])
-    }
-    //console.log(logo)
-  }
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg']
 
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFile = e.target.files[0]
+      if (!allowedTypes.includes(selectedFile.type)) {
+        toast.error('Only PNG, JPG, and JPEG images are allowed')
+        setLogo(null)
+        setPreview('')
+      } else {
+        setLogo(selectedFile)
+        // Optionally, setPreview(selectedFile); if you want to show a preview
+      }
+    }
+  }
   useEffect(() => {
     if (logo) {
       // setPreview(URL.createObjectURL(logo))
@@ -77,14 +85,23 @@ const AddCompany = () => {
       if (logo) {
         formData.append('logo', logo)
       }
-      companyCTX.createAddCompanyMutation.mutate(formData)
-      navigate('/company')
-      toast('Company created successfully!', {
-        type: 'success',
-        bodyStyle: {
-          fontSize: '18px',
-        },
-      })
+      try {
+        companyCTX.createAddCompanyMutation.mutate(formData)
+        navigate('/company')
+        toast('Company created successfully!', {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } catch (error) {
+        toast(error, {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      }
     },
   })
   return (

@@ -4,6 +4,7 @@ import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useAuth} from '../../modules/auth/core/Auth'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {Link} from 'react-router-dom'
+import {toast} from 'react-toastify'
 const ReadOnlyCourseFee = ({
   studentInfoData,
   StudentFee,
@@ -18,6 +19,20 @@ const ReadOnlyCourseFee = ({
   //console.log(paymentOptionCtx.getPaymentOptionsData.data)
 
   //onsole.log(StudentFee.paymentOption)
+
+  const studentEditCourseFeesHandler = (id) => {
+    setStudentCourseFeesEditId(id)
+    toast.error(
+      'Are you sure you want to Edit this student course fee? just edit recipt number and or date.Please do not update amount ?',
+      {
+        style: {
+          fontSize: '18px',
+          color: 'white',
+          background: 'black',
+        },
+      }
+    )
+  }
 
   const sendDataWhatsappAsMessage = () => {
     let url = `https://web.whatsapp.com/send?phone=+91${studentInfoData.phone_number}`
@@ -87,7 +102,7 @@ Visual Media Academy`
           {(auth.role === 'Admin' || auth.role === 'SuperAdmin') && (
             <>
               <button
-                onClick={() => setStudentCourseFeesEditId(StudentFee?._id)}
+                onClick={() => studentEditCourseFeesHandler(StudentFee?._id)}
                 type='button'
                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
               >

@@ -11,12 +11,12 @@ const PrintStudentFeesRecipt = () => {
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
-  // console.log(studentInfoData?.gst_percentage)
+  console.log(studentInfoData?.companyName?.isGstBased)
 
   const gstAmount =
-    studentInfoData.studentInfo.student_status === 'GST'
+    studentInfoData?.companyName?.isGstBased === 'Yes'
       ? (Number(studentInfoData.amountPaid) / Number(studentInfoData?.gst_percentage + 100)) * 100
-      : 0
+      : Number(studentInfoData.amountPaid)
   const cutWithGstAmountPaid = studentInfoData.amountPaid - gstAmount
   // console.log(lateFeesGstAmount, cutWithGstLateFees)
   //console.log(cutWithGstAmountPaid.toFixed(2))
@@ -299,7 +299,7 @@ const PrintStudentFeesRecipt = () => {
                       >
                         Fees Paid
                       </td>
-                      {studentInfoData.studentInfo.student_status === 'GST' ? (
+                      {studentInfoData?.companyName?.isGstBased === 'Yes' ? (
                         <td
                           align='left'
                           width='25%'
@@ -355,7 +355,7 @@ const PrintStudentFeesRecipt = () => {
                       </td>
                     </tr>
 
-                    {studentInfoData.studentInfo?.student_status !== 'NOGST' && (
+                    {studentInfoData?.companyName?.isGstBased === 'Yes' && (
                       <tr style={{border: '2px dotted black'}}>
                         <td
                           align='left'
@@ -398,7 +398,7 @@ const PrintStudentFeesRecipt = () => {
                       >
                         Total
                       </td>
-                      {studentInfoData.studentInfo?.student_status === 'NOGST' ? (
+                      {studentInfoData?.companyName?.isGstBased === 'No' ? (
                         <td
                           align='left'
                           width='25%'

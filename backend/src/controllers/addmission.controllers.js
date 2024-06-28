@@ -15,7 +15,6 @@ export const createAddMissionController = asyncHandler(
       date_of_birth,
       city,
       email,
-      student_status,
       education_qualification,
       //professional_qualification,
       select_course,
@@ -82,10 +81,10 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide email field!");
         return;
-      case !student_status:
-        res.status(400);
-        throw new Error("Please provide student status field!");
-        return;
+      // case !student_status:
+      //   res.status(400);
+      //   throw new Error("Please provide student status field!");
+      //   return;
       case !education_qualification:
         res.status(400);
         throw new Error("Please provide education qualification field!");

@@ -30,7 +30,7 @@ export interface AddMissionFormInterface {
   date_of_birth: Date
   city: string
   email: string
-  student_status: string
+  // student_status: string
   // Qualification
   education_qualification: string
 
@@ -70,7 +70,7 @@ export interface updateMissionFormInterface {
   date_of_birth: Date
   city: string
   email: string
-  student_status: string
+  // student_status: string
   // Qualification
   education_qualification: string
   //professional_qualification: string
@@ -108,7 +108,7 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   date_of_birth: new Date(),
   city: '',
   email: '',
-  student_status: '',
+  // student_status: '',
   education_qualification: '',
   // professional_qualification: '',
   select_course: '',
