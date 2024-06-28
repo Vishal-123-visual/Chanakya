@@ -281,9 +281,7 @@ const StudentProfile: React.FC = () => {
                               </div>
                             </div>
 
-                            <div className='fw-bold fs-6 text-gray-400'>
-                              Cut GST Amount Fees Paid
-                            </div>
+                            <div className='fw-bold fs-6 text-gray-400'>Gross Paid</div>
                           </div>
                           <div className='border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3'>
                             <div className='d-flex align-items-center'>
@@ -308,7 +306,7 @@ const StudentProfile: React.FC = () => {
                               </div>
                             </div>
 
-                            <div className='fw-bold fs-6 text-gray-400'>total Paid</div>
+                            <div className='fw-bold fs-6 text-gray-400'>Net Paid</div>
                           </div>
                         </>
                       ) : (
