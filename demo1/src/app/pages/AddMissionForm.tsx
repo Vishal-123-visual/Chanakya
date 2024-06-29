@@ -67,9 +67,10 @@ const AddMissionForm: React.FC = () => {
 
   const params = useParams()
   //console.log(params)
-  const {companyName} = companyCTX.useGetSingleCompanyData(
-    updateUserId === null ? params.id : updateUserId?.companyName
-  )?.data
+  const {data} = companyCTX?.useGetSingleCompanyData(
+    updateUserId === null ? params?.id : updateUserId?.companyName
+  )
+  // console.log(data)
   //console.log(companyCTX.getCompanyLists.data)
   // console.log(selectedCourseNameData)
 
@@ -200,7 +201,7 @@ const AddMissionForm: React.FC = () => {
 
       if (updateUserId) {
         formData.append('id', updateUserId?._id)
-        formData.append('courseName', updateUserId?.courseName._id)
+        formData.append('courseName', updateUserId?.courseName?._id)
         //console.log('course name id ', updateUserId?.courseName._id)
 
         context.updateStudentMutation.mutate(formData)
@@ -212,7 +213,7 @@ const AddMissionForm: React.FC = () => {
           },
         })
       } else {
-        formData.append('courseName', selectedCourseNameData._id)
+        formData.append('courseName', selectedCourseNameData?._id)
         context.createStudentMutation.mutate(formData)
         setLoading(true)
       }
@@ -237,8 +238,8 @@ const AddMissionForm: React.FC = () => {
           <div className='card-title m-0'>
             <h3 className='fw-bolder m-0'>
               {updateUserId
-                ? `${companyName} -> Edit Student Information`
-                : `${companyName} ->  Student Information`}
+                ? `${data?.companyName} -> Edit Student Information`
+                : `${data?.companyName} ->  Student Information`}
             </h3>
           </div>
         </div>

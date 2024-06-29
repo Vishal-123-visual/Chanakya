@@ -13,13 +13,13 @@ const MonthlyCollectionFee = () => {
   //console.log(fromDate, toDate)
   const paramsData = useParams()
   const ctx = useStudentCourseFeesContext()
-  const {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData.id)
+  const {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
   // console.log(data)
 
   const companyCTX = useCompanyContext()
 
   const params = useParams()
-  const {companyName} = companyCTX.useGetSingleCompanyData(params.id)?.data
+  const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
 
   const filteredData =
     data?.filter((item) => {
@@ -29,7 +29,7 @@ const MonthlyCollectionFee = () => {
       return createdAt.isBetween(startDate, endDate, null, '[]')
     }) || []
 
-  const collectionFeesBalance = filteredData.reduce((acc, cur) => acc + cur.installment_amount, 0)
+  const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
   // console.log(filteredData)
 
   const navigate = useNavigate()
@@ -39,7 +39,7 @@ const MonthlyCollectionFee = () => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>{companyName}</span>
+          <span className='card-label fw-bold fs-3 mb-1'>{CompanyInfo?.companyName}</span>
           <p className=' mt-1 fw-semibold fs-7'>
             Total Collection Fees Rs :: {collectionFeesBalance}
           </p>
@@ -111,7 +111,7 @@ const MonthlyCollectionFee = () => {
               ) : (
                 <>
                   {filteredData?.map((collectionFees) => (
-                    <tr key={collectionFees._id} className='fs-5 fw-bold'>
+                    <tr key={collectionFees?._id} className='fs-5 fw-bold'>
                       <td>
                         <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                       </td>
@@ -119,34 +119,34 @@ const MonthlyCollectionFee = () => {
                         <button
                           className='btn btn-link'
                           onClick={() =>
-                            navigate(`/student/${collectionFees.studentInfo._id}`, {
+                            navigate(`/student/${collectionFees?.studentInfo?._id}`, {
                               state: {
                                 ...collectionFees.studentInfo,
-                                courseName: collectionFees.courseName,
+                                courseName: collectionFees?.courseName,
                               },
                             })
                           }
                         >
-                          {collectionFees.studentInfo.rollNumber}
+                          {collectionFees?.studentInfo?.rollNumber}
                         </button>
                       </td>
-                      <td>{collectionFees.studentInfo.name}</td>
+                      <td>{collectionFees?.studentInfo.name}</td>
 
-                      <td>{collectionFees.courseName.courseName}</td>
+                      <td>{collectionFees?.courseName?.courseName}</td>
                       <td>
                         {collectionFees.studentInfo.no_of_installments ===
-                        collectionFees.installment_number
-                          ? collectionFees.studentInfo.installmentPaymentSkipMonth
+                        collectionFees?.installment_number
+                          ? collectionFees?.studentInfo?.installmentPaymentSkipMonth
                           : 'Paid'}
                       </td>
                       <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
-                          {collectionFees.studentInfo.mobile_number}
+                          {collectionFees?.studentInfo?.mobile_number}
                         </div>
                       </td>
                       <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
-                          {collectionFees.installment_amount}
+                          {collectionFees?.installment_amount}
                         </div>
                       </td>
                     </tr>

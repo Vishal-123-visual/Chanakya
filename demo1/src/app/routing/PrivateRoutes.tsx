@@ -44,9 +44,7 @@ const PrivateRoutes = () => {
   const AddCourseUpdateAndAdd = lazy(() => import('../pages/course/AddCourse'))
   const EditCourse = lazy(() => import('../pages/course/EditCourse'))
   const ViewCourse = lazy(() => import('../pages/course/ViewCourse'))
-  const MonthlyCollectionFee = lazy(
-    () => import('../pages/monthly_collection_fee/MonthlyCollectionFee')
-  )
+  const MonthlyCollectionFee = lazy(() => import('../pages/payment_option/MonthlyCollectionFee'))
   const AddPaymentOption = lazy(() => import('../pages/payment_option/AddPaymentOption'))
   const EmailTemplate = lazy(() => import('../pages/email-template/EmailTemplate'))
   const SendEmailSuggestion = lazy(() => import('../pages/email-template/SendEmailSuggestion'))
