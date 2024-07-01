@@ -1457,12 +1457,12 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       await studentInfo.save();
       // Get email remainder data
       const emailRemainderData = await EmailRemainderModel.find({});
-      console.log(currentTime.isAfter(installmentExpireDate));
+      // console.log(currentTime.isBefore(installmentExpireDate));
       // Check if the current time is past the due date
       if (currentTime.isAfter(installmentExpireDate)) {
         // Calculate the difference in days
         const daysDifference = currentTime.diff(installmentExpireDate, "days");
-        console.log("Days difference ", daysDifference);
+        //console.log("Days difference ", daysDifference);
         //console.log("Day difference time ", daysDifference);
 
         // Send email reminders based on specific dates
