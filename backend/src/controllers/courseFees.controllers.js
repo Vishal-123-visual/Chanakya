@@ -19,7 +19,7 @@ import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Su
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    console.log("from create course fees ->>>>", req.body);
+    // console.log("from create course fees ->>>>", req.body);
     try {
       const {
         studentInfo,
@@ -1457,11 +1457,12 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       await studentInfo.save();
       // Get email remainder data
       const emailRemainderData = await EmailRemainderModel.find({});
-
+      console.log(currentTime.isAfter(installmentExpireDate));
       // Check if the current time is past the due date
       if (currentTime.isAfter(installmentExpireDate)) {
         // Calculate the difference in days
         const daysDifference = currentTime.diff(installmentExpireDate, "days");
+        console.log("Days difference ", daysDifference);
         //console.log("Day difference time ", daysDifference);
 
         // Send email reminders based on specific dates
