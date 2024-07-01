@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { now } from "mongoose";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
@@ -766,6 +766,25 @@ export const createCourseFeesController = asyncHandler(
       );
 
       //console.log("Installment amount :  ".installmentAmount);
+      const lastPaymentInstallmentExpirationTime =
+        await PaymentInstallmentTimeExpireModel.findOne({
+          studentInfo,
+        }).sort({ createdAt: -1 });
+      // console.log(
+      //   "last payment installment time",
+      //   moment(lastPaymentInstallmentExpirationTime.expiration_date)
+      //     .format("DD-MM-YYYY")
+      //     .split("-")[1],
+      //   moment().format("DD-MM-YYYY").split("-")[1]
+      // );
+      if (lastPaymentInstallmentExpirationTime) {
+        if (
+          Number(lastPaymentInstallmentExpirationTime.installment_number) ===
+          Number(req.body.no_of_installments)
+        ) {
+          await lastPaymentInstallmentExpirationTime.deleteOne();
+        }
+      }
 
       // Create the entry for the current due installment
       const currentInstallmentExpiration =
