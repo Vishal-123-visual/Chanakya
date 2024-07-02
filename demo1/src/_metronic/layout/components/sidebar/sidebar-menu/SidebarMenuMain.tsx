@@ -133,6 +133,16 @@ const SidebarMenuMain = () => {
             title='Admission Form'
             hasBullet={true}
           />
+          <SidebarMenuItem
+            to={`/students-remainingFee/${CompanyListData?._id}`}
+            title='Pending Fess Students'
+            hasBullet={true}
+          />
+          <SidebarMenuItem
+            to={`/students-clearFee/${CompanyListData?._id}`}
+            title='Clear Fess Students'
+            hasBullet={true}
+          />
         </SidebarMenuItemWithSub>
       ))}
       {/* ----------------------------- Company Menu END Here ............................... */}

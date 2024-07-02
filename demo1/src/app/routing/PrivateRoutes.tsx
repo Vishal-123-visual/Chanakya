@@ -9,6 +9,12 @@ import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 
 const PrivateRoutes = () => {
+  const PendingFeesStudents = lazy(
+    () => import('../pages/student-with-feesClear-and-remaining/PendingFeesStudents')
+  )
+  const ClearFeesStudents = lazy(
+    () => import('../pages/student-with-feesClear-and-remaining/ClearFeesStudents')
+  )
   const GstSuggesstion = lazy(() => import('../pages/email-template/GstSuggesstion'))
   const ViewDayBookAccount = lazy(() => import('../pages/dayBook/ViewDayBookAccount'))
   const EditDayBookAccount = lazy(() => import('../pages/dayBook/EditDayBookAccount'))
@@ -223,6 +229,22 @@ const PrivateRoutes = () => {
           element={
             <SuspensedView>
               <StudentsList className='' />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/students-clearFee/:id'
+          element={
+            <SuspensedView>
+              <ClearFeesStudents />
+            </SuspensedView>
+          }
+        />
+        <Route
+          path='/students-remainingFee/:id'
+          element={
+            <SuspensedView>
+              <PendingFeesStudents />
             </SuspensedView>
           }
         />

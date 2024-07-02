@@ -77,9 +77,9 @@ const StudentProfile: React.FC = () => {
       : Number(updateUserId?.totalPaid)
 
   //console.log(singleComapnyData)
-  // if (updateUserId === null) {
-  //   setUpdateUserId(location?.state)
-  // }
+  if (updateUserId === null) {
+    setUpdateUserId(location?.state)
+  }
   useEffect(() => {
     if (updateUserId['remainingCourseFees'] === undefined) {
       let numberOfInstallmentAmount: number =
@@ -101,6 +101,7 @@ const StudentProfile: React.FC = () => {
       formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount?.toFixed(2))
     }
   }, [])
+  //console.log(updateUserId)
 
   // let updateStudentId = updateUserId?._id
 
@@ -389,13 +390,14 @@ const StudentProfile: React.FC = () => {
                         type='number'
                         className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                         placeholder='Enter Roll Number..'
-                        {...formik.getFieldProps('rollNumber')}
+                        value={updateUserId?.rollNumber}
+                        // {...formik.getFieldProps('rollNumber')}
                       />
-                      {formik.touched.rollNumber && formik.errors.rollNumber && (
+                      {/* {formik.touched?.rollNumber && formik.errors?.rollNumber && (
                         <div className='fv-plugins-message-container'>
                           <div className='fv-help-block'>{formik.errors?.rollNumber}</div>
                         </div>
-                      )}
+                      )} */}
                     </div>
                   </div>
                 </div>
