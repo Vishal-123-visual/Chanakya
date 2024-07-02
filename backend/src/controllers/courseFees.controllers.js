@@ -794,7 +794,7 @@ export const createCourseFeesController = asyncHandler(
           courseName: req.body.courseName,
           expiration_date: moment().toDate(), // Set to current date
           installment_number: req.body.no_of_installments, // Current installment number
-          installment_amount: installmentAmount,
+          installment_amount: amountPaid,
         });
 
       // Create the entry for the next installment
