@@ -56,6 +56,62 @@ export const addUsersControllers = asyncHandler(async (req, res, next) => {
   }
 });
 
+export const registerUserController = asyncHandler(async (req, res, next) => {
+  // console.log(req.headers);
+  // console.log(req.body);
+  try {
+    let {
+      email,
+      first_name: fName,
+      last_name: lName,
+      password,
+      password_confirmation,
+    } = req.body;
+
+    if (password_confirmation !== password) {
+      return res.status(401).json({ error: "Passwords do not match!" });
+    } else {
+      password = password_confirmation;
+    }
+
+    switch (true) {
+      case !fName:
+        return res.status(401).json("Name is required!");
+      case !lName:
+        return res.status(401).json("Last Name is required!");
+      case !email:
+        return res.status(401).json("Email is required!");
+      case !password:
+        return res.status(401).json("Password is required!");
+    }
+
+    const existedUser = await userModel.findOne({ email });
+    if (existedUser) {
+      return res.status(404).json({ error: "User already exists!" });
+    }
+
+    let hashPassword = await bcryptjs.hash(
+      password,
+      await bcryptjs.genSalt(10)
+    );
+
+    let user = new userModel({
+      fName,
+      lName,
+      email,
+      password: hashPassword,
+    });
+    let token = generateToken(res, user._id);
+    user.api_token = token;
+    await user.save();
+    // If all validations pass and user is saved, send a success response
+    res.status(201).json(user);
+  } catch (error) {
+    // Handle errors appropriately
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // login user controller
 export const loginUserController = asyncHandler(async (req, res, next) => {
   try {

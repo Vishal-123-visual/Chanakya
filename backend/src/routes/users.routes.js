@@ -9,11 +9,12 @@ import {
   getAllUsersController,
   deleteUserController,
   getUserByIdController,
+  registerUserController,
 } from "../controllers/user.controllers.js";
 import { isAdmin, requireSignIn } from "../middlewares/auth.middleware.js";
 
 let router = Router();
-
+router.post("/register", registerUserController);
 router.post("/users/auth", loginUserController);
 router
   .route("/users")

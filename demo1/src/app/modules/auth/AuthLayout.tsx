@@ -33,7 +33,7 @@ const AuthLayout = () => {
         {/* begin::Footer */}
         <div className='d-flex flex-center flex-wrap px-5'>
           {/* begin::Links */}
-          <div className='d-flex fw-semibold text-primary fs-base'>
+          {/* <div className='d-flex fw-semibold text-primary fs-base'>
             <a href='#' className='px-5' target='_blank'>
               Terms
             </a>
@@ -45,7 +45,7 @@ const AuthLayout = () => {
             <a href='#' className='px-5' target='_blank'>
               Contact Us
             </a>
-          </div>
+          </div> */}
           {/* end::Links */}
         </div>
         {/* end::Footer */}
@@ -60,27 +60,27 @@ const AuthLayout = () => {
         {/* begin::Content */}
         <div className='d-flex flex-column flex-center py-15 px-5 px-md-15 w-100'>
           {/* begin::Logo */}
-          <Link to='/' className='mb-12'>
+          {/* <Link to='/' className='mb-12'>
             <img alt='Logo' src={toAbsoluteUrl('/media/logos/custom-1.png')} className='h-75px' />
-          </Link>
+          </Link> */}
           {/* end::Logo */}
 
           {/* begin::Image */}
-          <img
+          {/* <img
             className='mx-auto w-275px w-md-50 w-xl-500px mb-10 mb-lg-20'
             src={toAbsoluteUrl('/media/misc/auth-screens.png')}
             alt=''
-          />
+          /> */}
           {/* end::Image */}
 
           {/* begin::Title */}
           <h1 className='text-white fs-2qx fw-bolder text-center mb-7'>
-            Fast, Efficient and Productive
+            Welcome Reliance Education
           </h1>
           {/* end::Title */}
 
           {/* begin::Text */}
-          <div className='text-white fs-base text-center'>
+          {/* <div className='text-white fs-base text-center'>
             In this kind of post,{' '}
             <a href='#' className='opacity-75-hover text-warning fw-bold me-1'>
               the blogger
@@ -91,7 +91,7 @@ const AuthLayout = () => {
               the interviewee
             </a>
             and their <br /> work following this is a transcript of the interview.
-          </div>
+          </div> */}
           {/* end::Text */}
         </div>
         {/* end::Content */}

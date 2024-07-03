@@ -6,7 +6,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 
 export const GET_USER_BY_ACCESSTOKEN_URL = `${API_URL}/verify_token`
 export const LOGIN_URL = `${API_URL}/login`
-export const REGISTER_URL = `${API_URL}/register`
+export const REGISTER_URL = `${BASE_URL}/api/register`
 export const REQUEST_PASSWORD_URL = `${API_URL}/forgot_password`
 
 // Server should return AuthModel

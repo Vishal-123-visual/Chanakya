@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useState } from 'react'
+import {useState} from 'react'
 import * as Yup from 'yup'
 import clsx from 'clsx'
-import { Link } from 'react-router-dom'
-import { useFormik } from 'formik'
-import { getUserByToken, login } from '../core/_requests'
-import { toAbsoluteUrl } from '../../../../_metronic/helpers'
-import { useAuth } from '../core/Auth'
+import {Link} from 'react-router-dom'
+import {useFormik} from 'formik'
+import {getUserByToken, login} from '../core/_requests'
+import {toAbsoluteUrl} from '../../../../_metronic/helpers'
+import {useAuth} from '../core/Auth'
 
 const loginSchema = Yup.object().shape({
   email: Yup.string()
@@ -33,20 +33,20 @@ const initialValues = {
 
 export function Login() {
   const [loading, setLoading] = useState(false)
-  const { saveAuth, setCurrentUser } = useAuth()
+  const {saveAuth, setCurrentUser} = useAuth()
 
   const formik = useFormik({
     initialValues,
     validationSchema: loginSchema,
-    onSubmit: async (values, { setStatus, setSubmitting }) => {
+    onSubmit: async (values, {setStatus, setSubmitting}) => {
       // console.log(values);
       setLoading(true)
       try {
-        const { data: auth } = await login(values.email, values.password)
+        const {data: auth} = await login(values.email, values.password)
         // console.log(auth);
 
         saveAuth(auth)
-        const { data: user } = await getUserByToken(auth.api_token)
+        const {data: user} = await getUserByToken(auth.api_token)
         setCurrentUser(user)
       } catch (error) {
         console.error(error)
@@ -68,7 +68,7 @@ export function Login() {
       {/* begin::Heading */}
       <div className='text-center mb-11'>
         <h1 className='text-dark fw-bolder mb-3'>Sign In</h1>
-        <div className='text-gray-500 fw-semibold fs-6'>Your Social Campaigns</div>
+        <div className='text-gray-500 fw-semibold fs-6'>Welcome to Reliance Education</div>
       </div>
       {/* begin::Heading */}
 
@@ -77,7 +77,7 @@ export function Login() {
         {/* begin::Col */}
         <div className='col-md-6'>
           {/* begin::Google link */}
-          <a
+          {/* <a
             href='#'
             className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
           >
@@ -87,7 +87,7 @@ export function Login() {
               className='h-15px me-3'
             />
             Sign in with Google
-          </a>
+          </a> */}
           {/* end::Google link */}
         </div>
         {/* end::Col */}
@@ -95,7 +95,7 @@ export function Login() {
         {/* begin::Col */}
         <div className='col-md-6'>
           {/* begin::Google link */}
-          <a
+          {/* <a
             href='#'
             className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
           >
@@ -110,7 +110,7 @@ export function Login() {
               className='theme-dark-show h-15px me-3'
             />
             Sign in with Apple
-          </a>
+          </a> */}
           {/* end::Google link */}
         </div>
         {/* end::Col */}
@@ -118,21 +118,14 @@ export function Login() {
       {/* end::Login options */}
 
       {/* begin::Separator */}
-      <div className='separator separator-content my-14'>
+      {/* <div className='separator separator-content my-14'>
         <span className='w-125px text-gray-500 fw-semibold fs-7'>Or with email</span>
-      </div>
+      </div> */}
       {/* end::Separator */}
 
-      {formik.status ? (
+      {formik.status && (
         <div className='mb-lg-15 alert alert-danger'>
           <div className='alert-text font-weight-bold'>{formik.status}</div>
-        </div>
-      ) : (
-        <div className='mb-10 bg-light-info p-8 rounded'>
-          <div className='text-info'>
-            Use account <strong>admin@demo.com</strong> and password <strong>demo</strong> to
-            continue.
-          </div>
         </div>
       )}
 
@@ -144,7 +137,7 @@ export function Login() {
           {...formik.getFieldProps('email')}
           className={clsx(
             'form-control bg-transparent',
-            { 'is-invalid': formik.touched.email && formik.errors.email },
+            {'is-invalid': formik.touched.email && formik.errors.email},
             {
               'is-valid': formik.touched.email && !formik.errors.email,
             }
@@ -210,7 +203,7 @@ export function Login() {
         >
           {!loading && <span className='indicator-label'>Continue</span>}
           {loading && (
-            <span className='indicator-progress' style={{ display: 'block' }}>
+            <span className='indicator-progress' style={{display: 'block'}}>
               Please wait...
               <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
             </span>

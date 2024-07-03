@@ -16,7 +16,7 @@ const initialValues = {
   email: '',
   password: '',
   changepassword: '',
-  acceptTerms: false,
+  // acceptTerms: false,
 }
 
 const registrationSchema = Yup.object().shape({
@@ -42,7 +42,7 @@ const registrationSchema = Yup.object().shape({
     .max(50, 'Maximum 50 symbols')
     .required('Password confirmation is required')
     .oneOf([Yup.ref('password')], "Password and Confirm Password didn't match"),
-  acceptTerms: Yup.bool().required('You must accept the terms and conditions'),
+  // acceptTerms: Yup.bool().required('You must accept the terms and conditions'),
 })
 
 export function Registration() {
@@ -52,6 +52,7 @@ export function Registration() {
     initialValues,
     validationSchema: registrationSchema,
     onSubmit: async (values, {setStatus, setSubmitting}) => {
+      //console.log(values)
       setLoading(true)
       try {
         const {data: auth} = await register(
@@ -61,6 +62,7 @@ export function Registration() {
           values.password,
           values.changepassword
         )
+        //console.log(auth)
         saveAuth(auth)
         const {data: user} = await getUserByToken(auth.api_token)
         setCurrentUser(user)
@@ -91,7 +93,7 @@ export function Registration() {
         <h1 className='text-dark fw-bolder mb-3'>Sign Up</h1>
         {/* end::Title */}
 
-        <div className='text-gray-500 fw-semibold fs-6'>Your Social Campaigns</div>
+        <div className='text-gray-500 fw-semibold fs-6'>Welcome to Reliance Education</div>
       </div>
       {/* end::Heading */}
 
@@ -100,7 +102,7 @@ export function Registration() {
         {/* begin::Col */}
         <div className='col-md-6'>
           {/* begin::Google link */}
-          <a
+          {/* <a
             href='#'
             className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
           >
@@ -110,7 +112,7 @@ export function Registration() {
               className='h-15px me-3'
             />
             Sign in with Google
-          </a>
+          </a> */}
           {/* end::Google link */}
         </div>
         {/* end::Col */}
@@ -118,7 +120,7 @@ export function Registration() {
         {/* begin::Col */}
         <div className='col-md-6'>
           {/* begin::Google link */}
-          <a
+          {/* <a
             href='#'
             className='btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100'
           >
@@ -133,16 +135,16 @@ export function Registration() {
               className='theme-dark-show h-15px me-3'
             />
             Sign in with Apple
-          </a>
+          </a> */}
           {/* end::Google link */}
         </div>
         {/* end::Col */}
       </div>
       {/* end::Login options */}
 
-      <div className='separator separator-content my-14'>
+      {/* <div className='separator separator-content my-14'>
         <span className='w-125px text-gray-500 fw-semibold fs-7'>Or with email</span>
-      </div>
+      </div> */}
 
       {formik.status && (
         <div className='mb-lg-15 alert alert-danger'>
@@ -307,7 +309,7 @@ export function Registration() {
 
       {/* begin::Form group */}
       <div className='fv-row mb-8'>
-        <label className='form-check form-check-inline' htmlFor='kt_login_toc_agree'>
+        {/* <label className='form-check form-check-inline' htmlFor='kt_login_toc_agree'>
           <input
             className='form-check-input'
             type='checkbox'
@@ -325,14 +327,14 @@ export function Registration() {
             </a>
             .
           </span>
-        </label>
-        {formik.touched.acceptTerms && formik.errors.acceptTerms && (
+        </label> */}
+        {/* {formik.touched.acceptTerms && formik.errors.acceptTerms && (
           <div className='fv-plugins-message-container'>
             <div className='fv-help-block'>
               <span role='alert'>{formik.errors.acceptTerms}</span>
             </div>
           </div>
-        )}
+        )} */}
       </div>
       {/* end::Form group */}
 
@@ -342,7 +344,7 @@ export function Registration() {
           type='submit'
           id='kt_sign_up_submit'
           className='btn btn-lg btn-primary w-100 mb-5'
-          disabled={formik.isSubmitting || !formik.isValid || !formik.values.acceptTerms}
+          disabled={formik.isSubmitting || !formik.isValid}
         >
           {!loading && <span className='indicator-label'>Submit</span>}
           {loading && (

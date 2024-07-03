@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
     },
     role: {
       type: String,
@@ -33,11 +32,12 @@ const userSchema = new mongoose.Schema(
         "SuperAdmin",
         "Student",
       ],
-      required: true,
+      default: "Student",
+      // required: true,
     },
     api_token: {
       type: String,
-      required: true,
+      // required: true,
     },
   },
   { timestamps: true }
