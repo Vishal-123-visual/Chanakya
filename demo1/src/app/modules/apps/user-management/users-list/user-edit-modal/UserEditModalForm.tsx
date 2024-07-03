@@ -1,13 +1,14 @@
-import { FC, useState } from 'react'
+import {FC, useState} from 'react'
 import * as Yup from 'yup'
-import { useFormik } from 'formik'
-import { isNotEmpty, toAbsoluteUrl } from '../../../../../../_metronic/helpers'
-import { initialUser, User } from '../core/_models'
+import {useFormik} from 'formik'
+import {isNotEmpty, toAbsoluteUrl} from '../../../../../../_metronic/helpers'
+import {initialUser, User} from '../core/_models'
 import clsx from 'clsx'
-import { useListView } from '../core/ListViewProvider'
-import { UsersListLoading } from '../components/loading/UsersListLoading'
-import { createUser, updateUser } from '../core/_requests'
-import { useQueryResponse } from '../core/QueryResponseProvider'
+import {useListView} from '../core/ListViewProvider'
+import {UsersListLoading} from '../components/loading/UsersListLoading'
+import {createUser, updateUser} from '../core/_requests'
+import {useQueryResponse} from '../core/QueryResponseProvider'
+import {toast} from 'react-toastify'
 
 type Props = {
   isUserLoading: boolean
@@ -20,14 +21,13 @@ const editUserSchema = Yup.object().shape({
   email: Yup.string().required('Email is required'),
   phone: Yup.string().required('Phone Number is required'),
   role: Yup.string().required('User Type is required'),
-  password: Yup.string().required('Password is required..')
+  password: Yup.string(),
 })
 
-const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
-  const { setItemIdForUpdate } = useListView()
-  const { refetch } = useQueryResponse()
+const UserEditModalForm: FC<Props> = ({user, isUserLoading}) => {
+  const {setItemIdForUpdate} = useListView()
+  const {refetch} = useQueryResponse()
   // console.log(user);
-
 
   const [userForEdit] = useState<User>({
     ...user,
@@ -37,7 +37,7 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
     lName: user.lName || initialUser.lName,
     phone: user.phone || initialUser.phone,
     email: user.email || initialUser.email,
-    password: user.password || initialUser.password
+    password: user.password || initialUser.password,
   })
 
   const cancel = (withRefresh?: boolean) => {
@@ -53,7 +53,7 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
   const formik = useFormik({
     initialValues: userForEdit,
     validationSchema: editUserSchema,
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async (values, {setSubmitting}) => {
       setSubmitting(true)
       try {
         if (isNotEmpty(values.id)) {
@@ -61,8 +61,14 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
         } else {
           await createUser(values)
         }
-      } catch (ex) {
-        console.error(ex)
+      } catch (ex: any) {
+        // console.log(ex.response.data.error)
+        toast.error(ex.response.data.error, {
+          style: {
+            fontSize: '16px',
+          },
+        })
+        return
       } finally {
         setSubmitting(true)
         cancel(true)
@@ -98,7 +104,7 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
               name='fName'
               className={clsx(
                 'form-control form-control-solid mb-3 mb-lg-0',
-                { 'is-invalid': formik.touched.fName && formik.errors.fName },
+                {'is-invalid': formik.touched.fName && formik.errors.fName},
                 {
                   'is-valid': formik.touched.fName && !formik.errors.fName,
                 }
@@ -130,7 +136,7 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
               name='lName'
               className={clsx(
                 'form-control form-control-solid mb-3 mb-lg-0',
-                { 'is-invalid': formik.touched.lName && formik.errors.lName },
+                {'is-invalid': formik.touched.lName && formik.errors.lName},
                 {
                   'is-valid': formik.touched.lName && !formik.errors.lName,
                 }
@@ -161,7 +167,7 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
               {...formik.getFieldProps('email')}
               className={clsx(
                 'form-control form-control-solid mb-3 mb-lg-0',
-                { 'is-invalid': formik.touched.email && formik.errors.email },
+                {'is-invalid': formik.touched.email && formik.errors.email},
                 {
                   'is-valid': formik.touched.email && !formik.errors.email,
                 }
@@ -191,7 +197,7 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
               {...formik.getFieldProps('phone')}
               className={clsx(
                 'form-control form-control-solid mb-3 mb-lg-0',
-                { 'is-invalid': formik.touched.phone && formik.errors.phone },
+                {'is-invalid': formik.touched.phone && formik.errors.phone},
                 {
                   'is-valid': formik.touched.phone && !formik.errors.phone,
                 }
@@ -221,7 +227,7 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
               {...formik.getFieldProps('password')}
               className={clsx(
                 'form-control form-control-solid mb-3 mb-lg-0',
-                { 'is-invalid': formik.touched.password && formik.errors.password },
+                {'is-invalid': formik.touched.password && formik.errors.password},
                 {
                   'is-valid': formik.touched.password && !formik.errors.password,
                 }
@@ -239,7 +245,6 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
             )}
           </div>
           {/* end::Input group */}
-
 
           {/* (((((((((((((((((((((((((((((((((((((((--------------User Role Start here-------------))))))))))))))))))))))))))))))))))))))) */}
           {/* begin::Input group */}
@@ -379,6 +384,32 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
               {/* end::Radio */}
             </div>
             {/* end::Input row */}
+            <div className='separator separator-dashed my-5'></div>
+            {/* begin::Input row */}
+            <div className='d-flex fv-row'>
+              {/* begin::Radio */}
+              <div className='form-check form-check-custom form-check-solid'>
+                {/* begin::Input */}
+                <input
+                  className='form-check-input me-3'
+                  {...formik.getFieldProps('role')}
+                  name='role'
+                  type='radio'
+                  id='kt_modal_update_role_option_4'
+                  value='Student'
+                  checked={formik.values.role === 'Student'}
+                  disabled={formik.isSubmitting || isUserLoading}
+                />
+                {/* end::Input */}
+                {/* begin::Label */}
+                <label className='form-check-label' htmlFor='kt_modal_update_role_option_4'>
+                  <div className='fw-bolder text-gray-800'>Student</div>
+                </label>
+                {/* end::Label */}
+              </div>
+              {/* end::Radio */}
+            </div>
+            {/* end::Input row */}
             {/* end::Roles */}
           </div>
           {/* end::Input group */}
@@ -419,4 +450,4 @@ const UserEditModalForm: FC<Props> = ({ user, isUserLoading }) => {
   )
 }
 
-export { UserEditModalForm }
+export {UserEditModalForm}

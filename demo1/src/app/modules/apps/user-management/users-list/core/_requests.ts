@@ -1,6 +1,7 @@
 import axios, {AxiosResponse} from 'axios'
 import {ID, Response} from '../../../../../../_metronic/helpers'
 import {User, UsersQueryResponse} from './_models'
+import {toast} from 'react-toastify'
 
 const API_URL = process.env.REACT_APP_THEME_API_URL
 const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -41,7 +42,14 @@ const updateUser = async (user: User): Promise<User | undefined> => {
 }
 
 const deleteUser = async (userId: ID): Promise<void> => {
-  return axios.delete(`${BASE_URL}/api/users/${userId}`).then(() => {})
+  try {
+    const res = await axios.delete(`${BASE_URL}/api/users/${userId}`)
+    toast.success(res.data.data.message)
+    toast.error(res.data.message)
+    return res.data
+  } catch (error: any) {
+    toast.error(`You are not authorized to delete`)
+  }
 }
 
 const deleteSelectedUsers = async (userIds: Array<ID>): Promise<void> => {

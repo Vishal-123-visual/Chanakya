@@ -115,7 +115,7 @@ const SidebarMenuMain = () => {
         >
           <SidebarMenuItem
             to={`/students/${CompanyListData?._id}`}
-            title='Students'
+            title='All Students'
             hasBullet={true}
           />
           <SidebarMenuItem

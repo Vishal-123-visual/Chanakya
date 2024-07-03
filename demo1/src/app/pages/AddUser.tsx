@@ -36,8 +36,9 @@ const AddUser: React.FC = () => {
       if (!response.ok) {
         console.error('Error posting data. Status:', response.status)
         const errorMessage = await response.text()
-        console.error('Error message:', errorMessage)
+        toast.error(`Error message: ${errorMessage}`)
         throw new Error('Error posting data')
+        return
       }
 
       // console.log('Data posted successfully', response);
@@ -200,6 +201,7 @@ const AddUser: React.FC = () => {
                   <option value='Counsellor'>Counsellor</option>
                   <option value='Telecaller'>Telecaller</option>
                   <option value='Accounts'>Accounts</option>
+                  <option value='Student'>Student</option>
                   <option value='SuperAdmin'>SuperAdmin</option>
                 </select>
                 {formik.touched.role && formik.errors.role && (

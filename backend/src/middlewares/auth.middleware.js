@@ -31,9 +31,9 @@ export const isAdmin = async (req, res, next) => {
     if (user.role === "Admin" || user.role === "SuperAdmin") {
       next();
     } else {
-      return res.status(401).send({
-        success: false,
-        message: "UnAuthorized Access",
+      return res.status(401).json({
+        error:
+          "You are not allowed to create user only admin and Super Admin can create users",
       });
     }
   } catch (error) {

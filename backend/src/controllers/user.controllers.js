@@ -267,10 +267,14 @@ export const editUserController = asyncHandler(async (req, res, next) => {
 
     // Check if the user performing the update is either SuperAdmin or the same user
     if (
+      req.user.role === "Admin" ||
       req.user.role === "SuperAdmin" ||
       (req.user._id.toString() === req.params.id && req.user.role === "Admin")
     ) {
       // SuperAdmin can update anyone, Admin can update non-SuperAdmin users
+      if (user.role === "Admin" && req.user.role !== "Admin") {
+        return res.status(400).json({ error: "Cannot update Admin user." });
+      }
       if (user.role === "SuperAdmin" && req.user.role !== "SuperAdmin") {
         return res
           .status(400)
@@ -301,11 +305,9 @@ export const editUserController = asyncHandler(async (req, res, next) => {
         updated_at: updateUser.updatedAt,
       });
     } else {
-      return res
-        .status(403)
-        .json({
-          error: "Forbidden: You don't have permission to perform this action.",
-        });
+      return res.status(403).json({
+        error: "Forbidden: You don't have permission to perform this action.",
+      });
     }
   } catch (error) {
     console.error(error);
@@ -320,7 +322,7 @@ export const deleteUserController = asyncHandler(async (req, res, next) => {
     // console.log(userId === req.user._id);
     let userId = req.params.id;
     if (userId === req.user._id.toString()) {
-      res.status(401).json({ message: "You can not delete current user" });
+      res.json({ message: "You can not delete current user" });
       return;
     }
     let user = await userModel.findById(userId);

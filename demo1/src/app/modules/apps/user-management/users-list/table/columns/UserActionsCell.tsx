@@ -1,19 +1,20 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC, useEffect, useState } from 'react'
-import { useMutation, useQueryClient } from 'react-query'
-import { MenuComponent } from '../../../../../../../_metronic/assets/ts/components'
-import { ID, KTIcon, QUERIES } from '../../../../../../../_metronic/helpers'
-import { useListView } from '../../core/ListViewProvider'
-import { useQueryResponse } from '../../core/QueryResponseProvider'
-import { deleteUser } from '../../core/_requests'
+import {FC, useEffect, useState} from 'react'
+import {useMutation, useQueryClient} from 'react-query'
+import {MenuComponent} from '../../../../../../../_metronic/assets/ts/components'
+import {ID, KTIcon, QUERIES} from '../../../../../../../_metronic/helpers'
+import {useListView} from '../../core/ListViewProvider'
+import {useQueryResponse} from '../../core/QueryResponseProvider'
+import {deleteUser} from '../../core/_requests'
+import {toast} from 'react-toastify'
 
 type Props = {
   id: ID
 }
 
-const UserActionsCell: FC<Props> = ({ id }) => {
-  const { setItemIdForUpdate } = useListView()
-  const { query, refetch } = useQueryResponse()
+const UserActionsCell: FC<Props> = ({id}) => {
+  const {setItemIdForUpdate} = useListView()
+  const {query, refetch} = useQueryResponse()
   const queryClient = useQueryClient()
 
   // console.log(id);
@@ -21,7 +22,6 @@ const UserActionsCell: FC<Props> = ({ id }) => {
   useEffect(() => {
     MenuComponent.reinitialization()
   }, [])
-
 
   const openEditModal = () => {
     setItemIdForUpdate(id)
@@ -32,8 +32,12 @@ const UserActionsCell: FC<Props> = ({ id }) => {
     onSuccess: () => {
       // ✅ update detail view directly
       queryClient.invalidateQueries([`${QUERIES.USERS_LIST}-${query}`])
-      alert("user deleted successfully")
-      refetch();
+      //toast.success('user deleted successfully')
+      refetch()
+    },
+    onError: (error: any) => {
+      toast.error(error.response.data)
+      return
     },
   })
   return (
@@ -77,4 +81,4 @@ const UserActionsCell: FC<Props> = ({ id }) => {
   )
 }
 
-export { UserActionsCell }
+export {UserActionsCell}
