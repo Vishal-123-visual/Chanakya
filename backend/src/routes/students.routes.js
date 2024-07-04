@@ -34,7 +34,7 @@ router
   .get(requireSignIn, getAllStudentsMonthlyCollectionFeesController);
 router
   .route("/:id")
-  .get(requireSignIn, isAdmin, getSingleStudentDetailsController)
+  .get(requireSignIn, getSingleStudentDetailsController)
   .put(requireSignIn, isAdmin, upload.single("image"), updateStudentController)
   .delete(requireSignIn, isAdmin, deleteStudentController);
 

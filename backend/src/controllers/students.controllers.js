@@ -199,8 +199,8 @@ export const getSingleStudentDetailsController = asyncHandler(
   async (req, res, next) => {
     try {
       const student = await admissionFormModel
-        .findById(req.params.id)
-        .populate("companyName");
+        .findOne({ email: req.params.id })
+        .populate("courseName");
       console.log("get the single student", student);
       res.status(200).json(student);
     } catch (error) {

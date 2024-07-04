@@ -30,6 +30,20 @@ export const AdmissionContextProvider = ({children}) => {
     },
   })
 
+  const useGetSingleStudentUsingWithEmail = (studentId) => {
+    return useQuery({
+      queryKey: ['getStudents', studentId],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/students/${studentId}`)
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
+
   //console.log(studentsLists)
   const createStudentMutation = useMutation({
     mutationFn: async (newAdmission) => {
@@ -131,6 +145,7 @@ export const AdmissionContextProvider = ({children}) => {
         deleteStudentMutation,
         updateStudentMutation,
         setStudentId,
+        useGetSingleStudentUsingWithEmail,
       }}
     >
       {children}

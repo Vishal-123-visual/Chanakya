@@ -1,13 +1,20 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import {FC} from 'react'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useAuth} from '../../../../app/modules/auth'
-import {Languages} from './Languages'
 import {toAbsoluteUrl} from '../../../helpers'
+import {useAdmissionContext} from '../../../../app/modules/auth/core/Addmission'
+import {Languages} from './Languages' // Uncomment if implemented
 
-const HeaderUserMenu: FC = () => {
+const BASE_URL = process.env.REACT_APP_BASE_URL
+const BASE_URL_Image = `${BASE_URL}/api/images`
+
+const HeaderUserMenu: FC<{
+  currentStudent: any
+}> = ({currentStudent}) => {
   const {currentUser, logout} = useAuth()
-  //console.log(currentUser)
+  const navigate = useNavigate()
+  // const studentCTX = useAdmissionContext(); // Uncomment if used
+
   return (
     <div
       className='menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px'
@@ -16,7 +23,14 @@ const HeaderUserMenu: FC = () => {
       <div className='menu-item px-3'>
         <div className='menu-content d-flex align-items-center px-3'>
           <div className='symbol symbol-50px me-5'>
-            <img alt='Logo' src={toAbsoluteUrl('/media/avatars/300-3.jpg')} />
+            <img
+              alt='Logo'
+              src={
+                currentStudent?.image
+                  ? BASE_URL_Image + '/' + currentStudent?.image
+                  : toAbsoluteUrl('/media/avatars/300-3.jpg')
+              }
+            />
           </div>
 
           <div className='d-flex flex-column'>
@@ -31,98 +45,50 @@ const HeaderUserMenu: FC = () => {
         </div>
       </div>
 
-      <div className='separator my-2'></div>
+      {currentStudent && (
+        <>
+          <div className='separator my-2'></div>
+          <div className='menu-item px-5'>
+            <button
+              onClick={() => navigate(`/student/${currentStudent?._id}`, {state: currentStudent})}
+              className='btn menu-link btn-block'
+            >
+              My Profile
+            </button>
+          </div>
+        </>
+      )}
 
-      <div className='menu-item px-5'>
-        <Link to={'/crafted/pages/profile'} className='menu-link px-5'>
-          My Profile
-        </Link>
+      {/* Uncomment additional menu items as needed */}
+      {/* <div className='menu-item px-5'>
+        <a href='#' className='menu-link px-5'>
+          My Projects
+        </a>
       </div>
 
-      {/* <div className='menu-item px-5'>
+      <div className='menu-item px-5'>
         <a href='#' className='menu-link px-5'>
-          <span className='menu-text'>My Projects</span>
-          <span className='menu-badge'>
-            <span className='badge badge-light-danger badge-circle fw-bolder fs-7'>3</span>
-          </span>
+          My Subscription
         </a>
-      </div> */}
+      </div>
 
-      {/* <div
-        className='menu-item px-5'
-        data-kt-menu-trigger='hover'
-        data-kt-menu-placement='left-start'
-        data-kt-menu-flip='bottom'
-      >
-        <a href='#' className='menu-link px-5'>
-          <span className='menu-title'>My Subscription</span>
-          <span className='menu-arrow'></span>
-        </a>
-
-        <div className='menu-sub menu-sub-dropdown w-175px py-4'>
-          <div className='menu-item px-3'>
-            <a href='#' className='menu-link px-5'>
-              Referrals
-            </a>
-          </div>
-
-          <div className='menu-item px-3'>
-            <a href='#' className='menu-link px-5'>
-              Billing
-            </a>
-          </div>
-
-          <div className='menu-item px-3'>
-            <a href='#' className='menu-link px-5'>
-              Payments
-            </a>
-          </div>
-
-          <div className='menu-item px-3'>
-            <a href='#' className='menu-link d-flex flex-stack px-5'>
-              Statements
-              <i
-                className='fas fa-exclamation-circle ms-2 fs-7'
-                data-bs-toggle='tooltip'
-                title='View your statements'
-              ></i>
-            </a>
-          </div>
-
-          <div className='separator my-2'></div>
-
-          <div className='menu-item px-3'>
-            <div className='menu-content px-3'>
-              <label className='form-check form-switch form-check-custom form-check-solid'>
-                <input
-                  className='form-check-input w-30px h-20px'
-                  type='checkbox'
-                  value='1'
-                  defaultChecked={true}
-                  name='notifications'
-                />
-                <span className='form-check-label text-muted fs-7'>Notifications</span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-      {/* <div className='menu-item px-5'>
+      <div className='menu-item px-5'>
         <a href='#' className='menu-link px-5'>
           My Statements
         </a>
-      </div> */}
+      </div>
 
       <div className='separator my-2'></div>
 
-      {/* <Languages /> */}
+      <Languages /> // Uncomment if implemented
 
-      {/* <div className='menu-item px-5 my-1'>
+      <div className='menu-item px-5 my-1'>
         <Link to='/crafted/account/settings' className='menu-link px-5'>
           Account Settings
         </Link>
       </div> */}
+
+      <div className='separator my-2'></div>
 
       <div className='menu-item px-5'>
         <a onClick={logout} className='menu-link px-5'>

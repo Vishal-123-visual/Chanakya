@@ -1,7 +1,9 @@
 import clsx from 'clsx'
 import {KTIcon, toAbsoluteUrl} from '../../../helpers'
-import {HeaderNotificationsMenu, HeaderUserMenu, Search, ThemeModeSwitcher} from '../../../partials'
+import {HeaderUserMenu, ThemeModeSwitcher} from '../../../partials'
 import {useLayout} from '../../core'
+import {useAuth} from '../../../../app/modules/auth'
+import {useAdmissionContext} from '../../../../app/modules/auth/core/Addmission'
 
 const itemClass = 'ms-1 ms-md-4'
 const btnClass =
@@ -9,39 +11,19 @@ const btnClass =
 const userAvatarClass = 'symbol-35px'
 const btnIconClass = 'fs-2'
 
+const BASE_URL = process.env.REACT_APP_BASE_URL
+const BASE_URL_Image = `${BASE_URL}/api/images`
+
 const Navbar = () => {
   const {config} = useLayout()
+  const {currentUser} = useAuth()
+  const studentCTX = useAdmissionContext()
+
+  // Fetch current student data based on currentUser's email
+  const currentStudent = studentCTX?.useGetSingleStudentUsingWithEmail(currentUser?.email)
+
   return (
     <div className='app-navbar flex-shrink-0'>
-      {/* <div className={clsx('app-navbar-item align-items-stretch', itemClass)}>
-        <Search />
-      </div> */}
-
-      {/* <div className={clsx('app-navbar-item', itemClass)}>
-        <div id='kt_activities_toggle' className={btnClass}>
-          <KTIcon iconName='chart-simple' className={btnIconClass} />
-        </div>
-      </div> */}
-
-      {/* <div className={clsx('app-navbar-item', itemClass)}>
-        <div
-          data-kt-menu-trigger="{default: 'click'}"
-          data-kt-menu-attach='parent'
-          data-kt-menu-placement='bottom-end'
-          className={btnClass}
-        >
-          <KTIcon iconName='element-plus' className={btnIconClass} />
-        </div>
-        <HeaderNotificationsMenu />
-      </div> */}
-
-      {/* <div className={clsx('app-navbar-item', itemClass)}>
-        <div className={clsx('position-relative', btnClass)} id='kt_drawer_chat_toggle'>
-          <KTIcon iconName='message-text-2' className={btnIconClass} />
-          <span className='bullet bullet-dot bg-success h-6px w-6px position-absolute translate-middle top-0 start-50 animation-blink' />
-        </div>
-      </div> */}
-
       <div className={clsx('app-navbar-item', itemClass)}>
         <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
       </div>
@@ -53,9 +35,16 @@ const Navbar = () => {
           data-kt-menu-attach='parent'
           data-kt-menu-placement='bottom-end'
         >
-          <img src={toAbsoluteUrl('/media/avatars/300-3.jpg')} alt='' />
+          <img
+            src={
+              currentStudent?.data?.image
+                ? BASE_URL_Image + '/' + currentStudent?.data?.image
+                : toAbsoluteUrl('media/avatars/300-3.jpg')
+            }
+            alt=''
+          />
         </div>
-        <HeaderUserMenu />
+        {currentStudent && <HeaderUserMenu currentStudent={currentStudent?.data} />}
       </div>
 
       {config.app?.header?.default?.menu?.display && (
