@@ -39,7 +39,7 @@ const Navbar = () => {
             src={
               currentStudent?.data?.image
                 ? BASE_URL_Image + '/' + currentStudent?.data?.image
-                : toAbsoluteUrl('media/avatars/300-3.jpg')
+                : toAbsoluteUrl('media/avatars/300-1.jpg')
             }
             alt=''
           />

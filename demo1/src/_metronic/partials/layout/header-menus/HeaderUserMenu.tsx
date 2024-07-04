@@ -28,7 +28,7 @@ const HeaderUserMenu: FC<{
               src={
                 currentStudent?.image
                   ? BASE_URL_Image + '/' + currentStudent?.image
-                  : toAbsoluteUrl('/media/avatars/300-3.jpg')
+                  : toAbsoluteUrl('/media/avatars/300-1.jpg')
               }
             />
           </div>
