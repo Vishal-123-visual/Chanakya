@@ -66,6 +66,7 @@ const useQueryResponsePagination = () => {
   }
 
   const {response} = useQueryResponse()
+  console.log(response)
   if (!response || !response.payload || !response.payload.pagination) {
     return defaultPaginationState
   }

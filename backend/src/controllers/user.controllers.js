@@ -212,6 +212,7 @@ export const getAllUsersController = asyncHandler(async (req, res, next) => {
   // console.log(req.headers.authorization.split(" ")[1]);
   try {
     // Extract page and items_per_page from the query parameters
+    console.log("from get all users ", req.query);
     const { page = 1, items_per_page = 10, search } = req.query;
 
     // Convert page and items_per_page to numbers

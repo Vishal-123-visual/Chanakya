@@ -9,6 +9,9 @@ import PaymentInstallmentTimeExpireModel from "../models/NumberInstallmentExpire
 import studentSubjectMarksModel from "../models/subject/student.subject.marks.models.js";
 import StudentComissionModel from "../models/student-comission/student.comission.models.js";
 import DayBookDataModel from "../models/day-book/DayBookData.models.js";
+import { userModel } from "../models/user.models.js";
+import bcryptjs from "bcryptjs";
+import { generateToken } from "../utils/createToken.js";
 
 const __dirname = path.resolve();
 
@@ -18,6 +21,33 @@ export const getAllStudentsController = asyncHandler(async (req, res, next) => {
       .find({})
       .populate(["courseName"])
       .sort({ createdAt: -1 });
+
+    //console.log(users);
+
+    for (const student of users) {
+      let existedStudent = await userModel.findOne({ email: student.email });
+
+      if (!existedStudent) {
+        let hashPassword = await bcryptjs.hash(
+          student.mobile_number,
+          await bcryptjs.genSalt(10)
+        );
+
+        existedStudent = new userModel({
+          fName: student.name.split(" ")[0],
+          lName: student.name.split(" ")[1],
+          email: student.email,
+          password: hashPassword,
+          phone: student.mobile_number,
+          role: "Student",
+        });
+
+        let token = generateToken(res, student?._id);
+        existedStudent.api_token = token;
+
+        await existedStudent.save();
+      }
+    }
     res.status(200).json({ users });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

@@ -1,3 +1,0 @@
-->Jab hum student create kerte hain
--> 1st fees he have to pay
--> then we store the next payment installment time
