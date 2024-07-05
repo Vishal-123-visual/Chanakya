@@ -30,6 +30,7 @@ const AppRoutes: FC = () => {
     () => import('../pages/print-student-fee-recipt/PrintStudentFeesRecipt')
   )
   const {currentUser} = useAuth()
+  console.log(currentUser)
   return (
     <BrowserRouter>
       <Routes>

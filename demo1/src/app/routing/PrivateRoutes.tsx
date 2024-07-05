@@ -7,6 +7,8 @@ import {MenuTestPage} from '../pages/MenuTestPage'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
+import {useAuth} from '../modules/auth'
+import {useAdmissionContext} from '../modules/auth/core/Addmission'
 
 const PrivateRoutes = () => {
   const PendingFeesStudents = lazy(
@@ -61,330 +63,350 @@ const PrivateRoutes = () => {
     () => import('../pages/courseStudentSubjectsMarks/StudentMarksResult')
   )
 
+  const {currentUser} = useAuth()
+  //console.log(currentUser)
+
+  const studentCTX = useAdmissionContext()
+
+  // Fetch current student data based on currentUser's email
+  const currentStudent = studentCTX?.useGetSingleStudentUsingWithEmail(currentUser?.email)
+  //console.log(currentStudent.data)
+
   return (
     <Routes>
       <Route element={<MasterLayout />}>
         {/* Redirect to Dashboard after success login/registartion */}
         <Route path='auth/*' element={<Navigate to='/dashboard' />} />
-        {/* ================================  DayBook Start Here ============================== */}
-        <Route
-          path='/daybook/viewDaybook'
-          element={
-            <SuspensedView>
-              <ViewDayBook />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/daybook/addAccount'
-          element={
-            <SuspensedView>
-              <AddAccountDayBook />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/daybook/singleAccount/:id'
-          element={
-            <SuspensedView>
-              <ShowSingleAccountDayBookData />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/daybook/editAccount/:id'
-          element={
-            <SuspensedView>
-              <EditDayBookAccount />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/daybook/viewAccount'
-          element={
-            <SuspensedView>
-              <ViewDayBookAccount />
-            </SuspensedView>
-          }
-        />
-        {/* ================================  DayBook End Here ============================== */}
-        {/* ====================Start Course Here ==================== */}
-        <Route
-          path='/course/course-type'
-          element={
-            <SuspensedView>
-              <CourseTypes className='' />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/course-type/editAdd/:id'
-          element={
-            <SuspensedView>
-              <AddCourseEditAndAdd />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/course-type/edit/:id'
-          element={
-            <SuspensedView>
-              <AddCourseTypeEdit />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/category'
-          element={
-            <SuspensedView>
-              <CourseCategory className='' />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/category/add'
-          element={
-            <SuspensedView>
-              <AddCourseCategory />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/student/commission/:companyId'
-          element={
-            <SuspensedView>
-              <StudentCommission />
-            </SuspensedView>
-          }
-        />
-        {/* ======================================Add Number Of Years Course Type Start ============================================= */}
-        <Route
-          path='/course/no_of_years_course'
-          element={
-            <SuspensedView>
-              <NumberOfYearsCourse className='' />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/no_of_years_course/add'
-          element={
-            <SuspensedView>
-              <AddNumberYearCourse />
-            </SuspensedView>
-          }
-        />
-        {/* ======================================Add Number Of Years Course Type End ============================================= */}
-        <Route
-          path='/course/addCourse'
-          element={
-            <SuspensedView>
-              <AddCourse className='' />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/viewCourses'
-          element={
-            <SuspensedView>
-              <ViewCourse />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/addCourse/add'
-          element={
-            <SuspensedView>
-              <AddCourseUpdateAndAdd />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/course/addCourse/update'
-          element={
-            <SuspensedView>
-              <EditCourse />
-            </SuspensedView>
-          }
-        />
-        {/* ====================End Course Here ==================== */}
-        <Route
-          path='/my-page'
-          element={
-            <SuspensedView>
-              <MyPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/addmission-form/:id'
-          element={
-            <SuspensedView>
-              <AddMissionForm />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/students/:id'
-          element={
-            <SuspensedView>
-              <StudentsList className='' />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/students-clearFee/:id'
-          element={
-            <SuspensedView>
-              <ClearFeesStudents />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/students-remainingFee/:id'
-          element={
-            <SuspensedView>
-              <PendingFeesStudents />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/student/:id'
-          element={
-            <SuspensedView>
-              <StudentProfile />
-            </SuspensedView>
-          }
-        />
-        {/* *************************************** Monthly Collection fees start here.. ******************************************* */}
-        <Route
-          path='/monthlyCollectionFees/:id'
-          element={
-            <SuspensedView>
-              <MonthlyCollectionFee />
-            </SuspensedView>
-          }
-        />
-        {/* *************************************** Monthly Collection fees End here.. ******************************************* */}
-        {/* *************************************** Payment Option start here.. ******************************************* */}
 
-        {/* *************************************** Payment Option End here.. ******************************************* */}
-        {/* ******************************......... Manage Company start here.....***************************** */}
-        <Route
-          path='/company'
-          element={
-            <SuspensedView>
-              <Company />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/add-company'
-          element={
-            <SuspensedView>
-              <AddCompany />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='/update-company'
-          element={
-            <SuspensedView>
-              <UpdateCompany />
-            </SuspensedView>
-          }
-        />
-        {/* ******************************................ Manage Company start here..............******************************************* */}
-        {/* ------------------------------- Email Template Start ----------------------------------- */}
-        <Route
-          path='/general-settings'
-          element={
-            <SuspensedView>
-              <div className='d-flex flex-column gap-10'>
-                <SendEmailSuggestion />
-                <GstSuggesstion />
-                <AddPaymentOption />
-                <EmailTemplate />
-              </div>
-            </SuspensedView>
-          }
-        />
+        {currentUser?.role !== 'Student' ? (
+          <>
+            {/* ================================  DayBook Start Here ============================== */}{' '}
+            <Route
+              path='/daybook/viewDaybook'
+              element={
+                <SuspensedView>
+                  <ViewDayBook />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/daybook/addAccount'
+              element={
+                <SuspensedView>
+                  <AddAccountDayBook />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/daybook/singleAccount/:id'
+              element={
+                <SuspensedView>
+                  <ShowSingleAccountDayBookData />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/daybook/editAccount/:id'
+              element={
+                <SuspensedView>
+                  <EditDayBookAccount />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/daybook/viewAccount'
+              element={
+                <SuspensedView>
+                  <ViewDayBookAccount />
+                </SuspensedView>
+              }
+            />
+            {/* ================================  DayBook End Here ============================== */}
+            {/* ====================Start Course Here ==================== */}
+            <Route
+              path='/course/course-type'
+              element={
+                <SuspensedView>
+                  <CourseTypes className='' />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/course-type/editAdd/:id'
+              element={
+                <SuspensedView>
+                  <AddCourseEditAndAdd />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/course-type/edit/:id'
+              element={
+                <SuspensedView>
+                  <AddCourseTypeEdit />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/category'
+              element={
+                <SuspensedView>
+                  <CourseCategory className='' />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/category/add'
+              element={
+                <SuspensedView>
+                  <AddCourseCategory />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/student/commission/:companyId'
+              element={
+                <SuspensedView>
+                  <StudentCommission />
+                </SuspensedView>
+              }
+            />
+            {/* ======================================Add Number Of Years Course Type Start ============================================= */}
+            <Route
+              path='/course/no_of_years_course'
+              element={
+                <SuspensedView>
+                  <NumberOfYearsCourse className='' />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/no_of_years_course/add'
+              element={
+                <SuspensedView>
+                  <AddNumberYearCourse />
+                </SuspensedView>
+              }
+            />
+            {/* ======================================Add Number Of Years Course Type End ============================================= */}
+            <Route
+              path='/course/addCourse'
+              element={
+                <SuspensedView>
+                  <AddCourse className='' />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/viewCourses'
+              element={
+                <SuspensedView>
+                  <ViewCourse />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/addCourse/add'
+              element={
+                <SuspensedView>
+                  <AddCourseUpdateAndAdd />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course/addCourse/update'
+              element={
+                <SuspensedView>
+                  <EditCourse />
+                </SuspensedView>
+              }
+            />
+            {/* ====================End Course Here ==================== */}
+            <Route
+              path='/my-page'
+              element={
+                <SuspensedView>
+                  <MyPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/addmission-form/:id'
+              element={
+                <SuspensedView>
+                  <AddMissionForm />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/students/:id'
+              element={
+                <SuspensedView>
+                  <StudentsList className='' />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/students-clearFee/:id'
+              element={
+                <SuspensedView>
+                  <ClearFeesStudents />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/students-remainingFee/:id'
+              element={
+                <SuspensedView>
+                  <PendingFeesStudents />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/student/:id'
+              element={
+                <SuspensedView>
+                  <StudentProfile />
+                </SuspensedView>
+              }
+            />
+            {/* *************************************** Monthly Collection fees start here.. ******************************************* */}
+            <Route
+              path='/monthlyCollectionFees/:id'
+              element={
+                <SuspensedView>
+                  <MonthlyCollectionFee />
+                </SuspensedView>
+              }
+            />
+            {/* *************************************** Monthly Collection fees End here.. ******************************************* */}
+            {/* ******************************......... Manage Company start here.....***************************** */}
+            <Route
+              path='/company'
+              element={
+                <SuspensedView>
+                  <Company />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/add-company'
+              element={
+                <SuspensedView>
+                  <AddCompany />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/update-company'
+              element={
+                <SuspensedView>
+                  <UpdateCompany />
+                </SuspensedView>
+              }
+            />
+            {/* ******************************................ Manage Company End here..............******************************************* */}
+            {/* ------------------------------- Email Template Start ----------------------------------- */}
+            <Route
+              path='/general-settings'
+              element={
+                <SuspensedView>
+                  <div className='d-flex flex-column gap-10'>
+                    <SendEmailSuggestion />
+                    <GstSuggesstion />
+                    <AddPaymentOption />
+                    <EmailTemplate />
+                  </div>
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='/course-subjects-addMarks'
+              element={
+                <SuspensedView>
+                  <CourseStudentSubjectMarks />
+                </SuspensedView>
+              }
+            />
+            {/* Pages */}
+            <Route path='dashboard' element={<DashboardWrapper />} />
+            <Route path='builder' element={<BuilderPageWrapper />} />
+            <Route path='menu-test' element={<MenuTestPage />} />
+            {/* Lazy Modules */}
+            <Route
+              path='crafted/pages/profile/*'
+              element={
+                <SuspensedView>
+                  <ProfilePage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='crafted/pages/wizards/*'
+              element={
+                <SuspensedView>
+                  <WizardsPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='crafted/widgets/*'
+              element={
+                <SuspensedView>
+                  <WidgetsPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='crafted/account/*'
+              element={
+                <SuspensedView>
+                  <AccountPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='apps/chat/*'
+              element={
+                <SuspensedView>
+                  <ChatPage />
+                </SuspensedView>
+              }
+            />
+            <Route
+              path='apps/user-management/*'
+              element={
+                <SuspensedView>
+                  <UsersPage />
+                </SuspensedView>
+              }
+            />
+            <Route path='*' element={<Navigate to='/error/404' />} />
+          </>
+        ) : (
+          <>
+            <Route path='dashboard' element={<DashboardWrapper />} />
+            <Route
+              path='/student/:id'
+              element={
+                <SuspensedView>
+                  <StudentProfile />
+                </SuspensedView>
+              }
+            />
 
-        <Route
-          path='/course-subjects-addMarks'
-          element={
-            <SuspensedView>
-              <CourseStudentSubjectMarks />
-            </SuspensedView>
-          }
-        />
-        {/******************* Route for the print result ******************** */}
-        {/* <Route
-          path='/student-result'
-          element={
-            <SuspensedView>
-              <StudentMarksResult />
-            </SuspensedView>
-          }
-        /> */}
-        {/* ------------------------------- Email Template End ----------------------------------- */}
-        {/* <Route path='/add-user' element={<AddUser />} />
-        <Route path='/user-list' element={<UserList />} /> */}
-        {/* Pages */}
-        <Route path='dashboard' element={<DashboardWrapper />} />
-        <Route path='builder' element={<BuilderPageWrapper />} />
-        <Route path='menu-test' element={<MenuTestPage />} />
-        {/* Lazy Modules */}
-        <Route
-          path='crafted/pages/profile/*'
-          element={
-            <SuspensedView>
-              <ProfilePage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='crafted/pages/wizards/*'
-          element={
-            <SuspensedView>
-              <WizardsPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='crafted/widgets/*'
-          element={
-            <SuspensedView>
-              <WidgetsPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='crafted/account/*'
-          element={
-            <SuspensedView>
-              <AccountPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='apps/chat/*'
-          element={
-            <SuspensedView>
-              <ChatPage />
-            </SuspensedView>
-          }
-        />
-        <Route
-          path='apps/user-management/*'
-          element={
-            <SuspensedView>
-              <UsersPage />
-            </SuspensedView>
-          }
-        />
-        {/* Page Not Found */}
-        <Route path='*' element={<Navigate to='/error/404' />} />
+            {/* Page Not Found */}
+            <Route
+              path='*'
+              element={
+                <Navigate
+                  to={`/student/${currentStudent?.data?._id}`}
+                  state={currentStudent?.data}
+                />
+              }
+            />
+          </>
+        )}
       </Route>
     </Routes>
   )
