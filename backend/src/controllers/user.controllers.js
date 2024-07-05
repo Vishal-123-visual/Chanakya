@@ -209,10 +209,8 @@ export const requsetUserPasswordController = asyncHandler(
 );
 
 export const getAllUsersController = asyncHandler(async (req, res, next) => {
-  // console.log(req.headers.authorization.split(" ")[1]);
   try {
     // Extract page and items_per_page from the query parameters
-    console.log("from get all users ", req.query);
     const { page = 1, items_per_page = 10, search } = req.query;
 
     // Convert page and items_per_page to numbers
@@ -232,84 +230,55 @@ export const getAllUsersController = asyncHandler(async (req, res, next) => {
       : {};
 
     // Use the skip and limit values in your MongoDB query to implement pagination
-    let users = await userModel.find(searchQuery).skip(skip).limit(limit);
+    const users = await userModel.find(searchQuery).skip(skip).limit(limit);
 
-    // Mock total users count (replace with actual count from your database)
+    // Get the total count of users matching the search query
     const totalUsersCount = await userModel.countDocuments(searchQuery);
 
-    const daysOfWeek = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
+    // Construct pagination links
+    const lastPage = Math.ceil(totalUsersCount / limit);
+    const links = [
+      {
+        url: page > 1 ? `/?page=${page - 1}` : null,
+        label: "&laquo; Previous",
+        active: page > 1,
+        page: page > 1 ? page - 1 : null,
+      },
+      ...Array.from({ length: lastPage }, (_, i) => ({
+        url: `/?page=${i + 1}`,
+        label: (i + 1).toString(),
+        active: i + 1 === parseInt(page),
+        page: i + 1,
+      })),
+      {
+        url: page < lastPage ? `/?page=${parseInt(page) + 1}` : null,
+        label: "Next &raquo;",
+        active: page < lastPage,
+        page: page < lastPage ? parseInt(page) + 1 : null,
+      },
     ];
 
     // Respond with the array of users and pagination details
-    const responseData = {
-      data: users.map((user) => ({
-        id: user.id,
-        fName: user.fName,
-        email: user.email,
-        role: user.role,
-        phone: user.phone,
-        last_login: daysOfWeek[new Date(user.createdAt).getDay()],
-        // Add other user properties as needed
-      })),
+    res.status(200).json({
+      data: users,
       payload: {
         pagination: {
           page: parseInt(page),
-          first_page_url: `/?page=1`,
+          first_page_url: "/?page=1",
           from: skip + 1,
-          last_page: Math.ceil(totalUsersCount / limit),
-          links: [
-            {
-              url: null,
-              label: "&laquo; Previous",
-              active: page > 1,
-              page: page > 1 ? page - 1 : null,
-            },
-            {
-              url: `/?page=${page}`,
-              label: page.toString(),
-              active: true,
-              page: parseInt(page),
-            },
-            {
-              url: `/?page=${page + 1}`,
-              label: (page + 1).toString(),
-              active: page < Math.ceil(totalUsersCount / limit),
-              page: page < Math.ceil(totalUsersCount / limit) ? page + 1 : null,
-            },
-            {
-              url: `/?page=${Math.ceil(totalUsersCount / limit)}`,
-              label: "Next &raquo;",
-              active: page < Math.ceil(totalUsersCount / limit),
-              page:
-                page < Math.ceil(totalUsersCount / limit)
-                  ? Math.ceil(totalUsersCount / limit)
-                  : null,
-            },
-          ],
+          last_page: lastPage,
+          links: links,
           next_page_url:
-            page < Math.ceil(totalUsersCount / limit)
-              ? `/?page=${page + 1}`
-              : null,
+            page < lastPage ? `/?page=${parseInt(page) + 1}` : null,
           items_per_page: limit,
           prev_page_url: page > 1 ? `/?page=${page - 1}` : null,
           to: skip + users.length,
           total: totalUsersCount,
         },
       },
-    };
-
-    res.status(200).json(responseData);
+    });
   } catch (error) {
-    // Handle errors, set status to 500 and throw a new error
-    res.status(500);
-    throw new Error(error);
+    res.status(500).json({ message: error.message });
   }
 });
 
