@@ -122,7 +122,9 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
-    const dayBookData = await DayBookDataModel.find({}).sort({ createdAt: -1 });
+    const dayBookData = await DayBookDataModel.find({})
+      .sort({ createdAt: -1 })
+      .populate("studentInfo");
     res.status(200).json(dayBookData);
   } catch (error) {
     res.status(500).json({

@@ -6,22 +6,30 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {Link, useNavigate} from 'react-router-dom'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(moment().subtract(6, 'days').toDate())
   const [toDate, setToDate] = useState(new Date())
   const navigate = useNavigate()
 
+  const params = useParams()
+
   const dayBookDataCtx = usePaymentOptionContextContext()
 
+  //console.log(dayBookDataCtx.getDayBookDataQuery?.data)
+
   const filteredData =
-    dayBookDataCtx.getDayBookDataQuery?.data?.filter((item) => {
-      const createdAt = moment(item.dayBookDatadate)
-      const startDate = moment(fromDate).startOf('day')
-      const endDate = moment(toDate).endOf('day')
-      return createdAt.isBetween(startDate, endDate, null, '[]')
-    }) || []
+    dayBookDataCtx.getDayBookDataQuery?.data
+      ?.filter(
+        (item) => item?.studentInfo?.companyName === params.id || item?.companyName === params.id
+      )
+      ?.filter((item) => {
+        const createdAt = moment(item.dayBookDatadate)
+        const startDate = moment(fromDate).startOf('day')
+        const endDate = moment(toDate).endOf('day')
+        return createdAt.isBetween(startDate, endDate, null, '[]')
+      }) || []
 
   //console.table(filteredData)
 
@@ -134,7 +142,7 @@ const ViewDayBook = () => {
                         to={
                           dayBookEntry.accountName
                             ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
-                            : '/daybook/viewDaybook'
+                            : `/daybook/viewDaybook/${params.id}`
                         }
                       >
                         {dayBookEntry.accountName || dayBookEntry.StudentName}
@@ -160,7 +168,7 @@ const ViewDayBook = () => {
                       {dayBookEntry?.studentLateFees || 0}
                     </td>
                     <td className='text-dark fw-bold text-hover-primary fs-6'>
-                      {dayBookEntry.balance}
+                      {dayBookEntry.balance.toFixed(2)}
                     </td>
                   </tr>
                 )

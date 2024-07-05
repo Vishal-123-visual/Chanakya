@@ -111,44 +111,71 @@ const SidebarMenuMain = () => {
         <>
           {/* ----------------------------- Company Menu Start Here ............................... */}
           {companyCTX.getCompanyLists?.data?.map((CompanyListData: any) => (
-            <SidebarMenuItemWithSub
-              key={CompanyListData?._id}
-              to='/apps/chat'
-              title={CompanyListData.companyName}
-              fontIcon='bi-chat-left'
-              icon='message-text-2'
-            >
-              <SidebarMenuItem
-                to={`/students/${CompanyListData?._id}`}
-                title='All Students'
-                hasBullet={true}
-              />
-              <SidebarMenuItem
-                to={`/monthlyCollectionFees/${CompanyListData?._id}`}
-                title='Monthly Collections'
-                hasBullet={true}
-              />
-              <SidebarMenuItem
-                to={`/student/commission/${CompanyListData?._id}`}
-                title='Commission'
-                hasBullet={true}
-              />
-              <SidebarMenuItem
-                to={`/addmission-form/${CompanyListData?._id}`}
-                title='Admission Form'
-                hasBullet={true}
-              />
-              <SidebarMenuItem
-                to={`/students-remainingFee/${CompanyListData?._id}`}
-                title='Pending Fess Students'
-                hasBullet={true}
-              />
-              <SidebarMenuItem
-                to={`/students-clearFee/${CompanyListData?._id}`}
-                title='Clear Fess Students'
-                hasBullet={true}
-              />
-            </SidebarMenuItemWithSub>
+            <>
+              <SidebarMenuItemWithSub
+                key={CompanyListData?._id}
+                to='/apps/chat'
+                title={CompanyListData.companyName}
+                fontIcon='bi-chat-left'
+                icon='message-text-2'
+              >
+                <SidebarMenuItem
+                  to={`/students/${CompanyListData?._id}`}
+                  title='All Students'
+                  hasBullet={true}
+                />
+                <SidebarMenuItem
+                  to={`/monthlyCollectionFees/${CompanyListData?._id}`}
+                  title='Monthly Collections'
+                  hasBullet={true}
+                />
+                <SidebarMenuItem
+                  to={`/student/commission/${CompanyListData?._id}`}
+                  title='Commission'
+                  hasBullet={true}
+                />
+                <SidebarMenuItem
+                  to={`/addmission-form/${CompanyListData?._id}`}
+                  title='Admission Form'
+                  hasBullet={true}
+                />
+                <SidebarMenuItem
+                  to={`/students-remainingFee/${CompanyListData?._id}`}
+                  title='Pending Fess Students'
+                  hasBullet={true}
+                />
+                <SidebarMenuItem
+                  to={`/students-clearFee/${CompanyListData?._id}`}
+                  title='Clear Fess Students'
+                  hasBullet={true}
+                />
+
+                {/* ------------------------------------ Start Day Book here ---------------------------------- */}
+                <SidebarMenuItemWithSub
+                  to='/apps/chat'
+                  title='Day Book'
+                  fontIcon='bi-chat-left'
+                  icon='message-text-2'
+                >
+                  <SidebarMenuItem
+                    to={`/daybook/viewDaybook/${CompanyListData._id}`}
+                    title='View DayBook'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
+                    to={`/daybook/addAccount/${CompanyListData._id}`}
+                    title='Add Account'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
+                    to={`/daybook/viewAccount/${CompanyListData._id}`}
+                    title='View Account'
+                    hasBullet={true}
+                  />
+                </SidebarMenuItemWithSub>
+                {/* ------------------------------------ End Day Book here ---------------------------------- */}
+              </SidebarMenuItemWithSub>
+            </>
           ))}
           {/* ----------------------------- Company Menu END Here ............................... */}
 
@@ -183,19 +210,6 @@ const SidebarMenuMain = () => {
             <SidebarMenuItem to='/add-company' title='Add Company' hasBullet={true} />
           </SidebarMenuItemWithSub>
           {/* *************************************  Manage Company End ******************************** */}
-
-          {/* ------------------------------------ Start Day Book here ---------------------------------- */}
-          <SidebarMenuItemWithSub
-            to='/apps/chat'
-            title='Day Book'
-            fontIcon='bi-chat-left'
-            icon='message-text-2'
-          >
-            <SidebarMenuItem to='/daybook/viewDaybook' title='View DayBook' hasBullet={true} />
-            <SidebarMenuItem to='/daybook/addAccount' title='Add Account' hasBullet={true} />
-            <SidebarMenuItem to='/daybook/viewAccount' title='View Account' hasBullet={true} />
-          </SidebarMenuItemWithSub>
-          {/* ------------------------------------ End Day Book here ---------------------------------- */}
 
           {/* ------------------------------ Settings Page Start ----------------------------------------- */}
           <SidebarMenuItemWithSub

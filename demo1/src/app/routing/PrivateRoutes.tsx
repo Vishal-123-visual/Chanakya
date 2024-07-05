@@ -82,7 +82,7 @@ const PrivateRoutes = () => {
           <>
             {/* ================================  DayBook Start Here ============================== */}{' '}
             <Route
-              path='/daybook/viewDaybook'
+              path='/daybook/viewDaybook/:id'
               element={
                 <SuspensedView>
                   <ViewDayBook />
@@ -90,7 +90,7 @@ const PrivateRoutes = () => {
               }
             />
             <Route
-              path='/daybook/addAccount'
+              path='/daybook/addAccount/:id'
               element={
                 <SuspensedView>
                   <AddAccountDayBook />
@@ -114,7 +114,7 @@ const PrivateRoutes = () => {
               }
             />
             <Route
-              path='/daybook/viewAccount'
+              path='/daybook/viewAccount/:id'
               element={
                 <SuspensedView>
                   <ViewDayBookAccount />
@@ -381,7 +381,7 @@ const PrivateRoutes = () => {
                 </SuspensedView>
               }
             />
-            <Route path='*' element={<Navigate to='/error/404' />} />
+            {/* <Route path='*' element={<Navigate to='/error/404' />} /> */}
           </>
         ) : (
           <>

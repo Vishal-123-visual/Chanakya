@@ -9,18 +9,10 @@ const ShowSingleAccountDayBookData = () => {
   const navigate = useNavigate()
   const {id} = useParams()
   const {data, isLoading} = dayBookAccountCtx.useGetSingleDayBookAccountNameDataQuery(id)
-  // console.log('data from single day book account ', data, isLoading)
+  //console.log('data from single day book account ', data, isLoading)
   let debitAmount = 0
   let creditAmount = 0
-  if (data?.length === 0) {
-    toast('You did not added data to this account. please add then check', {
-      type: 'error',
-      bodyStyle: {
-        fontSize: '18px',
-      },
-    })
-    navigate('/daybook/viewDaybook')
-  }
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -74,27 +66,27 @@ const ShowSingleAccountDayBookData = () => {
                         </td>
                         <td className='fw-bold'>{index + 1}</td>
                         <td style={{background: '#f2f2ff'}}>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {moment(dayBookAccountData?.dayBookDatadate).format('DD-MM-YYYY')}
                           </a>
                         </td>
                         <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.accountName}
                           </a>
                         </td>
                         <td style={{background: '#f2f2ff'}}>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.naretion}
                           </a>
                         </td>
                         <td>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.credit}
                           </a>
                         </td>
                         <td style={{background: '#f2f2ff'}}>
-                          <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.debit}
                           </a>
                         </td>
@@ -107,24 +99,20 @@ const ShowSingleAccountDayBookData = () => {
                 <td></td>
                 <td></td>
                 <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-3'>
-                    Total Balance
-                  </a>
+                  <a className='text-dark fw-bold text-hover-primary d-block fs-3'>Total Balance</a>
                 </td>
                 <td></td>
                 <td></td>
                 <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-3'>
+                  <a className='text-dark fw-bold text-hover-primary d-block fs-3'>
                     {creditAmount}
                   </a>
                 </td>
                 <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-3'>
-                    {debitAmount}
-                  </a>
+                  <a className='text-dark fw-bold text-hover-primary d-block fs-3'>{debitAmount}</a>
                 </td>
                 <td>
-                  <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-3'>
+                  <a className='text-dark fw-bold text-hover-primary d-block fs-3'>
                     {creditAmount > 0 ? creditAmount - debitAmount : null}
                   </a>
                 </td>

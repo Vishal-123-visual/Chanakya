@@ -1,10 +1,12 @@
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const ViewDayBookAccount = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
+
+  const params = useParams()
 
   const navigateHandler = (accountId) => {
     navigate('/daybook/singleAccount/' + accountId)
@@ -25,7 +27,7 @@ const ViewDayBookAccount = () => {
           title='Click to add Day Book Account'
         >
           <button
-            onClick={() => navigate('/daybook/addAccount')}
+            onClick={() => navigate(`/daybook/addAccount/${params.id}`)}
             className='btn btn-sm btn-light-primary'
             // data-bs-toggle='modal'
             // data-bs-target='#kt_modal_invite_friends'

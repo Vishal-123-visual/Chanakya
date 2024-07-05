@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
@@ -17,6 +17,7 @@ const AddAccountDayBook = () => {
     accountName: '',
     accountType: '',
   }
+  const params = useParams()
 
   const dayBookAccountCtx = usePaymentOptionContextContext()
   // console.log(dayBookAccountCtx.createDayBookAccountMutation)
@@ -28,7 +29,7 @@ const AddAccountDayBook = () => {
       dayBookAccountCtx.createDayBookAccountMutation.mutate(values)
       formik.setFieldValue('accountName', '')
       formik.setFieldValue('accountType', '--select--')
-      navigate('/daybook/viewAccount')
+      navigate(`/daybook/viewAccount/${params.id}`)
       toast(`Day Book Account Created Successfully!!`, {
         type: 'success',
         bodyStyle: {
