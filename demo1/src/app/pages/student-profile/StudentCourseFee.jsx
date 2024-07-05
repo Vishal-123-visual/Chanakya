@@ -13,6 +13,7 @@ import {toast} from 'react-toastify'
 const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentInfoData)
   const navigate = useNavigate()
+  const {currentUser} = useAuth()
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
   const [studentCourseFeeEditId, setStudentCourseFeesEditId] = useState(null)
@@ -138,14 +139,18 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           data-bs-trigger='hover'
           title='Click to pay fees'
         >
-          <button
-            disabled={studentInfoData?.remainingCourseFees === 0}
-            onClick={addStudentFeeFormToggleHandler}
-            className='btn btn-sm btn-light-primary'
-          >
-            <KTIcon iconName='plus' className='fs-3' />
-            {studentInfoData?.remainingCourseFees === 0 ? 'Student paid all fees' : 'Pay Fees'}
-          </button>
+          {currentUser.role !== 'Student' ? (
+            <button
+              disabled={studentInfoData?.remainingCourseFees === 0}
+              onClick={addStudentFeeFormToggleHandler}
+              className='btn btn-sm btn-light-primary'
+            >
+              <KTIcon iconName='plus' className='fs-3' />
+              {studentInfoData?.remainingCourseFees === 0 ? 'Student paid all fees' : 'Pay Fees'}
+            </button>
+          ) : (
+            <p className='btn btn-sm btn-light-primary'>Student Course Fees Record</p>
+          )}
         </div>
       </div>
       {/* end::Header */}

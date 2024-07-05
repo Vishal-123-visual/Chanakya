@@ -13,7 +13,7 @@ const ReadOnlyCourseFee = ({
   delelteStudentCourseFeesHandler,
 }) => {
   //console.log(StudentFee)
-  const {auth} = useAuth()
+  const {auth, currentUser} = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()
   //console.log(paymentOptionCtx.getPaymentOptionsData.data)
@@ -81,24 +81,28 @@ Visual Media Academy`
 
       <td>
         <div className='d-flex justify-content-end flex-shrink-0 gap-4 '>
-          <Link
-            to={'/print-student-fees-recipt'}
-            target='_blank'
-            type='button'
-            onClick={() =>
-              localStorage.setItem('print-student-fees-recipt', JSON.stringify(StudentFee))
-            }
-            className='btn btn-bg-light btn-active-color-primary btn-sm me-1'
-          >
-            Print Recipt
-          </Link>
-          <button
-            onClick={() => sendDataWhatsappAsMessage()}
-            type='button'
-            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-          >
-            <img src='/whatsapp.png' className='img-thumbnail' />
-          </button>
+          {currentUser.role !== 'Student' && (
+            <>
+              <Link
+                to={'/print-student-fees-recipt'}
+                target='_blank'
+                type='button'
+                onClick={() =>
+                  localStorage.setItem('print-student-fees-recipt', JSON.stringify(StudentFee))
+                }
+                className='btn btn-bg-light btn-active-color-primary btn-sm me-1'
+              >
+                Print Recipt
+              </Link>
+              <button
+                onClick={() => sendDataWhatsappAsMessage()}
+                type='button'
+                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+              >
+                <img src='/whatsapp.png' className='img-thumbnail' />
+              </button>
+            </>
+          )}
           {(auth.role === 'Admin' || auth.role === 'SuperAdmin') && (
             <>
               <button

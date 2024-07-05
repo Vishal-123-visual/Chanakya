@@ -179,6 +179,7 @@ export const getUserByTokn = asyncHandler(async (req, res, next) => {
       email_verified_at: user.createdAt,
       created_at: user.createdAt,
       updated_at: user.createdAt,
+      role: user.role,
       api_token: user.api_token,
     });
   } catch (error) {

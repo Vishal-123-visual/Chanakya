@@ -17,6 +17,7 @@ const BASE_URL_Image = `${BASE_URL}/api/images`
 const Navbar = () => {
   const {config} = useLayout()
   const {currentUser} = useAuth()
+  //console.log(currentUser?.role)
   const studentCTX = useAdmissionContext()
 
   // Fetch current student data based on currentUser's email

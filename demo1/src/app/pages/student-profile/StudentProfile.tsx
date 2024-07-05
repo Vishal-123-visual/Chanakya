@@ -19,6 +19,7 @@ import StudentCourseFee from './StudentCourseFee'
 import {useCompanyContext} from '../compay/CompanyContext'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
 import StudentCommissionLists from '../student-commission/StudentCommissionLists'
+import {useAuth} from '../../modules/auth'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -51,6 +52,8 @@ const addmissionFormSchema = Yup.object().shape({
 const StudentProfile: React.FC = () => {
   const [preview, setPreview] = useState('')
   const [image, setImage] = useState<File | null>(null)
+  const {currentUser} = useAuth()
+  // console.log(currentUser)
 
   const location = useLocation()
   const courseCtx = useCourseContext()
@@ -64,7 +67,7 @@ const StudentProfile: React.FC = () => {
   }
 
   const [updateUserId, setUpdateUserId] = useState<any>(location?.state)
-  console.log(updateUserId)
+  //console.log(updateUserId)
 
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(updateUserId?.companyName)
   // console.log(singleComapnyData)
@@ -245,18 +248,20 @@ const StudentProfile: React.FC = () => {
                     >
                       Hire Me
                     </a> */}
-                    <div className='me-0'>
-                      <button
-                        onClick={navigateCourseSubjectsHandler}
-                        className='btn  btn-bg-light btn-active-color-primary'
-                        data-kt-menu-trigger='click'
-                        data-kt-menu-placement='bottom-end'
-                        data-kt-menu-flip='top-end'
-                      >
-                        Course Subjects
-                      </button>
-                      <Dropdown1 />
-                    </div>
+                    {currentUser?.role !== 'Student' && (
+                      <div className='me-0'>
+                        <button
+                          onClick={navigateCourseSubjectsHandler}
+                          className='btn  btn-bg-light btn-active-color-primary'
+                          data-kt-menu-trigger='click'
+                          data-kt-menu-placement='bottom-end'
+                          data-kt-menu-flip='top-end'
+                        >
+                          Course Subjects
+                        </button>
+                        <Dropdown1 />
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -945,7 +950,7 @@ const StudentProfile: React.FC = () => {
         </div>
       </div>
       <StudentCourseFee className={''} studentInfoData={updateUserId} />
-      <StudentCommissionLists studentInfoData={updateUserId} />
+      {currentUser?.role !== 'Student' && <StudentCommissionLists studentInfoData={updateUserId} />}
     </>
   )
 }
