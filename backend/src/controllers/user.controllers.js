@@ -231,7 +231,18 @@ export const getAllUsersController = asyncHandler(async (req, res, next) => {
       : {};
 
     // Use the skip and limit values in your MongoDB query to implement pagination
-    const users = await userModel.find(searchQuery).skip(skip).limit(limit);
+    let users = await userModel.find(searchQuery).skip(skip).limit(limit);
+
+    users = users.map((user) => {
+      return {
+        id: user._id,
+        fName: user?.fName,
+        lName: user?.lName,
+        email: user?.email,
+        role: user?.role,
+        phone: user?.phone,
+      };
+    });
 
     // Get the total count of users matching the search query
     const totalUsersCount = await userModel.countDocuments(searchQuery);
@@ -373,7 +384,7 @@ export const deleteUserController = asyncHandler(async (req, res, next) => {
 
 // get user by id controller
 export const getUserByIdController = asyncHandler(async (req, res, next) => {
-  // console.log(req.params.id);
+  //console.log(req.params.id);
   try {
     let user = await userModel.findById(req.params.id);
     if (!user) {
