@@ -274,6 +274,7 @@ export const addStudentComissionController = asyncHandler(
       commissionAmount,
       commissionDate,
       commissionNaretion,
+      companyId,
     } = req.body;
     try {
       switch (true) {
@@ -306,9 +307,11 @@ export const addStudentComissionController = asyncHandler(
         ...req.body,
       });
 
-      const existingDataModel = await DayBookDataModel.find({}).sort({
-        createdAt: -1,
-      });
+      const existingDataModel = await DayBookDataModel.find({ companyId }).sort(
+        {
+          createdAt: -1,
+        }
+      );
       //console.log("day book data model", existingDataModel);
 
       if ((existingDataModel[0]?.balance || 0) < Number(commissionAmount)) {
@@ -324,6 +327,7 @@ export const addStudentComissionController = asyncHandler(
         StudentName: studentName.split("-")[0],
         dayBookDatadate: commissionDate,
         debit: +commissionAmount,
+        companyId,
         naretion: commissionNaretion,
         balance:
           (existingDataModel[0]?.balance || 0) - Number(commissionAmount),

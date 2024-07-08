@@ -21,11 +21,11 @@ const StudentCommission = () => {
   const params = useParams()
   const location = useLocation()
   //console.log(location.state.name)
-  // console.log(params)
+  //console.log(params)
   const studentCTX = useCompanyContext()
   const {data} = studentCTX.useGetStudentsAccordingToCompanyQuery(params.companyId)
   const companyData = studentCTX.useGetSingleCompanyData(params.companyId)
-  console.log(companyData?.data?.companyName)
+  //console.log(companyData?.data?.companyName)
 
   // console.log(data)
 
@@ -37,6 +37,7 @@ const StudentCommission = () => {
     commissionAmount: '',
     commissionDate: '',
     commissionNaretion: '',
+    companyId: params.companyId,
   }
 
   const formik = useFormik({
