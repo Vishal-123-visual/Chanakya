@@ -5,6 +5,7 @@ import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Co
 import {toast} from 'react-toastify'
 
 const AddDayBookData = ({totalBalance, companyId}) => {
+  //console.log(totalBalance)
   const [formData, setFormData] = useState({
     dayBookDatadate: new Date(),
     accountName: '',
@@ -15,69 +16,72 @@ const AddDayBookData = ({totalBalance, companyId}) => {
     accountType: '',
     companyId,
   })
-  //console.log(formData)
 
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
-    setFormData({...formData, dayBookDatadate: date})
+    setFormData((prevState) => ({...prevState, dayBookDatadate: date}))
   }
 
   const handleAccountNameChange = (event) => {
-    const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data.find(
-      (item) => item.accountName === event.target.value
-    )
-    setFormData({
-      ...formData,
+    const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data
+      ?.filter((cp) => cp.companyId === companyId)
+      ?.find((item) => item.accountName === event.target.value)
+    setFormData((prevState) => ({
+      ...prevState,
       accountName: event.target.value,
       accountType: selectedAccount ? selectedAccount.accountType : '',
       dayBookAccountId: selectedAccount ? selectedAccount._id : '',
-    })
+    }))
   }
 
   const handleInputChange = (event) => {
     const {name, value} = event.target
-    setFormData({
-      ...formData,
+    setFormData((prevState) => ({
+      ...prevState,
       [name]: value,
-    })
+    }))
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    if (formData.accountName === '') {
+    const {accountName, naretion, debit, credit} = formData
+
+    if (!accountName) {
       toast.error('Please select account name', {bodyStyle: {fontSize: '18px'}})
       return
-    } else if (formData.naretion === '') {
-      toast.error('Please enter naretion', {bodyStyle: {fontSize: '18px'}})
+    }
+
+    if (!naretion) {
+      toast.error('Please enter narration', {bodyStyle: {fontSize: '18px'}})
       return
-    } else if (formData.credit === 0 && formData.debit === 0) {
+    }
+
+    if (credit === 0 && debit === 0) {
       toast.error('Please enter either credit or debit', {bodyStyle: {fontSize: '18px'}})
       return
-    } else if (totalBalance < Number(formData.debit)) {
-      toast.error(`Your total balance is less than the debit amount ${formData.debit}`, {
+    }
+
+    if (totalBalance < Number(debit)) {
+      toast.error(`Your total balance is less than the debit amount ${debit}`, {
         bodyStyle: {fontSize: '18px'},
       })
       return
     }
 
     try {
-      const {error} = dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
-      if (error.message) {
-        toast.error(error.message, {bodyStyle: {fontSize: '18px'}})
-        return
-      } else {
-        toast.success('Day Account Data added successfully!', {bodyStyle: {fontSize: '18px'}})
-        setFormData({
-          dayBookDatadate: new Date(),
-          accountName: '',
-          naretion: '',
-          debit: 0,
-          credit: 0,
-          dayBookAccountId: '',
-          accountType: '',
-        })
-      }
+      dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
+
+      toast.success('Day Account Data added successfully!', {bodyStyle: {fontSize: '18px'}})
+      setFormData({
+        dayBookDatadate: new Date(),
+        accountName: '',
+        naretion: '',
+        debit: 0,
+        credit: 0,
+        dayBookAccountId: '',
+        accountType: '',
+      })
     } catch (error) {
       console.error(error)
     }
@@ -87,7 +91,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
     <tr>
       <td>
         <div className='form-check form-check-sm form-check-custom form-check-solid'>
-          {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
+          {/* <input className="form-check-input widget-9-check" type="checkbox" value="1" /> */}
         </div>
       </td>
       <td></td>
@@ -111,11 +115,13 @@ const AddDayBookData = ({totalBalance, companyId}) => {
           placeholder='Search account'
         />
         <datalist id='accountNameOptions'>
-          {dayBookAccountCtx.getDayBookAccountsLists.data.map((item) => (
-            <option key={item._id} value={item.accountName}>
-              {item.accountName}
-            </option>
-          ))}
+          {dayBookAccountCtx.getDayBookAccountsLists.data
+            ?.filter((cp) => cp.companyId === companyId)
+            .map((item) => (
+              <option key={item._id} value={item.accountName}>
+                {item.accountName}
+              </option>
+            ))}
         </datalist>
       </td>
       <td>
@@ -123,7 +129,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
           type='text'
           className='form-control'
           name='naretion'
-          placeholder='Enter naretion'
+          placeholder='Enter narration'
           value={formData.naretion}
           onChange={handleInputChange}
         />

@@ -17,7 +17,6 @@ const ViewDayBook = () => {
 
   const companyCTX = useCompanyContext()
   const result = companyCTX.useGetSingleCompanyData(params.id)
-  console.log(params.id)
 
   const dayBookDataCtx = usePaymentOptionContextContext()
 
@@ -25,9 +24,7 @@ const ViewDayBook = () => {
 
   const filteredData =
     dayBookDataCtx.getDayBookDataQuery?.data
-      ?.filter(
-        (item) => item?.studentInfo?.companyName === params.id || item?.companyName === params.id
-      )
+      ?.filter((item) => item?.companyId === params.id)
       ?.filter((item) => {
         const createdAt = moment(item.dayBookDatadate)
         const startDate = moment(fromDate).startOf('day')
@@ -36,6 +33,7 @@ const ViewDayBook = () => {
       }) || []
 
   //console.table(filteredData)
+  //console.log(filteredData[0]?.balance)
 
   const navigateHandler = (accountId, accountName) => {
     if (accountName) {
