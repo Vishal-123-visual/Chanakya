@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {toast} from 'react-toastify'
 
-const AddDayBookData = ({totalBalance}) => {
+const AddDayBookData = ({totalBalance, companyId}) => {
   const [formData, setFormData] = useState({
     dayBookDatadate: new Date(),
     accountName: '',
@@ -13,7 +13,9 @@ const AddDayBookData = ({totalBalance}) => {
     credit: 0,
     dayBookAccountId: '',
     accountType: '',
+    companyId,
   })
+  //console.log(formData)
 
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
@@ -60,17 +62,22 @@ const AddDayBookData = ({totalBalance}) => {
     }
 
     try {
-      dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
-      toast.success('Day Account Data added successfully!', {bodyStyle: {fontSize: '18px'}})
-      setFormData({
-        dayBookDatadate: new Date(),
-        accountName: '',
-        naretion: '',
-        debit: 0,
-        credit: 0,
-        dayBookAccountId: '',
-        accountType: '',
-      })
+      const {error} = dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
+      if (error.message) {
+        toast.error(error.message, {bodyStyle: {fontSize: '18px'}})
+        return
+      } else {
+        toast.success('Day Account Data added successfully!', {bodyStyle: {fontSize: '18px'}})
+        setFormData({
+          dayBookDatadate: new Date(),
+          accountName: '',
+          naretion: '',
+          debit: 0,
+          credit: 0,
+          dayBookAccountId: '',
+          accountType: '',
+        })
+      }
     } catch (error) {
       console.error(error)
     }

@@ -126,6 +126,17 @@ export const PaymentOptionContextProvider = ({children}) => {
     },
   })
 
+  const useGetSingleDayBookAccount = (id) => {
+    return useQuery({
+      queryKey: ['getDayBookAccountsLists', id],
+      queryFn: async () => {
+        return axios
+          .get(`${BASE_URL}/api/dayBook/singleAccountAccount/${id}`)
+          .then((res) => res.data)
+      },
+    })
+  }
+
   const deleteDayBooksAccountMutation = useMutation({
     mutationFn: async (id) => {
       if (!window.confirm('Are you sure you want to delete')) {
@@ -226,6 +237,7 @@ export const PaymentOptionContextProvider = ({children}) => {
         getDayBookAccountsLists,
         deleteDayBooksAccountMutation,
         updateDayBookAccountsMutation,
+        useGetSingleDayBookAccount,
         // ----------- Day Book Account ----------------
         // ----------- Day Book DATA ----------------
         createDayBookDataMutation,

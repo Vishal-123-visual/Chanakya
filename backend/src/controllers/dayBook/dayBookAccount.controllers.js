@@ -5,7 +5,7 @@ import DayBookDataModel from "../../models/day-book/DayBookData.models.js";
 
 export const addDayBookAccountController = asyncHandler(
   async (req, res, next) => {
-    const { accountName, accountType } = req.body;
+    const { accountName, accountType, companyId } = req.body;
     try {
       switch (true) {
         case !accountName:
@@ -27,6 +27,7 @@ export const addDayBookAccountController = asyncHandler(
       const newDayBookAccount = new DayBookAccountModel({
         accountName,
         accountType,
+        companyId,
       });
       await newDayBookAccount.save();
       res.status(201).json(newDayBookAccount);
@@ -47,6 +48,20 @@ export const getDayBookAccountsListsController = asyncHandler(
       res
         .status(500)
         .json({ error: "Error while getting day book accounts lists" });
+    }
+  }
+);
+export const getSingleDayBookAccountController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const daybookAccounts = await DayBookAccountModel.findById(
+        req.params.id
+      ).populate("companyId");
+      res.status(200).json(daybookAccounts);
+    } catch (error) {
+      res.status(500).json({
+        error: "Error while getting single day book accounts account",
+      });
     }
   }
 );
@@ -97,13 +112,20 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     debit,
     credit,
     naretion,
+    companyId,
   } = req.body;
 
   console.log(req.body);
   try {
-    const existingDataModel = await DayBookDataModel.find({}).sort({
+    const existingDataModel = await DayBookDataModel.find({ companyId }).sort({
       createdAt: -1,
     });
+    if (existingDataModel.length === 0) {
+      return res.status(400).json({
+        error:
+          "Day Book Account Balance is not sufficient for this transaction",
+      });
+    }
     const newDayBookData = new DayBookDataModel({
       ...req.body,
       balance:

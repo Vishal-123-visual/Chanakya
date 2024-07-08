@@ -7,13 +7,17 @@ import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {Link, useNavigate, useParams} from 'react-router-dom'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(moment().subtract(6, 'days').toDate())
   const [toDate, setToDate] = useState(new Date())
   const navigate = useNavigate()
-
   const params = useParams()
+
+  const companyCTX = useCompanyContext()
+  const result = companyCTX.useGetSingleCompanyData(params.id)
+  console.log(params.id)
 
   const dayBookDataCtx = usePaymentOptionContextContext()
 
@@ -44,7 +48,7 @@ const ViewDayBook = () => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Day Book</span>
+          <span className='card-label fw-bold fs-3 mb-1'>{result?.data?.companyName} Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
         </h3>
         <div className='d-flex gap-5'>
@@ -106,7 +110,7 @@ const ViewDayBook = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <AddDayBookData totalBalance={filteredData[0]?.balance} />
+              <AddDayBookData totalBalance={filteredData[0]?.balance} companyId={params.id} />
 
               {/* <tr className=''>
                 <td className='bg-secondary text-center p-4' colspan='9'>

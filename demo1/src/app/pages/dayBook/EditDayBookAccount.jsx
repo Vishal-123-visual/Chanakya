@@ -23,15 +23,18 @@ const EditDayBookAccount = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
   // console.log(dayBookAccountCtx.updateDayBookAccountsMutation)
 
+  const result = dayBookAccountCtx.useGetSingleDayBookAccount(location?.state?._id)
+  //console.log(result?.data?.companyId?.companyName)
+
   const formik = useFormik({
     initialValues,
     validationSchema: addAccountSchema,
     onSubmit: async (values) => {
-      console.log(values)
+      //console.log(values)
       dayBookAccountCtx.updateDayBookAccountsMutation.mutate({_id: location.state._id, ...values})
       formik.setFieldValue('accountName', '')
       formik.setFieldValue('accountType', '--select--')
-      navigate('/daybook/viewAccount')
+      navigate(`/daybook/viewAccount/${location?.state?.companyId}`)
       toast(`Day book Account Updated successfully`, {
         type: 'success',
         bodyStyle: {
@@ -52,7 +55,12 @@ const EditDayBookAccount = () => {
           aria-controls='kt_account_profile_details'
         >
           <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0'>Edit Account In DayBook</h3>
+            <h3 className='card-title align-items-start flex-column'>
+              <span className='card-label fw-bold fs-3 mb-1'>
+                {result?.data?.companyId?.companyName}
+              </span>
+              <span className='text-muted mt-1 fw-semibold fs-7'>Edit Account In DayBook</span>
+            </h3>
           </div>
         </div>
 

@@ -58,7 +58,9 @@ export const createCourseFeesController = asyncHandler(
         return res.status(404).json({ message: "Student not found" });
       }
       //console.log("from student create fees", student);
-      const existingDataModel = await DayBookDataModel.find({}).sort({
+      const existingDataModel = await DayBookDataModel.find({
+        companyId: student?.companyName._id,
+      }).sort({
         createdAt: -1,
       });
       //console.log("day book data model", existingDataModel);
@@ -68,6 +70,7 @@ export const createCourseFeesController = asyncHandler(
         rollNo: student.rollNumber,
         StudentName: student.name,
         studentLateFees: +lateFees,
+        companyId: student?.companyName?._id,
         dayBookDatadate: amountDate,
         credit: +amountPaid,
         balance:

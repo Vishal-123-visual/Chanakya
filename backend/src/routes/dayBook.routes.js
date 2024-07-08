@@ -5,6 +5,7 @@ import {
   getDayBookAccountsListsController,
   deleteDayBookAccountsListDataController,
   updateDayBookAccountController,
+  getSingleDayBookAccountController,
   //  day book data controller start here
   addDayBookDataController,
   getDayBookDataController,
@@ -12,6 +13,7 @@ import {
 } from "../controllers/dayBook/dayBookAccount.controllers.js";
 
 const router = Router();
+router.get("/singleAccountAccount/:id", getSingleDayBookAccountController);
 
 router.get("/", requireSignIn, getDayBookAccountsListsController);
 router.delete(
@@ -21,6 +23,7 @@ router.delete(
   deleteDayBookAccountsListDataController
 );
 router.put("/:id", requireSignIn, isAdmin, updateDayBookAccountController);
+
 router.post("/addAccount", requireSignIn, isAdmin, addDayBookAccountController);
 
 // day Book Data Start here ................................

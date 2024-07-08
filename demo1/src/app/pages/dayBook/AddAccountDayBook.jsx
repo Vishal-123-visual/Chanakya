@@ -4,6 +4,7 @@ import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {toast} from 'react-toastify'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const addAccountSchema = Yup.object().shape({
   accountName: Yup.string().required('Account Name is required'),
@@ -12,12 +13,17 @@ const addAccountSchema = Yup.object().shape({
 
 const AddAccountDayBook = () => {
   const navigate = useNavigate()
-
+  const params = useParams()
   let initialValues = {
     accountName: '',
     accountType: '',
+    companyId: params.id,
   }
-  const params = useParams()
+
+  const companyCTX = useCompanyContext()
+  const result = companyCTX.useGetSingleCompanyData(params.id)
+  //console.log(result)
+  //console.log(initialValues)
 
   const dayBookAccountCtx = usePaymentOptionContextContext()
   // console.log(dayBookAccountCtx.createDayBookAccountMutation)
@@ -50,7 +56,8 @@ const AddAccountDayBook = () => {
           aria-controls='kt_account_profile_details'
         >
           <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0'>Add Account In DayBook</h3>
+            <h3 className='fw-bolder m-0'>{result?.data?.companyName} Add Account In DayBook</h3>
+            <span className='fw-bolder m-0'></span>
           </div>
         </div>
 

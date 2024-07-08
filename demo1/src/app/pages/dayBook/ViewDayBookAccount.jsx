@@ -1,12 +1,18 @@
 import {useNavigate, useParams} from 'react-router-dom'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const ViewDayBookAccount = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
 
   const params = useParams()
+  //console.log(params.id)
+
+  const companyCTX = useCompanyContext()
+  const result = companyCTX.useGetSingleCompanyData(params.id)
+  //console.log(dayBookAccountCtx.getDayBookAccountsLists.data[0].companyId === params.id)
 
   const navigateHandler = (accountId) => {
     navigate('/daybook/singleAccount/' + accountId)
@@ -17,7 +23,9 @@ const ViewDayBookAccount = () => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>DayBook Accounts</span>
+          <span className='card-label fw-bold fs-3 mb-1'>
+            {result?.data?.companyName} DayBook Accounts
+          </span>
         </h3>
         <div
           className='card-toolbar'
@@ -71,8 +79,9 @@ const ViewDayBookAccount = () => {
                 </tr>
               ) : (
                 <>
-                  {dayBookAccountCtx.getDayBookAccountsLists.data?.map(
-                    (dayBookAccountData, index) => (
+                  {dayBookAccountCtx.getDayBookAccountsLists.data
+                    ?.filter((cp) => cp?.companyId === params?.id)
+                    .map((dayBookAccountData, index) => (
                       <tr key={index}>
                         <td>
                           <div className='form-check form-check-sm form-check-custom form-check-solid'>
@@ -126,8 +135,7 @@ const ViewDayBookAccount = () => {
                           </div>
                         </td>
                       </tr>
-                    )
-                  )}
+                    ))}
                 </>
               )}
             </tbody>
