@@ -10,10 +10,13 @@ import {useNavigate} from 'react-router-dom'
 import ReadOnlyCourseFee from './ReadOnlyCourseFee'
 import EditOnlyCourseFee from './EditOnlyCourseFee'
 import {toast} from 'react-toastify'
+import {useCompanyContext} from '../compay/CompanyContext'
 const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentInfoData)
   const navigate = useNavigate()
   const {currentUser} = useAuth()
+  const companyCtx = useCompanyContext()
+  console.log(companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus)
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
   const [studentCourseFeeEditId, setStudentCourseFeesEditId] = useState(null)
@@ -110,7 +113,9 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         paymentOption: '',
         lateFees: 0,
       })
-      window.open(url)
+      if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
+        window.open(url)
+      }
       navigate(`/students/${studentInfoData?.companyName}`)
       window.location.reload()
     } catch (error) {
