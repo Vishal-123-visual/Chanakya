@@ -89,18 +89,12 @@ const StudentProfile: React.FC = () => {
       let numberOfInstallmentAmount: number =
         Number(formik.values.netCourseFees) / Number(updateUserId.no_of_installments)
       // Check if numberOfInstallmentAmount is NaN, and set it to 0 if NaN
-      if (isNaN(numberOfInstallmentAmount)) {
-        numberOfInstallmentAmount = 0
-      }
       //console.log(numberOfInstallmentAmount)
       formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount.toFixed(2))
     } else {
       let numberOfInstallmentAmount: number =
         Number(formik.values?.remainingCourseFees) / Number(updateUserId?.no_of_installments)
       // Check if numberOfInstallmentAmount is NaN, and set it to 0 if NaN
-      if (isNaN(numberOfInstallmentAmount)) {
-        numberOfInstallmentAmount = 0
-      }
       //console.log(numberOfInstallmentAmount)
       formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount?.toFixed(2))
     }
