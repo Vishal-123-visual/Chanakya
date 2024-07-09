@@ -8,7 +8,7 @@ import { JWT_SECRET } from "../config/config.js";
 // add user controller
 export const addUsersControllers = asyncHandler(async (req, res, next) => {
   // console.log(req.headers);
-  //console.log(req.body);
+  console.log(req.body);
   try {
     const { fName, lName, email, password, phone, role } = req.body;
 
