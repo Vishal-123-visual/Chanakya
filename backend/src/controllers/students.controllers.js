@@ -125,7 +125,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     //   commision_voucher_number || student.commision_voucher_number;
     student.course_fees = course_fees || student.course_fees;
     student.discount = discount || student.discount;
-    student.netCourseFees = netCourseFees || student.netCourseFees;
+    //student.netCourseFees = netCourseFees || student.netCourseFees;
     student.remainingCourseFees =
       remainingCourseFees || student.remainingCourseFees;
     student.down_payment = down_payment || student.down_payment;

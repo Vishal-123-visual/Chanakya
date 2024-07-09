@@ -81,6 +81,12 @@ const AddMissionForm: React.FC = () => {
   //   }
   // }
 
+  useEffect(() => {
+    if (updateUserId) {
+      formik.setFieldValue('netCourseFees', formik?.values?.remainingCourseFees)
+    }
+  }, [])
+
   const studentStatusHandler = (e) => {
     if (e.target.value === 'NOGST') {
       formik.setFieldValue('netCourseFees', formik.values.course_fees)
