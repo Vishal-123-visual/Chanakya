@@ -33,9 +33,11 @@ export const getAllStudentsController = asyncHandler(async (req, res, next) => {
           await bcryptjs.genSalt(10)
         );
 
+        let splitedName = student?.name.split(" ");
+
         existedStudent = new userModel({
-          fName: student.name.split(" ")[0],
-          lName: student.name.split(" ")[1],
+          fName: splitedName[0],
+          lName: splitedName[1],
           email: student.email,
           password: hashPassword,
           phone: student.mobile_number,
