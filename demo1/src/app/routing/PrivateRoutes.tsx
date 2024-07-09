@@ -11,6 +11,9 @@ import {useAuth} from '../modules/auth'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
 
 const PrivateRoutes = () => {
+  const WhatsappMessageSuggestion = lazy(
+    () => import('../pages/email-template/WhatsappMessageSuggestion')
+  )
   const PendingFeesStudents = lazy(
     () => import('../pages/student-with-feesClear-and-remaining/PendingFeesStudents')
   )
@@ -313,6 +316,7 @@ const PrivateRoutes = () => {
                 <SuspensedView>
                   <div className='d-flex flex-column gap-10'>
                     <SendEmailSuggestion />
+                    <WhatsappMessageSuggestion />
                     <GstSuggesstion />
                     <AddPaymentOption />
                     <EmailTemplate />
