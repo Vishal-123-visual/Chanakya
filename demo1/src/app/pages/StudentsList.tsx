@@ -77,9 +77,9 @@ const StudentsList: React.FC<Props> = ({className}) => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {ctx.studentsLists.data.users
-                .filter((c: any) => params.id === c.companyName)
-                .map((student: any) => (
+              {ctx.studentsLists?.data?.users
+                ?.filter((c: any) => params?.id === c?.companyName)
+                ?.map((student: any) => (
                   <tr key={student._id}>
                     <td>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'>
@@ -93,35 +93,35 @@ const StudentsList: React.FC<Props> = ({className}) => {
                         </div>
                         <div className='d-flex justify-content-start flex-column'>
                           <div
-                            onClick={() => navigate(`/student/${student._id}`, {state: student})}
+                            onClick={() => navigate(`/student/${student?._id}`, {state: student})}
                             style={{cursor: 'pointer'}}
                             className='text-dark fw-bold text-hover-primary fs-6'
                           >
-                            {student.name}
+                            {student?.name}
                           </div>
                           <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                            {student.select_course}
+                            {student?.select_course}
                           </span>
                         </div>
                       </div>
                     </td>
                     <td>
                       <div
-                        onClick={() => navigate(`/student/${student._id}`, {state: student})}
+                        onClick={() => navigate(`/student/${student?._id}`, {state: student})}
                         style={{cursor: 'pointer'}}
                         className='text-dark fw-bold text-hover-primary d-block fs-6'
                       >
-                        +91 {student.mobile_number}
+                        +91 {student?.mobile_number}
                       </div>
                       <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                        {student.email}
+                        {student?.email}
                       </span>
                     </td>
                     <td className='text-end'>
                       <div className='d-flex flex-column w-100 me-2'>
                         <div
                           onClick={() =>
-                            navigate(`/student/${student._id}`, {
+                            navigate(`/student/${student?._id}`, {
                               state: student,
                             })
                           }
@@ -129,7 +129,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
                           className='d-flex flex-stack mb-2'
                         >
                           <span className='text-muted me-2 fs-7 fw-semibold'>
-                            {moment(student.date_of_joining).format('DD-MM-YYYY')}
+                            {moment(student?.date_of_joining).format('DD-MM-YYYY')}
                           </span>
                         </div>
                       </div>
@@ -138,14 +138,14 @@ const StudentsList: React.FC<Props> = ({className}) => {
                       <div className='d-flex justify-content-end flex-shrink-0'>
                         <button
                           onClick={() =>
-                            navigate(`/addmission-form/${student._id}`, {state: student})
+                            navigate(`/addmission-form/${student?._id}`, {state: student})
                           }
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                         >
                           <KTIcon iconName='pencil' className='fs-3' />
                         </button>
                         <button
-                          onClick={() => ctx.deleteStudentMutation.mutateAsync(student._id)}
+                          onClick={() => ctx.deleteStudentMutation.mutateAsync(student?._id)}
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                         >
                           <KTIcon iconName='trash' className='fs-3' />
@@ -158,7 +158,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
                 <td></td>
                 <td></td>
                 <td>
-                  {ctx.studentsLists.data.users.length === 0 && (
+                  {ctx?.studentsLists?.data?.users?.length === 0 && (
                     <h4 className='text-center'>
                       No Student Available ? <b>Create Student</b>
                     </h4>

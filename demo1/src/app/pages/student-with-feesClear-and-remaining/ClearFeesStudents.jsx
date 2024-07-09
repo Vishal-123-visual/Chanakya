@@ -19,7 +19,7 @@ const ClearFeesStudents = () => {
   //console.log(data)
 
   const filteredStudents = studentsCTX?.studentsLists?.data?.users?.filter(
-    (student) => student.companyName === data?._id && student?.no_of_installments === 0
+    (student) => student?.companyName === data?._id && student?.no_of_installments === 0
   )
 
   //console.log(filteredStudents)
@@ -80,7 +80,7 @@ const ClearFeesStudents = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {filteredStudents.length === 0 ? (
+              {filteredStudents?.length === 0 ? (
                 <tr>
                   <td className='text-center' colSpan={5}>
                     <h4>No Clear Fees Students Available</h4>
@@ -125,7 +125,7 @@ const ClearFeesStudents = () => {
                         }
                       >
                         <div className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                          +91 {studentData.mobile_number}
+                          +91 {studentData?.mobile_number}
                         </div>
                         <span className=' fw-semibold  d-block fs-7'>
                           Remaining Fees :{' '}
