@@ -138,7 +138,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
                       <div className='d-flex justify-content-end flex-shrink-0'>
                         <button
                           onClick={() =>
-                            navigate(`/addmission-form/${student?._id}`, {state: student})
+                            navigate(`/update-addmission-form/${student?._id}`, {state: student})
                           }
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                         >

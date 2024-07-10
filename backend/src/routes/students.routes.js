@@ -9,6 +9,8 @@ import {
   getStudentsAccordingToCompanyController,
   addStudentComissionController,
   getStudentCommissionListsController,
+  createAlertStudentPendingFeesController,
+  getAlertStudentPendingFeesController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 
@@ -23,6 +25,19 @@ router.post(
 );
 router.get("/commission/:data", getStudentCommissionListsController);
 // Student Commission End here ---------------------------------------
+
+router.post(
+  "/createAlertStudentPendingFees/add",
+  requireSignIn,
+  isAdmin,
+  createAlertStudentPendingFeesController
+);
+router.get(
+  "/createAlertStudentPendingFees/get",
+  requireSignIn,
+  isAdmin,
+  getAlertStudentPendingFeesController
+);
 
 // get the student According to company wise
 router.get("/company/:companyId", getStudentsAccordingToCompanyController);

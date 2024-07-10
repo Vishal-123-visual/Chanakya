@@ -135,6 +135,75 @@ export const AdmissionContextProvider = ({children}) => {
     },
   })
 
+  /********************** Student Fees Alert Start   *******************/
+  const createAlertStudentPendingFeesMutation = useMutation({
+    mutationFn: async (newAlertPendingFees) => {
+      //console.log(newAlertPendingFees)
+      try {
+        return axios
+          .post(
+            `${BASE_URL}/api/students/createAlertStudentPendingFees/add`,
+            newAlertPendingFees,
+            config
+          )
+          .then((res) => res.data)
+      } catch (error) {
+        return
+      }
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      // console.log('error')
+    },
+
+    onSuccess: () => {
+      //console.log('success')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getStudentsAlertPendingFessDetails']})
+      }
+    },
+  })
+
+  // const getAlertStudentPendingFeesQuery = useQuery({
+  //   queryKey: ['getStudentsAlertPendingFessDetails'],
+  //   queryFn: async () => {
+  //     try {
+  //       const response = await axios.get(
+  //         `${BASE_URL}/api/students/createAlertStudentPendingFees/get`,
+  //         config
+  //       )
+  //       return response.data
+  //     } catch (error) {
+  //       throw new Error('Error fetching student fees alert data: ' + error.message)
+  //     }
+  //   },
+  // })
+
+  const getAlertStudentPendingFeesQuery = useQuery({
+    queryKey: ['getStudentsAlertPendingFessDetails'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/api/students/createAlertStudentPendingFees/get`,
+          config
+        )
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+  /********************** Student Fees Alert End  *******************/
+
   return (
     <AdmissionContext.Provider
       value={{
@@ -146,6 +215,10 @@ export const AdmissionContextProvider = ({children}) => {
         updateStudentMutation,
         setStudentId,
         useGetSingleStudentUsingWithEmail,
+        /********************** Student Fees Alert Start   *******************/
+        createAlertStudentPendingFeesMutation,
+        getAlertStudentPendingFeesQuery,
+        /********************** Student Fees Alert End  *******************/
       }}
     >
       {children}

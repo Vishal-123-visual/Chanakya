@@ -9,8 +9,13 @@ import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 import {useAuth} from '../modules/auth'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
+import StudentProfile from '../pages/student-profile/StudentProfile'
+import UpdateAddmission from '../pages/UpdateAddmission'
 
 const PrivateRoutes = () => {
+  const AlertPendingFeesNewStudents = lazy(
+    () => import('../pages/Alert_Pending_NewStudents/AlertPendingNewStudents')
+  )
   const WhatsappMessageSuggestion = lazy(
     () => import('../pages/email-template/WhatsappMessageSuggestion')
   )
@@ -41,7 +46,7 @@ const PrivateRoutes = () => {
   const AddMissionForm = lazy(() => import('../pages/AddMissionForm'))
   const MyPage = lazy(() => import('../pages/MyPage'))
   const StudentsList = lazy(() => import('../pages/StudentsList'))
-  const StudentProfile = lazy(() => import('../pages/student-profile/StudentProfile'))
+  // const StudentProfile = lazy(() => import('../pages/student-profile/StudentProfile'))
   const CourseTypes = lazy(() => import('../pages/course/course-type'))
   const CourseCategory = lazy(() => import('../pages/course/category'))
   const NumberOfYearsCourse = lazy(() => import('../pages/course/Number Of Years'))
@@ -242,6 +247,14 @@ const PrivateRoutes = () => {
               }
             />
             <Route
+              path='/update-addmission-form/:id'
+              element={
+                <SuspensedView>
+                  <UpdateAddmission />
+                </SuspensedView>
+              }
+            />
+            <Route
               path='/students/:id'
               element={
                 <SuspensedView>
@@ -265,14 +278,7 @@ const PrivateRoutes = () => {
                 </SuspensedView>
               }
             />
-            <Route
-              path='/student/:id'
-              element={
-                <SuspensedView>
-                  <StudentProfile />
-                </SuspensedView>
-              }
-            />
+            <Route path='/student/:id' element={<StudentProfile />} />
             {/* *************************************** Monthly Collection fees start here.. ******************************************* */}
             <Route
               path='/monthlyCollectionFees/:id'

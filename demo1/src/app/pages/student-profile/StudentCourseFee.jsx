@@ -16,7 +16,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const navigate = useNavigate()
   const {currentUser} = useAuth()
   const companyCtx = useCompanyContext()
-  console.log(companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus)
+  // console.log(companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus)
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
   const [studentCourseFeeEditId, setStudentCourseFeesEditId] = useState(null)

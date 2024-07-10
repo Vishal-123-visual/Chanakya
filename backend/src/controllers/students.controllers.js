@@ -12,6 +12,7 @@ import DayBookDataModel from "../models/day-book/DayBookData.models.js";
 import { userModel } from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 import { generateToken } from "../utils/createToken.js";
+import AlertStudentPendingFeesModel from "../models/alert-student_fees/alertStudentFees.models.js";
 
 const __dirname = path.resolve();
 
@@ -229,9 +230,9 @@ export const getSingleStudentDetailsController = asyncHandler(
   async (req, res, next) => {
     try {
       const student = await admissionFormModel
-        .findOne({ email: req.params.id })
+        .findOne({ $or: [{ _id: req.params.id }, { email: req.params.id }] })
         .populate("courseName");
-      console.log("get the single student", student);
+
       res.status(200).json(student);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
@@ -352,6 +353,42 @@ export const getStudentCommissionListsController = asyncHandler(
         studentName: req.params.data.split("_").join(" "),
       });
       res.status(200).json(studentCommissionLists);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+
+export const createAlertStudentPendingFeesController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const { Date, RemainderDateAndTime, Status, particulars } = req.body;
+      if (!Date || !RemainderDateAndTime || !Status || !particulars) {
+        return res
+          .status(400)
+          .json({ success: false, message: "All fields are required!" });
+      }
+      const alertStudentPendingFees = new AlertStudentPendingFeesModel(
+        req.body
+      );
+
+      await alertStudentPendingFees.save();
+      res.status(200).json({
+        success: true,
+        message: "Alert student pending fees created successfully!",
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+
+export const getAlertStudentPendingFeesController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const getAlertStudentPendingFeesData =
+        await AlertStudentPendingFeesModel.find({});
+      res.status(200).json(getAlertStudentPendingFeesData);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }
