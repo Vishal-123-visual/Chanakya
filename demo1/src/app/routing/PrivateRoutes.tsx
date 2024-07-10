@@ -13,9 +13,7 @@ import StudentProfile from '../pages/student-profile/StudentProfile'
 
 const PrivateRoutes = () => {
   const UpdateAddmission = lazy(() => import('../pages/UpdateAddmission'))
-  const AlertPendingFeesNewStudents = lazy(
-    () => import('../pages/Alert_Pending_NewStudents/AlertPendingNewStudents')
-  )
+
   const WhatsappMessageSuggestion = lazy(
     () => import('../pages/email-template/WhatsappMessageSuggestion')
   )

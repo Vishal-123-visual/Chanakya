@@ -258,7 +258,7 @@ const UpdateAddmission = () => {
               <div className='row mt-5 '>
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>Image</label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Image</label>
                     <div className='col-lg-6 fv-row'>
                       <input
                         type='file'
@@ -273,9 +273,7 @@ const UpdateAddmission = () => {
                 {updateUserId && (
                   <div className='col-6'>
                     <div className='row mb-6'>
-                      <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                        Roll Number{' '}
-                      </label>
+                      <label className='col-lg-4 col-form-label  fw-bold fs-6'>Roll Number </label>
                       <div className='col-lg-6 fv-row'>
                         <input
                           type='number'
@@ -298,7 +296,7 @@ const UpdateAddmission = () => {
                 {/* ================================------Name----================================== */}
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>Name</label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Name</label>
                     <div className='col-lg-6 fv-row'>
                       <input
                         type='text'
@@ -318,9 +316,7 @@ const UpdateAddmission = () => {
                 {/* ================================------Father Name----================================== */}
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Father Name
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Father Name</label>
                     <div className='col-lg-6 fv-row'>
                       <input
                         type='text'
@@ -344,9 +340,7 @@ const UpdateAddmission = () => {
               <div className='row'>
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Mobile Number
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Mobile Number</label>
 
                     <div className='col-lg-8 fv-row'>
                       <input
@@ -366,7 +360,7 @@ const UpdateAddmission = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Parent Number</span>
+                      <span className=''>Parent Number</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -394,7 +388,7 @@ const UpdateAddmission = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Present Address</span>
+                      <span className=''>Present Address</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -422,7 +416,7 @@ const UpdateAddmission = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>City</span>
+                      <span className=''>City</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -443,7 +437,7 @@ const UpdateAddmission = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>Email</span>
+                      <span className=''>Email</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -468,7 +462,7 @@ const UpdateAddmission = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className='required'>DOB</span>
+                      <span className=''>DOB</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
@@ -507,7 +501,7 @@ const UpdateAddmission = () => {
                 </div>
                 <div className='col-6 mt-5'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                       Education Qualification
                     </label>
 
@@ -536,9 +530,7 @@ const UpdateAddmission = () => {
                 </div>
                 <div className='col-6 mt-5'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Company Name
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Company Name</label>
 
                     <div className='col-lg-8 fv-row'>
                       <select
@@ -580,9 +572,7 @@ const UpdateAddmission = () => {
 
                 <div className='col-6 mt-5'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Select Course
-                    </label>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>Select Course</label>
 
                     <div className='col-lg-8 fv-row'>
                       <select
@@ -613,7 +603,7 @@ const UpdateAddmission = () => {
 
                 {/* <div className='col-6 mt-5'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                       Student Status
                     </label>
 
@@ -664,7 +654,7 @@ const UpdateAddmission = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Course Fees</span>
+                        <span className=''>Course Fees</span>
                         {/* <p>(including 14% service Tax)</p> */}
                       </label>
 
@@ -687,7 +677,7 @@ const UpdateAddmission = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Course Fees Discount</span>
+                        <span className=''>Course Fees Discount</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
@@ -718,7 +708,7 @@ const UpdateAddmission = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>Net Course Fees</span>
+                        <span className=''>Net Course Fees</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
@@ -741,7 +731,7 @@ const UpdateAddmission = () => {
                   <div className='col-6'>
                     <div className='row mb-6'>
                       <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                        <span className='required'>D.O.J</span>
+                        <span className=''>D.O.J</span>
                       </label>
 
                       <div className='col-lg-8 fv-row'>
@@ -770,7 +760,7 @@ const UpdateAddmission = () => {
               <div className='row'>
                 <div className='col-6'>
                   <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                       No. of Installments
                     </label>
 
