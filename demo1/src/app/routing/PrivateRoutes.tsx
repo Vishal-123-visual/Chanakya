@@ -10,9 +10,9 @@ import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 import {useAuth} from '../modules/auth'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
 import StudentProfile from '../pages/student-profile/StudentProfile'
-import UpdateAddmission from '../pages/UpdateAddmission'
 
 const PrivateRoutes = () => {
+  const UpdateAddmission = lazy(() => import('../pages/UpdateAddmission'))
   const AlertPendingFeesNewStudents = lazy(
     () => import('../pages/Alert_Pending_NewStudents/AlertPendingNewStudents')
   )

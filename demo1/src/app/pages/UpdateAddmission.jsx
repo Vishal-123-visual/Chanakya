@@ -70,6 +70,15 @@ const UpdateAddmission = () => {
   useEffect(() => {
     if (updateUserId['remainingCourseFees'] !== undefined) {
       formik.setFieldValue('netCourseFees', updateUserId?.remainingCourseFees)
+      formik.setFieldValue(
+        'no_of_installments_amount',
+        updateUserId?.remainingCourseFees / updateUserId?.no_of_installments
+      )
+    } else {
+      formik.setFieldValue(
+        'no_of_installments_amount',
+        updateUserId.netCourseFees / updateUserId?.no_of_installments
+      )
     }
   }, [])
 
@@ -140,9 +149,9 @@ const UpdateAddmission = () => {
   }, [image])
 
   const numberOfInstallmentAmountHandler = (e) => {
-    console.log(e.target.value)
+    //console.log(e.target.value)
     const numberOfInstallmentAmount = Number(formik.values.netCourseFees) / Number(e.target.value)
-    console.log(numberOfInstallmentAmount)
+    //console.log(numberOfInstallmentAmount)
     formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount.toFixed(2))
     formik.setFieldValue('no_of_installments', e.target.value)
   }
