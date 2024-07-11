@@ -97,11 +97,10 @@ const ViewDayBook = () => {
                 <th className='min-w-140px'>Date</th>
                 <th className='min-w-120px'>Roll No</th>
                 <th className='min-w-120px'>Particulars</th>
-                <th className='min-w-120px'>Naretion</th>
-
+                <th className='min-w-120px'>Narration</th>
                 <th className='min-w-120px'>Credit</th>
                 <th className='min-w-120px'>Debit</th>
-                <th className='min-w-120px'>late Fees</th>
+                <th className='min-w-120px'>Late Fees</th>
                 <th className='min-w-100px text-center'>Balance</th>
               </tr>
             </thead>

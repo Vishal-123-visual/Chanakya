@@ -87,7 +87,7 @@ const MonthlyCollectionFee = () => {
                 <th className='min-w-150px'>Roll Number</th>
                 <th className='min-w-140px'>Name</th>
                 <th className='min-w-120px'>Course</th>
-                <th className='min-w-120px'>Time Avaiable</th>
+                <th className='min-w-120px'>Missing Month</th>
 
                 <th className='min-w-100px text-end'>Contact</th>
                 <th className='min-w-100px text-end'>Installments</th>
