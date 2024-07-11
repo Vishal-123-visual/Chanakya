@@ -750,7 +750,7 @@ export const createCourseFeesController = asyncHandler(
       student.no_of_installments -= 1;
 
       // Calculate and store new installment expiration times
-      let expirationDate = moment();
+      let expirationDate = moment(amountDate);
       // if (student.no_of_installments_expireTimeandAmount) {
       //   // Get the expiration date of the last installment
       //   const lastExpirationDate = moment(
