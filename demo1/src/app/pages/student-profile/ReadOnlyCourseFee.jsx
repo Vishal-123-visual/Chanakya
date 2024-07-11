@@ -12,7 +12,7 @@ const ReadOnlyCourseFee = ({
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
-  //console.log(StudentFee)
+  console.log(StudentFee)
   const {auth, currentUser} = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()
@@ -60,13 +60,7 @@ Visual Media Academy`
       <td>{StudentFee?.netCourseFees}</td>
       <td>{StudentFee?.amountPaid}</td>
       <td>{StudentFee?.remainingFees}</td>
-      <td>
-        {moment(
-          StudentFee?.amountDate.length === 13
-            ? new Date(StudentFee?.amountDate)
-            : new Date(StudentFee?.amountDate)
-        ).format('DD-MM-YYYY')}
-      </td>
+      <td>{moment.utc(StudentFee?.amountDate).format('DD-MM-YYYY')}</td>
       <td>{StudentFee?.reciptNumber}</td>
 
       <td>

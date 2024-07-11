@@ -750,7 +750,8 @@ export const createCourseFeesController = asyncHandler(
       student.no_of_installments -= 1;
 
       // Calculate and store new installment expiration times
-      let expirationDate = moment(amountDate);
+      let expirationDate = moment(amountDate).toDate();
+      //console.log(expirationDate);
       // if (student.no_of_installments_expireTimeandAmount) {
       //   // Get the expiration date of the last installment
       //   const lastExpirationDate = moment(
@@ -761,7 +762,6 @@ export const createCourseFeesController = asyncHandler(
       // } else {
       //   // If there are no previous installments, set the expiration date to be one month from now
       // }
-      expirationDate = moment().add(1, "months");
 
       const nextInstallment = Number(req.body.no_of_installments) - 1;
       const installmentAmount = Math.floor(
@@ -795,10 +795,11 @@ export const createCourseFeesController = asyncHandler(
           studentInfo,
           companyName: student.companyName._id,
           courseName: req.body.courseName,
-          expiration_date: moment().toDate(), // Set to current date
+          expiration_date: expirationDate, // Set to current date
           installment_number: req.body.no_of_installments, // Current installment number
           installment_amount: amountPaid,
         });
+      expirationDate = moment(amountDate).add(1, "months");
 
       // Create the entry for the next installment
       const nextInstallmentExpiration = new PaymentInstallmentTimeExpireModel({
