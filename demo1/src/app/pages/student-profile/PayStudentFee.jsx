@@ -1,31 +1,31 @@
-import {useEffect, Fragment} from 'react'
+import React from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {Link} from 'react-router-dom'
+import {Fragment} from 'react'
 
 const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFeeFormToggle}) => {
   //console.log(payStudentFeesAdd)
   const remainingFeesHandler = (e) => {
-    setPayStudentFeesAdd((prev) => {
-      return {
-        ...prev,
-        amountPaid: Number(e.target.value),
-        remainingFees: (Number(prev.netCourseFees) - Number(e.target.value)).toFixed(2),
-      }
-    })
-
-    //console.log(payStudentFeesAdd)
+    setPayStudentFeesAdd((prev) => ({
+      ...prev,
+      amountPaid: Number(e.target.value),
+      remainingFees: (Number(prev.netCourseFees) - Number(e.target.value)).toFixed(2),
+    }))
   }
 
   const paymentOptionCtx = usePaymentOptionContextContext()
-  //console.log(paymentOptionCtx.getPaymentOptionsData.data[4])
+
+  const handleDateChange = (date) => {
+    setPayStudentFeesAdd((prevState) => ({
+      ...prevState,
+      amountDate: date,
+    }))
+  }
 
   return (
     <tr>
-      <td>
-        {/* <div className='form-check form-check-sm form-check-custom form-check-solid'></div> */}
-      </td>
+      <td></td>
       <td></td>
       <td>
         <input
@@ -57,20 +57,12 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       <td>
         <DatePicker
           selected={payStudentFeesAdd.amountDate}
-          onChange={(date) => setPayStudentFeesAdd({...payStudentFeesAdd, amountDate: date})}
-          dateFormat='dd/MM/yyyy'
+          onChange={handleDateChange}
+          dateFormat='dd/MM/yyyy' // Desired date format
           className='form-control form-control-lg form-control-solid min-w-150px'
           placeholderText='DD/MM/YYYY'
         />
       </td>
-      {/* <td>
-        <input
-          type='text'
-          readOnly
-          value={payStudentFeesAdd.reciptNumber}
-          className='form-control w-auto '
-        />
-      </td> */}
       <td className='min-w-0px'></td>
       <td>
         <select
@@ -80,7 +72,6 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
             setPayStudentFeesAdd({...payStudentFeesAdd, paymentOption: e.target.value})
           }
         >
-          {' '}
           <option>select payment option</option>
           {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
             <Fragment key={paymentOpt._id}>
@@ -122,4 +113,5 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
     </tr>
   )
 }
+
 export default PayStudentFee

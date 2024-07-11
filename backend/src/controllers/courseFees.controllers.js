@@ -19,7 +19,7 @@ import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Su
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    // console.log("from create course fees ->>>>", req.body);
+    console.log("from create course fees ->>>>", req.body);
     try {
       const {
         studentInfo,
