@@ -86,14 +86,6 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       return
     }
 
-    if (studentInfoData.no_of_installments === 1) {
-      toast.error(
-        'No installments are available for this student is 1, you have to pay complete remaining fees',
-        {bodyStyle: {fontSize: '18px'}}
-      )
-      return
-    }
-
     let url = `https://web.whatsapp.com/send?phone=+91${studentInfoData.phone_number}`
 
     // // Appending the message to the URL by encoding it
@@ -106,6 +98,40 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     )}/- as your monthly installment.\nThanks,\nAVisual Media Academy`
 
     try {
+      //console.log(payStudentFeesAdd)
+      if (
+        studentInfoData.no_of_installments === 1 &&
+        payStudentFeesAdd.amountPaid === payStudentFeesAdd.netCourseFees
+      ) {
+        studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
+          ...payStudentFeesAdd,
+          studentInfo: studentInfoData?._id,
+          no_of_installments_amount: studentInfoData.no_of_installments_amount,
+          no_of_installments: studentInfoData.no_of_installments,
+          courseName: studentInfoData?.courseName,
+        })
+        setPayStudentFeesAdd({
+          netCourseFees: 0,
+          remainingFees: 0,
+          amountPaid: 0,
+          amountDate: Date.now(),
+          paymentOption: '',
+          lateFees: 0,
+        })
+        if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
+          window.open(url)
+        }
+        navigate(`/students/${studentInfoData?.companyName}`)
+        window.location.reload()
+      }
+
+      if (studentInfoData.no_of_installments === 1 && payStudentFeesAdd.remainingCourseFees !== 0) {
+        toast.error(
+          'If student have 1 installment then you have to pay complete remaining fees. else you have to increase student installment'
+        )
+        return
+      }
+
       studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
         ...payStudentFeesAdd,
         studentInfo: studentInfoData?._id,
@@ -126,6 +152,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       }
       navigate(`/students/${studentInfoData?.companyName}`)
       window.location.reload()
+      return
     } catch (error) {
       console.log(error)
     }

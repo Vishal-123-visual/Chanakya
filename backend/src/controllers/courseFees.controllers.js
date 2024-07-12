@@ -117,6 +117,7 @@ export const createCourseFeesController = asyncHandler(
         student.installmentPaymentSkipMonth === 0
       ) {
         student.remainingCourseFees = 0;
+        student.no_of_installments_expireTimeandAmount = null;
         // Save course fees
         const newCourseFees = new CourseFeesModel({
           ...req.body,
