@@ -86,6 +86,14 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       return
     }
 
+    if (studentInfoData.no_of_installments === 1) {
+      toast.error(
+        'No installments are available for this student is 1, you have to pay complete remaining fees',
+        {bodyStyle: {fontSize: '18px'}}
+      )
+      return
+    }
+
     let url = `https://web.whatsapp.com/send?phone=+91${studentInfoData.phone_number}`
 
     // // Appending the message to the URL by encoding it

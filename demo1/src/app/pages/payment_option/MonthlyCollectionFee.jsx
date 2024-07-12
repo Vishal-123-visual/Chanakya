@@ -13,13 +13,14 @@ const MonthlyCollectionFee = () => {
   //console.log(fromDate, toDate)
   const paramsData = useParams()
   const ctx = useStudentCourseFeesContext()
-  const {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
-  // console.log(data)
+  let {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
+  data = data.filter((item) => item.studentInfo.no_of_installments === item?.installment_number)
 
   const companyCTX = useCompanyContext()
 
   const params = useParams()
   const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
+  //console.log(CompanyInfo)
 
   const filteredData =
     data?.filter((item) => {
