@@ -14,7 +14,7 @@ const MonthlyCollectionFee = () => {
   const paramsData = useParams()
   const ctx = useStudentCourseFeesContext()
   let {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
-  data = data.filter((item) => item.studentInfo.no_of_installments === item?.installment_number)
+  data = data?.filter((item) => item?.studentInfo?.no_of_installments === item?.installment_number)
 
   const companyCTX = useCompanyContext()
 
