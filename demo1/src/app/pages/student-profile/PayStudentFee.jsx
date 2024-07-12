@@ -17,6 +17,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
   const paymentOptionCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
+    //console.log(date)
     setPayStudentFeesAdd((prevState) => ({
       ...prevState,
       amountDate: date,
@@ -62,6 +63,12 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
           className='form-control form-control-lg form-control-solid min-w-150px'
           placeholderText='DD/MM/YYYY'
         />
+        {/* <input
+          type='date'
+          className='form-control w-min-100px'
+          value={payStudentFeesAdd.amountDate}
+          onChange={handleDateChange}
+        /> */}
       </td>
       <td className='min-w-0px'></td>
       <td>

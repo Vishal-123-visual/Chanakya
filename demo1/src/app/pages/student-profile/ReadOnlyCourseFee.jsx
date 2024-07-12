@@ -60,7 +60,7 @@ Visual Media Academy`
       <td>{StudentFee?.netCourseFees}</td>
       <td>{StudentFee?.amountPaid}</td>
       <td>{StudentFee?.remainingFees}</td>
-      <td>{moment.utc(StudentFee?.amountDate).format('DD-MM-YYYY')}</td>
+      <td>{moment(StudentFee?.amountDate).format('DD-MM-YYYY')}</td>
       <td>{StudentFee?.reciptNumber}</td>
 
       <td>
