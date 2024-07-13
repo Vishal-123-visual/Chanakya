@@ -42,6 +42,7 @@ const courseFeesSchema = new mongoose.Schema(
     reciptNumber: {
       type: String,
       required: true,
+      unique: true,
     },
     paymentOption: {
       type: mongoose.Schema.Types.ObjectId,

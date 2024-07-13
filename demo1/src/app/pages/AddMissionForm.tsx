@@ -108,10 +108,6 @@ const AddMissionForm: React.FC = () => {
   }
 
   const handleCourseFeesDiscount = (e) => {
-    //console.log(formik.values.course_fees)
-    // const amount = updateUserId
-    //   ? Number(updateUserId.course_fees)
-    //   : selectedCourseNameData?.courseFees
     formik.setFieldValue('netCourseFees', 0)
     const amount = updateUserId
       ? Number(formik.values.course_fees)
@@ -174,7 +170,7 @@ const AddMissionForm: React.FC = () => {
 
   const navigate = useNavigate()
   const context = useAdmissionContext()
-  context.setStudentId(updateUserId?._id)
+
   const formik = useFormik<AddMissionFormInterface>({
     initialValues: updateStudentInitialValues,
     validationSchema: addmissionFormSchema,
@@ -188,41 +184,14 @@ const AddMissionForm: React.FC = () => {
         formData.append(key, value as string) // Ensure value is a string, adjust if needed
       })
 
-      // if (!image) {
-      //   toast(`Please select image`, {
-      //     type: 'error',
-      //     bodyStyle: {
-      //       fontSize: '18px',
-      //     },
-      //   })
-      //   return
-      // }
-
       // Append the image to formData
       if (image) {
         formData.append('image', image)
       }
 
-      //console.log(selectedCourseNameData)
-
-      if (updateUserId) {
-        formData.append('id', updateUserId?._id)
-        formData.append('courseName', updateUserId?.courseName?._id)
-        //console.log('course name id ', updateUserId?.courseName._id)
-
-        context.updateStudentMutation.mutate(formData)
-        setLoading(true)
-        toast(`Student Updated Successfully`, {
-          type: 'success',
-          bodyStyle: {
-            fontSize: '18px',
-          },
-        })
-      } else {
-        formData.append('courseName', selectedCourseNameData?._id)
-        context.createStudentMutation.mutate(formData)
-        setLoading(true)
-      }
+      formData.append('courseName', selectedCourseNameData?._id)
+      context.createStudentMutation.mutate(formData)
+      setLoading(true)
 
       navigate(`/students/${values?.companyName}`)
     },

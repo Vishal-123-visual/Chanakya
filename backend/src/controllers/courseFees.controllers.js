@@ -1537,7 +1537,7 @@ export const getSingleStudentCourseFeesController = asyncHandler(
 );
 
 export const updateSingleStudentCourseFeesController = asyncHandler(
-  async (req, res, next) => {
+  async (req, res) => {
     const {
       netCourseFees,
       studentInfo,
@@ -1550,25 +1550,46 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
     } = req.body;
 
     try {
+      // Check if a receipt with the same number already exists
+      const alreadyReciptExists = await CourseFeesModel.findOne({
+        reciptNumber,
+      });
+      if (
+        alreadyReciptExists &&
+        alreadyReciptExists._id.toString() !== req.params.id
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "A fee with the same receipt number already exists",
+        });
+      }
+
+      // Find the student fee by ID
       const singleStudentFee = await CourseFeesModel.findById(req.params.id);
       if (!singleStudentFee) {
-        return res.status(404).json({ message: "Student fee not found" });
+        return res
+          .status(404)
+          .json({ success: false, message: "Student fee not found" });
       }
+
+      // Update fields if they are provided in the request body
       singleStudentFee.netCourseFees =
-        netCourseFees || singleStudentFee.netCourseFees;
+        netCourseFees ?? singleStudentFee.netCourseFees;
       singleStudentFee.studentInfo =
-        studentInfo || singleStudentFee.studentInfo;
+        studentInfo ?? singleStudentFee.studentInfo;
       singleStudentFee.remainingFees =
-        remainingFees || singleStudentFee.remainingFees;
-      singleStudentFee.amountPaid = amountPaid || singleStudentFee.amountPaid;
-      singleStudentFee.amountDate = amountDate || singleStudentFee.amountDate;
+        remainingFees ?? singleStudentFee.remainingFees;
+      singleStudentFee.amountPaid = amountPaid ?? singleStudentFee.amountPaid;
+      singleStudentFee.amountDate = amountDate ?? singleStudentFee.amountDate;
       singleStudentFee.paymentOption =
-        paymentOption || singleStudentFee.paymentOption;
-      singleStudentFee.lateFees = lateFees || singleStudentFee.lateFees;
+        paymentOption ?? singleStudentFee.paymentOption;
+      singleStudentFee.lateFees = lateFees ?? singleStudentFee.lateFees;
       singleStudentFee.reciptNumber =
-        reciptNumber || singleStudentFee.reciptNumber;
-      let updatedSingleStudentFee = await singleStudentFee.save();
-      res.status(200).json(updatedSingleStudentFee);
+        reciptNumber ?? singleStudentFee.reciptNumber;
+
+      // Save the updated student fee
+      const updatedSingleStudentFee = await singleStudentFee.save();
+      res.status(200).json({ success: true, data: updatedSingleStudentFee });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }

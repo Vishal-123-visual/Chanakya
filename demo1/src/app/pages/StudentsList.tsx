@@ -21,6 +21,14 @@ const StudentsList: React.FC<Props> = ({className}) => {
   // console.log(new Date(ctx.studentsLists.data.users[0].commision_date).toLocaleDateString())
   // console.log(params)
   //console.log(params.id)
+
+  const studentDeleteHandler = (studentId: string) => {
+    if (!window.confirm('Are you sure you want to delete this student?')) {
+      return
+    }
+    ctx.deleteStudentMutation.mutateAsync(studentId)
+  }
+
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
@@ -145,7 +153,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
                           <KTIcon iconName='pencil' className='fs-3' />
                         </button>
                         <button
-                          onClick={() => ctx.deleteStudentMutation.mutateAsync(student?._id)}
+                          onClick={() => studentDeleteHandler(student?._id)}
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                         >
                           <KTIcon iconName='trash' className='fs-3' />

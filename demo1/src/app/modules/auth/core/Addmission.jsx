@@ -47,44 +47,38 @@ export const AdmissionContextProvider = ({children}) => {
   //console.log(studentsLists)
   const createStudentMutation = useMutation({
     mutationFn: async (newAdmission) => {
-      //console.log(newAdmission)
-      return axios
-        .post(`${BASE_URL}/api/addmission_form`, newAdmission, config)
-        .then((res) => res.data)
+      try {
+        const response = await axios.post(`${BASE_URL}/api/addmission_form`, newAdmission, config)
+        return response.data
+      } catch (error) {
+        // Throw error to be caught in onError
+        throw error
+      }
     },
     onMutate: () => {
-      //console.log('mutate')
+      console.log('mutate')
     },
-
-    onError: () => {
-      // console.log('error')
-    },
-
-    onSuccess: () => {
-      toast('Addmission done success 😊', {
-        type: 'success',
+    onError: (error) => {
+      // Extract error message
+      const errorMessage = error.response?.data?.message || 'Something went wrong'
+      toast.error(`Error: ${errorMessage}`, {
         bodyStyle: {
           fontSize: '18px',
         },
       })
-
+    },
+    onSuccess: () => {
+      toast.success('Admission done successfully 😊', {
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
       //console.log('success')
     },
-
-    onSettled: async (_, error) => {
+    onSettled: async (data, error) => {
       //console.log('settled')
       if (error) {
         //console.log(error)
-
-        toast(
-          `Something went wrong I think with your email admission done please try another email address then it will work 😊😊`,
-          {
-            type: 'error',
-            bodyStyle: {
-              fontSize: '18px',
-            },
-          }
-        )
       } else {
         await queryClient.invalidateQueries({queryKey: ['getStudents']})
       }

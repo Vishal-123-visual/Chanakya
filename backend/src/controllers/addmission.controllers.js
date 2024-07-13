@@ -134,12 +134,14 @@ export const createAddMissionController = asyncHandler(
         break;
     }
 
-    const existedAddmission = await addMissionFormModel.findOne({ email });
+    const existedAddmission = await addMissionFormModel.findOne({
+      mobile_number,
+    });
 
     if (existedAddmission) {
       return res.status(400).json({
         success: false,
-        message: "Admission already done with this email!",
+        message: "Admission already done with this mobile_number!",
       });
       // throw new Error("with this email addmission already done!");
     }

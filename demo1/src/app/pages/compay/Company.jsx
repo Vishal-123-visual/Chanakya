@@ -10,6 +10,14 @@ const Company = () => {
   const navigate = useNavigate()
   const companyCTX = useCompanyContext()
   //console.log(companyCTX.getCompanyLists.data)
+
+  const companyDeleteHandler = (companyId) => {
+    if (!window.confirm('Are you sure you want to delete this student?')) {
+      return
+    }
+    companyCTX.deleteCompanyMutation.mutate(companyId)
+  }
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -113,7 +121,7 @@ const Company = () => {
                         <KTIcon iconName='pencil' className='fs-3' />
                       </button>
                       <button
-                        onClick={() => companyCTX.deleteCompanyMutation.mutate(companyData._id)}
+                        onClick={() => companyDeleteHandler(companyData._id)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <KTIcon iconName='trash' className='fs-3' />

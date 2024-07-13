@@ -2,6 +2,7 @@ import {createContext, useContext, useState} from 'react'
 import axios from 'axios'
 import {useQueryClient, useMutation, useQuery} from 'react-query'
 import {useAuth} from '../../modules/auth'
+import {toast} from 'react-toastify'
 const StudentCourseFeeContext = createContext()
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -149,17 +150,31 @@ export const StudentCourseFeesContextProvider = ({children}) => {
   // update Course type
   const updateStudentSingleCourseFeesMutation = useMutation({
     mutationFn: async (updateData) => {
-      console.log(updateData)
-      return axios
-        .put(`${BASE_URL}/api/courseFees/${updateData._id}`, updateData, config) // Corrected order of arguments
-        .then((res) => res.data)
-    },
-    onSettled: async (_, error) => {
-      if (error) {
-        alert('Error while updating student...', error)
-      } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+      try {
+        const res = await axios.put(
+          `${BASE_URL}/api/courseFees/${updateData._id}`,
+          updateData,
+          config
+        )
+        return res.data // Return the response data
+      } catch (error) {
+        // Throw an error to be caught in onError
+        throw error
       }
+    },
+    onSuccess: (data) => {
+      // Success message
+      toast.success('Course fees updated successfully!', {
+        bodyStyle: {
+          fontSize: '18px',
+        },
+      })
+      queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+    },
+    onError: (error) => {
+      // Check if error.response exists to get the server error message
+      const errorMessage = error.response?.data?.message || 'Something went wrong'
+      alert(errorMessage)
     },
   })
   // get all students course fees

@@ -43,6 +43,9 @@ const updateUser = async (user: User): Promise<User | undefined> => {
 
 const deleteUser = async (userId: ID): Promise<void> => {
   try {
+    if (!window.confirm('Are you sure you want to delete this user')) {
+      return
+    }
     const res = await axios.delete(`${BASE_URL}/api/users/${userId}`)
     toast.success(res.data.data.message)
     toast.error(res.data.message)
