@@ -97,12 +97,43 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       payStudentFeesAdd.amountPaid
     )}/- as your monthly installment.\nThanks,\nAVisual Media Academy`
 
-    try {
-      //console.log(payStudentFeesAdd)
-      if (
-        studentInfoData.no_of_installments === 1 &&
-        payStudentFeesAdd.amountPaid === payStudentFeesAdd.netCourseFees
-      ) {
+    //console.log(Number(payStudentFeesAdd.amountPaid), Number(payStudentFeesAdd.netCourseFees))
+
+    if (Number(payStudentFeesAdd?.amountPaid) <= Number(payStudentFeesAdd?.netCourseFees)) {
+      try {
+        if (studentInfoData.no_of_installments === 1) {
+          //console.log(payStudentFeesAdd)
+          if (Number(payStudentFeesAdd.remainingFees) === 0) {
+            studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
+              ...payStudentFeesAdd,
+              studentInfo: studentInfoData?._id,
+              no_of_installments_amount: studentInfoData.no_of_installments_amount,
+              no_of_installments: studentInfoData.no_of_installments,
+              courseName: studentInfoData?.courseName,
+            })
+            setPayStudentFeesAdd({
+              netCourseFees: 0,
+              remainingFees: 0,
+              amountPaid: 0,
+              amountDate: Date.now(),
+              paymentOption: '',
+              lateFees: 0,
+            })
+            if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
+              window.open(url)
+            }
+            navigate(`/students/${studentInfoData?.companyName}`)
+            window.location.reload()
+            return
+          }
+
+          toast.error(
+            'If student have 1 installment then you have to pay complete remaining fees. else you have to increase student installment'
+          )
+          navigate(`/students/${studentInfoData?.companyName}`)
+          return
+        }
+
         studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
           ...payStudentFeesAdd,
           studentInfo: studentInfoData?._id,
@@ -123,38 +154,14 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         }
         navigate(`/students/${studentInfoData?.companyName}`)
         window.location.reload()
-      }
-
-      if (studentInfoData.no_of_installments === 1 && payStudentFeesAdd.remainingCourseFees !== 0) {
-        toast.error(
-          'If student have 1 installment then you have to pay complete remaining fees. else you have to increase student installment'
-        )
         return
+      } catch (error) {
+        console.log(error)
       }
-
-      studentPayFeeCtx.createStudentCourseFeesMutation.mutate({
-        ...payStudentFeesAdd,
-        studentInfo: studentInfoData?._id,
-        no_of_installments_amount: studentInfoData.no_of_installments_amount,
-        no_of_installments: studentInfoData.no_of_installments,
-        courseName: studentInfoData?.courseName,
-      })
-      setPayStudentFeesAdd({
-        netCourseFees: 0,
-        remainingFees: 0,
-        amountPaid: 0,
-        amountDate: Date.now(),
-        paymentOption: '',
-        lateFees: 0,
-      })
-      if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
-        window.open(url)
-      }
+    } else {
+      toast.error('Amount paid should not be more than remaining fees')
       navigate(`/students/${studentInfoData?.companyName}`)
-      window.location.reload()
       return
-    } catch (error) {
-      console.log(error)
     }
   }
 
