@@ -8,9 +8,12 @@ import AddDayBookData from './AddDayBookData'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import {useCompanyContext} from '../compay/CompanyContext'
+import AddAccountDayBook from './AddAccountDayBook'
+import AddDayBookAccountFromDayBook from './AddDayBookAccountFromDayBook'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(moment().subtract(6, 'days').toDate())
+  const [showAddAccountBtn, setShowAddAccountBtn] = useState(false)
   const [toDate, setToDate] = useState(new Date())
   const navigate = useNavigate()
   const params = useParams()
@@ -48,6 +51,14 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{result?.data?.companyName} Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
+          <span className='mt-3'>
+            <button
+              onClick={() => setShowAddAccountBtn((prev) => !prev)}
+              className='btn btn-primary btn-hover btn-sm'
+            >
+              Add DayBook Account
+            </button>
+          </span>
         </h3>
         <div className='d-flex gap-5'>
           <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
@@ -107,7 +118,11 @@ const ViewDayBook = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <AddDayBookData totalBalance={filteredData[0]?.balance} companyId={params.id} />
+              {!showAddAccountBtn ? (
+                <AddDayBookData totalBalance={filteredData[0]?.balance} companyId={params.id} />
+              ) : (
+                <AddDayBookAccountFromDayBook setShowAddAccountBtn={setShowAddAccountBtn} />
+              )}
 
               {/* <tr className=''>
                 <td className='bg-secondary text-center p-4' colspan='9'>
