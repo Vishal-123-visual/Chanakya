@@ -159,7 +159,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         console.log(error)
       }
     } else {
-      toast.error('Amount paid should not be more than remaining fees')
+      toast.error('Amount paid should not be more than Net Course  fees')
       navigate(`/students/${studentInfoData?.companyName}`)
       return
     }

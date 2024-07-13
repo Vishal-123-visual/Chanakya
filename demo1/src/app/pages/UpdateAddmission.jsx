@@ -69,15 +69,15 @@ const UpdateAddmission = () => {
 
   useEffect(() => {
     if (updateUserId['remainingCourseFees'] !== undefined) {
-      formik.setFieldValue('netCourseFees', updateUserId?.remainingCourseFees)
+      formik.setFieldValue('netCourseFees', Number(updateUserId?.remainingCourseFees).toFixed(2))
       formik.setFieldValue(
         'no_of_installments_amount',
-        updateUserId?.remainingCourseFees / updateUserId?.no_of_installments
+        Number(updateUserId?.remainingCourseFees / updateUserId?.no_of_installments).toFixed(2)
       )
     } else {
       formik.setFieldValue(
         'no_of_installments_amount',
-        updateUserId.netCourseFees / updateUserId?.no_of_installments
+        Number(updateUserId.netCourseFees / updateUserId?.no_of_installments).toFixed(2)
       )
     }
   }, [])

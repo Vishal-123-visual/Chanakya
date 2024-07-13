@@ -15,6 +15,7 @@ const MonthlyCollectionFee = () => {
   const ctx = useStudentCourseFeesContext()
   let {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
   data = data?.filter((item) => item?.studentInfo?.no_of_installments === item?.installment_number)
+  //console.log(isLoading)
 
   const companyCTX = useCompanyContext()
 
@@ -31,7 +32,7 @@ const MonthlyCollectionFee = () => {
     }) || []
 
   const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
-  // console.log(filteredData)
+  // console.log(filteredData.length === 0)
 
   const navigate = useNavigate()
 
@@ -97,13 +98,14 @@ const MonthlyCollectionFee = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {isLoading ? (
+              {filteredData.length === 0 ? (
                 <tr>
                   <td></td>
                   <td></td>
                   <td></td>
+                  <td></td>
                   <td>
-                    <h1>Loading.....</h1>
+                    <h3>No Student Payment Installments available</h3>
                   </td>
                   <td></td>
                   <td></td>
@@ -134,12 +136,7 @@ const MonthlyCollectionFee = () => {
                       <td>{collectionFees?.studentInfo.name}</td>
 
                       <td>{collectionFees?.courseName?.courseName}</td>
-                      <td>
-                        {collectionFees.studentInfo.no_of_installments ===
-                        collectionFees?.installment_number
-                          ? collectionFees?.studentInfo?.installmentPaymentSkipMonth
-                          : 'Paid'}
-                      </td>
+                      <td>{collectionFees?.studentInfo?.installmentPaymentSkipMonth}</td>
                       <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
                           {collectionFees?.studentInfo?.mobile_number}
