@@ -10,6 +10,13 @@ type Props = {
 const CourseCategory: React.FC<Props> = ({className}) => {
   const navigate = useNavigate()
   const ctx = useGetCourseCategoryContextContext()
+
+  const deleteCourseCategoryHandler = (courseCategoryId: string) => {
+    if (!window.confirm('Are you sure you want to delete this course category?')) {
+      return
+    }
+    ctx.deleteCourseCategoryMutation.mutate(courseCategoryId)
+  }
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
@@ -98,7 +105,7 @@ const CourseCategory: React.FC<Props> = ({className}) => {
                           <KTIcon iconName='pencil' className='fs-3' />
                         </button>
                         <button
-                          onClick={() => ctx.deleteCourseCategoryMutation.mutate(category._id)}
+                          onClick={() => deleteCourseCategoryHandler(category._id)}
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                         >
                           <KTIcon iconName='trash' className='fs-3' />

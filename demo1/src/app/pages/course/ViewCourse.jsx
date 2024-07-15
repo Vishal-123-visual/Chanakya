@@ -8,6 +8,14 @@ const ViewCourse = () => {
   const courseCtx = useCourseContext()
   const navigate = useNavigate()
   //console.log(courseCtx.getCourseLists.data)
+
+  const deleteCourseHandler = (courseId) => {
+    if (!window.confirm('Are you sure you want to delete this course?')) {
+      return
+    }
+    courseCtx.deleteCourseMutation.mutate(courseId)
+  }
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -89,7 +97,7 @@ const ViewCourse = () => {
                         <KTIcon iconName='pencil' className='fs-3' />
                       </button>
                       <button
-                        onClick={() => courseCtx.deleteCourseMutation.mutate(course?._id)}
+                        onClick={() => deleteCourseHandler(course?._id)}
                         className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                       >
                         <KTIcon iconName='trash' className='fs-3' />

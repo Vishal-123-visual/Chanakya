@@ -56,6 +56,9 @@ const AddPaymentOption = ({}) => {
   }
 
   const deletePaymentOptionHandler = (e, id) => {
+    if (!window.confirm('Are you sure you want to delete this payment option?')) {
+      return
+    }
     e.preventDefault()
     paymentOptionCtx.deletePaymentOptionMutation.mutate(id)
     setPaymentOptionId(null)

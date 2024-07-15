@@ -2,6 +2,7 @@ import {createContext, useContext, useState} from 'react'
 import axios from 'axios'
 import {useQueryClient, useMutation, useQuery} from 'react-query'
 import {useAuth} from '../../modules/auth'
+import {toast} from 'react-toastify'
 const PaymentOptionContext = createContext()
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -59,7 +60,7 @@ export const PaymentOptionContextProvider = ({children}) => {
       return axios.delete(`${BASE_URL}/api/paymentOptions/${id}`, config).then((res) => res.data)
     },
     onSuccess: () => {
-      alert('Payment Option  deleted successfully')
+      toast.error('Payment Option  deleted successfully')
     },
     onSettled: async (_, error) => {
       if (error) {

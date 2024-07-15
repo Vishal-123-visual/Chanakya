@@ -11,6 +11,14 @@ type Props = {
 const CourseTypes: React.FC<Props> = ({className}) => {
   const ctx = useCourseTypesContext()
   const navigate = useNavigate()
+
+  const deleteCourseTypeHandler = (courseTypeId: string) => {
+    if (!window.confirm('Are you sure you want to delete this course type?')) {
+      return
+    }
+    ctx.deleteCourseTypeMutation.mutate(courseTypeId)
+  }
+
   return (
     <div>
       <div className={`card ${className}`}>
@@ -118,7 +126,7 @@ const CourseTypes: React.FC<Props> = ({className}) => {
                           <KTIcon iconName='pencil' className='fs-3' />
                         </button>
                         <button
-                          onClick={() => ctx.deleteCourseTypeMutation.mutate(course._id)}
+                          onClick={() => deleteCourseTypeHandler(course._id)}
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                         >
                           <KTIcon iconName='trash' className='fs-3' />
