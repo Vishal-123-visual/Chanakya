@@ -411,3 +411,23 @@ export const deleteAlertStudentPendingFeesController = asyncHandler(
     }
   }
 );
+
+export const updateAlertStudentPendingFeesController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const updateAlertStudentPendingFeesData =
+        await AlertStudentPendingFeesModel.findByIdAndUpdate(
+          req.params.id,
+          req.body,
+          { new: true }
+        );
+      res.status(200).json({
+        success: true,
+        message: "Alert student pending fees updated successfully!",
+        updatedData: updateAlertStudentPendingFeesData,
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);

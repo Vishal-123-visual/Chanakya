@@ -100,12 +100,21 @@ const EditAlertStudentFees = ({studentAlertData, setEditAlertStudentId}) => {
         </select>
       </td>
       <td className='text-end'>
-        <button className='btn btn-primary' onClick={handleSave}>
-          Save
-        </button>
-        <button className='btn btn-primary' onClick={handleCancel}>
-          Cancel
-        </button>
+        <div className='d-flex justify-content-end flex-shrink-0'>
+          <button
+            onClick={handleSave}
+            className='btn btn-success btn btn-success btn-active-color-primary text-white btn-sm me-1 px-5'
+          >
+            Save
+          </button>
+          <button
+            type='button'
+            onClick={handleCancel}
+            className='btn btn-danger btn btn-success btn-active-color-primary btn-sm me-1 px-5'
+          >
+            cancel
+          </button>
+        </div>
       </td>
     </tr>
   )

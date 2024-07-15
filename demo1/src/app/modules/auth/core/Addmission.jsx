@@ -232,7 +232,7 @@ export const AdmissionContextProvider = ({children}) => {
 
   const updateAlertPendingStudentFeesMutation = useMutation({
     mutationFn: async (updateStudent) => {
-      console.log(updateStudent)
+      //console.log(updateStudent)
       const res = await axios.put(
         `${BASE_URL}/api/students/createAlertStudentPendingFees/${updateStudent.id}`,
         updateStudent,
