@@ -4,13 +4,13 @@ import 'react-datepicker/dist/react-datepicker.css'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import {useParams} from 'react-router-dom'
 
-const AddAlertStudentFees = ({}) => {
+const EditAlertStudentFees = ({studentAlertData, setEditAlertStudentId}) => {
   const params = useParams()
   //console.log(params.id)
-  const [amountDate, setAmountDate] = useState(null)
-  const [dateTime, setDateTime] = useState(null)
-  const [status, setStatus] = useState('pending') // State to handle status selection
-  const [particulars, setParticulars] = useState('') // State to handle status selection
+  const [amountDate, setAmountDate] = useState(studentAlertData.Date)
+  const [dateTime, setDateTime] = useState(studentAlertData.RemainderDateAndTime)
+  const [status, setStatus] = useState(studentAlertData.Status) // State to handle status selection
+  const [particulars, setParticulars] = useState(studentAlertData.particulars) // State to handle status selection
   const studentCTX = useAdmissionContext()
 
   const handleSave = () => {
@@ -33,7 +33,8 @@ const AddAlertStudentFees = ({}) => {
       return
     }
     try {
-      studentCTX.createAlertStudentPendingFeesMutation.mutate({
+      studentCTX.updateAlertPendingStudentFeesMutation.mutate({
+        id: studentAlertData?._id,
         Date: amountDate,
         RemainderDateAndTime: dateTime,
         Status: status,
@@ -45,10 +46,15 @@ const AddAlertStudentFees = ({}) => {
       return
     }
     //console.log('Save button clicked', amountDate, dateTime, status, particulars)
+    setEditAlertStudentId(null)
     setAmountDate(null)
     setParticulars('')
     setDateTime(null)
     setStatus('')
+  }
+
+  const handleCancel = () => {
+    setEditAlertStudentId(null)
   }
 
   return (
@@ -97,9 +103,12 @@ const AddAlertStudentFees = ({}) => {
         <button className='btn btn-primary' onClick={handleSave}>
           Save
         </button>
+        <button className='btn btn-primary' onClick={handleCancel}>
+          Cancel
+        </button>
       </td>
     </tr>
   )
 }
 
-export default AddAlertStudentFees
+export default EditAlertStudentFees

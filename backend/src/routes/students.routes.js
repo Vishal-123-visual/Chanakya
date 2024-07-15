@@ -11,6 +11,7 @@ import {
   getStudentCommissionListsController,
   createAlertStudentPendingFeesController,
   getAlertStudentPendingFeesController,
+  deleteAlertStudentPendingFeesController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 
@@ -37,6 +38,12 @@ router.get(
   requireSignIn,
   isAdmin,
   getAlertStudentPendingFeesController
+);
+router.delete(
+  "/createAlertStudentPendingFees/:id",
+  requireSignIn,
+  isAdmin,
+  deleteAlertStudentPendingFeesController
 );
 
 // get the student According to company wise

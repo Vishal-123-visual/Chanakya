@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 const schema = new mongoose.Schema({
-  companyId: {
+  studentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Company",
+    ref: "Students",
   },
   Date: {
     type: Date,

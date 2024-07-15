@@ -3,15 +3,20 @@ import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import AddAlertStudentFees from './AddAlertStudentFees'
 import moment from 'moment'
+import {Fragment, useState} from 'react'
+import ReadOnlyAlertStudentPending from './ReadOnlyAlertStudentPending.jsx'
+import EditAlertStudentFees from './EditAlertStudentFees'
 
 const AlertPendingFeesNewStudents = ({studentInfoData}) => {
-  // console.log(studentInfoData)
   const studentCTX = useAdmissionContext()
-  console.log(
-    studentCTX.getAlertStudentPendingFeesQuery.data.filter(
-      (student) => student.companyId === studentInfoData.companyName
-    )
-  )
+  const params = useParams()
+  const [editAlertStudentId, setEditAlertStudentId] = useState(null)
+
+  const handleEditClick = (e, alertStudentData) => {
+    e.preventDefault()
+    setEditAlertStudentId(alertStudentData._id)
+  }
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -72,33 +77,25 @@ const AlertPendingFeesNewStudents = ({studentInfoData}) => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <AddAlertStudentFees studentInfoData={studentInfoData} />
-              {studentCTX.getAlertStudentPendingFeesQuery.data
-                .filter((student) => student.companyId === studentInfoData.companyName)
-                .map((studentAlertData, index) => {
+              <AddAlertStudentFees />
+              {studentCTX.getAlertStudentPendingFeesQuery?.data
+                ?.filter((student) => student?.studentId === params?.id)
+                ?.map((studentAlertData, index) => {
                   return (
-                    <tr key={studentAlertData._id}>
-                      <td>
-                        <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                          {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
-                        </div>
-                      </td>
-                      <td>{index + 1}</td>
-                      <td>{moment(studentAlertData?.Date).format('DD-MM-YYYY')}</td>
-                      <td className=''>{studentAlertData?.particulars}</td>
-                      <td className=''>{studentAlertData?.particulars}</td>
-                      <td className=''>Student course Name is ectc</td>
-                      <td>
-                        <div className='d-flex justify-content-end flex-shrink-0'>
-                          <a className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
-                            <KTIcon iconName='pencil' className='fs-3' />
-                          </a>
-                          <a className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'>
-                            <KTIcon iconName='trash' className='fs-3' />
-                          </a>
-                        </div>
-                      </td>
-                    </tr>
+                    <Fragment key={index}>
+                      {studentAlertData._id === editAlertStudentId ? (
+                        <EditAlertStudentFees
+                          studentAlertData={studentAlertData}
+                          setEditAlertStudentId={setEditAlertStudentId}
+                        />
+                      ) : (
+                        <ReadOnlyAlertStudentPending
+                          index={index}
+                          studentAlertData={studentAlertData}
+                          handleEditClick={handleEditClick}
+                        />
+                      )}
+                    </Fragment>
                   )
                 })}
             </tbody>

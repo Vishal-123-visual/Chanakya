@@ -196,6 +196,75 @@ export const AdmissionContextProvider = ({children}) => {
       }
     },
   })
+
+  const deleteAlertStudentPendingFeesMutation = useMutation({
+    mutationFn: async (id) => {
+      // console.log(id)
+      // return axios
+      //   .delete(`${BASE_URL}/api/students/createAlertStudentPendingFees/${id}`, config)
+      //   .then((res) => res.data)
+      const res = await axios.delete(
+        `${BASE_URL}/api/students/createAlertStudentPendingFees/${id}`,
+        config
+      )
+      //console.log(res)
+      if (!res.data.success) {
+        throw new Error('Failed to delete student fees alert')
+      } else {
+        toast(`Student fees alert deleted Successfully`, {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      }
+      return res.data
+    },
+    onSuccess: () => {},
+    onSettled: async (_, error) => {
+      if (error) {
+        alert(error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getStudentsAlertPendingFessDetails']})
+      }
+    },
+  })
+
+  const updateAlertPendingStudentFeesMutation = useMutation({
+    mutationFn: async (updateStudent) => {
+      console.log(updateStudent)
+      const res = await axios.put(
+        `${BASE_URL}/api/students/createAlertStudentPendingFees/${updateStudent.id}`,
+        updateStudent,
+        config
+      )
+
+      if (res.data.success) {
+        toast(`Student fees alert updated Successfully`, {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        throw new Error('Error while updating alert student pending fees')
+      }
+
+      return res.data
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        // toast(`Error while updating student... ${error}`, {
+        //   type: 'error',
+        //   bodyStyle: {
+        //     fontSize: '18px',
+        //   },
+        // })
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getStudentsAlertPendingFessDetails']})
+      }
+    },
+  })
   /********************** Student Fees Alert End  *******************/
 
   return (
@@ -212,6 +281,8 @@ export const AdmissionContextProvider = ({children}) => {
         /********************** Student Fees Alert Start   *******************/
         createAlertStudentPendingFeesMutation,
         getAlertStudentPendingFeesQuery,
+        deleteAlertStudentPendingFeesMutation,
+        updateAlertPendingStudentFeesMutation,
         /********************** Student Fees Alert End  *******************/
       }}
     >
