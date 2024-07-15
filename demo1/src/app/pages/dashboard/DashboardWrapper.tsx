@@ -17,6 +17,7 @@ import {
   ListsWidget26,
   EngageWidget10,
 } from '../../../_metronic/partials/widgets'
+import ListAlertPendingStudent from '../Alert_Pending_NewStudents/ListAlertPendingStudent'
 
 const DashboardPage: FC = () => (
   <>
@@ -75,7 +76,10 @@ const DashboardPage: FC = () => (
     {/* begin::Row */}
     <div className='row gy-5 gx-xl-8'>
       <div className='col-xxl-4'>
-        <ListsWidget3 className='card-xxl-stretch mb-xl-3' />
+        {/* <ListsWidget3 className='card-xxl-stretch mb-xl-3' /> */}
+        {/* --------------------------- Start here  Alert Pending Student Show here ------------------- */}
+        <ListAlertPendingStudent />
+        {/* --------------------------- End here  Alert Pending Student Show here ------------------- */}
       </div>
       <div className='col-xl-8'>
         <TablesWidget10 className='card-xxl-stretch mb-5 mb-xl-8' />
