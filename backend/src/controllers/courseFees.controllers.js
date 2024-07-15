@@ -1486,18 +1486,20 @@ export const getCourseFeesByStudentIdController = asyncHandler(
       if (currentTime.isAfter(installmentExpireDate)) {
         // Calculate the difference in days
         const daysDifference = currentTime.diff(installmentExpireDate, "days");
+        const hoursDifference =
+          currentTime.diff(installmentExpireDate, "hours") % 24;
         //console.log("Days difference ", daysDifference);
         //console.log("Day difference time ", daysDifference);
 
         // Send email reminders based on specific dates
         let emailContent;
-        if (daysDifference === 1) {
+        if (daysDifference === 1 && hoursDifference === 0) {
           emailContent = emailRemainderData[0].firstRemainder;
-        } else if (daysDifference === 10) {
+        } else if (daysDifference === 10 && hoursDifference === 0) {
           emailContent = emailRemainderData[0].secondRemainder;
-        } else if (daysDifference === 12) {
+        } else if (daysDifference === 12 && hoursDifference === 0) {
           emailContent = emailRemainderData[0].thirdRemainder;
-        } else if (daysDifference === 15) {
+        } else if (daysDifference === 15 && hoursDifference === 0) {
           emailContent = emailRemainderData[0].firstRemainder;
         }
 
