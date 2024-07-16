@@ -4,10 +4,9 @@ import { userModel } from "../../src/models/user.models.js";
 import admissionFormModel from "../../src/models/addmission_form.models.js";
 import EmailRemainderModel from "../../src/models/email-remainder/email.remainder.models.js";
 import { USER_EMAIL } from "../../src/config/config.js";
+import { mailTransporter } from "../../src/utils/mail_helpers.js";
 
 export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
-  //console.log("Incoming request:", req.method, req.url);
-  // console.log(new Date());
   let adminEmail, superAdminEmail;
 
   try {
@@ -34,9 +33,7 @@ export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
       const currentTime = moment();
 
       // Update installmentPaymentSkipMonth if current time matches installment due date
-      //console.log(moment(currentTime).isSame(installmentExpireDate), student);
-      // console.log(student.student?.no_of_installments_expireTimeandAmount);
-      if (moment(currentTime).isSame(installmentExpireDate)) {
+      if (moment(currentTime).isSame(installmentExpireDate, "day")) {
         if (
           student.student?.no_of_installments_expireTimeandAmount !== undefined
         ) {
@@ -45,10 +42,11 @@ export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
         }
       }
 
+      // Save student's updated information
       await student.save();
 
       // Fetch email remainder data
-      const emailRemainderData = await EmailRemainderModel.find({});
+      const emailRemainderData = await EmailRemainderModel.findOne({}); // Assuming there's only one document
 
       // Check if current time is after the installment due date
       if (currentTime.isAfter(installmentExpireDate)) {
@@ -60,13 +58,13 @@ export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
         // Send email based on specific days/hours difference
         let emailContent;
         if (daysDifference === 1 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].firstRemainder;
+          emailContent = emailRemainderData.firstRemainder;
         } else if (daysDifference === 10 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].secondRemainder;
+          emailContent = emailRemainderData.secondRemainder;
         } else if (daysDifference === 12 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].thirdRemainder;
+          emailContent = emailRemainderData.thirdRemainder;
         } else if (daysDifference === 15 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].firstRemainder;
+          emailContent = emailRemainderData.firstRemainder;
         }
 
         if (emailContent) {
@@ -81,8 +79,6 @@ export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
           );
         }
       }
-      // Save student's updated information
-      await student.save();
     }
 
     // Proceed to next middleware or route handler
