@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {KTIcon} from '../../_metronic/helpers'
 import {Link, useNavigate, useParams} from 'react-router-dom'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
@@ -12,6 +12,7 @@ type Props = {
 }
 const BASE_URL_Image = `${BASE_URL}/api/images`
 const StudentsList: React.FC<Props> = ({className}) => {
+  const [searchValue, setSearchValue] = useState('')
   const ctx = useAdmissionContext()
   const companyCTX = useCompanyContext()
   const params = useParams()
@@ -29,6 +30,11 @@ const StudentsList: React.FC<Props> = ({className}) => {
     ctx.deleteStudentMutation.mutateAsync(studentId)
   }
 
+  const searchValueHandler = (value: string) => {
+    setSearchValue(value)
+    //console.log(value)
+  }
+
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
@@ -37,6 +43,15 @@ const StudentsList: React.FC<Props> = ({className}) => {
           <span className='card-label fw-bold fs-3 mb-1'>{singleComapnyData?.companyName}</span>
           <span className='text-muted mt-1 fw-semibold fs-7'>All Over World</span>
         </h3>
+        <div className='search-bar'>
+          <input
+            type='text'
+            value={searchValue}
+            onChange={(e) => searchValueHandler(e.target.value)}
+            className='form-control'
+            placeholder='Search Student'
+          />
+        </div>
         <div
           className='card-toolbar'
           data-bs-toggle='tooltip'
@@ -87,6 +102,12 @@ const StudentsList: React.FC<Props> = ({className}) => {
             <tbody>
               {ctx.studentsLists?.data?.users
                 ?.filter((c: any) => params?.id === c?.companyName)
+                ?.filter(
+                  (searchStudent: any) =>
+                    searchValue.trim() === '' ||
+                    searchStudent?.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    searchStudent?.email.toLowerCase().includes(searchValue.toLowerCase())
+                )
                 ?.map((student: any) => (
                   <tr key={student._id}>
                     <td>
