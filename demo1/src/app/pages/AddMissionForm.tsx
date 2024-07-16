@@ -583,7 +583,7 @@ const AddMissionForm: React.FC = () => {
                         <option value=''>-select-</option>
                         {courseCtx?.getCourseLists?.data?.map((c: any) => (
                           <option key={c?._id} value={c?.courseName}>
-                            {c?.courseName}
+                            {c?.courseName}-<b>({c?.category?.category})</b>
                           </option>
                         ))}
                       </select>

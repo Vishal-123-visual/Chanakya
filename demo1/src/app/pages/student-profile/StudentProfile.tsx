@@ -726,7 +726,7 @@ const StudentProfile: React.FC = () => {
                         <option value=''>-select-</option>
                         {courseCtx.getCourseLists?.data?.map((c: any) => (
                           <option key={c._id} value={c.courseName}>
-                            {c.courseName}
+                            {c.courseName}-({c?.category?.category})
                           </option>
                         ))}
                       </select>

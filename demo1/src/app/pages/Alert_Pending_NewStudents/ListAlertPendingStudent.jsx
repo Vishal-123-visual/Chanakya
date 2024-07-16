@@ -32,7 +32,7 @@ const ListAlertPendingStudent = () => {
       {/* end::Header */}
       {/* begin::Body */}
       <div className='card-body pt-2'>
-        {filteredStudentsAlertData.length === 0 ? (
+        {filteredStudentsAlertData?.length === 0 ? (
           <div className=''>No Pending Alert Student Available</div>
         ) : (
           <>

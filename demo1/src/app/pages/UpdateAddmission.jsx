@@ -158,7 +158,7 @@ const UpdateAddmission = () => {
 
   const navigate = useNavigate()
   const context = useAdmissionContext()
-  context.setStudentId(updateUserId?._id)
+  // context.setStudentId(updateUserId?._id)
   const formik = useFormik({
     initialValues,
     validationSchema: addmissionFormSchema,
@@ -588,7 +588,7 @@ const UpdateAddmission = () => {
                         <option value=''>-select-</option>
                         {courseCtx?.getCourseLists?.data?.map((c) => (
                           <option key={c?._id} value={c?.courseName}>
-                            {c?.courseName}
+                            {c?.courseName}-({c?.category?.category})
                           </option>
                         ))}
                       </select>
