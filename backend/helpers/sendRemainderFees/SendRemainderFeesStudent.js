@@ -7,6 +7,7 @@ import { USER_EMAIL } from "../../src/config/config.js";
 import { mailTransporter } from "../../src/utils/mail_helpers.js";
 
 export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
+  //console.log("req and res", req.url, req.body);
   let adminEmail, superAdminEmail;
 
   try {

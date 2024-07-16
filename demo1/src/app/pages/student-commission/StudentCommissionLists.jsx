@@ -6,9 +6,10 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const StudentCommissionLists = ({studentInfoData}) => {
+  console.log(studentInfoData)
   const navigate = useNavigate()
   const studentCTX = useCompanyContext()
-  let studentName = studentInfoData?.name.split(' ').join('_') + '-' + studentInfoData.rollNumber
+  let studentName = studentInfoData?.name?.split(' ').join('_') + '-' + studentInfoData?.rollNumber
 
   const {data, isLoading} = studentCTX.useGetStudentCommissionDataQuery(studentName)
   return (
@@ -17,7 +18,7 @@ const StudentCommissionLists = ({studentInfoData}) => {
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Student Commission</span>
-          <span className='mt-1 fw-semibold fs-7'>{studentInfoData.name}</span>
+          <span className='mt-1 fw-semibold fs-7'>{studentInfoData?.name}</span>
         </h3>
         <div
           className='card-toolbar'

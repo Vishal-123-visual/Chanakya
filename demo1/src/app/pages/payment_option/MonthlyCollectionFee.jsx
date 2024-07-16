@@ -119,19 +119,21 @@ const MonthlyCollectionFee = () => {
                         <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                       </td>
                       <td>
-                        <button
+                        <Link
+                          to={`/student/${collectionFees?.studentInfo?._id}`}
+                          target='_blank'
                           className='btn btn-link'
-                          onClick={() =>
-                            navigate(`/student/${collectionFees?.studentInfo?._id}`, {
-                              state: {
-                                ...collectionFees.studentInfo,
-                                courseName: collectionFees?.courseName,
-                              },
-                            })
-                          }
+                          // onClick={() =>
+                          //   navigate(`/student/${collectionFees?.studentInfo?._id}`, {
+                          //     state: {
+                          //       ...collectionFees.studentInfo,
+                          //       courseName: collectionFees?.courseName,
+                          //     },
+                          //   })
+                          // }
                         >
                           {collectionFees?.studentInfo?.rollNumber}
-                        </button>
+                        </Link>
                       </td>
                       <td>{collectionFees?.studentInfo.name}</td>
 

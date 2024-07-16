@@ -15,7 +15,6 @@ import dayBookRoutes from "./routes/dayBook.routes.js";
 import studentGstSuggestionsRoutes from "./routes/studentGstSuggestions.routes.js";
 import { BACKEND_URL, FRONTEND_URL } from "./config/config.js";
 import sendRemainderFeesStudent from "../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
-
 const app = express();
 
 // Apply CORS middleware with options
@@ -23,8 +22,6 @@ app.use(cors({ origin: [BACKEND_URL, FRONTEND_URL], credentials: true }));
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true }));
-
-app.use(sendRemainderFeesStudent);
 
 app.use("/api", userRoutes);
 app.use("/api/addmission_form", addMissionFormRoutes);
@@ -42,6 +39,7 @@ const __dirname = path.resolve();
 app.use("/api/images", express.static(path.join(__dirname + "/images")));
 app.use(express.static(path.join(__dirname, "./build")));
 
+app.use(sendRemainderFeesStudent);
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "/build/index.html"));
 });
