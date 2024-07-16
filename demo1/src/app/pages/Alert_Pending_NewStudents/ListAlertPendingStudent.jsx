@@ -1,11 +1,13 @@
 import moment from 'moment'
-import {KTIcon} from '../../../_metronic/helpers'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
-import {Dropdown1} from './DropDown1'
 
 const ListAlertPendingStudent = () => {
   const studentCTX = useAdmissionContext()
-  console.log(studentCTX.getAlertStudentPendingFeesQuery?.data)
+  const filteredStudentsAlertData = studentCTX.getAlertStudentPendingFeesQuery?.data?.filter(
+    (s) => s.Status === 'pending'
+  )
+
+  //console.log(filteredStudentsAlertData)
 
   return (
     <div className={`card`}>
@@ -30,29 +32,32 @@ const ListAlertPendingStudent = () => {
       {/* end::Header */}
       {/* begin::Body */}
       <div className='card-body pt-2'>
-        {/* begin::Item */}
-        {studentCTX.getAlertStudentPendingFeesQuery?.data
-          ?.filter((alertStudent) => alertStudent?.Status === 'pending')
-          ?.map((studentAlertData) => {
-            return (
-              <div className='d-flex align-items-center mb-8' key={studentAlertData?._id}>
-                <span className='bullet bullet-vertical h-40px bg-danger'></span>
-                <div className='form-check form-check-custom form-check-solid mx-5'></div>
-                <div className='flex-grow-1'>
-                  <a className='text-gray-800 text-hover-primary fw-bold fs-6'>
-                    {studentAlertData?.particulars}
-                  </a>
-                  <span className='text-muted fw-semibold d-block'>
-                    Due in {moment(studentAlertData?.RemainderDateAndTime).date() - moment().date()}{' '}
-                    Days
+        {filteredStudentsAlertData.length === 0 ? (
+          <div className=''>No Pending Alert Student Available</div>
+        ) : (
+          <>
+            {filteredStudentsAlertData?.map((studentAlertData) => {
+              return (
+                <div className='d-flex align-items-center mb-8' key={studentAlertData?._id}>
+                  <span className='bullet bullet-vertical h-40px bg-danger'></span>
+                  <div className='form-check form-check-custom form-check-solid mx-5'></div>
+                  <div className='flex-grow-1'>
+                    <a className='text-gray-800 text-hover-primary fw-bold fs-6'>
+                      {studentAlertData?.particulars}
+                    </a>
+                    <span className='text-muted fw-semibold d-block'>
+                      Due in{' '}
+                      {moment(studentAlertData?.RemainderDateAndTime).date() - moment().date()} Days
+                    </span>
+                  </div>
+                  <span className='badge badge-light-danger fs-8 fw-bold'>
+                    {studentAlertData?.Status}
                   </span>
                 </div>
-                <span className='badge badge-light-danger fs-8 fw-bold'>
-                  {studentAlertData?.Status}
-                </span>
-              </div>
-            )
-          })}
+              )
+            })}
+          </>
+        )}
 
         {/* end:Item */}
       </div>
