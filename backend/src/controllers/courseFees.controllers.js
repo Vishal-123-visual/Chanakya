@@ -1441,75 +1441,9 @@ export const getCourseFeesByStudentIdController = asyncHandler(
         ]);
       //console.log("from student fees controllers ", studentFees);
 
-      let adminEmail, superAdminEmail;
-      const adminUser = await userModel.find({});
-      adminUser.forEach((user) => {
-        console.log(user);
-        if (user.role === "Admin") {
-          adminEmail = user.email;
-        }
-        if (user.role === "SuperAdmin") {
-          superAdminEmail = user.email;
-        }
-      });
-
       // Check if student fees are not found
       if (!studentFees || studentFees.length === 0) {
         return res.status(404).json({ message: "Student fee not found" });
-      }
-
-      // Fetch additional information about the student
-      const studentInfo = await admissionFormModel
-        .findById(studentId)
-        .populate(["courseName", "companyName"]);
-
-      // Calculate the next payment installment due date
-      const installmentExpireDate = moment(
-        studentInfo.no_of_installments_expireTimeandAmount
-      );
-      const currentTime = moment();
-
-      // console.log(
-      //   "check the student installment time available",
-      //   moment(currentTime).isSame(installmentExpireDate)
-      // );
-
-      if (moment(currentTime).isSame(installmentExpireDate)) {
-        studentInfo.installmentPaymentSkipMonth += 1;
-      }
-
-      await studentInfo.save();
-      // Get email remainder data
-      const emailRemainderData = await EmailRemainderModel.find({});
-      // console.log(currentTime.isBefore(installmentExpireDate));
-      // Check if the current time is past the due date
-      if (currentTime.isAfter(installmentExpireDate)) {
-        // Calculate the difference in days
-        const daysDifference = currentTime.diff(installmentExpireDate, "days");
-        const hoursDifference =
-          currentTime.diff(installmentExpireDate, "hours") % 24;
-        //console.log("Days difference ", daysDifference);
-        //console.log("Day difference time ", daysDifference);
-
-        // Send email reminders based on specific dates
-        let emailContent;
-        if (daysDifference === 1 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].firstRemainder;
-        } else if (daysDifference === 10 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].secondRemainder;
-        } else if (daysDifference === 12 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].thirdRemainder;
-        } else if (daysDifference === 15 && hoursDifference === 0) {
-          emailContent = emailRemainderData[0].firstRemainder;
-        }
-
-        if (emailContent) {
-          sendEmail(
-            `${req.user.email}, ${studentInfo.email}, ${studentInfo.companyName.email}, thakurarvindkr10@gmail.com, ${adminEmail}, ${superAdminEmail}`,
-            "Installment Payment Reminder",
-            emailContent
-          );
-        }
       }
 
       // Return student fees
