@@ -13,7 +13,10 @@ import { userModel } from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 import { generateToken } from "../utils/createToken.js";
 import AlertStudentPendingFeesModel from "../models/alert-student_fees/alertStudentFees.models.js";
-import sendRemainderFeesStudent from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
+import sendRemainderFeesStudent, {
+  sendEmail,
+} from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
+import moment from "moment";
 
 const __dirname = path.resolve();
 
@@ -397,14 +400,15 @@ export const getAlertStudentPendingFeesController = asyncHandler(
     }
   }
 );
+
 export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
   async (req, res, next) => {
     try {
       const getAlertStudentPendingFeesData =
         await AlertStudentPendingFeesModel.find({}).populate("studentId");
 
-      let adminEmail, superAdminEmail;
-      // console.log("sending email reminder");
+      let adminEmail = null;
+      let superAdminEmail = null;
 
       // Fetch admin and super admin emails
       const adminUsers = await userModel.find({});
@@ -416,6 +420,43 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
           superAdminEmail = user.email;
         }
       });
+
+      //console.log(getAlertStudentPendingFeesData);
+
+      const currentTime = moment();
+
+      // Iterate through fetched data to check reminder dates
+      for (const studentData of getAlertStudentPendingFeesData) {
+        const { RemainderDateAndTime } = studentData;
+
+        // Check if RemainderDateAndTime is valid
+        console.log(
+          moment(currentTime).isSame(RemainderDateAndTime, "day:hour")
+        );
+        if (
+          RemainderDateAndTime &&
+          moment(currentTime).isSame(RemainderDateAndTime, "day:hour")
+        ) {
+          const toEmails = `${req?.user?.email}, thakurarvindkr10@gmail.com, ${adminEmail}, ${superAdminEmail}`;
+
+          try {
+            // Send email
+            await sendEmail(
+              toEmails,
+              "Alert Student Pending Fees",
+              studentData?.particulars
+            );
+            // console.log(
+            //   `Reminder email sent for student ${studentData.studentId.name}.`
+            // );
+          } catch (emailError) {
+            console.error(
+              `Error sending email for student ${studentData.studentId.name}:`,
+              emailError
+            );
+          }
+        }
+      }
 
       res.status(200).json(getAlertStudentPendingFeesData);
     } catch (error) {

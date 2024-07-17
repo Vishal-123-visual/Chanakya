@@ -21,7 +21,9 @@ const ReadOnlyAlertStudentPending = ({index, studentAlertData, handleEditClick})
       <td>{index + 1}</td>
       <td>{moment(studentAlertData?.Date).format('DD-MM-YYYY')}</td>
       <td className=''>{studentAlertData?.particulars}</td>
-      <td className=''>{moment(studentAlertData?.Date).format('DD-MM-YYYY hh:mm a')}</td>
+      <td className=''>
+        {moment(studentAlertData?.RemainderDateAndTime).format('DD-MM-YYYY hh:mm a')}
+      </td>
       <td className=''>{studentAlertData?.Status}</td>
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>

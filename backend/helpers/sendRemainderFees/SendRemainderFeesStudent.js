@@ -36,7 +36,7 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
       const currentTime = moment();
 
       // Update installmentPaymentSkipMonth if current time matches installment due date
-      if (moment(currentTime).isSame(installmentExpireDate, "day")) {
+      if (moment(currentTime).isSame(installmentExpireDate, "day:hour")) {
         if (
           student.student?.no_of_installments_expireTimeandAmount !== undefined
         ) {
@@ -95,7 +95,7 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
 };
 
 // Function to send email
-async function sendEmail(toEmails, subject, text, html) {
+export async function sendEmail(toEmails, subject, text, html) {
   const mailOptions = {
     from: USER_EMAIL,
     to: toEmails,
