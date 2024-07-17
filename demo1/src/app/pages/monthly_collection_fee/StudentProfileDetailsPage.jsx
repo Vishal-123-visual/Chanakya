@@ -39,6 +39,11 @@ const StudentProfileDetailsPage = () => {
     // console.log('navigating to the course subject page !!!', updateUserId)
     navigate('/course-subjects-addMarks', {state: studentInfoData})
   }
+
+  const installmentHandler = () => {
+    let value = studentInfoData?.remainingCourseFees % studentInfoData?.no_of_installments
+    return value.toFixed(2)
+  }
   return (
     <>
       <div className='card mb-5 mb-xl-10'>
@@ -715,8 +720,9 @@ const StudentProfileDetailsPage = () => {
                         type='text'
                         className='form-control w-50 '
                         readOnly
-                        // value={formik.values.no_of_installments_amount}
-                        value={studentInfoData?.no_of_installments_amount}
+                        value={(
+                          studentInfoData?.remainingCourseFees / studentInfoData?.no_of_installments
+                        ).toFixed(2)}
                       />
                     </div>
                   </div>
