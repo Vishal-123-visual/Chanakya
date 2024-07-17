@@ -179,7 +179,9 @@ export const AdmissionContextProvider = ({children}) => {
       if (error) {
         //console.log(error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudentsAlertPendingFessDetails']})
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentsAlertPendingFessDetails'],
+        })
       }
     },
   })
@@ -214,7 +216,7 @@ export const AdmissionContextProvider = ({children}) => {
     },
   })
   const getAllStudentsAlertStudentPendingFeesQuery = useQuery({
-    queryKey: ['getAllStudentsAlertPendingFessDetails'],
+    queryKey: ['getStudentsAlertPendingFessDetails', 1],
     queryFn: async () => {
       try {
         const response = await axios.get(

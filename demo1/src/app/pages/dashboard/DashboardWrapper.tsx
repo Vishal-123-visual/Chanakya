@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {FC} from 'react'
+import {FC, useState} from 'react'
 import {useIntl} from 'react-intl'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
@@ -18,6 +18,7 @@ import {
   EngageWidget10,
 } from '../../../_metronic/partials/widgets'
 import ListAlertPendingStudent from '../Alert_Pending_NewStudents/ListAlertPendingStudent'
+import DialogAlertPendingStudent from '../Alert_Pending_NewStudents/DialogAlertPendingStudent'
 
 const DashboardPage: FC = () => (
   <>
@@ -119,11 +120,33 @@ const DashboardPage: FC = () => (
 
 const DashboardWrapper: FC = () => {
   const intl = useIntl()
+  const [showDialog, setShowDialog] = useState(true)
   return (
-    <>
+    <div style={{position: 'relative'}}>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</PageTitle>
       <DashboardPage />
-    </>
+      <div
+        style={{
+          position: 'fixed',
+          top: '60%',
+          right: '0px',
+          zIndex: '1',
+        }}
+      >
+        {showDialog && <DialogAlertPendingStudent />}
+        <button
+          type='button'
+          className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
+          data-kt-menu-trigger='click'
+          data-kt-menu-placement='bottom-end'
+          data-kt-menu-flip='top-end'
+          style={{position: 'fixed', top: '60%', right: '0', zIndex: '1'}}
+          onClick={() => setShowDialog((prev) => !prev)}
+        >
+          <img src='/whatsapp.png' alt='' className='img-thumbnail' />
+        </button>
+      </div>
+    </div>
   )
 }
 

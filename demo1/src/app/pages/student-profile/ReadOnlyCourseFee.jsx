@@ -12,7 +12,7 @@ const ReadOnlyCourseFee = ({
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
-  console.log(StudentFee)
+  //console.log(StudentFee)
   const {auth, currentUser} = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()

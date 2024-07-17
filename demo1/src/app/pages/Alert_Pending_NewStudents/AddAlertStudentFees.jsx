@@ -48,7 +48,7 @@ const AddAlertStudentFees = ({}) => {
     setAmountDate(null)
     setParticulars('')
     setDateTime(null)
-    setStatus('')
+    setStatus('pending')
   }
 
   return (
