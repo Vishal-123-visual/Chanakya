@@ -21,6 +21,10 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  isEmailSent: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const AlertStudentPendingFeesModel = new mongoose.model(

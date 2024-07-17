@@ -400,7 +400,6 @@ export const getAlertStudentPendingFeesController = asyncHandler(
     }
   }
 );
-
 export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
   async (req, res, next) => {
     try {
@@ -421,22 +420,21 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
         }
       });
 
-      //console.log(getAlertStudentPendingFeesData);
-
       const currentTime = moment();
 
       // Iterate through fetched data to check reminder dates
       for (const studentData of getAlertStudentPendingFeesData) {
-        const { RemainderDateAndTime } = studentData;
+        const { RemainderDateAndTime, isEmailSent } = studentData;
 
         // Check if RemainderDateAndTime is valid
-        console.log(
-          moment(currentTime).isSame(RemainderDateAndTime, "day:hour")
-        );
         if (
           RemainderDateAndTime &&
-          moment(currentTime).isSame(RemainderDateAndTime, "day:hour")
+          moment(currentTime).isSame(RemainderDateAndTime, "minute") &&
+          !isEmailSent
         ) {
+          // console.log(
+          //   `Reminder time for student ${studentData.studentId.name} is now.`
+          // );
           const toEmails = `${req?.user?.email}, thakurarvindkr10@gmail.com, ${adminEmail}, ${superAdminEmail}`;
 
           try {
@@ -446,6 +444,8 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
               "Alert Student Pending Fees",
               studentData?.particulars
             );
+            studentData.isEmailSent = true;
+            await studentData.save();
             // console.log(
             //   `Reminder email sent for student ${studentData.studentId.name}.`
             // );
