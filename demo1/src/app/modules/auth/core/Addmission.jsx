@@ -213,6 +213,20 @@ export const AdmissionContextProvider = ({children}) => {
       }
     },
   })
+  const getAllStudentsAlertStudentPendingFeesQuery = useQuery({
+    queryKey: ['getStudentsAlertPendingFessDetails'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/api/students/getStudentAlertStudentPendingFees`,
+          config
+        )
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
 
   const deleteAlertStudentPendingFeesMutation = useMutation({
     mutationFn: async (id) => {
@@ -301,6 +315,7 @@ export const AdmissionContextProvider = ({children}) => {
         getAlertStudentPendingFeesQuery,
         deleteAlertStudentPendingFeesMutation,
         updateAlertPendingStudentFeesMutation,
+        getAllStudentsAlertStudentPendingFeesQuery,
         /********************** Student Fees Alert End  *******************/
       }}
     >

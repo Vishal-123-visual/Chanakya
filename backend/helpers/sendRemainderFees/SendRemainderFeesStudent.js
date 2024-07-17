@@ -6,10 +6,10 @@ import EmailRemainderModel from "../../src/models/email-remainder/email.remainde
 import { USER_EMAIL } from "../../src/config/config.js";
 import { mailTransporter } from "../../src/utils/mail_helpers.js";
 
-export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
+export const sendRemainderFeesStudent = async (req, res, next) => {
   //console.log("req and res", req.url, req.body);
   let adminEmail, superAdminEmail;
-
+  console.log("sending email reminder");
   try {
     // Fetch admin and super admin emails
     const adminUsers = await userModel.find({});
@@ -22,11 +22,13 @@ export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
       }
     });
 
+    //console.log(adminUsers);
+
     // Fetch student information with populated fields
     const studentInfo = await admissionFormModel
       .find()
       .populate(["courseName", "companyName"]);
-
+    //console.log(studentInfo);
     for (const student of studentInfo) {
       const installmentExpireDate = moment(
         student?.no_of_installments_expireTimeandAmount
@@ -58,13 +60,13 @@ export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
 
         // Send email based on specific days/hours difference
         let emailContent;
-        if (daysDifference === 1 && hoursDifference === 0) {
+        if (daysDifference === 1 && hoursDifference === 12) {
           emailContent = emailRemainderData.firstRemainder;
-        } else if (daysDifference === 10 && hoursDifference === 0) {
+        } else if (daysDifference === 10 && hoursDifference === 12) {
           emailContent = emailRemainderData.secondRemainder;
-        } else if (daysDifference === 12 && hoursDifference === 0) {
+        } else if (daysDifference === 12 && hoursDifference === 12) {
           emailContent = emailRemainderData.thirdRemainder;
-        } else if (daysDifference === 15 && hoursDifference === 0) {
+        } else if (daysDifference === 15 && hoursDifference === 12) {
           emailContent = emailRemainderData.firstRemainder;
         }
 
@@ -84,12 +86,13 @@ export const sendRemainderFeesStudent = asyncHandler(async (req, res, next) => {
 
     // Proceed to next middleware or route handler
     next();
+    console.log("send mail");
   } catch (error) {
     console.error("Error in sendRemainderFeesStudent:", error);
     // Handle error appropriately, e.g., send response or log further
     res.status(500).json({ success: false, error: "Internal Server Error" });
   }
-});
+};
 
 // Function to send email
 async function sendEmail(toEmails, subject, text, html) {

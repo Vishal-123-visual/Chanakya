@@ -13,6 +13,7 @@ import {
   getAlertStudentPendingFeesController,
   deleteAlertStudentPendingFeesController,
   updateAlertStudentPendingFeesController,
+  getAllStudentsAlertPendingFeesDataController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 
@@ -33,6 +34,12 @@ router.post(
   requireSignIn,
   isAdmin,
   createAlertStudentPendingFeesController
+);
+router.get(
+  "/getStudentAlertStudentPendingFees",
+  requireSignIn,
+  isAdmin,
+  getAllStudentsAlertPendingFeesDataController
 );
 router.get(
   "/createAlertStudentPendingFees/get",

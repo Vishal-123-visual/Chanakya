@@ -13,6 +13,7 @@ import { userModel } from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 import { generateToken } from "../utils/createToken.js";
 import AlertStudentPendingFeesModel from "../models/alert-student_fees/alertStudentFees.models.js";
+import sendRemainderFeesStudent from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 
 const __dirname = path.resolve();
 
@@ -390,6 +391,19 @@ export const getAlertStudentPendingFeesController = asyncHandler(
     try {
       const getAlertStudentPendingFeesData =
         await AlertStudentPendingFeesModel.find({});
+      sendRemainderFeesStudent(req, res, next);
+      res.status(200).json(getAlertStudentPendingFeesData);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const getAlertStudentPendingFeesData =
+        await AlertStudentPendingFeesModel.find({}).populate("Students");
+      sendRemainderFeesStudent(req, res, next);
       res.status(200).json(getAlertStudentPendingFeesData);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });

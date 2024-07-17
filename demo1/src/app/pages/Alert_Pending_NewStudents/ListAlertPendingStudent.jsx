@@ -3,11 +3,12 @@ import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 
 const ListAlertPendingStudent = () => {
   const studentCTX = useAdmissionContext()
-  const filteredStudentsAlertData = studentCTX.getAlertStudentPendingFeesQuery?.data?.filter(
-    (s) => s.Status === 'pending'
-  )
+  const filteredStudentsAlertData =
+    studentCTX.getAllStudentsAlertStudentPendingFeesQuery?.data?.filter(
+      (s) => s.Status === 'pending'
+    )
 
-  //console.log(filteredStudentsAlertData)
+  console.log(filteredStudentsAlertData)
 
   return (
     <div className={`card`}>

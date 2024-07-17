@@ -77,7 +77,7 @@ const ViewCourse = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {courseCtx?.getCourseLists?.data.map((course, index) => (
+              {courseCtx?.getCourseLists?.data?.map((course, index) => (
                 <tr key={course._id}>
                   <td></td>
                   <td className='fw-bold fs-5'>{index + 1}</td>
@@ -106,7 +106,7 @@ const ViewCourse = () => {
                   </td>
                 </tr>
               ))}
-              {courseCtx.getCourseLists.data.length === 0 && (
+              {courseCtx?.getCourseLists?.data?.length === 0 && (
                 <tr>
                   <td></td>
                   <td></td>
