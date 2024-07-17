@@ -391,7 +391,6 @@ export const getAlertStudentPendingFeesController = asyncHandler(
     try {
       const getAlertStudentPendingFeesData =
         await AlertStudentPendingFeesModel.find({});
-      sendRemainderFeesStudent(req, res, next);
       res.status(200).json(getAlertStudentPendingFeesData);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
@@ -402,8 +401,22 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
   async (req, res, next) => {
     try {
       const getAlertStudentPendingFeesData =
-        await AlertStudentPendingFeesModel.find({}).populate("Students");
-      sendRemainderFeesStudent(req, res, next);
+        await AlertStudentPendingFeesModel.find({}).populate("studentId");
+
+      let adminEmail, superAdminEmail;
+      // console.log("sending email reminder");
+
+      // Fetch admin and super admin emails
+      const adminUsers = await userModel.find({});
+      adminUsers.forEach((user) => {
+        if (user.role === "Admin") {
+          adminEmail = user.email;
+        }
+        if (user.role === "SuperAdmin") {
+          superAdminEmail = user.email;
+        }
+      });
+
       res.status(200).json(getAlertStudentPendingFeesData);
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });

@@ -214,7 +214,7 @@ export const AdmissionContextProvider = ({children}) => {
     },
   })
   const getAllStudentsAlertStudentPendingFeesQuery = useQuery({
-    queryKey: ['getStudentsAlertPendingFessDetails'],
+    queryKey: ['getAllStudentsAlertPendingFessDetails'],
     queryFn: async () => {
       try {
         const response = await axios.get(

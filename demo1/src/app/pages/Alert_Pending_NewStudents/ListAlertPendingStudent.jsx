@@ -8,7 +8,7 @@ const ListAlertPendingStudent = () => {
       (s) => s.Status === 'pending'
     )
 
-  console.log(filteredStudentsAlertData)
+  //console.log(filteredStudentsAlertData)
 
   return (
     <div className={`card`}>
@@ -44,8 +44,11 @@ const ListAlertPendingStudent = () => {
                   <div className='form-check form-check-custom form-check-solid mx-5'></div>
                   <div className='flex-grow-1'>
                     <a className='text-gray-800 text-hover-primary fw-bold fs-6'>
-                      {studentAlertData?.particulars}
+                      {studentAlertData?.studentId?.name}
                     </a>
+                    <span className='text-muted fw-semibold d-block'>
+                      {studentAlertData?.particulars}
+                    </span>
                     <span className='text-muted fw-semibold d-block'>
                       Due in{' '}
                       {moment(studentAlertData?.RemainderDateAndTime).date() - moment().date()} Days

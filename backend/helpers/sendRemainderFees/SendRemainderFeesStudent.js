@@ -9,7 +9,7 @@ import { mailTransporter } from "../../src/utils/mail_helpers.js";
 export const sendRemainderFeesStudent = async (req, res, next) => {
   //console.log("req and res", req.url, req.body);
   let adminEmail, superAdminEmail;
-  console.log("sending email reminder");
+  // console.log("sending email reminder");
   try {
     // Fetch admin and super admin emails
     const adminUsers = await userModel.find({});
@@ -86,7 +86,7 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
 
     // Proceed to next middleware or route handler
     next();
-    console.log("send mail");
+    //console.log("send mail");
   } catch (error) {
     console.error("Error in sendRemainderFeesStudent:", error);
     // Handle error appropriately, e.g., send response or log further

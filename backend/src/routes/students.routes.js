@@ -16,35 +16,29 @@ import {
   getAllStudentsAlertPendingFeesDataController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
+import sendRemainderFeesStudent from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 
 const router = Router();
 
 // Student Commission Start here -------------------------------------
-router.post(
-  "/commission",
-  requireSignIn,
-  isAdmin,
-  addStudentComissionController
-);
+router.post("/commission", requireSignIn, addStudentComissionController);
 router.get("/commission/:data", getStudentCommissionListsController);
 // Student Commission End here ---------------------------------------
 
 router.post(
   "/createAlertStudentPendingFees/add",
   requireSignIn,
-  isAdmin,
   createAlertStudentPendingFeesController
 );
 router.get(
   "/getStudentAlertStudentPendingFees",
   requireSignIn,
-  isAdmin,
+  sendRemainderFeesStudent,
   getAllStudentsAlertPendingFeesDataController
 );
 router.get(
   "/createAlertStudentPendingFees/get",
   requireSignIn,
-  isAdmin,
   getAlertStudentPendingFeesController
 );
 router.delete(
