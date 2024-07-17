@@ -9,10 +9,10 @@ const DialogAlertPendingStudent = () => {
         s.Status === 'pending' && moment(s?.RemainderDateAndTime).date() - moment().date() === 0
     )
 
-  console.log(filteredStudentsAlertData)
+  //console.log(filteredStudentsAlertData)
 
   return (
-    <div className='card'>
+    <div className='card' style={{backgroundColor: '#f8f9fa'}}>
       {/* begin::Header */}
       <div className='card-header border-0'>
         <h3 className='card-title fw-bold text-dark'>Alert Student Pending Fees</h3>
