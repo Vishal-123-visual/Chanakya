@@ -13,8 +13,12 @@ const CourseStudentSubjectMarks = () => {
   const navigate = useNavigate()
   const {auth} = useAuth()
 
+  //console.log(location?.state?.courseName._id === undefined)
+
   const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
-    location?.state?.updateUserId?.courseName._id
+    location?.state?.courseName._id === undefined
+      ? location?.state?.courseName
+      : location?.state?.courseName._id
   )
 
   // console.log(location?.state?.updateUserId)
@@ -23,7 +27,7 @@ const CourseStudentSubjectMarks = () => {
     data: studentSubjectMarksData,
     error: studentSubjectMarksError,
     isLoading: studentSubjectMarksIsLoading,
-  } = courseSubjectsCtx.useGetStudentSubjectsMarksBasedOnCourse(location?.state?.updateUserId?._id)
+  } = courseSubjectsCtx.useGetStudentSubjectsMarksBasedOnCourse(location?.state?._id)
 
   useEffect(() => {
     if (studentSubjectMarksData) {
@@ -39,7 +43,7 @@ const CourseStudentSubjectMarks = () => {
     }
   }, [studentSubjectMarksData])
 
-  if (location?.state?.updateUserId === undefined) {
+  if (location?.state === undefined) {
     navigate(-1)
     return null
   }
@@ -79,9 +83,12 @@ const CourseStudentSubjectMarks = () => {
         courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
           subjectId: id,
           ...marksData[id],
-          courseId: location.state.updateUserId.courseName._id,
-          studentId: location.state.updateUserId._id,
-          companyName: location.state.updateUserId.companyName,
+          courseId:
+            location?.state?.courseName._id === undefined
+              ? location?.state?.courseName
+              : location?.state?.courseName._id,
+          studentId: location.state._id,
+          companyName: location.state.companyName,
         })
       )
 
@@ -127,9 +134,7 @@ const CourseStudentSubjectMarks = () => {
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Course Subjects Results</span>
-          <span className=' mt-1 fw-semibold fs-7'>
-            Student Name : {location?.state?.updateUserId.name}
-          </span>
+          <span className=' mt-1 fw-semibold fs-7'>Student Name : {location?.state?.name}</span>
         </h3>
 
         <div className='card-toolbar'>

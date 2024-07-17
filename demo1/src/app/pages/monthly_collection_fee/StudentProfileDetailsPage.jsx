@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import {useAuth} from '../../modules/auth'
 import {useCompanyContext} from '../compay/CompanyContext'
@@ -8,6 +8,7 @@ import {KTIcon} from '../../../_metronic/helpers'
 import {useCourseContext} from '../course/CourseContext'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import StudentCourseFee from '../student-profile/StudentCourseFee'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -16,10 +17,11 @@ const StudentProfileDetailsPage = () => {
   const params = useParams()
   const companyCTX = useCompanyContext()
   const studentCTX = useAdmissionContext()
+  const navigate = useNavigate()
   // console.log(params)
   const {currentUser} = useAuth()
   const {data: studentInfoData} = studentCTX.useGetSingleStudentUsingById(params.id)
-  console.log(studentInfoData)
+  //console.log(studentInfoData)
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(
     studentInfoData?.companyName
   )
@@ -35,7 +37,7 @@ const StudentProfileDetailsPage = () => {
   const navigateCourseSubjectsHandler = () => {
     //console.log('data of subjects based on course', data)
     // console.log('navigating to the course subject page !!!', updateUserId)
-    // navigate('/course-subjects-addMarks', {state: {updateUserId}})
+    navigate('/course-subjects-addMarks', {state: studentInfoData})
   }
   return (
     <>
@@ -726,13 +728,13 @@ const StudentProfileDetailsPage = () => {
           </form>
         </div>
       </div>
-      {/* <StudentCourseFee className={''} studentInfoData={studentInfoData} />
+      <StudentCourseFee className={''} studentInfoData={studentInfoData} />
       {currentUser?.role !== 'Student' && (
         <div className='d-flex flex-column gap-10 mt-4'>
           <AlertPendingFeesNewStudents studentInfoData={studentInfoData} />
           <StudentCommissionLists studentInfoData={studentInfoData} />
         </div>
-      )} */}
+      )}
     </>
   )
 }
