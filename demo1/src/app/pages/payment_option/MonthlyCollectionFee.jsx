@@ -120,7 +120,7 @@ const MonthlyCollectionFee = () => {
                       </td>
                       <td>
                         <Link
-                          to={`/student/${collectionFees?.studentInfo?._id}`}
+                          to={`/profile/student/${collectionFees?.studentInfo?._id}`}
                           target='_blank'
                           className='btn btn-link'
                           // onClick={() =>

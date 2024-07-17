@@ -51,6 +51,7 @@ import EmailTemplate from '../pages/email-template/EmailTemplate'
 import SendEmailSuggestion from '../pages/email-template/SendEmailSuggestion'
 import CourseStudentSubjectMarks from '../pages/courseStudentSubjectsMarks/CourseStudentSubjectMarks'
 import StudentMarksResult from '../pages/courseStudentSubjectsMarks/StudentMarksResult'
+import StudentProfileDetailsPage from '../pages/monthly_collection_fee/StudentProfileDetailsPage'
 const PrivateRoutes = () => {
   const {currentUser} = useAuth()
   //console.log(currentUser)
@@ -260,7 +261,8 @@ const PrivateRoutes = () => {
               }
             />
             <Route path='/student/:id' element={<StudentProfile />} />
-            {/* *************************************** Monthly Collection fees start here.. ******************************************* */}
+            <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
+            {/* *************************************** Monthly Collection fees start here.************************** */}
             <Route
               path='/monthlyCollectionFees/:id'
               element={

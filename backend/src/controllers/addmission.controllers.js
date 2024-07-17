@@ -157,3 +157,19 @@ export const createAddMissionController = asyncHandler(
     });
   }
 );
+
+export const getSingleStudentByIdController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const student = await addMissionFormModel.findById(req.params.id);
+      if (!student) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Student not found!" });
+      }
+      res.status(200).json(student);
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);

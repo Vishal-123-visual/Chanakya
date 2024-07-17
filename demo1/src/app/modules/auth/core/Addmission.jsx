@@ -43,6 +43,23 @@ export const AdmissionContextProvider = ({children}) => {
       },
     })
   }
+  const useGetSingleStudentUsingById = (studentId) => {
+    console.log(studentId)
+    return useQuery({
+      queryKey: ['getStudents', studentId],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/addmission_form/${studentId}`)
+          console.log(response.data)
+          return response.data
+        } catch (error) {
+          console.error('Error fetching student data:', error)
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+      enabled: !!studentId, // Ensure the query runs only if studentId is defined
+    })
+  }
 
   //console.log(studentsLists)
   const createStudentMutation = useMutation({
@@ -278,6 +295,7 @@ export const AdmissionContextProvider = ({children}) => {
         updateStudentMutation,
         setStudentId,
         useGetSingleStudentUsingWithEmail,
+        useGetSingleStudentUsingById,
         /********************** Student Fees Alert Start   *******************/
         createAlertStudentPendingFeesMutation,
         getAlertStudentPendingFeesQuery,
