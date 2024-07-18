@@ -816,7 +816,7 @@ export const createCourseFeesController = asyncHandler(
       await nextInstallmentExpiration.save();
 
       student.no_of_installments_expireTimeandAmount = expirationDate.toDate(); // Convert moment object to Date
-      student.no_of_installments_amount = installation_amount;
+      student.no_of_installments_amount = installmentAmount;
       await student.save();
       const findPaymentOptionName = await PaymentOptionsModel.findById(
         paymentOption
