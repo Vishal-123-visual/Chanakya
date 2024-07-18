@@ -1488,12 +1488,12 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
 
     try {
       // Check if a receipt with the same number already exists
-      const alreadyReciptExists = await CourseFeesModel.findOne({
+      const alreadyReceiptExists = await CourseFeesModel.findOne({
         reciptNumber,
       });
       if (
-        alreadyReciptExists &&
-        alreadyReciptExists._id.toString() !== req.params.id
+        alreadyReceiptExists &&
+        alreadyReceiptExists._id.toString() !== req.params.id
       ) {
         return res.status(400).json({
           success: false,
@@ -1526,6 +1526,46 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
 
       // Save the updated student fee
       const updatedSingleStudentFee = await singleStudentFee.save();
+
+      // Find all course fees related to the student by studentInfo
+      const allCourseFeesSingleStudent = await CourseFeesModel.find({
+        studentInfo: updatedSingleStudentFee?.studentInfo,
+      });
+
+      // Update each related course fee
+      if (allCourseFeesSingleStudent?.length > 0) {
+        // Update related course fees sequentially
+        for (let i = 1; i < allCourseFeesSingleStudent?.length; i++) {
+          const prevCourseFee = allCourseFeesSingleStudent[i - 1];
+          const currentCourseFee = allCourseFeesSingleStudent[i];
+
+          currentCourseFee.netCourseFees = prevCourseFee?.remainingFees ?? 0;
+          currentCourseFee.remainingFees =
+            (prevCourseFee?.remainingFees ?? 0) -
+            (currentCourseFee?.amountPaid ?? 0);
+          currentCourseFee.no_of_installments_amount =
+            ((prevCourseFee?.remainingFees ?? 0) -
+              (currentCourseFee?.amountPaid ?? 0)) /
+            (currentCourseFee?.no_of_installments ?? 1);
+
+          // Save the updated course fee
+          await currentCourseFee.save();
+        }
+      }
+
+      // Update the first course fee separately (if applicable)
+      const firstCourseFee = allCourseFeesSingleStudent[0];
+      firstCourseFee.no_of_installments_amount =
+        firstCourseFee?.remainingFees / firstCourseFee?.no_of_installments;
+      await firstCourseFee.save();
+
+      const totalPaidSingleStudentCourseFees =
+        allCourseFeesSingleStudent.reduce(
+          (acc, cur) => acc + cur.amountPaid,
+          0
+        );
+      console.log(totalPaidSingleStudentCourseFees);
+
       res.status(200).json({ success: true, data: updatedSingleStudentFee });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });

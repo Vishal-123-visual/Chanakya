@@ -61,11 +61,29 @@ export const getAllStudentsController = asyncHandler(async (req, res, next) => {
 
 export const updateStudentController = asyncHandler(async (req, res, next) => {
   try {
+    const expirePaymentInstallments =
+      await PaymentInstallmentTimeExpireModel.find({
+        studentInfo: req.params?.id,
+      }).sort({ createdAt: -1 });
+    //console.log(expirePaymentInstallments[0]);
     const student = await admissionFormModel.findOne({ _id: req.params?.id });
     if (!student) {
       res.status(404).json({ success: false, message: "Student not found!" });
       return; // Added return to exit the function if student is not found
     }
+
+    if (student.no_of_installments === 1) {
+      if (expirePaymentInstallments[0]) {
+        try {
+          await expirePaymentInstallments[0].deleteOne();
+          student.no_of_installments_expireTimeandAmount = null;
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+
+    // console.log(student);
 
     //console.log("update student", req.body);
 
