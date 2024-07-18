@@ -34,9 +34,12 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
         student?.no_of_installments_expireTimeandAmount
       );
       const currentTime = moment();
+      const diffInDays = installmentExpireDate.diff(currentTime, "days");
+
+      //console.log(student.name, diffInDays);
 
       // Update installmentPaymentSkipMonth if current time matches installment due date
-      if (moment(currentTime).isSame(installmentExpireDate, "day:hour")) {
+      if (moment(currentTime).isSame(installmentExpireDate, "day")) {
         if (
           student.student?.no_of_installments_expireTimeandAmount !== undefined
         ) {
@@ -50,6 +53,8 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
 
       // Fetch email remainder data
       const emailRemainderData = await EmailRemainderModel.findOne({}); // Assuming there's only one document
+
+      //console.log(emailRemainderData);
 
       // Check if current time is after the installment due date
       if (currentTime.isAfter(installmentExpireDate)) {
