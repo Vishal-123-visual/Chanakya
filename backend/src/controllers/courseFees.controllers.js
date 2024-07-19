@@ -1593,10 +1593,6 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
           allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
             .remainingFees /
           lastPaymentInstallmentExpirationTime.installment_number;
-        lastPaymentInstallmentExpirationTime.installment_amount =
-          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
-            .remainingFees /
-          lastPaymentInstallmentExpirationTime.installment_number;
         presentStudent.no_of_installments =
           lastPaymentInstallmentExpirationTime.installment_number - 1;
       } else {
