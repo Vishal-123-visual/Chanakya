@@ -1583,12 +1583,25 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         allCourseFeesSingleStudent[
           allCourseFeesSingleStudent.length - 1
         ].remainingFees;
-      presentStudent.no_of_installments_amount =
-        allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
-          .remainingFees / presentStudent.no_of_installments;
-      lastPaymentInstallmentExpirationTime.installment_amount =
-        allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
-          .remainingFees / presentStudent.no_of_installments;
+      if (presentStudent.no_of_installments === 0) {
+        presentStudent.no_of_installments_amount =
+          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+            .remainingFees /
+          lastPaymentInstallmentExpirationTime.installment_number;
+        lastPaymentInstallmentExpirationTime.installment_amount =
+          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+            .remainingFees /
+          lastPaymentInstallmentExpirationTime.installment_number;
+        presentStudent.no_of_installments =
+          lastPaymentInstallmentExpirationTime.installment_amount - 1;
+      } else {
+        presentStudent.no_of_installments_amount =
+          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+            .remainingFees / presentStudent.no_of_installments;
+        lastPaymentInstallmentExpirationTime.installment_amount =
+          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+            .remainingFees / presentStudent.no_of_installments;
+      }
       await presentStudent.save();
       await lastPaymentInstallmentExpirationTime.save();
 
