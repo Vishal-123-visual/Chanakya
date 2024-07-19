@@ -1594,7 +1594,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       // update the reciptNumber to DayBookDataStudent
       // console.log(allCourseFeesSingleStudent.length, singleDayBookData.length);
       for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
-        if (singleDayBookData[i].reciptNumber === "undefined") {
+        if (singleDayBookData[i].reciptNumber === undefined) {
           singleDayBookData[i].reciptNumber =
             allCourseFeesSingleStudent[i].reciptNumber;
         }
@@ -1620,8 +1620,9 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
               singleDayBookData[i - 1]?.balance + amountPaid + lateFees;
           } else {
             singleDayBookData[i].balance =
-              totalBalaceOfDayBookAccountsData[0]?.balance === undefined
-                ? 0
+              totalBalaceOfDayBookAccountsData[0]?.StudentName ===
+              singleDayBookData[i].StudentName
+                ? 0 + (amountPaid + lateFees)
                 : totalBalaceOfDayBookAccountsData[0]?.balance +
                   amountPaid +
                   lateFees;
