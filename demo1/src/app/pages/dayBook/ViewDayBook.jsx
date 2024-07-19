@@ -165,7 +165,7 @@ const ViewDayBook = () => {
                       </Link>
                     </td>
                     <td className='text-dark fw-bold text-hover-primary fs-6'>
-                      {dayBookEntry.naretion || '--'}
+                      {dayBookEntry.naretion || dayBookEntry.reciptNumber}
                     </td>
                     <td
                       className='text-dark fw-bold text-hover-primary fs-6 '

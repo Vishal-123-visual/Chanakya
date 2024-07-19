@@ -65,22 +65,6 @@ export const createCourseFeesController = asyncHandler(
       });
       //console.log("day book data model", existingDataModel);
 
-      const newDayBookData = new DayBookDataModel({
-        studentInfo: student._id,
-        rollNo: student.rollNumber,
-        StudentName: student.name,
-        studentLateFees: +lateFees,
-        companyId: student?.companyName?._id,
-        dayBookDatadate: amountDate,
-        credit: +amountPaid,
-        balance:
-          (existingDataModel[0]?.balance || 0) +
-          Number(amountPaid) +
-          Number(lateFees),
-      });
-
-      await newDayBookData.save();
-
       //console.log(BACKEND_URL + "/api/images/" + student.companyName.logo);
 
       // get the admin email and super admin email addresses
@@ -101,6 +85,23 @@ export const createCourseFeesController = asyncHandler(
       if (student.companyName.reciptNumber) {
         reciptNumber = student.companyName.reciptNumber;
       }
+
+      const newDayBookData = new DayBookDataModel({
+        studentInfo: student._id,
+        rollNo: student.rollNumber,
+        StudentName: student.name,
+        studentLateFees: +lateFees,
+        companyId: student?.companyName?._id,
+        dayBookDatadate: amountDate,
+        reciptNumber,
+        credit: +amountPaid,
+        balance:
+          (existingDataModel[0]?.balance || 0) +
+          Number(amountPaid) +
+          Number(lateFees),
+      });
+
+      await newDayBookData.save();
 
       const studentGSTStatus = await StudentGST_GuggestionModel.find();
       //console.log(studentGSTStatus[0].studentGST_Guggestion);
@@ -1601,37 +1602,27 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         await singleDayBookData[i].save();
       }
 
-      const totalBalaceOfDayBookAccountsData = await DayBookDataModel.find(
-        {}
-      ).sort({ createdAt: -1 });
+      const totalBalaceOfDayBookAccountsData = await DayBookDataModel.find({});
       //console.log("total balance is ", totalBalaceOfDayBookAccountsData);
 
       // update the dayBook Student amount
-      for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
-        if (
-          allCourseFeesSingleStudent[i].reciptNumber ===
-          singleDayBookData[i].reciptNumber
-        ) {
-          if (singleDayBookData[i - 1]?.balance) {
-            singleDayBookData[i].credit = amountPaid;
-            singleDayBookData[i].studentLateFees = lateFees;
-            singleDayBookData[i].dayBookDatadate = amountDate;
-            singleDayBookData[i].balance =
-              singleDayBookData[i - 1]?.balance + amountPaid + lateFees;
+      for (let i = 0; i < totalBalaceOfDayBookAccountsData.length; i++) {
+        if (totalBalaceOfDayBookAccountsData[i].reciptNumber === reciptNumber) {
+          if (totalBalaceOfDayBookAccountsData[i - 1]) {
+            totalBalaceOfDayBookAccountsData[i].reciptNumber = reciptNumber;
+            totalBalaceOfDayBookAccountsData[i].studentLateFees = lateFees;
+            totalBalaceOfDayBookAccountsData[i].dayBookDatadate = amountDate;
+            totalBalaceOfDayBookAccountsData[i].credit = amountPaid;
+            totalBalaceOfDayBookAccountsData[i].balance =
+              totalBalaceOfDayBookAccountsData[i - 1].balance +
+              lateFees +
+              amountPaid;
           } else {
-            singleDayBookData[i].balance =
-              totalBalaceOfDayBookAccountsData[0]?.StudentName ===
-              singleDayBookData[i].StudentName
-                ? 0 + (amountPaid + lateFees)
-                : totalBalaceOfDayBookAccountsData[0]?.balance +
-                  amountPaid +
-                  lateFees;
-
-            singleDayBookData[i].credit = amountPaid;
-            singleDayBookData[i].studentLateFees = lateFees;
-            singleDayBookData[i].dayBookDatadate = amountDate;
+            totalBalaceOfDayBookAccountsData[i].balance =
+              0 + lateFees + amountPaid;
           }
-          await singleDayBookData[i].save();
+
+          await totalBalaceOfDayBookAccountsData[i].save();
         }
       }
       res.status(200).json({ success: true, data: updatedSingleStudentFee });
