@@ -1503,11 +1503,24 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
 
       // Find the student fee by ID
       const singleStudentFee = await CourseFeesModel.findById(req.params.id);
+      const singleDayBookData = await DayBookDataModel.find({
+        studentInfo: studentInfo,
+      });
+      //console.log(singleDayBookData);
+      //console.log(singleStudentFee);
       if (!singleStudentFee) {
         return res
           .status(404)
           .json({ success: false, message: "Student fee not found" });
       }
+      //console.log(req.params.id);
+      const presentStudent = await admissionFormModel.findById(studentInfo);
+      //console.log(presentStudent);
+      const lastPaymentInstallmentExpirationTime =
+        await PaymentInstallmentTimeExpireModel.findOne({
+          installment_number: presentStudent.no_of_installments,
+        });
+      // console.log(lastPaymentInstallmentExpirationTime);
 
       // Update fields if they are provided in the request body
       singleStudentFee.netCourseFees =
@@ -1564,8 +1577,62 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
           (acc, cur) => acc + cur.amountPaid,
           0
         );
-      console.log(totalPaidSingleStudentCourseFees);
+      presentStudent.totalPaid = totalPaidSingleStudentCourseFees;
+      presentStudent.remainingCourseFees =
+        allCourseFeesSingleStudent[
+          allCourseFeesSingleStudent.length - 1
+        ].remainingFees;
+      presentStudent.no_of_installments_amount =
+        allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+          .remainingFees / presentStudent.no_of_installments;
+      lastPaymentInstallmentExpirationTime.installment_amount =
+        allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+          .remainingFees / presentStudent.no_of_installments;
+      await presentStudent.save();
+      await lastPaymentInstallmentExpirationTime.save();
 
+      // update the reciptNumber to DayBookDataStudent
+      // console.log(allCourseFeesSingleStudent.length, singleDayBookData.length);
+      for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
+        if (singleDayBookData[i].reciptNumber === "undefined") {
+          singleDayBookData[i].reciptNumber =
+            allCourseFeesSingleStudent[i].reciptNumber;
+        }
+        await singleDayBookData[i].save();
+      }
+
+      const totalBalaceOfDayBookAccountsData = await DayBookDataModel.find(
+        {}
+      ).sort({ createdAt: -1 });
+      //console.log("total balance is ", totalBalaceOfDayBookAccountsData);
+
+      // update the dayBook Student amount
+      for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
+        if (
+          allCourseFeesSingleStudent[i].reciptNumber ===
+          singleDayBookData[i].reciptNumber
+        ) {
+          if (singleDayBookData[i - 1]?.balance) {
+            singleDayBookData[i].credit = amountPaid;
+            singleDayBookData[i].studentLateFees = lateFees;
+            singleDayBookData[i].dayBookDatadate = amountDate;
+            singleDayBookData[i].balance =
+              singleDayBookData[i - 1]?.balance + amountPaid + lateFees;
+          } else {
+            singleDayBookData[i].balance =
+              totalBalaceOfDayBookAccountsData[0]?.balance === undefined
+                ? 0
+                : totalBalaceOfDayBookAccountsData[0]?.balance +
+                  amountPaid +
+                  lateFees;
+
+            singleDayBookData[i].credit = amountPaid;
+            singleDayBookData[i].studentLateFees = lateFees;
+            singleDayBookData[i].dayBookDatadate = amountDate;
+          }
+          await singleDayBookData[i].save();
+        }
+      }
       res.status(200).json({ success: true, data: updatedSingleStudentFee });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });

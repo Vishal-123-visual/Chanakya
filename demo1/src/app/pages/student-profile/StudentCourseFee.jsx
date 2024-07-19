@@ -170,6 +170,9 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     e.preventDefault()
     studentPayFeeCtx.updateStudentSingleCourseFeesMutation.mutate(editStudentCourseFees)
     setStudentCourseFeesEditId(null)
+    navigate(`/students/${studentInfoData?.companyName}`)
+    window.location.reload()
+    return
   }
 
   // console.log(payStudentFeesAdd)

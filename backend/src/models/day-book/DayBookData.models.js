@@ -12,6 +12,9 @@ const dayBookDataSchema = new mongoose.Schema(
     StudentName: {
       type: String,
     },
+    reciptNumber: {
+      type: String,
+    },
 
     studentLateFees: {
       type: Number,
