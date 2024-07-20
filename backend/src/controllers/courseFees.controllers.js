@@ -1708,6 +1708,15 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
         singleStudentFee.studentInfo
       );
 
+      const lastPaymentInstallmentOfCurrentStudent =
+        await PaymentInstallmentTimeExpireModel.findOne({
+          installment_number: currentStudent.no_of_installments,
+          studentInfo: singleStudentFee.studentInfo,
+        });
+      if (lastPaymentInstallmentOfCurrentStudent) {
+        await lastPaymentInstallmentOfCurrentStudent.deleteOne();
+      }
+
       // Re-fetch course fees and DayBook data after deletion
       allCourseFeesSingleStudent = await CourseFeesModel.find({
         studentInfo: singleStudentFee.studentInfo,
@@ -1746,7 +1755,7 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
       // Update the student's total paid and remaining course fees
       if (allCourseFeesSingleStudent.length === 0) {
         currentStudent.totalPaid = 0;
-        delete currentStudent.remainingCourseFees;
+        currentStudent.remainingCourseFees = undefined;
         currentStudent.no_of_installments = singleStudentFee.no_of_installments;
         currentStudent.netCourseFees = singleStudentFee.netCourseFees;
         currentStudent.no_of_installments_amount =
