@@ -104,13 +104,14 @@ const ViewDayBook = () => {
             <thead>
               <tr className='fw-bold'>
                 <th className='w-25px'></th>
-                <th className='min-w-150px'>ID</th>
-                <th className='min-w-140px'>Date</th>
-                <th className='min-w-120px'>Roll No</th>
+                <th className='min-w-10px'>ID</th>
+                <th className='min-w-100px'>Date</th>
+                <th className='min-w-100px'>Roll No</th>
+                <th className='min-w-100px'>Recipt No</th>
                 <th className='min-w-120px'>Particulars</th>
                 <th className='min-w-120px'>Narration</th>
-                <th className='min-w-120px'>Credit</th>
-                <th className='min-w-120px'>Debit</th>
+                <th className='min-w-100px'>Credit</th>
+                <th className='min-w-100px'>Debit</th>
                 <th className='min-w-120px'>Late Fees</th>
                 <th className='min-w-100px text-center'>Balance</th>
               </tr>
@@ -147,6 +148,12 @@ const ViewDayBook = () => {
                     <td className='text-dark fw-bold text-hover-primary fs-6'>
                       {dayBookEntry.rollNo}
                     </td>
+                    <td
+                      style={{background: '#f2f2ff'}}
+                      className='text-dark fw-bold text-hover-primary fs-6'
+                    >
+                      {dayBookEntry?.reciptNumber}
+                    </td>
                     <td className='' style={{background: '#f2f2ff'}}>
                       <Link
                         className={
@@ -165,7 +172,7 @@ const ViewDayBook = () => {
                       </Link>
                     </td>
                     <td className='text-dark fw-bold text-hover-primary fs-6'>
-                      {dayBookEntry.naretion || dayBookEntry.reciptNumber}
+                      {dayBookEntry.naretion || '--'}
                     </td>
                     <td
                       className='text-dark fw-bold text-hover-primary fs-6 '
@@ -185,6 +192,16 @@ const ViewDayBook = () => {
                     </td>
                     <td className='text-dark fw-bold text-hover-primary fs-6'>
                       {dayBookEntry.balance.toFixed(2)}
+                    </td>
+                    <td>
+                      <div className='d-flex justify-content-end flex-shrink-0'>
+                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                          <KTIcon iconName='pencil' className='fs-3' />
+                        </button>
+                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'>
+                          <KTIcon iconName='trash' className='fs-3' />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 )
