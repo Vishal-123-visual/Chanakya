@@ -44,6 +44,8 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     if (window.confirm('Are you sure you want to delete this student course fee?')) {
       studentPayFeeCtx.useDeleteSingleStudentCourseFees.mutate(id)
     }
+    navigate(`/students/${studentInfoData?.companyName}`)
+    window.location.reload()
     return
   }
   const [payStudentFeesAdd, setPayStudentFeesAdd] = useState()

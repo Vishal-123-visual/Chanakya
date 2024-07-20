@@ -1665,17 +1665,109 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
     }
   }
 );
-
 export const deleteSingleStudentCourseFeesController = asyncHandler(
   async (req, res, next) => {
     try {
-      console.log(req.params.id);
       const singleStudentFee = await CourseFeesModel.findById(req.params.id);
       if (!singleStudentFee) {
         return res.status(404).json({ message: "Student fee not found" });
       }
-      console.log(singleStudentFee);
+
+      let allCourseFeesSingleStudent = await CourseFeesModel.find({
+        studentInfo: singleStudentFee.studentInfo,
+      });
+
+      let singleStudentDayBooksData = await DayBookDataModel.find({
+        companyId: singleStudentFee.companyName,
+      });
+
+      // Update receipt numbers if they are not present in the DayBook data
+      for (const [
+        index,
+        updateReciptNumberDayBookData,
+      ] of singleStudentDayBooksData.entries()) {
+        if (updateReciptNumberDayBookData.reciptNumber === undefined) {
+          updateReciptNumberDayBookData.reciptNumber =
+            allCourseFeesSingleStudent[index]?.reciptNumber;
+          await updateReciptNumberDayBookData.save();
+        }
+      }
+
+      // Find and delete the specific DayBook data
+      const singleDayBookData = await DayBookDataModel.findOne({
+        reciptNumber: singleStudentFee.reciptNumber,
+      });
+
+      if (singleDayBookData) {
+        await singleDayBookData.deleteOne();
+      }
+
       await singleStudentFee.deleteOne();
+
+      const currentStudent = await admissionFormModel.findById(
+        singleStudentFee.studentInfo
+      );
+
+      // Re-fetch course fees and DayBook data after deletion
+      allCourseFeesSingleStudent = await CourseFeesModel.find({
+        studentInfo: singleStudentFee.studentInfo,
+      });
+
+      singleStudentDayBooksData = await DayBookDataModel.find({
+        companyId: singleStudentFee.companyName,
+      });
+
+      // Update remaining fees and balance for the student
+      for (let i = 1; i < allCourseFeesSingleStudent.length; i++) {
+        const previousFees = allCourseFeesSingleStudent[i - 1];
+        const currentFees = allCourseFeesSingleStudent[i];
+        currentFees.netCourseFees = previousFees.remainingFees;
+        currentFees.remainingFees =
+          previousFees.remainingFees - currentFees.amountPaid;
+        await currentFees.save();
+      }
+
+      // Update DayBook data
+      for (let i = 1; i < singleStudentDayBooksData.length; i++) {
+        const previousDayBookData = singleStudentDayBooksData[i - 1];
+        const currentDayBookData = singleStudentDayBooksData[i];
+        if (currentDayBookData.credit !== 0) {
+          currentDayBookData.balance =
+            previousDayBookData.balance +
+            currentDayBookData.credit +
+            currentDayBookData.studentLateFees;
+        } else {
+          currentDayBookData.balance =
+            previousDayBookData.balance - currentDayBookData.debit;
+        }
+        await currentDayBookData.save();
+      }
+
+      // Update the student's total paid and remaining course fees
+      if (allCourseFeesSingleStudent.length === 0) {
+        currentStudent.totalPaid = 0;
+        delete currentStudent.remainingCourseFees;
+        currentStudent.no_of_installments = singleStudentFee.no_of_installments;
+        currentStudent.netCourseFees = singleStudentFee.netCourseFees;
+        currentStudent.no_of_installments_amount =
+          singleStudentFee.netCourseFees / singleStudentFee.no_of_installments;
+      } else {
+        const totalPaid = allCourseFeesSingleStudent.reduce(
+          (acc, cur) => acc + cur.amountPaid,
+          0
+        );
+        currentStudent.totalPaid = totalPaid;
+        currentStudent.remainingCourseFees =
+          allCourseFeesSingleStudent[
+            allCourseFeesSingleStudent.length - 1
+          ].remainingFees;
+        currentStudent.no_of_installments =
+          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+            .no_of_installments + 1;
+      }
+
+      await currentStudent.save();
+
       res.status(200).json({ message: "Student fee deleted" });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
