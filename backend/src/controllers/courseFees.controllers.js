@@ -1709,13 +1709,16 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
       );
 
       const lastPaymentInstallmentOfCurrentStudent =
-        await PaymentInstallmentTimeExpireModel.findOne({
-          installment_number: currentStudent.no_of_installments,
+        await PaymentInstallmentTimeExpireModel.find({
           studentInfo: singleStudentFee.studentInfo,
         });
-      if (lastPaymentInstallmentOfCurrentStudent) {
-        await lastPaymentInstallmentOfCurrentStudent.deleteOne();
-      }
+      lastPaymentInstallmentOfCurrentStudent.map(
+        async (deleteCurrentStudentPaymentInstallments) => {
+          if (deleteCurrentStudentPaymentInstallments) {
+            await deleteCurrentStudentPaymentInstallments.deleteOne();
+          }
+        }
+      );
 
       // Re-fetch course fees and DayBook data after deletion
       allCourseFeesSingleStudent = await CourseFeesModel.find({
