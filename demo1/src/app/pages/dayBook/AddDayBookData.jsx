@@ -105,6 +105,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
         />
       </td>
       <td></td>
+      <td></td>
       <td>
         <input
           type='search'
