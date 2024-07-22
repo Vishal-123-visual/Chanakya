@@ -1730,7 +1730,7 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
       });
 
       // Update remaining fees and balance for the student
-      for (let i = 1; i < allCourseFeesSingleStudent.length; i++) {
+      for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
         const previousFees = allCourseFeesSingleStudent[i - 1];
         const currentFees = allCourseFeesSingleStudent[i];
         currentFees.netCourseFees = previousFees.remainingFees;
@@ -1740,7 +1740,7 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
       }
 
       // Update DayBook data
-      for (let i = 1; i < singleStudentDayBooksData.length; i++) {
+      for (let i = 0; i < singleStudentDayBooksData.length; i++) {
         const previousDayBookData = singleStudentDayBooksData[i - 1];
         const currentDayBookData = singleStudentDayBooksData[i];
         if (currentDayBookData.credit !== 0) {
@@ -1760,9 +1760,9 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
         currentStudent.totalPaid = 0;
         currentStudent.remainingCourseFees = undefined;
         currentStudent.no_of_installments = singleStudentFee.no_of_installments;
-        currentStudent.netCourseFees = singleStudentFee.netCourseFees;
+        currentStudent.netCourseFees = currentStudent.netCourseFees;
         currentStudent.no_of_installments_amount =
-          singleStudentFee.netCourseFees / singleStudentFee.no_of_installments;
+          currentStudent.netCourseFees / singleStudentFee.no_of_installments;
       } else {
         const totalPaid = allCourseFeesSingleStudent.reduce(
           (acc, cur) => acc + cur.amountPaid,
@@ -1770,9 +1770,20 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
         );
         currentStudent.totalPaid = totalPaid;
         currentStudent.remainingCourseFees =
-          allCourseFeesSingleStudent[
-            allCourseFeesSingleStudent.length - 1
-          ].remainingFees;
+          currentStudent.netCourseFees - totalPaid;
+        currentStudent.no_of_installments =
+          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
+            .no_of_installments + 1;
+      }
+
+      if (allCourseFeesSingleStudent.length === 1) {
+        const totalPaid = allCourseFeesSingleStudent.reduce(
+          (acc, cur) => acc + cur.amountPaid,
+          0
+        );
+        currentStudent.totalPaid = totalPaid;
+        currentStudent.remainingCourseFees =
+          currentStudent.netCourseFees - totalPaid;
         currentStudent.no_of_installments =
           allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
             .no_of_installments + 1;
