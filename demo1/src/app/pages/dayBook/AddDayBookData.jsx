@@ -3,9 +3,12 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {toast} from 'react-toastify'
+import {useParams} from 'react-router-dom'
 
 const AddDayBookData = ({totalBalance, companyId}) => {
-  console.log(totalBalance, companyId)
+  // console.log(totalBalance, companyId)
+  const params = useParams()
+  // console.log(params.id)
   const [formData, setFormData] = useState({
     dayBookDatadate: new Date(),
     accountName: '',
@@ -14,7 +17,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
     credit: 0,
     dayBookAccountId: '',
     accountType: '',
-    companyId,
+    companyId: params.id,
   })
 
   //console.log(formData)
@@ -27,7 +30,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
 
   const handleAccountNameChange = (event) => {
     const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data
-      ?.filter((cp) => cp.companyId === companyId)
+      ?.filter((cp) => cp.companyId === params.id)
       ?.find((item) => item.accountName === event.target.value)
     setFormData((prevState) => ({
       ...prevState,
@@ -119,7 +122,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
         />
         <datalist id='accountNameOptions'>
           {dayBookAccountCtx.getDayBookAccountsLists.data
-            ?.filter((cp) => cp.companyId === companyId)
+            ?.filter((cp) => cp.companyId === params.id)
             .map((item) => (
               <option key={item._id} value={item.accountName}>
                 {item.accountName}

@@ -110,8 +110,8 @@ const SidebarMenuMain = () => {
       {currentUser?.role !== 'Student' ? (
         <>
           {/* ----------------------------- Company Menu Start Here ............................... */}
-          {companyCTX.getCompanyLists?.data?.map((CompanyListData: any) => (
-            <>
+          {companyCTX.getCompanyLists?.data?.map((CompanyListData: any, index: number) => (
+            <React.Fragment key={index}>
               <SidebarMenuItemWithSub
                 key={CompanyListData?._id}
                 to='/apps/chat'
@@ -175,7 +175,7 @@ const SidebarMenuMain = () => {
                 </SidebarMenuItemWithSub>
                 {/* ------------------------------------ End Day Book here ---------------------------------- */}
               </SidebarMenuItemWithSub>
-            </>
+            </React.Fragment>
           ))}
           {/* ----------------------------- Company Menu END Here ............................... */}
 
