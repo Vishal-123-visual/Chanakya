@@ -5,7 +5,7 @@ import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Co
 import {toast} from 'react-toastify'
 
 const AddDayBookData = ({totalBalance, companyId}) => {
-  //console.log(totalBalance)
+  console.log(totalBalance, companyId)
   const [formData, setFormData] = useState({
     dayBookDatadate: new Date(),
     accountName: '',
@@ -16,6 +16,8 @@ const AddDayBookData = ({totalBalance, companyId}) => {
     accountType: '',
     companyId,
   })
+
+  //console.log(formData)
 
   const dayBookAccountCtx = usePaymentOptionContextContext()
 

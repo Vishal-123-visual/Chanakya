@@ -115,7 +115,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     companyId,
   } = req.body;
 
-  console.log(req.body);
+  //console.log(req.body);
   try {
     const existingDataModel = await DayBookDataModel.find({ companyId }).sort({
       createdAt: -1,
