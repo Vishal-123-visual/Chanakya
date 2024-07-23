@@ -10,6 +10,7 @@ import {
   addDayBookDataController,
   getDayBookDataController,
   getSingleDayBookDataController,
+  deleteDayBookDataByIdController,
 } from "../controllers/dayBook/dayBookAccount.controllers.js";
 
 const router = Router();
@@ -34,5 +35,6 @@ router.get(
 );
 router.post("/addData", requireSignIn, isAdmin, addDayBookDataController);
 router.get("/data", requireSignIn, getDayBookDataController);
+router.delete("/data/:id", requireSignIn, deleteDayBookDataByIdController);
 
 export default router;

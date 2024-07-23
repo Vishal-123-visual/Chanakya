@@ -224,6 +224,20 @@ export const PaymentOptionContextProvider = ({children}) => {
     return result
   }
 
+  const deleteSingleDayBookDataById = useMutation({
+    mutationFn: async (id) => {
+      //console.log(id)
+      return axios.delete(`${BASE_URL}/api/dayBook/data/${id}`, config).then((res) => res.data)
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        alert(error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getDayBookDataLists']})
+      }
+    },
+  })
+
   // ------------------------------------- Starting Day Book Context goes end here ----------------------------------
 
   return (
@@ -244,6 +258,7 @@ export const PaymentOptionContextProvider = ({children}) => {
         createDayBookDataMutation,
         getDayBookDataQuery,
         useGetSingleDayBookAccountNameDataQuery,
+        deleteSingleDayBookDataById,
 
         // ----------- Day Book DATA ----------------
       }}

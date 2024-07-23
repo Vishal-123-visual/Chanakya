@@ -171,4 +171,49 @@ export const getSingleDayBookDataController = asyncHandler(
   }
 );
 
+export const deleteDayBookDataByIdController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const singleDayBookData = await DayBookDataModel.findById(req.params.id);
+      await singleDayBookData.deleteOne();
+      const getAllDayBookDataByCompanyId = await DayBookDataModel.find({
+        companyId: singleDayBookData.companyId,
+      });
+
+      for (let i = 0; i < getAllDayBookDataByCompanyId.length; i++) {
+        if (i === 0) {
+          getAllDayBookDataByCompanyId[i].balance =
+            getAllDayBookDataByCompanyId[i].credit +
+            getAllDayBookDataByCompanyId[i].studentLateFees;
+        } else {
+          if (getAllDayBookDataByCompanyId[i - 1]) {
+            if (getAllDayBookDataByCompanyId[i].credit !== 0) {
+              getAllDayBookDataByCompanyId[i].balance =
+                getAllDayBookDataByCompanyId[i].credit +
+                getAllDayBookDataByCompanyId[i].studentLateFees +
+                getAllDayBookDataByCompanyId[i - 1].balance;
+            } else {
+              getAllDayBookDataByCompanyId[i].balance =
+                getAllDayBookDataByCompanyId[i - 1].balance -
+                getAllDayBookDataByCompanyId[i].debit;
+            }
+            getAllDayBookDataByCompanyId[i].balance;
+          }
+        }
+
+        await getAllDayBookDataByCompanyId[i].save();
+      }
+      res.status(200).json({
+        success: true,
+        message: "Day Book Data deleted successfully",
+      });
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: "Error: while deleting the day book data " || error.message,
+      });
+    }
+  }
+);
+
 //  Day Book Data Controller End here -------------------------------------------------
