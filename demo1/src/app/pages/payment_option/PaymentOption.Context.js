@@ -238,6 +238,22 @@ export const PaymentOptionContextProvider = ({children}) => {
     },
   })
 
+  const updateDayBookDataMutation = useMutation({
+    mutationFn: async (updateData) => {
+      //console.log(updateData)
+      return axios
+        .put(`${BASE_URL}/api/dayBook/data/${updateData._id}`, updateData, config) // Corrected order of arguments
+        .then((res) => res.data)
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        alert('Error while updating day book Account...', error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getDayBookDataLists']})
+      }
+    },
+  })
+
   // ------------------------------------- Starting Day Book Context goes end here ----------------------------------
 
   return (
@@ -259,6 +275,7 @@ export const PaymentOptionContextProvider = ({children}) => {
         getDayBookDataQuery,
         useGetSingleDayBookAccountNameDataQuery,
         deleteSingleDayBookDataById,
+        updateDayBookDataMutation,
 
         // ----------- Day Book DATA ----------------
       }}

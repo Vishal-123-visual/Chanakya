@@ -215,5 +215,67 @@ export const deleteDayBookDataByIdController = asyncHandler(
     }
   }
 );
+export const updateDayBookDataByIdController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const dayBookData = await DayBookDataModel.find({
+        companyId: req.body.companyId,
+      });
+
+      for (let i = 0; i < dayBookData.length; i++) {
+        if (i === 0) {
+          dayBookData[i].balance =
+            dayBookData[i].credit + dayBookData[i].studentLateFees;
+        } else {
+          if (dayBookData[i - 1]) {
+            if (dayBookData[i]._id.toString() === req.params.id.toString()) {
+              dayBookData[i].dayBookDatadate =
+                req.body.dayBookDatadate || dayBookData[i].dayBookDatadate;
+              dayBookData[i].accountName =
+                req.body.accountName || dayBookData[i].accountName;
+              dayBookData[i].naretion =
+                req.body.naretion || dayBookData[i].naretion;
+              dayBookData[i].debit = req.body.debit || dayBookData[i].debit;
+              dayBookData[i].credit = req.body.credit || dayBookData[i].credit;
+              dayBookData[i].balance =
+                req.body.credit !== 0
+                  ? dayBookData[i - 1].balance + Number(req.body.credit)
+                  : dayBookData[i - 1].balance - req.body.debit ||
+                    dayBookData[i].balance;
+              dayBookData[i].companyId =
+                req.body.companyId || dayBookData[i].companyId;
+              dayBookData[i].companyId =
+                req.body.companyId || dayBookData[i].companyId;
+              dayBookData[i].dayBookAccountId =
+                req.body.dayBookAccountId || dayBookData[i].dayBookAccountId;
+            } else {
+              if (dayBookData[i].credit !== 0) {
+                dayBookData[i].balance =
+                  dayBookData[i - 1].balance +
+                  dayBookData[i].credit +
+                  dayBookData[i].studentLateFees;
+              } else {
+                dayBookData[i].balance =
+                  dayBookData[i - 1].balance - dayBookData[i].debit;
+              }
+            }
+          }
+        }
+
+        await dayBookData[i].save();
+      }
+      res.status(200).json({
+        success: true,
+        message: "Day Book Data updated successfully",
+      });
+      // console.log(dayBookData);
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        error: "Error: while deleting the day book data " || error.message,
+      });
+    }
+  }
+);
 
 //  Day Book Data Controller End here -------------------------------------------------

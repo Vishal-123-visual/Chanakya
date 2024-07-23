@@ -5,8 +5,9 @@ import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Co
 import {toast} from 'react-toastify'
 
 const EditDayBookData = ({setEditBayBookDataId, dayBookEntry, totalBalance}) => {
-  console.log(dayBookEntry.balance, totalBalance)
+  //console.log(dayBookEntry.balance, totalBalance)
   const [formData, setFormData] = useState({
+    _id: dayBookEntry._id,
     dayBookDatadate: dayBookEntry.dayBookDatadate,
     accountName: dayBookEntry.accountName,
     naretion: dayBookEntry.naretion,
@@ -16,7 +17,7 @@ const EditDayBookData = ({setEditBayBookDataId, dayBookEntry, totalBalance}) => 
     accountType: '',
     companyId: dayBookEntry.companyId,
   })
-  console.log(formData)
+  //console.log(formData)
 
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
@@ -63,25 +64,26 @@ const EditDayBookData = ({setEditBayBookDataId, dayBookEntry, totalBalance}) => 
       return
     }
 
-    // if (totalBalance < Number(debit)) {
-    //   toast.error(`Your total balance is less than the debit amount ${debit}`, {
-    //     bodyStyle: {fontSize: '18px'},
-    //   })
-    //   return
-    // }
+    if (totalBalance - Number(debit) < Number(debit)) {
+      toast.error(`Your total balance is less than the debit amount ${debit}`, {
+        bodyStyle: {fontSize: '18px'},
+      })
+      return
+    }
 
     try {
-      // dayBookAccountCtx.createDayBookDataMutation.mutate(formData)
-      // toast.success('Day Account Data added successfully!', {bodyStyle: {fontSize: '18px'}})
-      // setFormData({
-      //   dayBookDatadate: new Date(),
-      //   accountName: '',
-      //   naretion: '',
-      //   debit: 0,
-      //   credit: 0,
-      //   dayBookAccountId: '',
-      //   accountType: '',
-      // })
+      dayBookAccountCtx.updateDayBookDataMutation.mutate(formData)
+      toast.success('Updated Day Account Data added successfully!', {bodyStyle: {fontSize: '18px'}})
+      setFormData({
+        dayBookDatadate: new Date(),
+        accountName: '',
+        naretion: '',
+        debit: 0,
+        credit: 0,
+        dayBookAccountId: '',
+        accountType: '',
+      })
+      setEditBayBookDataId(null)
     } catch (error) {
       console.error(error)
     }
@@ -175,6 +177,7 @@ const EditDayBookData = ({setEditBayBookDataId, dayBookEntry, totalBalance}) => 
           </button>
         </div>
       </td>
+      {/* <td>{formData.debit !== 0 ? totalBalance - Number(formData.debit) : +formData.credit} </td> */}
     </tr>
   )
 }
