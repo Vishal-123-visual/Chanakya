@@ -1730,13 +1730,13 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
       });
 
       // Update remaining fees and balance for the student
-      for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
+      for (let i = 1; i < allCourseFeesSingleStudent.length; i++) {
         if (i === 0) {
           allCourseFeesSingleStudent[0].netCourseFees =
             currentStudent.netCourseFees;
           allCourseFeesSingleStudent[0].remainingFees =
-            currentStudent.netCourseFees - amountPaid;
-          allCourseFeesSingleStudent[0].amountPaid = amountPaid;
+            currentStudent.netCourseFees -
+            allCourseFeesSingleStudent[0].amountPaid;
         }
         const previousFees = allCourseFeesSingleStudent[i - 1];
         const currentFees = allCourseFeesSingleStudent[i];
@@ -1747,7 +1747,7 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
       }
 
       // Update DayBook data
-      for (let i = 0; i < singleStudentDayBooksData.length; i++) {
+      for (let i = 1; i < singleStudentDayBooksData.length; i++) {
         const previousDayBookData = singleStudentDayBooksData[i - 1];
         const currentDayBookData = singleStudentDayBooksData[i];
         if (currentDayBookData.credit !== 0) {
