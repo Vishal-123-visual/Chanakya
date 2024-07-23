@@ -120,9 +120,13 @@ const ViewDayBook = () => {
             {/* begin::Table body */}
             <tbody>
               {!showAddAccountBtn ? (
-                <AddDayBookData totalBalance={filteredData[0]?.balance} companyId={params.id} />
+                <AddDayBookData
+                  key={1}
+                  totalBalance={filteredData[0]?.balance}
+                  companyId={params.id}
+                />
               ) : (
-                <AddDayBookAccountFromDayBook setShowAddAccountBtn={setShowAddAccountBtn} />
+                <AddDayBookAccountFromDayBook key={1} setShowAddAccountBtn={setShowAddAccountBtn} />
               )}
 
               {/* <tr className=''>
@@ -193,40 +197,21 @@ const ViewDayBook = () => {
                     <td className='text-dark fw-bold text-hover-primary fs-6'>
                       {dayBookEntry.balance.toFixed(2)}
                     </td>
-                    <td>
-                      <div className='d-flex justify-content-end flex-shrink-0'>
-                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
-                          <KTIcon iconName='pencil' className='fs-3' />
-                        </button>
-                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'>
-                          <KTIcon iconName='trash' className='fs-3' />
-                        </button>
-                      </div>
-                    </td>
+                    {dayBookEntry.naretion && (
+                      <td>
+                        <div className='d-flex justify-content-end flex-shrink-0'>
+                          <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                            <KTIcon iconName='pencil' className='fs-3' />
+                          </button>
+                          <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'>
+                            <KTIcon iconName='trash' className='fs-3' />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 )
               })}
-
-              {/* <tr className=''>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td className='text-center'>
-                  <h4>{debitDayBookAmount}</h4>
-                </td>
-                <td className='text-center'>
-                  <h4>{creditDayBookAmount}</h4>
-                </td>
-                <td className='text-center'>
-                  <h4>{lateFineStudent}</h4>
-                </td>
-                <td className='text-center'>
-                  <h4>{balance}</h4>
-                </td>
-              </tr> */}
             </tbody>
             {/* end::Table body */}
           </table>
