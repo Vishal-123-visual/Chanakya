@@ -1731,6 +1731,13 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
 
       // Update remaining fees and balance for the student
       for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
+        if (i === 0) {
+          allCourseFeesSingleStudent[0].netCourseFees =
+            currentStudent.netCourseFees;
+          allCourseFeesSingleStudent[0].remainingFees =
+            currentStudent.netCourseFees - amountPaid;
+          allCourseFeesSingleStudent[0].amountPaid = amountPaid;
+        }
         const previousFees = allCourseFeesSingleStudent[i - 1];
         const currentFees = allCourseFeesSingleStudent[i];
         currentFees.netCourseFees = previousFees.remainingFees;
