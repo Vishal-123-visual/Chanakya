@@ -1667,12 +1667,12 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       }
 
       currentStudent = await admissionFormModel.findById(studentInfo);
-
       const lastPaymentInstallment =
         await PaymentInstallmentTimeExpireModel.findOne({
           installment_number: currentStudent.no_of_installments,
           studentInfo: currentStudent._id,
         });
+      //console.log(lastPaymentInstallment);
       lastPaymentInstallment.installment_amount =
         totalPaid / currentStudent.no_of_installments;
       await lastPaymentInstallment.save();
