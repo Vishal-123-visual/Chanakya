@@ -1502,7 +1502,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         });
       }
 
-      const currentStudent = await admissionFormModel.findById(studentInfo);
+      let currentStudent = await admissionFormModel.findById(studentInfo);
       let getSingleStudentDayBookData = await DayBookDataModel.find({
         companyId: currentStudent.companyName,
       });
@@ -1650,7 +1650,6 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
             }
           }
         }
-
         await getSingleStudentDayBookData[i].save();
       }
 
@@ -1659,6 +1658,24 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
           singleStudentAllCourseFees[i].reciptNumber;
         await getSingleStudentDayBookData[i].save();
       }
+
+      currentStudent = await admissionFormModel.findById(studentInfo);
+
+      if (currentStudent.remainingCourseFees === 0) {
+        currentStudent.no_of_installments_expireTimeandAmount = null;
+        currentStudent.no_of_installments = 0;
+        const allPaymentInstallments =
+          await PaymentInstallmentTimeExpireModel.find({
+            studentInfo: currentStudent._id,
+          });
+        allPaymentInstallments.map(async (paymentInstallment) => {
+          if (paymentInstallment) {
+            await paymentInstallment.deleteOne();
+          }
+        });
+        await currentStudent.save();
+      }
+
       res.status(200).json({
         success: true,
         message: "Student fee updated successfully",
