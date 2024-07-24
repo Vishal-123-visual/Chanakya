@@ -1,4 +1,4 @@
-import mongoose, { now } from "mongoose";
+import mongoose, { get, now } from "mongoose";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
@@ -1502,164 +1502,168 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         });
       }
 
-      // Find the student fee by ID
-      const singleStudentFee = await CourseFeesModel.findById(req.params.id);
-      const singleDayBookData = await DayBookDataModel.find({
+      const currentStudent = await admissionFormModel.findById(studentInfo);
+      let getSingleStudentDayBookData = await DayBookDataModel.find({
+        companyId: currentStudent.companyName,
+      });
+
+      // first get all course fees
+      let singleStudentAllCourseFees = await CourseFeesModel.find({
         studentInfo: studentInfo,
       });
-      //console.log(singleDayBookData);
-      //console.log(singleStudentFee);
-      if (!singleStudentFee) {
-        return res
-          .status(404)
-          .json({ success: false, message: "Student fee not found" });
+
+      for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
+        getSingleStudentDayBookData[i].reciptNumber =
+          singleStudentAllCourseFees[i].reciptNumber;
+        await getSingleStudentDayBookData[i].save();
       }
-      //console.log(req.params.id);
-      const presentStudent = await admissionFormModel.findById(studentInfo);
-      //console.log(presentStudent);
+      //console.log(singleStudentAllCourseFees, getSingleStudentDayBookData);
 
-      // console.log(lastPaymentInstallmentExpirationTime);
+      let updateDataWhichYouWantReciptNumberData;
 
-      // Update fields if they are provided in the request body
-      singleStudentFee.netCourseFees =
-        netCourseFees ?? singleStudentFee.netCourseFees;
-      singleStudentFee.studentInfo =
-        studentInfo ?? singleStudentFee.studentInfo;
-      singleStudentFee.remainingFees =
-        remainingFees ?? singleStudentFee.remainingFees;
-      singleStudentFee.amountPaid = amountPaid ?? singleStudentFee.amountPaid;
-      singleStudentFee.amountDate = amountDate ?? singleStudentFee.amountDate;
-      singleStudentFee.paymentOption =
-        paymentOption ?? singleStudentFee.paymentOption;
-      singleStudentFee.lateFees = lateFees ?? singleStudentFee.lateFees;
-      singleStudentFee.reciptNumber =
-        reciptNumber ?? singleStudentFee.reciptNumber;
+      for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
+        if (singleStudentAllCourseFees[i]._id.toString() === req.params.id) {
+          updateDataWhichYouWantReciptNumberData =
+            singleStudentAllCourseFees[i];
+          if (i === 0) {
+            singleStudentAllCourseFees[i].reciptNumber =
+              reciptNumber || singleStudentAllCourseFees[i].reciptNumber;
+            singleStudentAllCourseFees[i].amountPaid =
+              amountPaid || singleStudentAllCourseFees[i].amountPaid;
+            singleStudentAllCourseFees[i].netCourseFees =
+              currentStudent.netCourseFees;
+            singleStudentAllCourseFees[i].remainingFees =
+              currentStudent.netCourseFees - amountPaid ||
+              currentStudent.netCourseFees -
+                singleStudentAllCourseFees[i].amountPaid;
+            singleStudentAllCourseFees[i].amountDate =
+              amountDate || singleStudentAllCourseFees[i].amountDate;
+            singleStudentAllCourseFees[i].paymentOption =
+              paymentOption || singleStudentAllCourseFees[i].paymentOption;
+            singleStudentAllCourseFees[i].lateFees =
+              lateFees || singleStudentAllCourseFees[i].lateFees;
 
-      // Save the updated student fee
-      const updatedSingleStudentFee = await singleStudentFee.save();
-
-      const lastPaymentInstallmentExpirationTime =
-        await PaymentInstallmentTimeExpireModel.findOne({
-          installment_number:
-            presentStudent.no_of_installments === 0
-              ? updatedSingleStudentFee.no_of_installments
-              : presentStudent.no_of_installments,
-        });
-
-      // Find all course fees related to the student by studentInfo
-      const allCourseFeesSingleStudent = await CourseFeesModel.find({
-        studentInfo: updatedSingleStudentFee?.studentInfo,
-      });
-
-      // Update each related course fee
-      if (allCourseFeesSingleStudent?.length > 0) {
-        // Update related course fees sequentially
-        for (let i = 1; i < allCourseFeesSingleStudent?.length; i++) {
-          const prevCourseFee = allCourseFeesSingleStudent[i - 1];
-          const currentCourseFee = allCourseFeesSingleStudent[i];
-
-          currentCourseFee.netCourseFees = prevCourseFee?.remainingFees ?? 0;
-          currentCourseFee.remainingFees =
-            (prevCourseFee?.remainingFees ?? 0) -
-            (currentCourseFee?.amountPaid ?? 0);
-          currentCourseFee.no_of_installments_amount =
-            ((prevCourseFee?.remainingFees ?? 0) -
-              (currentCourseFee?.amountPaid ?? 0)) /
-            (currentCourseFee?.no_of_installments ?? 1);
-
-          // Save the updated course fee
-          await currentCourseFee.save();
-        }
-      }
-
-      // Update the first course fee separately (if applicable)
-      const firstCourseFee = allCourseFeesSingleStudent[0];
-      firstCourseFee.no_of_installments_amount =
-        firstCourseFee?.remainingFees / firstCourseFee?.no_of_installments;
-      await firstCourseFee.save();
-
-      const totalPaidSingleStudentCourseFees =
-        allCourseFeesSingleStudent.reduce(
-          (acc, cur) => acc + cur.amountPaid,
-          0
-        );
-      presentStudent.totalPaid = totalPaidSingleStudentCourseFees;
-      presentStudent.remainingCourseFees =
-        allCourseFeesSingleStudent[
-          allCourseFeesSingleStudent.length - 1
-        ].remainingFees;
-      if (presentStudent.no_of_installments === 0) {
-        presentStudent.no_of_installments_amount =
-          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
-            .remainingFees /
-          lastPaymentInstallmentExpirationTime.installment_number;
-        presentStudent.no_of_installments =
-          lastPaymentInstallmentExpirationTime.installment_number - 1;
-      } else {
-        presentStudent.no_of_installments_amount =
-          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
-            .remainingFees / presentStudent.no_of_installments;
-        lastPaymentInstallmentExpirationTime.installment_amount =
-          allCourseFeesSingleStudent[allCourseFeesSingleStudent.length - 1]
-            .remainingFees / presentStudent.no_of_installments;
-      }
-      await presentStudent.save();
-      await lastPaymentInstallmentExpirationTime.save();
-
-      // update the reciptNumber to DayBookDataStudent
-      // console.log(allCourseFeesSingleStudent.length, singleDayBookData.length);
-      for (let i = 0; i < allCourseFeesSingleStudent.length; i++) {
-        if (singleDayBookData[i].reciptNumber === undefined) {
-          singleDayBookData[i].reciptNumber =
-            allCourseFeesSingleStudent[i].reciptNumber;
-        }
-        await singleDayBookData[i].save();
-      }
-
-      const totalBalaceOfDayBookAccountsData = await DayBookDataModel.find({
-        companyId: presentStudent.companyName,
-      });
-      //console.log("total balance is ", totalBalaceOfDayBookAccountsData);
-
-      // update the dayBook Student amount
-      for (let i = 0; i < totalBalaceOfDayBookAccountsData.length; i++) {
-        if (totalBalaceOfDayBookAccountsData[i].reciptNumber === reciptNumber) {
-          if (totalBalaceOfDayBookAccountsData[i - 1]) {
-            totalBalaceOfDayBookAccountsData[i].reciptNumber = reciptNumber;
-            totalBalaceOfDayBookAccountsData[i].studentLateFees = lateFees;
-            totalBalaceOfDayBookAccountsData[i].dayBookDatadate = amountDate;
-            totalBalaceOfDayBookAccountsData[i].credit = amountPaid;
-            totalBalaceOfDayBookAccountsData[i].balance =
-              totalBalaceOfDayBookAccountsData[i - 1].balance +
-              lateFees +
-              amountPaid;
+            currentStudent.totalPaid = amountPaid;
+            currentStudent.remainingCourseFees =
+              currentStudent.netCourseFees - amountPaid;
           } else {
-            totalBalaceOfDayBookAccountsData[i].reciptNumber = reciptNumber;
-            totalBalaceOfDayBookAccountsData[i].studentLateFees = lateFees;
-            totalBalaceOfDayBookAccountsData[i].dayBookDatadate = amountDate;
-            totalBalaceOfDayBookAccountsData[i].credit = amountPaid;
-            totalBalaceOfDayBookAccountsData[i].balance =
-              0 + lateFees + amountPaid;
+            if (singleStudentAllCourseFees[i - 1]) {
+              singleStudentAllCourseFees[i].netCourseFees =
+                singleStudentAllCourseFees[i - 1].remainingFees;
+              singleStudentAllCourseFees[i].remainingFees =
+                singleStudentAllCourseFees[i - 1].remainingFees - amountPaid ||
+                singleStudentAllCourseFees[i - 1].remainingFees -
+                  singleStudentAllCourseFees[i].amountPaid;
+              singleStudentAllCourseFees[i].amountPaid =
+                amountPaid || singleStudentAllCourseFees[i].amountPaid;
+              singleStudentAllCourseFees[i].amountDate =
+                amountDate || singleStudentAllCourseFees[i].amountDate;
+              singleStudentAllCourseFees[i].reciptNumber =
+                reciptNumber || singleStudentAllCourseFees[i].reciptNumber;
+              singleStudentAllCourseFees[i].paymentOption =
+                paymentOption || singleStudentAllCourseFees[i].paymentOption;
+              singleStudentAllCourseFees[i].lateFees =
+                lateFees || singleStudentAllCourseFees[i].lateFees;
+            }
           }
-          await totalBalaceOfDayBookAccountsData[i].save();
-        }
-      }
 
-      for (let i = 1; i < totalBalaceOfDayBookAccountsData.length; i++) {
-        if (totalBalaceOfDayBookAccountsData[i].credit !== 0) {
-          totalBalaceOfDayBookAccountsData[i].balance =
-            totalBalaceOfDayBookAccountsData[i - 1].balance +
-            totalBalaceOfDayBookAccountsData[i].credit +
-            totalBalaceOfDayBookAccountsData[i].studentLateFees;
+          await singleStudentAllCourseFees[i].save();
+          await currentStudent.save();
         } else {
-          totalBalaceOfDayBookAccountsData[i].balance =
-            totalBalaceOfDayBookAccountsData[i - 1].balance -
-            totalBalaceOfDayBookAccountsData[i].debit;
+          if (i === 0) {
+            singleStudentAllCourseFees[i].remainingFees =
+              currentStudent.netCourseFees -
+              singleStudentAllCourseFees[i].amountPaid;
+          } else {
+            singleStudentAllCourseFees[i].netCourseFees =
+              singleStudentAllCourseFees[i - 1].remainingFees;
+            singleStudentAllCourseFees[i].remainingFees =
+              singleStudentAllCourseFees[i - 1].remainingFees -
+              singleStudentAllCourseFees[i].amountPaid;
+          }
+
+          await singleStudentAllCourseFees[i].save();
+          await currentStudent.save();
         }
-        await totalBalaceOfDayBookAccountsData[i].save();
       }
 
-      res.status(200).json({ success: true, data: updatedSingleStudentFee });
+      singleStudentAllCourseFees = await CourseFeesModel.find({
+        studentInfo: studentInfo,
+      });
+
+      const totalPaid = singleStudentAllCourseFees.reduce(
+        (acc, cur) => acc + cur.amountPaid,
+        0
+      );
+      currentStudent.remainingCourseFees =
+        currentStudent.netCourseFees - totalPaid;
+      currentStudent.totalPaid = totalPaid;
+      await currentStudent.save();
+
+      getSingleStudentDayBookData = await DayBookDataModel.find({
+        companyId: currentStudent.companyName,
+      });
+
+      // now update the day book data
+      //console.log(updateDataWhichYouWantReciptNumberData);
+      for (let i = 0; i < getSingleStudentDayBookData.length; i++) {
+        if (
+          updateDataWhichYouWantReciptNumberData.reciptNumber ===
+          getSingleStudentDayBookData[i].reciptNumber
+        ) {
+          if (i === 0) {
+            getSingleStudentDayBookData[i].reciptNumber = reciptNumber;
+            getSingleStudentDayBookData[i].credit = amountPaid;
+            getSingleStudentDayBookData[i].studentLateFees = lateFees;
+            getSingleStudentDayBookData[i].balance = amountPaid + lateFees;
+            getSingleStudentDayBookData[i].dayBookDatadate =
+              amountDate || getSingleStudentDayBookData[i].dayBookDatadate;
+            await getSingleStudentDayBookData[i].save();
+          } else {
+            getSingleStudentDayBookData[i].reciptNumber = reciptNumber;
+            getSingleStudentDayBookData[i].credit = amountPaid;
+            getSingleStudentDayBookData[i].studentLateFees = lateFees;
+            getSingleStudentDayBookData[i].balance =
+              getSingleStudentDayBookData[i - 1].balance +
+              amountPaid +
+              lateFees;
+            getSingleStudentDayBookData[i].dayBookDatadate =
+              amountDate || getSingleStudentDayBookData[i].dayBookDatadate;
+            await getSingleStudentDayBookData[i].save();
+          }
+          await getSingleStudentDayBookData[i].save();
+        } else {
+          if (i === 0) {
+            getSingleStudentDayBookData[i].balance =
+              getSingleStudentDayBookData[i].credit +
+              getSingleStudentDayBookData[i].studentLateFees;
+          } else {
+            if (getSingleStudentDayBookData[i].credit !== 0) {
+              getSingleStudentDayBookData[i].balance =
+                getSingleStudentDayBookData[i - 1].balance +
+                getSingleStudentDayBookData[i].credit +
+                getSingleStudentDayBookData[i].studentLateFees;
+            } else {
+              getSingleStudentDayBookData[i].balance =
+                getSingleStudentDayBookData[i - 1].balance -
+                getSingleStudentDayBookData[i].debit;
+            }
+          }
+        }
+
+        await getSingleStudentDayBookData[i].save();
+      }
+
+      for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
+        getSingleStudentDayBookData[i].reciptNumber =
+          singleStudentAllCourseFees[i].reciptNumber;
+        await getSingleStudentDayBookData[i].save();
+      }
+      res.status(200).json({
+        success: true,
+        message: "Student fee updated successfully",
+        updatedData: singleStudentAllCourseFees,
+      });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }
