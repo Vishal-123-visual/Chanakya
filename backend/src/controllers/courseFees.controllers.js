@@ -1673,9 +1673,24 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
           studentInfo: currentStudent._id,
         });
       //console.log(lastPaymentInstallment);
-      lastPaymentInstallment.installment_amount =
-        totalPaid / currentStudent.no_of_installments;
-      await lastPaymentInstallment.save();
+      if (currentStudent.netCourseFees === totalPaid) {
+        currentStudent.no_of_installments_expireTimeandAmount = null;
+        currentStudent.no_of_installments = 0;
+        const allPaymentInstallments =
+          await PaymentInstallmentTimeExpireModel.find({
+            studentInfo: currentStudent._id,
+          });
+        allPaymentInstallments.map(async (paymentInstallment) => {
+          if (paymentInstallment) {
+            await paymentInstallment.deleteOne();
+          }
+        });
+        await currentStudent.save();
+      } else {
+        lastPaymentInstallment.installment_amount =
+          totalPaid / currentStudent.no_of_installments;
+      }
+      await lastPaymentInstallment?.save();
 
       if (currentStudent.remainingCourseFees === 0) {
         currentStudent.no_of_installments_expireTimeandAmount = null;
