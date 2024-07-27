@@ -3,6 +3,7 @@ import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useCompanyContext} from '../compay/CompanyContext'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import moment from 'moment'
+import {useState} from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -11,6 +12,7 @@ const ClearFeesStudents = () => {
   const companyCTX = useCompanyContext()
   const studentsCTX = useAdmissionContext()
   //console.log(studentsCTX.studentsLists.data.users)
+  const [searchValue, setSearchValue] = useState('')
   const navigate = useNavigate()
 
   const params = useParams()
@@ -18,9 +20,15 @@ const ClearFeesStudents = () => {
   const {data} = companyCTX?.useGetSingleCompanyData(params?.id)
   //console.log(data)
 
-  const filteredStudents = studentsCTX?.studentsLists?.data?.users?.filter(
-    (student) => student?.companyName === data?._id && student?.no_of_installments === 0
-  )
+  const filteredStudents = studentsCTX?.studentsLists?.data?.users
+    ?.filter(
+      (searchStudent) =>
+        searchValue?.trim() === '' ||
+        searchStudent?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        searchStudent?.email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        searchStudent.mobile_number.includes(searchValue)
+    )
+    ?.filter((student) => student?.companyName === data?._id && student?.no_of_installments === 0)
 
   //console.log(filteredStudents)
 
@@ -32,22 +40,14 @@ const ClearFeesStudents = () => {
           <span className='card-label fw-bold fs-3 mb-1'>{data?.companyName}</span>
           <span className='text-muted mt-1 fw-semibold fs-7'>Pending Fees Students</span>
         </h3>
-        <div
-          className='card-toolbar'
-          data-bs-toggle='tooltip'
-          data-bs-placement='top'
-          data-bs-trigger='hover'
-          title='Click to add a user'
-        >
-          {/* <a
-          href='#'
-          className='btn btn-sm btn-light-primary'
-          // data-bs-toggle='modal'
-          // data-bs-target='#kt_modal_invite_friends'
-        >
-          <KTIcon iconName='plus' className='fs-3' />
-          New Member
-        </a> */}
+        <div className=''>
+          <input
+            type='text'
+            placeholder='search student'
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            className='form-control'
+          />
         </div>
       </div>
       {/* end::Header */}

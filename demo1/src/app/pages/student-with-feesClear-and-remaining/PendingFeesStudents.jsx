@@ -3,6 +3,7 @@ import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useCompanyContext} from '../compay/CompanyContext'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import moment from 'moment'
+import {useState} from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -11,6 +12,8 @@ const PendingFeesStudents = () => {
   const companyCTX = useCompanyContext()
   const studentsCTX = useAdmissionContext()
   const navigate = useNavigate()
+  const [searchValue, setSearchValue] = useState('')
+  // console.log(searchValue)
 
   // console.log(studentsCTX.studentsLists.data.users)
 
@@ -19,9 +22,15 @@ const PendingFeesStudents = () => {
   const {data} = companyCTX?.useGetSingleCompanyData(params?.id)
   //console.log(data)
 
-  const filteredStudents = studentsCTX?.studentsLists?.data?.users?.filter(
-    (student) => student?.companyName === data?._id && student?.no_of_installments > 0
-  )
+  const filteredStudents = studentsCTX?.studentsLists?.data?.users
+    ?.filter(
+      (searchStudent) =>
+        searchValue?.trim() === '' ||
+        searchStudent?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        searchStudent?.email?.toLowerCase().includes(searchValue.toLowerCase()) ||
+        searchStudent.mobile_number.includes(searchValue)
+    )
+    ?.filter((student) => student?.companyName === data?._id && student?.no_of_installments > 0)
 
   //console.log(filteredStudents)
   return (
@@ -39,6 +48,13 @@ const PendingFeesStudents = () => {
           data-bs-trigger='hover'
           title='Click to add a user'
         >
+          <input
+            type='text'
+            className='form-control'
+            placeholder='search student'
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
           {/* <a
             href='#'
             className='btn btn-sm btn-light-primary'
