@@ -19,6 +19,7 @@ const ViewDayBook = () => {
   const [editBayBookDataId, setEditBayBookDataId] = useState(null)
   const navigate = useNavigate()
   const params = useParams()
+  const [searchValue, setSearchValue] = useState('')
 
   const companyCTX = useCompanyContext()
   const result = companyCTX.useGetSingleCompanyData(params.id)
@@ -59,7 +60,7 @@ const ViewDayBook = () => {
   return (
     <div className={`card`}>
       {/* begin::Header */}
-      <div className='card-header border-0 pt-5'>
+      <div className='card-header border-0 pt-5 d-flex align-items-center'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{result?.data?.companyName} Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
@@ -72,6 +73,17 @@ const ViewDayBook = () => {
             </button>
           </span>
         </h3>
+
+        <div className=''>
+          <input
+            type='text'
+            placeholder='search student'
+            className='form-control'
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </div>
+
         <div className='d-flex gap-5'>
           <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
             From
@@ -148,98 +160,109 @@ const ViewDayBook = () => {
               </tr> */}
 
               {/* Day Book Data */}
-              {filteredData.map((dayBookEntry, index) => {
-                return (
-                  <Fragment key={index}>
-                    {dayBookEntry._id === editBayBookDataId ? (
-                      <EditDayBookData
-                        setEditBayBookDataId={setEditBayBookDataId}
-                        dayBookEntry={dayBookEntry}
-                        totalBalance={filteredData[0]?.balance}
-                      />
-                    ) : (
-                      <tr>
-                        <td>
-                          <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                        </td>
-                        <td className='text-dark fw-bold text-hover-primary fs-6 '>{index + 1}</td>
-                        <td
-                          className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{background: '#f2f2ff'}}
-                        >
-                          {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
-                        </td>
-                        <td className='text-dark fw-bold text-hover-primary fs-6'>
-                          {dayBookEntry.rollNo}
-                        </td>
-                        <td
-                          style={{background: '#f2f2ff'}}
-                          className='text-dark fw-bold text-hover-primary fs-6'
-                        >
-                          {dayBookEntry?.reciptNumber}
-                        </td>
-                        <td className='' style={{background: '#f2f2ff'}}>
-                          <Link
-                            className={
-                              dayBookEntry.accountName
-                                ? 'text-dark fw-bold text-hover-primary fs-6'
-                                : 'text-dark fw-bold text-hover-primary fs-6'
-                            }
-                            target={dayBookEntry.accountName && '_blank'}
-                            to={
-                              dayBookEntry.accountName
-                                ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
-                                : `/daybook/viewDaybook/${params.id}`
-                            }
-                          >
-                            {dayBookEntry.accountName || dayBookEntry.StudentName}
-                          </Link>
-                        </td>
-                        <td className='text-dark fw-bold text-hover-primary fs-6'>
-                          {dayBookEntry.naretion || '--'}
-                        </td>
-                        <td
-                          className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{background: '#f2f2ff'}}
-                        >
-                          {dayBookEntry.credit}
-                        </td>
-                        <td className='text-dark fw-bold text-hover-primary fs-6'>
-                          {dayBookEntry.debit}
-                        </td>
-
-                        <td
-                          style={{background: '#f2f2ff'}}
-                          className='text-dark fw-bold text-hover-primary fs-6'
-                        >
-                          {dayBookEntry?.studentLateFees || 0}
-                        </td>
-                        <td className='text-dark fw-bold text-hover-primary fs-6'>
-                          {dayBookEntry.balance.toFixed(2)}
-                        </td>
-                        {dayBookEntry.naretion && (
+              {filteredData
+                ?.filter((dayBookData) => {
+                  //console.log(dayBookData)
+                  return (
+                    dayBookData?.StudentName?.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    dayBookData?.rollNo?.includes(searchValue.toLowerCase()) ||
+                    dayBookData?.reciptNumber?.toLowerCase()?.includes(searchValue.toLowerCase())
+                  )
+                })
+                ?.map((dayBookEntry, index) => {
+                  return (
+                    <Fragment key={index}>
+                      {dayBookEntry._id === editBayBookDataId ? (
+                        <EditDayBookData
+                          setEditBayBookDataId={setEditBayBookDataId}
+                          dayBookEntry={dayBookEntry}
+                          totalBalance={filteredData[0]?.balance}
+                        />
+                      ) : (
+                        <tr>
                           <td>
-                            <div className='d-flex justify-content-end flex-shrink-0'>
-                              <button
-                                onClick={() => editDayBookSingleDataHandler(dayBookEntry?._id)}
-                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                              >
-                                <KTIcon iconName='pencil' className='fs-3' />
-                              </button>
-                              <button
-                                onClick={() => deleteDayBookSingleDataHandler(dayBookEntry?._id)}
-                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                              >
-                                <KTIcon iconName='trash' className='fs-3' />
-                              </button>
-                            </div>
+                            <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                           </td>
-                        )}
-                      </tr>
-                    )}
-                  </Fragment>
-                )
-              })}
+                          <td className='text-dark fw-bold text-hover-primary fs-6 '>
+                            {index + 1}
+                          </td>
+                          <td
+                            className='text-dark fw-bold text-hover-primary fs-6 '
+                            style={{background: '#f2f2ff'}}
+                          >
+                            {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
+                          </td>
+                          <td className='text-dark fw-bold text-hover-primary fs-6'>
+                            {dayBookEntry.rollNo}
+                          </td>
+                          <td
+                            style={{background: '#f2f2ff'}}
+                            className='text-dark fw-bold text-hover-primary fs-6'
+                          >
+                            {dayBookEntry?.reciptNumber}
+                          </td>
+                          <td className='' style={{background: '#f2f2ff'}}>
+                            <Link
+                              className={
+                                dayBookEntry.accountName
+                                  ? 'text-dark fw-bold text-hover-primary fs-6'
+                                  : 'text-dark fw-bold text-hover-primary fs-6'
+                              }
+                              target={dayBookEntry.accountName && '_blank'}
+                              to={
+                                dayBookEntry.accountName
+                                  ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
+                                  : `/daybook/viewDaybook/${params.id}`
+                              }
+                            >
+                              {dayBookEntry.accountName || dayBookEntry.StudentName}
+                            </Link>
+                          </td>
+                          <td className='text-dark fw-bold text-hover-primary fs-6'>
+                            {dayBookEntry.naretion || '--'}
+                          </td>
+                          <td
+                            className='text-dark fw-bold text-hover-primary fs-6 '
+                            style={{background: '#f2f2ff'}}
+                          >
+                            {dayBookEntry.credit}
+                          </td>
+                          <td className='text-dark fw-bold text-hover-primary fs-6'>
+                            {dayBookEntry.debit}
+                          </td>
+
+                          <td
+                            style={{background: '#f2f2ff'}}
+                            className='text-dark fw-bold text-hover-primary fs-6'
+                          >
+                            {dayBookEntry?.studentLateFees || 0}
+                          </td>
+                          <td className='text-dark fw-bold text-hover-primary fs-6'>
+                            {dayBookEntry.balance.toFixed(2)}
+                          </td>
+                          {dayBookEntry.naretion && (
+                            <td>
+                              <div className='d-flex justify-content-end flex-shrink-0'>
+                                <button
+                                  onClick={() => editDayBookSingleDataHandler(dayBookEntry?._id)}
+                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                >
+                                  <KTIcon iconName='pencil' className='fs-3' />
+                                </button>
+                                <button
+                                  onClick={() => deleteDayBookSingleDataHandler(dayBookEntry?._id)}
+                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                                >
+                                  <KTIcon iconName='trash' className='fs-3' />
+                                </button>
+                              </div>
+                            </td>
+                          )}
+                        </tr>
+                      )}
+                    </Fragment>
+                  )
+                })}
             </tbody>
             {/* end::Table body */}
           </table>
