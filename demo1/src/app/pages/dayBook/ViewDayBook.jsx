@@ -74,7 +74,7 @@ const ViewDayBook = () => {
           </span>
         </h3>
 
-        <div className=''>
+        {/* <div className=''>
           <input
             type='text'
             placeholder='search student'
@@ -82,7 +82,7 @@ const ViewDayBook = () => {
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
           />
-        </div>
+        </div> */}
 
         <div className='d-flex gap-5'>
           <label className='col-6 col-form-label fw-bold fs-6 flex-4'>
@@ -160,109 +160,98 @@ const ViewDayBook = () => {
               </tr> */}
 
               {/* Day Book Data */}
-              {filteredData
-                ?.filter((dayBookData) => {
-                  //console.log(dayBookData)
-                  return (
-                    dayBookData?.StudentName?.toLowerCase().includes(searchValue.toLowerCase()) ||
-                    dayBookData?.rollNo?.includes(searchValue.toLowerCase()) ||
-                    dayBookData?.reciptNumber?.toLowerCase()?.includes(searchValue.toLowerCase())
-                  )
-                })
-                ?.map((dayBookEntry, index) => {
-                  return (
-                    <Fragment key={index}>
-                      {dayBookEntry._id === editBayBookDataId ? (
-                        <EditDayBookData
-                          setEditBayBookDataId={setEditBayBookDataId}
-                          dayBookEntry={dayBookEntry}
-                          totalBalance={filteredData[0]?.balance}
-                        />
-                      ) : (
-                        <tr>
-                          <td>
-                            <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                          </td>
-                          <td className='text-dark fw-bold text-hover-primary fs-6 '>
-                            {index + 1}
-                          </td>
-                          <td
-                            className='text-dark fw-bold text-hover-primary fs-6 '
-                            style={{background: '#f2f2ff'}}
+              {filteredData?.map((dayBookEntry, index) => {
+                return (
+                  <Fragment key={index}>
+                    {dayBookEntry._id === editBayBookDataId ? (
+                      <EditDayBookData
+                        setEditBayBookDataId={setEditBayBookDataId}
+                        dayBookEntry={dayBookEntry}
+                        totalBalance={filteredData[0]?.balance}
+                      />
+                    ) : (
+                      <tr>
+                        <td>
+                          <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                        </td>
+                        <td className='text-dark fw-bold text-hover-primary fs-6 '>{index + 1}</td>
+                        <td
+                          className='text-dark fw-bold text-hover-primary fs-6 '
+                          style={{background: '#f2f2ff'}}
+                        >
+                          {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
+                        </td>
+                        <td className='text-dark fw-bold text-hover-primary fs-6'>
+                          {dayBookEntry.rollNo}
+                        </td>
+                        <td
+                          style={{background: '#f2f2ff'}}
+                          className='text-dark fw-bold text-hover-primary fs-6'
+                        >
+                          {dayBookEntry?.reciptNumber}
+                        </td>
+                        <td className='' style={{background: '#f2f2ff'}}>
+                          <Link
+                            className={
+                              dayBookEntry.accountName
+                                ? 'text-dark fw-bold text-hover-primary fs-6'
+                                : 'text-dark fw-bold text-hover-primary fs-6'
+                            }
+                            target={dayBookEntry.accountName && '_blank'}
+                            to={
+                              dayBookEntry.accountName
+                                ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
+                                : `/daybook/viewDaybook/${params.id}`
+                            }
                           >
-                            {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
-                          </td>
-                          <td className='text-dark fw-bold text-hover-primary fs-6'>
-                            {dayBookEntry.rollNo}
-                          </td>
-                          <td
-                            style={{background: '#f2f2ff'}}
-                            className='text-dark fw-bold text-hover-primary fs-6'
-                          >
-                            {dayBookEntry?.reciptNumber}
-                          </td>
-                          <td className='' style={{background: '#f2f2ff'}}>
-                            <Link
-                              className={
-                                dayBookEntry.accountName
-                                  ? 'text-dark fw-bold text-hover-primary fs-6'
-                                  : 'text-dark fw-bold text-hover-primary fs-6'
-                              }
-                              target={dayBookEntry.accountName && '_blank'}
-                              to={
-                                dayBookEntry.accountName
-                                  ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
-                                  : `/daybook/viewDaybook/${params.id}`
-                              }
-                            >
-                              {dayBookEntry.accountName || dayBookEntry.StudentName}
-                            </Link>
-                          </td>
-                          <td className='text-dark fw-bold text-hover-primary fs-6'>
-                            {dayBookEntry.naretion || '--'}
-                          </td>
-                          <td
-                            className='text-dark fw-bold text-hover-primary fs-6 '
-                            style={{background: '#f2f2ff'}}
-                          >
-                            {dayBookEntry.credit}
-                          </td>
-                          <td className='text-dark fw-bold text-hover-primary fs-6'>
-                            {dayBookEntry.debit}
-                          </td>
+                            {dayBookEntry.accountName || dayBookEntry.StudentName}
+                          </Link>
+                        </td>
+                        <td className='text-dark fw-bold text-hover-primary fs-6'>
+                          {dayBookEntry.naretion || '--'}
+                        </td>
+                        <td
+                          className='text-dark fw-bold text-hover-primary fs-6 '
+                          style={{background: '#f2f2ff'}}
+                        >
+                          {dayBookEntry.credit}
+                        </td>
+                        <td className='text-dark fw-bold text-hover-primary fs-6'>
+                          {dayBookEntry.debit}
+                        </td>
 
-                          <td
-                            style={{background: '#f2f2ff'}}
-                            className='text-dark fw-bold text-hover-primary fs-6'
-                          >
-                            {dayBookEntry?.studentLateFees || 0}
+                        <td
+                          style={{background: '#f2f2ff'}}
+                          className='text-dark fw-bold text-hover-primary fs-6'
+                        >
+                          {dayBookEntry?.studentLateFees || 0}
+                        </td>
+                        <td className='text-dark fw-bold text-hover-primary fs-6'>
+                          {dayBookEntry.balance.toFixed(2)}
+                        </td>
+                        {dayBookEntry.naretion && (
+                          <td>
+                            <div className='d-flex justify-content-end flex-shrink-0'>
+                              <button
+                                onClick={() => editDayBookSingleDataHandler(dayBookEntry?._id)}
+                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                              >
+                                <KTIcon iconName='pencil' className='fs-3' />
+                              </button>
+                              <button
+                                onClick={() => deleteDayBookSingleDataHandler(dayBookEntry?._id)}
+                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                              >
+                                <KTIcon iconName='trash' className='fs-3' />
+                              </button>
+                            </div>
                           </td>
-                          <td className='text-dark fw-bold text-hover-primary fs-6'>
-                            {dayBookEntry.balance.toFixed(2)}
-                          </td>
-                          {dayBookEntry.naretion && (
-                            <td>
-                              <div className='d-flex justify-content-end flex-shrink-0'>
-                                <button
-                                  onClick={() => editDayBookSingleDataHandler(dayBookEntry?._id)}
-                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                                >
-                                  <KTIcon iconName='pencil' className='fs-3' />
-                                </button>
-                                <button
-                                  onClick={() => deleteDayBookSingleDataHandler(dayBookEntry?._id)}
-                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                                >
-                                  <KTIcon iconName='trash' className='fs-3' />
-                                </button>
-                              </div>
-                            </td>
-                          )}
-                        </tr>
-                      )}
-                    </Fragment>
-                  )
-                })}
+                        )}
+                      </tr>
+                    )}
+                  </Fragment>
+                )
+              })}
             </tbody>
             {/* end::Table body */}
           </table>
