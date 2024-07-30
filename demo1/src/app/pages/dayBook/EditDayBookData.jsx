@@ -5,7 +5,7 @@ import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Co
 import {toast} from 'react-toastify'
 
 const EditDayBookData = ({setEditBayBookDataId, dayBookEntry, totalBalance}) => {
-  //console.log(dayBookEntry.balance, totalBalance)
+  //console.log(dayBookEntry.debit + dayBookEntry.balance)
   const [formData, setFormData] = useState({
     _id: dayBookEntry._id,
     dayBookDatadate: dayBookEntry.dayBookDatadate,
@@ -64,7 +64,9 @@ const EditDayBookData = ({setEditBayBookDataId, dayBookEntry, totalBalance}) => 
       return
     }
 
-    if (totalBalance - Number(debit) < Number(debit)) {
+    //console.log(debit)
+
+    if (dayBookEntry.debit + dayBookEntry.balancedebit > Number(debit)) {
       toast.error(`Your total balance is less than the debit amount ${debit}`, {
         bodyStyle: {fontSize: '18px'},
       })
