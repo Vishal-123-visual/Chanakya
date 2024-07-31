@@ -133,6 +133,14 @@ const admissionFormSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    skipMonthIncremented: {
+      type: Boolean,
+      default: false,
+    },
+    remainderSent: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

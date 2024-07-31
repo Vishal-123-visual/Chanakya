@@ -33,18 +33,25 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
       const installmentExpireDate = moment(
         student?.no_of_installments_expireTimeandAmount
       );
+      //console.log(installmentExpireDate);
       const currentTime = moment();
       const diffInDays = installmentExpireDate.diff(currentTime, "days");
+      // console.log(diffInDays);
 
-      //console.log(student.name, diffInDays);
+      // console.log(student.name, diffInDays);
+      // console.log(moment(currentTime).isSame(installmentExpireDate));
 
       // Update installmentPaymentSkipMonth if current time matches installment due date
-      if (moment(currentTime).isSame(installmentExpireDate, "day")) {
+      if (
+        moment(currentTime).isSame(installmentExpireDate) &&
+        !student.skipMonthIncremented
+      ) {
         if (
           student.student?.no_of_installments_expireTimeandAmount !== undefined
         ) {
           student.installmentPaymentSkipMonth =
             Number(student.installmentPaymentSkipMonth) + 1;
+          student.skipMonthIncremented = true;
         }
       }
 
@@ -67,15 +74,19 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
         let emailContent;
         if (daysDifference === 1 && hoursDifference === 12) {
           emailContent = emailRemainderData.firstRemainder;
+          student.remainderSent = false;
         } else if (daysDifference === 10 && hoursDifference === 12) {
+          student.remainderSent = false;
           emailContent = emailRemainderData.secondRemainder;
         } else if (daysDifference === 12 && hoursDifference === 12) {
+          student.remainderSent = false;
           emailContent = emailRemainderData.thirdRemainder;
         } else if (daysDifference === 15 && hoursDifference === 12) {
+          student.remainderSent = false;
           emailContent = emailRemainderData.firstRemainder;
         }
 
-        if (emailContent) {
+        if (emailContent && !student.remainderSent) {
           // Prepare recipients list for email
           const toEmails = `${req?.user?.email}, ${student?.email}, ${student?.companyName.email}, thakurarvindkr10@gmail.com, ${adminEmail}, ${superAdminEmail}`;
 
@@ -85,6 +96,10 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
             "Installment Payment Reminder",
             emailContent
           );
+
+          // Update student document to mark remainder as sent
+          student.remainderSent = true;
+          await student.save();
         }
       }
     }
