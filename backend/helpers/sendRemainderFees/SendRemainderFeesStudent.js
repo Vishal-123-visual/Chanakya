@@ -43,14 +43,28 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
       console.log(moment(currentTime).isSame(installmentExpireDate, "month"));
 
       // Update installmentPaymentSkipMonth if current time matches installment due date
+      // if (
+      //   moment(currentTime).isSame(installmentExpireDate, "month") &&
+      //   !student.skipMonthIncremented
+      // ) {
+      //   if (student?.no_of_installments_expireTimeandAmount !== undefined) {
+      //     student.installmentPaymentSkipMonth =
+      //       Number(student.installmentPaymentSkipMonth) + 1;
+      //     student.skipMonthIncremented = true;
+      //   }
+      // }
+
+      // Update installmentPaymentSkipMonth if current time matches installment due date
+      console.log(student.skipMonthIncremented !== moment(currentTime).month());
       if (
         moment(currentTime).isSame(installmentExpireDate, "month") &&
-        !student.skipMonthIncremented
+        (!student.skipMonthIncremented ||
+          student.skipMonthIncremented !== moment(currentTime).month())
       ) {
         if (student?.no_of_installments_expireTimeandAmount !== undefined) {
           student.installmentPaymentSkipMonth =
             Number(student.installmentPaymentSkipMonth) + 1;
-          student.skipMonthIncremented = true;
+          student.skipMonthIncremented = moment(currentTime).month();
         }
       }
 
@@ -87,7 +101,7 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
 
         if (emailContent && !student.remainderSent) {
           // Prepare recipients list for email
-          const toEmails = `${req?.user?.email}, ${student?.email}, ${student?.companyName.email}, thakurarvindkr10@gmail.com, ${adminEmail}, ${superAdminEmail}`;
+          const toEmails = `${req?.user?.email}, ${student?.email}, ${student?.companyName.email}, ${adminEmail}, ${superAdminEmail}`;
 
           // Send email
           await sendEmail(
