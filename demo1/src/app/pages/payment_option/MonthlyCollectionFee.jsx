@@ -32,6 +32,7 @@ const MonthlyCollectionFee = () => {
       return createdAt.isBetween(startDate, endDate, null, '[]')
     }) || []
 
+  //console.log(filteredData)
   const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
   // console.log(filteredData.length === 0)
 

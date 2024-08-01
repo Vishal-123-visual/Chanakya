@@ -792,11 +792,13 @@ export const createCourseFeesController = asyncHandler(
       }
 
       // Create the entry for the current due installment
+      // console.log(student);
+      // console.log(req.body);
       const currentInstallmentExpiration =
         new PaymentInstallmentTimeExpireModel({
           studentInfo,
           companyName: student.companyName._id,
-          courseName: req.body.courseName,
+          courseName: student?.courseName?._id,
           expiration_date: expirationDate, // Set to current date
           installment_number: req.body.no_of_installments, // Current installment number
           installment_amount: amountPaid,
@@ -807,7 +809,7 @@ export const createCourseFeesController = asyncHandler(
       const nextInstallmentExpiration = new PaymentInstallmentTimeExpireModel({
         studentInfo,
         companyName: student.companyName._id,
-        courseName: req.body.courseName,
+        courseName: student?.courseName?._id,
         expiration_date: expirationDate.toDate(), // Convert moment object to Date
         installment_number: nextInstallment,
         installment_amount: installmentAmount,
