@@ -22,7 +22,7 @@ const MonthlyCollectionFee = () => {
 
   const params = useParams()
   const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
-  //console.log(data)
+  //  console.log(data)
 
   // const filteredData =
   //   data?.filter((item) => {
@@ -38,7 +38,7 @@ const MonthlyCollectionFee = () => {
 
   const navigate = useNavigate()
 
-  console.log(data)
+  //console.log(data)
   //const currentTime = moment(Date.now())
 
   return (
@@ -48,7 +48,7 @@ const MonthlyCollectionFee = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{CompanyInfo?.companyName}</span>
           <p className=' mt-1 fw-semibold fs-7'>
-            Total Collection Fees Rs :: {collectionFeesBalance}
+            Total Collection Fees Rs :: {collectionFeesBalance?.toFixed(2)}
           </p>
         </h3>
         <div className=''>
@@ -172,7 +172,7 @@ const MonthlyCollectionFee = () => {
                             moment(
                               collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
                             ).diff(moment(Date.now()), 'months')
-                          )}
+                          ) + 1}
                         </td>
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
@@ -181,7 +181,7 @@ const MonthlyCollectionFee = () => {
                         </td>
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
-                            {collectionFees?.installment_amount}
+                            {collectionFees?.installment_amount.toFixed(2)}
                           </div>
                         </td>
                       </tr>
