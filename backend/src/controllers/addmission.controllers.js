@@ -40,10 +40,7 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide company Name field!");
         return;
-      // case !rollNumber:
-      //   res.status(400);
-      //   throw new Error("Please provide roll Number field!");
-      //   return;
+
       case !file:
         res.status(400);
         throw new Error("Please provide image field!");
@@ -81,10 +78,7 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide email field!");
         return;
-      // case !student_status:
-      //   res.status(400);
-      //   throw new Error("Please provide student status field!");
-      //   return;
+
       case !education_qualification:
         res.status(400);
         throw new Error("Please provide education qualification field!");
@@ -94,19 +88,6 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide select course field!");
         return;
-
-      // case !name_of_person_for_commision:
-      //   res.status(400);
-      //   throw new Error("Please provide name of person for commision field!");
-      //   return;
-      // case !commision_paid:
-      //   res.status(400);
-      //   throw new Error("Please provide commision paid field!");
-      //   return;
-      // case !commision_date:
-      //   res.status(400);
-      //   throw new Error("Please provide commision date field!");
-      //   return;
 
       case !course_fees:
         res.status(400);

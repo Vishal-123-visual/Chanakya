@@ -35,10 +35,7 @@ const admissionFormSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // permanent_address: {
-    //   type: String,
-    //   required: true,
-    // },
+
     date_of_birth: {
       type: Date,
       required: true,
@@ -59,34 +56,11 @@ const admissionFormSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // professional_qualification: {
-    //   type: String,
-    //   required: true,
-    // },
+
     select_course: {
       type: String,
       required: true,
     },
-    // document_attached: {
-    //   type: String,
-    //   required: true,
-    // },
-    // select_software: {
-    //   type: String,
-    //   required: true,
-    // },
-    // name_of_person_for_commision: {
-    //   type: String,
-    // },
-    // commision_paid: {
-    //   type: String,
-    // },
-    // commision_date: {
-    //   type: String,
-    // },
-    // commision_voucher_number: {
-    //   type: String,
-    // },
     course_fees: {
       type: String,
       required: true,
