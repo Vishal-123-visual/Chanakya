@@ -39,12 +39,12 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
       // console.log(diffInDays);
 
       // console.log(student.name, diffInDays);
-      console.log(currentTime, installmentExpireDate);
-      console.log(moment(currentTime).isSame(installmentExpireDate, "month"));
+      // console.log(currentTime, installmentExpireDate);
+      // console.log(moment(currentTime).isSame(installmentExpireDate, "month"));
 
       // Update installmentPaymentSkipMonth if current time matches installment due date
       // if (
-      //   moment(currentTime).isSame(installmentExpireDate, "month") &&
+      //   moment(currentTime).isSame(installmentExpireDate) &&
       //   !student.skipMonthIncremented
       // ) {
       //   if (student?.no_of_installments_expireTimeandAmount !== undefined) {
@@ -53,20 +53,6 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
       //     student.skipMonthIncremented = true;
       //   }
       // }
-
-      // Update installmentPaymentSkipMonth if current time matches installment due date
-      console.log(student.skipMonthIncremented !== moment(currentTime).month());
-      if (
-        moment(currentTime).isSame(installmentExpireDate, "month") &&
-        (!student.skipMonthIncremented ||
-          student.skipMonthIncremented !== moment(currentTime).month())
-      ) {
-        if (student?.no_of_installments_expireTimeandAmount !== undefined) {
-          student.installmentPaymentSkipMonth =
-            Number(student.installmentPaymentSkipMonth) + 1;
-          student.skipMonthIncremented = moment(currentTime).month();
-        }
-      }
 
       // Save student's updated information
       await student.save();

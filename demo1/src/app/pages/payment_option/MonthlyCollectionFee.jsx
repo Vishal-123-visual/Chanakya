@@ -22,21 +22,24 @@ const MonthlyCollectionFee = () => {
 
   const params = useParams()
   const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
-  //console.log(CompanyInfo)
+  //console.log(data)
 
-  const filteredData =
-    data?.filter((item) => {
-      const createdAt = moment(item.expiration_date)
-      const startDate = moment(fromDate).startOf('month')
-      const endDate = moment(toDate).endOf('month')
-      return createdAt.isBetween(startDate, endDate, null, '[]')
-    }) || []
+  // const filteredData =
+  //   data?.filter((item) => {
+  //     const createdAt = moment(item.expiration_date)
+  //     const startDate = moment(fromDate).startOf('month')
+  //     const endDate = moment(toDate).endOf('month')
+  //     return createdAt.isBetween(startDate, endDate, null, '[]')
+  //   }) || []
 
   //console.log(filteredData)
-  const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
+  const collectionFeesBalance = data?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
   // console.log(filteredData.length === 0)
 
   const navigate = useNavigate()
+
+  console.log(data)
+  //const currentTime = moment(Date.now())
 
   return (
     <div className={`card`}>
@@ -109,7 +112,7 @@ const MonthlyCollectionFee = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {filteredData.length === 0 ? (
+              {data?.length === 0 ? (
                 <tr>
                   <td></td>
                   <td></td>
@@ -124,7 +127,7 @@ const MonthlyCollectionFee = () => {
                 </tr>
               ) : (
                 <>
-                  {filteredData
+                  {data
                     ?.filter((searchStudent) => {
                       //  console.log(searchStudent)
                       return (
@@ -164,7 +167,13 @@ const MonthlyCollectionFee = () => {
                         <td>{collectionFees?.studentInfo.name}</td>
 
                         <td>{collectionFees?.courseName?.courseName}</td>
-                        <td>{collectionFees?.studentInfo?.installmentPaymentSkipMonth}</td>
+                        <td>
+                          {Math.abs(
+                            moment(
+                              collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
+                            ).diff(moment(Date.now()), 'months')
+                          )}
+                        </td>
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
                             {collectionFees?.studentInfo?.mobile_number}
