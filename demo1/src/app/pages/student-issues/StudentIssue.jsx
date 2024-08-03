@@ -29,10 +29,10 @@ const StudentIssue = ({studentInfoData}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Student Issues</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Student Notes</span>
           <span className='text-muted mt-1 fw-semibold fs-7'>Student {studentInfoData.name}</span>
         </h3>
-        {/* <div
+        <div
           className='card-toolbar'
           data-bs-toggle='tooltip'
           data-bs-placement='top'
@@ -40,14 +40,14 @@ const StudentIssue = ({studentInfoData}) => {
           title='Click to add Student Issue'
         >
           <a
-            className='btn btn-sm btn-light-primary'
+            className='btn btn-sm btn-light-danger'
             // data-bs-toggle="modal"
             // data-bs-target="#kt_modal_invite_friends"
           >
             <KTIcon iconName='plus' className='fs-3' />
-            Add New Issue
+            Flag On Dashboard
           </a>
-        </div> */}
+        </div>
       </div>
       {/* end::Header */}
       {/* begin::Body */}

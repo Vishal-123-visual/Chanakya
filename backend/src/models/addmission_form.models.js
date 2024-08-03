@@ -115,6 +115,11 @@ const admissionFormSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+
+    showNotesDashBoard: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,
