@@ -33,7 +33,7 @@ const StudentIssue = ({studentInfoData}) => {
     //console.log(toggleShowStudentNotes)
     studentIssueCTX.useUpdateStudentStatusShowNotesDashboardMutation.mutate({
       showNotesDashBoard: toggleShowStudentNotes,
-      id: studentInfoData._id,
+      id: studentInfoData?._id,
     })
   }
 
@@ -43,7 +43,7 @@ const StudentIssue = ({studentInfoData}) => {
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Student Notes</span>
-          <span className='text-muted mt-1 fw-semibold fs-7'>Student {studentInfoData.name}</span>
+          <span className='text-muted mt-1 fw-semibold fs-7'>Student {studentInfoData?.name}</span>
         </h3>
         <div
           className='card-toolbar'
@@ -87,22 +87,22 @@ const StudentIssue = ({studentInfoData}) => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              <AddStudentIssue studentInfoData={studentInfoData._id} />
+              <AddStudentIssue studentInfoData={studentInfoData?._id} />
               {studentIssueCTX?.getStudentIssuesListsQuery?.data
                 ?.filter((stud) => stud?.studentId === studentInfoData?._id)
                 ?.map((studentIssueData, index) => {
                   // console.log(studentIssueData._id, editStudentIssueId)
                   return (
                     <>
-                      {studentIssueData._id === editStudentIssueId ? (
+                      {studentIssueData?._id === editStudentIssueId ? (
                         <EditStudentIssue
-                          studentInfoData={studentInfoData._id}
-                          key={studentIssueData._id}
+                          studentInfoData={studentInfoData?._id}
+                          key={studentIssueData?._id}
                           studentIssueData={studentIssueData}
                           setEditStudentIssueId={setEditStudentIssueId}
                         />
                       ) : (
-                        <tr key={studentIssueData._id}>
+                        <tr key={studentIssueData?._id}>
                           <td>
                             <div className='form-check form-check-sm form-check-custom form-check-solid'>
                               {/* <input className="form-check-input widget-9-check" type="checkbox" value="1" /> */}
@@ -111,21 +111,21 @@ const StudentIssue = ({studentInfoData}) => {
                           <td>{index + 1}</td>
                           <td>
                             <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                              {moment(studentIssueData.date).format('DD-MM-YYYY')}
+                              {moment(studentIssueData?.date).format('DD-MM-YYYY')}
                             </a>
                           </td>
                           <td>
                             <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                              {studentIssueData.particulars}
+                              {studentIssueData?.particulars}
                             </a>
                           </td>
-                          <td className=''>{studentIssueData.addedBy}</td>
+                          <td className=''>{studentIssueData?.addedBy}</td>
 
                           <td>
                             <div className='d-flex justify-content-end flex-shrink-0'>
                               <button
                                 onClick={(e) =>
-                                  handleEditStudentIssueIdhandler(e, studentIssueData._id)
+                                  handleEditStudentIssueIdhandler(e, studentIssueData?._id)
                                 }
                                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                               >
@@ -133,7 +133,7 @@ const StudentIssue = ({studentInfoData}) => {
                               </button>
                               <button
                                 onClick={(e) =>
-                                  deleteSingleStudentIssueHandler(e, studentIssueData._id)
+                                  deleteSingleStudentIssueHandler(e, studentIssueData?._id)
                                 }
                                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                               >

@@ -21,6 +21,7 @@ const StudentProfileDetailsPage = () => {
   const navigate = useNavigate()
   // console.log(params)
   const {currentUser} = useAuth()
+  //console.log(params)
   const {data: studentInfoData} = studentCTX.useGetSingleStudentUsingById(params.id)
   //console.log(studentInfoData)
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(
@@ -167,7 +168,7 @@ const StudentProfileDetailsPage = () => {
                               <KTIcon iconName='arrow-down' className='fs-3 text-danger me-2' />
                               <div className='fs-2 fw-bolder'>
                                 Rs.
-                                {cutWithGSTAmount.toFixed(2)}
+                                {cutWithGSTAmount?.toFixed(2)}
                               </div>
                             </div>
 
