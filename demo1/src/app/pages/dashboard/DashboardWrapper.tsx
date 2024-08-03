@@ -20,6 +20,7 @@ import {
 import ListAlertPendingStudent from '../Alert_Pending_NewStudents/ListAlertPendingStudent'
 import DialogAlertPendingStudent from '../Alert_Pending_NewStudents/DialogAlertPendingStudent'
 import {useAuth} from '../../modules/auth'
+import ShowStudentNotesNameDashboard from '../student-issues/ShowStudentNotesNameDashboard'
 
 const DashboardPage: FC = () => (
   <>
@@ -47,7 +48,8 @@ const DashboardPage: FC = () => (
       {/* begin::Col */}
       <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
         <CardsWidget17 className='h-md-50 mb-5 mb-xl-10' />
-        <ListsWidget26 className='h-lg-50' />
+        {/* <ListsWidget26 className='h-lg-50' /> */}
+        <ShowStudentNotesNameDashboard className='h-lg-50' />
       </div>
       {/* end::Col */}
 
