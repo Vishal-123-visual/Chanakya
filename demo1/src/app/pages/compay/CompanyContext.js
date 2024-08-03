@@ -333,6 +333,139 @@ export const CompanyContextProvider = ({children}) => {
 
   // student commission end here --------------------------------------------------
 
+  //  ------------------------------------- Student Issues Start here -------------------------------------------
+  const createStudentIssueMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/student-issues`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentIssues'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentIssues'],
+        })
+      }
+    },
+  })
+  const useUpdateStudentIssueMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.put(`${BASE_URL}/api/student-issues/${data.id}`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentIssues'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentIssues'],
+        })
+      }
+    },
+  })
+  const useDeleteStudentIssueMutation = useMutation({
+    mutationFn: async (id) => {
+      //console.log(data)
+      return axios.delete(`${BASE_URL}/api/student-issues/${id}`, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentIssues'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentIssues'],
+        })
+      }
+    },
+  })
+
+  const getStudentIssuesListsQuery = useQuery({
+    queryKey: ['getStudentIssues'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/student-issues`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
+  //  ------------------------------------- Student Issues End here ---------------------------------------------
+
   return (
     <CompanyContext.Provider
       value={{
@@ -355,6 +488,14 @@ export const CompanyContextProvider = ({children}) => {
         postWhatsAppMessageSuggestionStatus,
         getWhatsAppMessageuggestionStatus,
         /***************************  whatsapp Message Suggestion end   *****************************/
+
+        // student issues start here --------------------------------------
+        createStudentIssueMutation,
+        getStudentIssuesListsQuery,
+        useUpdateStudentIssueMutation,
+        useDeleteStudentIssueMutation,
+
+        // student issues end here --------------------------------------
       }}
     >
       {children}

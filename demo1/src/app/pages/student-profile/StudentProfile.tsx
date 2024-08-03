@@ -21,6 +21,7 @@ import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectCon
 import StudentCommissionLists from '../student-commission/StudentCommissionLists'
 import {useAuth} from '../../modules/auth'
 import AlertPendingFeesNewStudents from '../Alert_Pending_NewStudents/AlertPendingNewStudents'
+import StudentIssue from '../student-issues/StudentIssue'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -949,6 +950,7 @@ const StudentProfile: React.FC = () => {
         <div className='d-flex flex-column gap-10 mt-4'>
           <AlertPendingFeesNewStudents studentInfoData={updateUserId} />
           <StudentCommissionLists studentInfoData={updateUserId} />
+          <StudentIssue studentInfoData={updateUserId} />
         </div>
       )}
     </>

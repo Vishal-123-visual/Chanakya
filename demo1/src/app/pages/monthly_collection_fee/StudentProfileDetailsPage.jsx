@@ -9,6 +9,7 @@ import {useCourseContext} from '../course/CourseContext'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import StudentCourseFee from '../student-profile/StudentCourseFee'
+import StudentIssue from '../student-issues/StudentIssue'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -739,6 +740,7 @@ const StudentProfileDetailsPage = () => {
         <div className='d-flex flex-column gap-10 mt-4'>
           <AlertPendingFeesNewStudents studentInfoData={studentInfoData} />
           <StudentCommissionLists studentInfoData={studentInfoData} />
+          <StudentIssue studentInfoData={studentInfoData} />
         </div>
       )}
     </>
