@@ -85,7 +85,7 @@ export const updateStudentIssueNoteStatusController = async (req, res) => {
     await updatedStudentIssue.save();
     res
       .status(200)
-      .json({ success: true, message: "updated student notes stutus" });
+      .json({ success: true, message: "updated student notes status" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Internal Server error" });
   }
