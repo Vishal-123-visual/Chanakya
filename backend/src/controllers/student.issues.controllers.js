@@ -1,3 +1,4 @@
+import admissionFormModel from "../models/addmission_form.models.js";
 import StudentIssueModel from "../models/student-issues/student.issues.models.js";
 
 export const addStudentIssueController = async (req, res) => {
@@ -69,5 +70,23 @@ export const deleteSingleStudentIssueController = async (req, res) => {
       .json({ success: true, message: "delete student Issue successfully!" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
+
+export const updateStudentIssueNoteStatusController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { showNotesDashBoard } = req.body;
+    const updatedStudentIssue = await admissionFormModel.findByIdAndUpdate(
+      id,
+      { showNotesDashBoard },
+      { new: true }
+    );
+    await updatedStudentIssue.save();
+    res
+      .status(200)
+      .json({ success: true, message: "updated student notes stutus" });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Internal Server error" });
   }
 };

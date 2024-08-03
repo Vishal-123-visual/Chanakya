@@ -44,7 +44,7 @@ export const AdmissionContextProvider = ({children}) => {
     })
   }
   const useGetSingleStudentUsingById = (studentId) => {
-    console.log(studentId)
+    //console.log(studentId)
     return useQuery({
       queryKey: ['getStudents', studentId],
       queryFn: async () => {

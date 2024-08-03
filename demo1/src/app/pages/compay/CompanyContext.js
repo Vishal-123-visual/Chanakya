@@ -412,6 +412,49 @@ export const CompanyContextProvider = ({children}) => {
       }
     },
   })
+  const useUpdateStudentStatusShowNotesDashboardMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.put(
+        `${BASE_URL}/api/student-issues/updateStudentStatus/${data.id}`,
+        data,
+        config
+      )
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudents'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentIssues'],
+        })
+      }
+    },
+  })
   const useDeleteStudentIssueMutation = useMutation({
     mutationFn: async (id) => {
       //console.log(data)
@@ -493,6 +536,7 @@ export const CompanyContextProvider = ({children}) => {
         createStudentIssueMutation,
         getStudentIssuesListsQuery,
         useUpdateStudentIssueMutation,
+        useUpdateStudentStatusShowNotesDashboardMutation,
         useDeleteStudentIssueMutation,
 
         // student issues end here --------------------------------------

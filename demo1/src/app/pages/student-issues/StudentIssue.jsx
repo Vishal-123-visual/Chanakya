@@ -7,6 +7,10 @@ import EditStudentIssue from './EditStudentIssue'
 
 const StudentIssue = ({studentInfoData}) => {
   //console.log(studentInfoData)
+  const [toggleShowStudentNotes, setToggleShowStudentNotes] = useState(
+    studentInfoData?.showNotesDashBoard
+  )
+
   const studentIssueCTX = useCompanyContext()
   //console.log(studentIssueCTX.getStudentIssuesListsQuery.data)
   const [editStudentIssueId, setEditStudentIssueId] = useState(null)
@@ -24,6 +28,15 @@ const StudentIssue = ({studentInfoData}) => {
     studentIssueCTX.useDeleteStudentIssueMutation.mutate(studentId)
   }
 
+  const showStudentNotesHandler = async () => {
+    setToggleShowStudentNotes((prev) => !prev)
+    //console.log(toggleShowStudentNotes)
+    studentIssueCTX.useUpdateStudentStatusShowNotesDashboardMutation.mutate({
+      showNotesDashBoard: toggleShowStudentNotes,
+      id: studentInfoData._id,
+    })
+  }
+
   return (
     <div className='card'>
       {/* begin::Header */}
@@ -37,16 +50,18 @@ const StudentIssue = ({studentInfoData}) => {
           data-bs-toggle='tooltip'
           data-bs-placement='top'
           data-bs-trigger='hover'
-          title='Click to add Student Issue'
+          title='Click to show notes on dashboard'
         >
-          <a
+          <button
+            onClick={showStudentNotesHandler}
+            disabled={studentIssueCTX.useUpdateStudentStatusShowNotesDashboardMutation.isLoading}
             className='btn btn-sm btn-light-danger'
             // data-bs-toggle="modal"
             // data-bs-target="#kt_modal_invite_friends"
           >
             <KTIcon iconName='plus' className='fs-3' />
-            Flag On Dashboard
-          </a>
+            Flag {toggleShowStudentNotes ? 'Off' : 'On'} Dashboard
+          </button>
         </div>
       </div>
       {/* end::Header */}
@@ -73,9 +88,9 @@ const StudentIssue = ({studentInfoData}) => {
             {/* begin::Table body */}
             <tbody>
               <AddStudentIssue studentInfoData={studentInfoData._id} />
-              {studentIssueCTX.getStudentIssuesListsQuery.data
-                .filter((stud) => stud.studentId === studentInfoData._id)
-                .map((studentIssueData, index) => {
+              {studentIssueCTX?.getStudentIssuesListsQuery?.data
+                ?.filter((stud) => stud?.studentId === studentInfoData?._id)
+                ?.map((studentIssueData, index) => {
                   // console.log(studentIssueData._id, editStudentIssueId)
                   return (
                     <>

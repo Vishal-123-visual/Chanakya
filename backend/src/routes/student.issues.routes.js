@@ -5,9 +5,13 @@ import {
   getAllStudentIssuesListsController,
   updateSingleStudentIssueController,
   deleteSingleStudentIssueController,
+  updateStudentIssueNoteStatusController,
 } from "../controllers/student.issues.controllers.js";
 
 const router = Router();
+
+// update the student show notes status
+router.put("/updateStudentStatus/:id", updateStudentIssueNoteStatusController);
 
 router
   .route("/")
