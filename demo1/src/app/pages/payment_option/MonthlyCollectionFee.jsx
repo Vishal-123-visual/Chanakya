@@ -16,7 +16,7 @@ const MonthlyCollectionFee = () => {
   const ctx = useStudentCourseFeesContext()
   let {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
   data = data?.filter((item) => item?.studentInfo?.no_of_installments === item?.installment_number)
-  //console.log(isLoading)
+  // console.log(data?.length)
 
   const companyCTX = useCompanyContext()
 
@@ -47,6 +47,7 @@ const MonthlyCollectionFee = () => {
       <div className='card-header border-0 pt-5 d-flex align-items-center'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{CompanyInfo?.companyName}</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Students {data?.length}</span>
           <p className=' mt-1 fw-semibold fs-7'>
             Total Collection Fees Rs :: {collectionFeesBalance?.toFixed(2)}
           </p>

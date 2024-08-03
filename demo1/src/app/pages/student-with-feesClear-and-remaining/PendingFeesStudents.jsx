@@ -32,13 +32,14 @@ const PendingFeesStudents = () => {
     )
     ?.filter((student) => student?.companyName === data?._id && student?.no_of_installments > 0)
 
-  //console.log(filteredStudents)
+  // console.log(filteredStudents?.length)
   return (
     <div className={`card`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{data?.companyName}</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Students {filteredStudents?.length}</span>
           <span className='text-muted mt-1 fw-semibold fs-7'>Pending Fees Students</span>
         </h3>
         <div

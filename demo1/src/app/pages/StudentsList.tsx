@@ -35,13 +35,20 @@ const StudentsList: React.FC<Props> = ({className}) => {
     //console.log(value)
   }
 
+  const countStudentCompanyWise = ctx.studentsLists?.data?.users?.filter(
+    (c: any) => params?.id === c?.companyName
+  )
+  //console.log(countStudentCompanyWise?.length)
+
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{singleComapnyData?.companyName}</span>
-          <span className='text-muted mt-1 fw-semibold fs-7'>All Over World</span>
+          <span className='card-label fw-bold fs-3 mb-1'>
+            Students {countStudentCompanyWise?.length}
+          </span>
         </h3>
         <div className='search-bar'>
           <input
