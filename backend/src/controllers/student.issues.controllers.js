@@ -1,4 +1,5 @@
 import admissionFormModel from "../models/addmission_form.models.js";
+import ShowStudentDashboardModel from "../models/student-issues/showstudentdashboard.models.js";
 import StudentIssueModel from "../models/student-issues/student.issues.models.js";
 
 export const addStudentIssueController = async (req, res) => {
@@ -88,5 +89,59 @@ export const updateStudentIssueNoteStatusController = async (req, res) => {
       .json({ success: true, message: "updated student notes status" });
   } catch (error) {
     res.status(500).json({ success: false, error: "Internal Server error" });
+  }
+};
+
+export const showStudentIssueOnDashboardController = async (req, res) => {
+  try {
+    const { studentId, showStudent, studentName } = req.body;
+    //console.log(req.body);
+    const existedStudentIssueStatus = await ShowStudentDashboardModel.findOne({
+      studentId,
+    });
+    //console.log(existedStudentIssueStatus);
+
+    if (existedStudentIssueStatus) {
+      existedStudentIssueStatus.showStudent = showStudent;
+      existedStudentIssueStatus.studentName = studentName;
+    } else {
+      const newStudentIssueStatus = new ShowStudentDashboardModel({
+        studentId,
+        showStudent: showStudent,
+        studentName,
+      });
+      await newStudentIssueStatus.save();
+    }
+
+    await existedStudentIssueStatus.save();
+    return res.status(200).json({
+      success: true,
+      message: "student issue status updated successfully!",
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+};
+
+export const getAllShowStudentIssueOnDashboardController = async (req, res) => {
+  try {
+    const getAllStudentIssueStatus = await ShowStudentDashboardModel.find();
+    return res.status(200).json(getAllStudentIssueStatus);
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getSingleStudentShowStudentIssueOnDashboardController = async (
+  req,
+  res
+) => {
+  try {
+    const singleStudentIssueStatus = await ShowStudentDashboardModel.findOne({
+      studentId: req.params.id,
+    });
+    res.status(200).json({ success: true, singleStudentIssueStatus });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Internal server error" });
   }
 };

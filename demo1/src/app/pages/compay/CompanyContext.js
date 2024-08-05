@@ -412,49 +412,7 @@ export const CompanyContextProvider = ({children}) => {
       }
     },
   })
-  const useUpdateStudentStatusShowNotesDashboardMutation = useMutation({
-    mutationFn: async (data) => {
-      //console.log(data)
-      return axios.put(
-        `${BASE_URL}/api/student-issues/updateStudentStatus/${data.id}`,
-        data,
-        config
-      )
-    },
-    onMutate: () => {
-      //console.log('mutate')
-    },
 
-    onError: () => {
-      //console.log('error')
-    },
-
-    onSuccess: async (res) => {
-      if (res.data.success) {
-        toast.success(res.data.message)
-      }
-      await queryClient.invalidateQueries({
-        queryKey: ['getStudents'],
-      })
-    },
-
-    onSettled: async (_, error) => {
-      //console.log('settled')
-      if (error) {
-        //console.log(error)
-        toast.warn(error.response.data.error, {
-          type: 'error',
-          bodyStyle: {
-            fontSize: '18px',
-          },
-        })
-      } else {
-        await queryClient.invalidateQueries({
-          queryKey: ['getStudentIssues'],
-        })
-      }
-    },
-  })
   const useDeleteStudentIssueMutation = useMutation({
     mutationFn: async (id) => {
       //console.log(data)
@@ -509,6 +467,80 @@ export const CompanyContextProvider = ({children}) => {
 
   //  ------------------------------------- Student Issues End here ---------------------------------------------
 
+  // -------------------------------- Show Student status Dashboard start here -----------------------------------
+  const useUpdateStudentStatusShowNotesDashboardMutation = useMutation({
+    mutationFn: async (data) => {
+      return axios.post(`${BASE_URL}/api/student-issues/showStudentDashboard`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      console.log(res)
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentIssuesStatus'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentIssuesStatus'],
+        })
+      }
+    },
+  })
+
+  const useGetSingleStudentIssueStatusQuery = (studentId) => {
+    return useQuery({
+      queryKey: ['getStudentIssuesStatus', studentId],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/api/student-issues/showStudentDashboard/${studentId}`,
+            config
+          )
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
+  const useGetAllStudentIssueStatusQuery = useQuery({
+    queryKey: ['getStudentIssuesStatus'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/api/student-issues/showStudentDashboard`,
+          config
+        )
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
+  // -------------------------------- Show Student status Dashboard End here -----------------------------------
+
   return (
     <CompanyContext.Provider
       value={{
@@ -537,7 +569,9 @@ export const CompanyContextProvider = ({children}) => {
         getStudentIssuesListsQuery,
         useUpdateStudentIssueMutation,
         useUpdateStudentStatusShowNotesDashboardMutation,
+        useGetSingleStudentIssueStatusQuery,
         useDeleteStudentIssueMutation,
+        useGetAllStudentIssueStatusQuery,
 
         // student issues end here --------------------------------------
       }}

@@ -6,9 +6,22 @@ import {
   updateSingleStudentIssueController,
   deleteSingleStudentIssueController,
   updateStudentIssueNoteStatusController,
+  showStudentIssueOnDashboardController,
+  getAllShowStudentIssueOnDashboardController,
+  getSingleStudentShowStudentIssueOnDashboardController,
 } from "../controllers/student.issues.controllers.js";
 
 const router = Router();
+
+router.post("/showStudentDashboard", showStudentIssueOnDashboardController);
+router.get(
+  "/showStudentDashboard",
+  getAllShowStudentIssueOnDashboardController
+);
+router.get(
+  "/showStudentDashboard/:id",
+  getSingleStudentShowStudentIssueOnDashboardController
+);
 
 // update the student show notes status
 router.put("/updateStudentStatus/:id", updateStudentIssueNoteStatusController);

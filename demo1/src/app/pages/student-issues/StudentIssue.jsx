@@ -6,13 +6,11 @@ import {useState} from 'react'
 import EditStudentIssue from './EditStudentIssue'
 
 const StudentIssue = ({studentInfoData}) => {
-  //console.log(studentInfoData)
-  const [toggleShowStudentNotes, setToggleShowStudentNotes] = useState(
-    studentInfoData?.showNotesDashBoard
-  )
-
+  //console.log(studentInfoData.name)
   const studentIssueCTX = useCompanyContext()
-  //console.log(studentIssueCTX.getStudentIssuesListsQuery.data)
+  const {data: toggleShowStudentNotes} = studentIssueCTX.useGetSingleStudentIssueStatusQuery(
+    studentInfoData?._id
+  )
   const [editStudentIssueId, setEditStudentIssueId] = useState(null)
   //console.log(editStudentIssueId)
   const handleEditStudentIssueIdhandler = (e, studentId) => {
@@ -28,12 +26,11 @@ const StudentIssue = ({studentInfoData}) => {
     studentIssueCTX.useDeleteStudentIssueMutation.mutate(studentId)
   }
 
-  const showStudentNotesHandler = async () => {
-    setToggleShowStudentNotes((prev) => !prev)
-    //console.log(toggleShowStudentNotes)
+  const showStudentNotesHandler = async (e) => {
     studentIssueCTX.useUpdateStudentStatusShowNotesDashboardMutation.mutate({
-      showNotesDashBoard: toggleShowStudentNotes,
-      id: studentInfoData?._id,
+      showStudent: e.target.checked,
+      studentId: studentInfoData?._id,
+      studentName: studentInfoData?.name,
     })
   }
 
@@ -52,16 +49,18 @@ const StudentIssue = ({studentInfoData}) => {
           data-bs-trigger='hover'
           title='Click to show notes on dashboard'
         >
-          <button
-            onClick={showStudentNotesHandler}
-            disabled={studentIssueCTX.useUpdateStudentStatusShowNotesDashboardMutation.isLoading}
-            className='btn btn-sm btn-light-danger'
-            // data-bs-toggle="modal"
-            // data-bs-target="#kt_modal_invite_friends"
-          >
-            <KTIcon iconName='plus' className='fs-3' />
-            Flag {toggleShowStudentNotes ? 'Off' : 'On'} Dashboard
-          </button>
+          <div className='form-check'>
+            <input
+              className='form-check-input'
+              type='checkbox'
+              id='sendEmailCheckbox'
+              onChange={showStudentNotesHandler}
+              checked={toggleShowStudentNotes?.singleStudentIssueStatus?.showStudent}
+            />
+            <label className='form-check-label' htmlFor='sendEmailCheckbox'>
+              Show Student On Dashboard
+            </label>
+          </div>
         </div>
       </div>
       {/* end::Header */}
