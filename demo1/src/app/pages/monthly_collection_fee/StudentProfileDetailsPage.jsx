@@ -722,9 +722,16 @@ const StudentProfileDetailsPage = () => {
                         type='text'
                         className='form-control w-50 '
                         readOnly
-                        value={(
-                          studentInfoData?.remainingCourseFees / studentInfoData?.no_of_installments
-                        ).toFixed(2)}
+                        value={
+                          studentInfoData?.remainingCourseFees === undefined
+                            ? (
+                                studentInfoData?.netCourseFees / studentInfoData?.no_of_installments
+                              ).toFixed(2)
+                            : (
+                                studentInfoData?.remainingCourseFees /
+                                studentInfoData?.no_of_installments
+                              ).toFixed(2)
+                        }
                       />
                     </div>
                   </div>

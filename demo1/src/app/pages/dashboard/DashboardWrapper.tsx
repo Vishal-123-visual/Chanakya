@@ -49,7 +49,11 @@ const DashboardPage: FC = () => (
       <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
         <CardsWidget17 className='h-md-50 mb-5 mb-xl-10' />
         {/* <ListsWidget26 className='h-lg-50' /> */}
-        <ShowStudentNotesNameDashboard className='h-lg-50' />
+        <div className='card card-header pt-5 h-lg-50'>
+          <h3 className='card-title text-gray-800 fw-bold'>Student Notes Flag</h3>
+          <div className='card-toolbar'></div>
+          <ShowStudentNotesNameDashboard className={''} />
+        </div>
       </div>
       {/* end::Col */}
 
