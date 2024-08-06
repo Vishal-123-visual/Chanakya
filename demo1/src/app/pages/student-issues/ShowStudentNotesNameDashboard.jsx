@@ -16,8 +16,8 @@ const ShowStudentNotesNameDashboard = ({className}) => {
     <>
       <div style={{overflowY: 'scroll'}} className={`card card-flush ${className}`}>
         <div className='card-body pt-5'>
-          {filteredData.length === 0 && <div>No Student Issue is right now</div>}
-          {filteredData.map((row, index) => (
+          {filteredData?.length === 0 && <div>No Student Issue is right now</div>}
+          {filteredData?.map((row, index) => (
             <Fragment key={`lw26-rows-${index}`}>
               <div className='d-flex flex-stack'>
                 <a className='text-primary fw-semibold fs-6 me-2'>{row?.studentName}</a>
@@ -30,7 +30,7 @@ const ShowStudentNotesNameDashboard = ({className}) => {
                 </button>
               </div>
               {/* <div className='separator separator-dashed my-3' /> */}
-              {filteredData.length - 1 > index && (
+              {filteredData?.length - 1 > index && (
                 <div className='separator separator-dashed my-3' />
               )}
             </Fragment>
