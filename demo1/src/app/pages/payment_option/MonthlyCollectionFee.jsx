@@ -159,7 +159,11 @@ const MonthlyCollectionFee = () => {
                       </td>
                       <td>{collectionFees?.studentInfo.name}</td>
                       <td>{courseIdToName[collectionFees?.studentInfo?.courseName]}</td>
-                      <td>{calculateMonthDiff(collectionFees?.expiration_date)}</td>
+                      <td>
+                        {calculateMonthDiff(
+                          collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
+                        )}
+                      </td>
                       <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
                           {collectionFees?.studentInfo?.mobile_number}
