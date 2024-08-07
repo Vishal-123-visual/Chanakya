@@ -41,6 +41,14 @@ const MonthlyCollectionFee = () => {
   //console.log(data)
   //const currentTime = moment(Date.now())
 
+  const calculateMonthDiff = (expireDate) => {
+    const currentDate = new Date(Date.now())
+    const expireMonth = new Date(expireDate).getMonth()
+    const currentMonth = currentDate.getMonth()
+    const monthDiff = Math.abs(currentMonth - expireMonth)
+    return monthDiff
+  }
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -169,24 +177,9 @@ const MonthlyCollectionFee = () => {
 
                         <td>{collectionFees?.courseName?.courseName}</td>
                         <td>
-                          {/* {Math.round(
-                            moment(Date.now()).diff(
-                              moment(
-                                collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
-                              ),
-                              'months'
-                            )
-                          )} */}
-                          {new Date(Date.now()).getMonth() -
-                            new Date(
-                              collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
-                            ).getMonth()}
-                        </td>
-                        <td>
-                          {new Date(Date.now()).getMonth()},{' '}
-                          {new Date(
+                          {calculateMonthDiff(
                             collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
-                          ).getMonth()}
+                          )}
                         </td>
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
