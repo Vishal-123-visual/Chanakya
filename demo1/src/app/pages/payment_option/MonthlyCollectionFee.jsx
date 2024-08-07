@@ -36,15 +36,16 @@ const MonthlyCollectionFee = () => {
   const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
 
   const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
-
+  console.log(filteredData)
   const navigate = useNavigate()
 
   const calculateMonthDiff = (expireDate) => {
-    const currentDate = new Date(Date.now())
-    const expireDateObj = new Date(expireDate)
-    const monthsDiff =
-      (currentDate.getFullYear() - expireDateObj.getFullYear()) * 12 +
-      (currentDate.getMonth() - expireDateObj.getMonth())
+    const currentDate = moment() // Current date
+    const expireDateObj = moment(expireDate) // Expiry date
+    // Get the difference in total months
+    let monthsDiff = currentDate.diff(expireDateObj, 'months', true) // 'true' for floating point number
+    // Round down to get the full month difference
+    monthsDiff = Math.floor(monthsDiff)
     return monthsDiff < 0 ? 0 : monthsDiff
   }
 
@@ -158,11 +159,7 @@ const MonthlyCollectionFee = () => {
                       </td>
                       <td>{collectionFees?.studentInfo.name}</td>
                       <td>{courseIdToName[collectionFees?.studentInfo?.courseName]}</td>
-                      <td>
-                        {calculateMonthDiff(
-                          collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
-                        )}
-                      </td>
+                      <td>{calculateMonthDiff(collectionFees?.expiration_date)}</td>
                       <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
                           {collectionFees?.studentInfo?.mobile_number}
