@@ -43,10 +43,11 @@ const MonthlyCollectionFee = () => {
 
   const calculateMonthDiff = (expireDate) => {
     const currentDate = new Date(Date.now())
-    const expireMonth = new Date(expireDate).getMonth()
-    const currentMonth = currentDate.getMonth()
-    const monthDiff = Math.abs(currentMonth - expireMonth)
-    return monthDiff
+    const expireDateObj = new Date(expireDate)
+    const monthsDiff =
+      (currentDate.getFullYear() - expireDateObj.getFullYear()) * 12 +
+      (currentDate.getMonth() - expireDateObj.getMonth())
+    return monthsDiff
   }
 
   return (
