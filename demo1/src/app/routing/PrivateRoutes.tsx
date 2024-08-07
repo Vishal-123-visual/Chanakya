@@ -52,6 +52,7 @@ import SendEmailSuggestion from '../pages/email-template/SendEmailSuggestion'
 import CourseStudentSubjectMarks from '../pages/courseStudentSubjectsMarks/CourseStudentSubjectMarks'
 import StudentMarksResult from '../pages/courseStudentSubjectsMarks/StudentMarksResult'
 import StudentProfileDetailsPage from '../pages/monthly_collection_fee/StudentProfileDetailsPage'
+import DropOutStudents from '../pages/drop-out-students/DropOutStudents'
 const PrivateRoutes = () => {
   const {currentUser} = useAuth()
   //console.log(currentUser)
@@ -241,6 +242,14 @@ const PrivateRoutes = () => {
               element={
                 <>
                   <StudentsList className='' />
+                </>
+              }
+            />
+            <Route
+              path='/drop-out-students/:id'
+              element={
+                <>
+                  <DropOutStudents />
                 </>
               }
             />

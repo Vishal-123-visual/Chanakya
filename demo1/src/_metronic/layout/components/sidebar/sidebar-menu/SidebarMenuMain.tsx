@@ -125,6 +125,11 @@ const SidebarMenuMain = () => {
                   hasBullet={true}
                 />
                 <SidebarMenuItem
+                  to={`/drop-out-students/${CompanyListData?._id}`}
+                  title='Drop Out Students'
+                  hasBullet={true}
+                />
+                <SidebarMenuItem
                   to={`/monthlyCollectionFees/${CompanyListData?._id}`}
                   title='Monthly Collections'
                   hasBullet={true}

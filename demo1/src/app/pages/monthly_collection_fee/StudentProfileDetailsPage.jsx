@@ -90,6 +90,20 @@ const StudentProfileDetailsPage = () => {
                       >
                         Upgrade to Pro
                       </a>
+
+                      <button
+                        id='#student-notes'
+                        className='btn  btn-bg-dark btn-color-primary btn-active-color-info  me-1'
+                        onClick={() => {
+                          const studentNotesSection =
+                            document.getElementById('student-notes-section')
+                          if (studentNotesSection) {
+                            studentNotesSection.scrollIntoView({behavior: 'smooth'})
+                          }
+                        }}
+                      >
+                        Student Flag 🚩
+                      </button>
                     </div>
 
                     <div className='d-flex flex-wrap fw-bold fs-6 mb-4 pe-2'>

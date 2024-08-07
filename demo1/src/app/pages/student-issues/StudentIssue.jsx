@@ -35,7 +35,7 @@ const StudentIssue = ({studentInfoData}) => {
   }
 
   return (
-    <div className='card'>
+    <div id='student-notes-section' className='card'>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
@@ -49,17 +49,16 @@ const StudentIssue = ({studentInfoData}) => {
           data-bs-trigger='hover'
           title='Click to show notes on dashboard'
         >
-          <div className='form-check'>
+          <div className='bg-light-info p-5 form-check form-switch form-switch-sm form-check-custom form-check-solid'>
             <input
               className='form-check-input'
               type='checkbox'
+              value=''
               id='sendEmailCheckbox'
               onChange={showStudentNotesHandler}
               checked={toggleShowStudentNotes?.singleStudentIssueStatus?.showStudent}
             />
-            <label className='form-check-label' htmlFor='sendEmailCheckbox'>
-              Show Student On Dashboard
-            </label>
+            <label className='form-check-label'>Show Student On Dashboard</label>
           </div>
         </div>
       </div>
