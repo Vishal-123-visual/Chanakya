@@ -102,7 +102,9 @@ export const updateCourseController = asyncHandler(async (req, res) => {
 export const getSingleCourseController = asyncHandler(
   async (req, res, next) => {
     try {
+      console.log("from course name", req.params.id);
       let findCourse = await CourseModel.findOne({ _id: req.params.id });
+      console.log(findCourse);
       if (!findCourse) {
         return res.status(404).json("Course not found");
       }

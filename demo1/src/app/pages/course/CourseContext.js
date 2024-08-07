@@ -27,6 +27,19 @@ export const CourseContextProvider = ({children}) => {
       }
     },
   })
+  const useGetSingleStudentCourse = (courseId) => {
+    return useQuery({
+      queryKey: ['getCourseLists', courseId],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/courses/${courseId}`, config)
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
 
   //console.log(getCourseLists)
 
@@ -107,6 +120,7 @@ export const CourseContextProvider = ({children}) => {
         deleteCourseMutation,
         createCourseMutation,
         updateCourseMutation,
+        useGetSingleStudentCourse,
       }}
     >
       {children}

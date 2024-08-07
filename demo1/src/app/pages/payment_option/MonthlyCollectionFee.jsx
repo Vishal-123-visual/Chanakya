@@ -6,6 +6,7 @@ import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {useCompanyContext} from '../compay/CompanyContext'
+import {useCourseContext} from '../course/CourseContext'
 
 const MonthlyCollectionFee = () => {
   const [fromDate, setFromDate] = useState(new Date())
@@ -14,23 +15,19 @@ const MonthlyCollectionFee = () => {
   //console.log(fromDate, toDate)
   const paramsData = useParams()
   const ctx = useStudentCourseFeesContext()
+  const studentCourseCTX = useCourseContext()
   let {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
   data = data?.filter((item) => item?.studentInfo?.no_of_installments === item?.installment_number)
-  // console.log(data?.length)
+
+  const studentCourseName = (courseId) => {
+    const {data: courseDataName} = studentCourseCTX.useGetSingleStudentCourse(courseId)
+    return courseDataName?.courseName
+  }
 
   const companyCTX = useCompanyContext()
 
   const params = useParams()
   const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
-  //  console.log(data)
-
-  // const filteredData =
-  //   data?.filter((item) => {
-  //     const createdAt = moment(item.expiration_date)
-  //     const startDate = moment(fromDate).startOf('month')
-  //     const endDate = moment(toDate).endOf('month')
-  //     return createdAt.isBetween(startDate, endDate, null, '[]')
-  //   }) || []
 
   //console.log(filteredData)
   const collectionFeesBalance = data?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
@@ -47,7 +44,7 @@ const MonthlyCollectionFee = () => {
     const monthsDiff =
       (currentDate.getFullYear() - expireDateObj.getFullYear()) * 12 +
       (currentDate.getMonth() - expireDateObj.getMonth())
-    return monthsDiff
+    return Math.abs(monthsDiff)
   }
 
   return (
@@ -176,7 +173,7 @@ const MonthlyCollectionFee = () => {
                         </td>
                         <td>{collectionFees?.studentInfo.name}</td>
 
-                        <td>{collectionFees?.courseName?.courseName}</td>
+                        <td>{studentCourseName(collectionFees?.studentInfo?.courseName)}</td>
                         <td>
                           {calculateMonthDiff(
                             collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
