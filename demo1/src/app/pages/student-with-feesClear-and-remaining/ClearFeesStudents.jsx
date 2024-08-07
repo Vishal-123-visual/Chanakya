@@ -39,7 +39,7 @@ const ClearFeesStudents = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{data?.companyName}</span>
           <span className='card-label fw-bold fs-3 mb-1'>Students {filteredStudents?.length}</span>
-          <span className='text-muted mt-1 fw-semibold fs-7'>Pending Fees Students</span>
+          <span className='text-muted mt-1 fw-semibold fs-7'>Clear Fees Students</span>
         </h3>
         <div className=''>
           <input

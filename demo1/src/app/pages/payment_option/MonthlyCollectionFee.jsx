@@ -169,14 +169,24 @@ const MonthlyCollectionFee = () => {
 
                         <td>{collectionFees?.courseName?.courseName}</td>
                         <td>
-                          {Math.round(
+                          {/* {Math.round(
                             moment(Date.now()).diff(
                               moment(
                                 collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
                               ),
                               'months'
                             )
-                          )}
+                          )} */}
+                          {new Date(Date.now()).getMonth() -
+                            new Date(
+                              collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
+                            ).getMonth()}
+                        </td>
+                        <td>
+                          {new Date(Date.now()).getMonth()},{' '}
+                          {new Date(
+                            collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
+                          ).getMonth()}
                         </td>
                         <td>
                           <div className='d-flex justify-content-end flex-shrink-0'>
