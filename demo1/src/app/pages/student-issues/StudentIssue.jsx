@@ -47,9 +47,8 @@ const StudentIssue = ({studentInfoData}) => {
           data-bs-toggle='tooltip'
           data-bs-placement='top'
           data-bs-trigger='hover'
-          title='Click to show notes on dashboard'
         >
-          <div className='bg-light-info p-5 form-check form-switch form-switch-sm form-check-custom form-check-solid'>
+          <div className='p-3 btn btn-outline btn-danger form-check form-switch form-switch-sm form-check-custom form-check-solid'>
             <input
               className='form-check-input'
               type='checkbox'

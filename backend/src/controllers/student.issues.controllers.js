@@ -95,15 +95,14 @@ export const updateStudentIssueNoteStatusController = async (req, res) => {
 export const showStudentIssueOnDashboardController = async (req, res) => {
   try {
     const { studentId, showStudent, studentName } = req.body;
-    //console.log(req.body);
     const existedStudentIssueStatus = await ShowStudentDashboardModel.findOne({
       studentId,
     });
-    //console.log(existedStudentIssueStatus);
 
     if (existedStudentIssueStatus) {
       existedStudentIssueStatus.showStudent = showStudent;
       existedStudentIssueStatus.studentName = studentName;
+      await existedStudentIssueStatus.save(); // Move save inside if block
     } else {
       const newStudentIssueStatus = new ShowStudentDashboardModel({
         studentId,
@@ -113,7 +112,6 @@ export const showStudentIssueOnDashboardController = async (req, res) => {
       await newStudentIssueStatus.save();
     }
 
-    await existedStudentIssueStatus.save();
     return res.status(200).json({
       success: true,
       message: "student issue status updated successfully!",

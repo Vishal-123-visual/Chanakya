@@ -93,7 +93,7 @@ const StudentProfileDetailsPage = () => {
 
                       <button
                         id='#student-notes'
-                        className='btn  btn-bg-dark btn-color-primary btn-active-color-info  me-1'
+                        className='btn btn-light-youtube '
                         onClick={() => {
                           const studentNotesSection =
                             document.getElementById('student-notes-section')
@@ -102,7 +102,7 @@ const StudentProfileDetailsPage = () => {
                           }
                         }}
                       >
-                        Student Flag 🚩
+                        Student Flag <i className='fa-regular fa-flag'></i>
                       </button>
                     </div>
 
