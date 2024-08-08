@@ -19,7 +19,6 @@ import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Su
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
-    console.log("from create course fees ->>>>", req.body);
     try {
       const {
         studentInfo,
@@ -72,9 +71,9 @@ export const createCourseFeesController = asyncHandler(
       const adminUser = await userModel.find({});
       adminUser.forEach((user) => {
         //sconsole.log(user);
-        if (user.role === "Admin") {
-          adminEmail = user.email;
-        }
+        // if (user.role === "Admin") {
+        //   adminEmail = user.email;
+        // }
         if (user.role === "SuperAdmin") {
           superAdminEmail = user.email;
         }
@@ -148,7 +147,7 @@ export const createCourseFeesController = asyncHandler(
 
         if (emailSuggestionsStatus[0].emailSuggestionStatus) {
           sendEmail(
-            `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}, visualmediatechnology@gmail.com`,
+            `${student.email}, ${student.companyName.email},${superAdminEmail}, visualmediatechnology@gmail.com`,
             ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
             `Hello ${student.name} you have submitted fees `,
             `<!DOCTYPE html>
@@ -831,7 +830,7 @@ export const createCourseFeesController = asyncHandler(
         BACKEND_URL + "/api/images/" + student.companyName.logo;
       if (emailSuggestionsStatus[0].emailSuggestionStatus) {
         sendEmail(
-          `${req.user.email}, ${student.email} ${student.companyName.email},${adminEmail},${superAdminEmail}, visualmediatechnology@gmail.com`,
+          ` ${student.email}, ${student.companyName.email},${superAdminEmail}, visualmediatechnology@gmail.com`,
           ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
           `Hello ${student.name} you have submitted fees `,
           `<!DOCTYPE html>

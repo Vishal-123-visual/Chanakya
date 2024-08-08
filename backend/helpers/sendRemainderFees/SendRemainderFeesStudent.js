@@ -8,15 +8,12 @@ import { mailTransporter } from "../../src/utils/mail_helpers.js";
 
 export const sendRemainderFeesStudent = async (req, res, next) => {
   //console.log("req and res", req.url, req.body);
-  let adminEmail, superAdminEmail;
+  let superAdminEmail;
   // console.log("sending email reminder");
   try {
     // Fetch admin and super admin emails
     const adminUsers = await userModel.find({});
     adminUsers.forEach((user) => {
-      if (user.role === "Admin") {
-        adminEmail = user.email;
-      }
       if (user.role === "SuperAdmin") {
         superAdminEmail = user.email;
       }
@@ -35,24 +32,6 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
       );
       //console.log(installmentExpireDate);
       const currentTime = moment();
-      const diffInDays = installmentExpireDate.diff(currentTime, "days");
-      // console.log(diffInDays);
-
-      // console.log(student.name, diffInDays);
-      // console.log(currentTime, installmentExpireDate);
-      // console.log(moment(currentTime).isSame(installmentExpireDate, "month"));
-
-      // Update installmentPaymentSkipMonth if current time matches installment due date
-      // if (
-      //   moment(currentTime).isSame(installmentExpireDate) &&
-      //   !student.skipMonthIncremented
-      // ) {
-      //   if (student?.no_of_installments_expireTimeandAmount !== undefined) {
-      //     student.installmentPaymentSkipMonth =
-      //       Number(student.installmentPaymentSkipMonth) + 1;
-      //     student.skipMonthIncremented = true;
-      //   }
-      // }
 
       // Save student's updated information
       await student.save();
@@ -87,7 +66,7 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
 
         if (emailContent && !student.remainderSent) {
           // Prepare recipients list for email
-          const toEmails = `${req?.user?.email}, ${student?.email}, ${student?.companyName.email}, ${adminEmail}, ${superAdminEmail}`;
+          const toEmails = `${student?.email}, ${student?.companyName.email},  ${superAdminEmail}`;
 
           // Send email
           await sendEmail(
