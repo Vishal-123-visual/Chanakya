@@ -46,7 +46,7 @@ const MonthlyCollectionFee = () => {
     let monthsDiff = currentDate.diff(expireDateObj, 'months', true) // 'true' for floating point number
     // Round down to get the full month difference
     monthsDiff = Math.floor(monthsDiff)
-    return monthsDiff < 0 ? 0 : monthsDiff
+    return monthsDiff < 0 ? 0 : monthsDiff + 1
   }
 
   return (
