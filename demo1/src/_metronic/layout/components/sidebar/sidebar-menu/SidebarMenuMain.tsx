@@ -119,16 +119,35 @@ const SidebarMenuMain = () => {
                 fontIcon='bi-chat-left'
                 icon='message-text-2'
               >
-                <SidebarMenuItem
-                  to={`/students/${CompanyListData?._id}`}
-                  title='All Students'
-                  hasBullet={true}
-                />
-                <SidebarMenuItem
-                  to={`/drop-out-students/${CompanyListData?._id}`}
-                  title='Drop Out Students'
-                  hasBullet={true}
-                />
+                <SidebarMenuItemWithSub
+                  to=''
+                  title={'Students'}
+                  fontIcon='bi-chat-left'
+                  icon='message-text-2'
+                >
+                  <SidebarMenuItem
+                    to={`/students/${CompanyListData?._id}`}
+                    title='All Students'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
+                    to={`/drop-out-students/${CompanyListData?._id}`}
+                    title='Drop Out Students'
+                    hasBullet={true}
+                  />
+
+                  <SidebarMenuItem
+                    to={`/students-remainingFee/${CompanyListData?._id}`}
+                    title='Pending Students'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
+                    to={`/students-clearFee/${CompanyListData?._id}`}
+                    title='Clear Students'
+                    hasBullet={true}
+                  />
+                </SidebarMenuItemWithSub>
+
                 <SidebarMenuItem
                   to={`/monthlyCollectionFees/${CompanyListData?._id}`}
                   title='Monthly Collections'
@@ -142,16 +161,6 @@ const SidebarMenuMain = () => {
                 <SidebarMenuItem
                   to={`/addmission-form/${CompanyListData?._id}`}
                   title='Admission Form'
-                  hasBullet={true}
-                />
-                <SidebarMenuItem
-                  to={`/students-remainingFee/${CompanyListData?._id}`}
-                  title='Pending Fess Students'
-                  hasBullet={true}
-                />
-                <SidebarMenuItem
-                  to={`/students-clearFee/${CompanyListData?._id}`}
-                  title='Clear Fess Students'
                   hasBullet={true}
                 />
 

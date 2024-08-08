@@ -49,15 +49,17 @@ const StudentIssue = ({studentInfoData}) => {
           data-bs-trigger='hover'
         >
           <div className='p-3 btn btn-outline btn-danger form-check form-switch form-switch-sm form-check-custom form-check-solid'>
-            <input
-              className='form-check-input'
-              type='checkbox'
-              value=''
-              id='sendEmailCheckbox'
-              onChange={showStudentNotesHandler}
-              checked={toggleShowStudentNotes?.singleStudentIssueStatus?.showStudent}
-            />
-            <label className='form-check-label'>Show Student On Dashboard</label>
+            <label className='form-check-label text-secondary' style={{cursor: 'pointer'}}>
+              <input
+                className='form-check-input me-3'
+                type='checkbox'
+                value=''
+                id='sendEmailCheckbox'
+                onChange={showStudentNotesHandler}
+                checked={toggleShowStudentNotes?.singleStudentIssueStatus?.showStudent}
+              />
+              Student Flag
+            </label>
           </div>
         </div>
       </div>

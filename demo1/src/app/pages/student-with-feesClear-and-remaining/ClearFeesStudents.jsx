@@ -75,6 +75,7 @@ const ClearFeesStudents = () => {
                 <th className='min-w-150px'>Name</th>
                 <th className='min-w-140px'>Mobile</th>
                 <th className='min-w-120px'>D.O.J</th>
+                <th className='min-w-120px'>Actions</th>
                 {/* <th className='min-w-100px text-end'>Actions</th>  */}
               </tr>
             </thead>
@@ -138,28 +139,11 @@ const ClearFeesStudents = () => {
                       <td className=''>
                         {moment(studentData?.date_of_joining).format('DD-MM-YYYY')}
                       </td>
-                      {/* <td>
-                      <div className='d-flex justify-content-end flex-shrink-0'>
-                        <a
-                          href='#'
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                        >
-                          <KTIcon iconName='switch' className='fs-3' />
-                        </a>
-                        <a
-                          href='#'
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                        >
-                          <KTIcon iconName='pencil' className='fs-3' />
-                        </a>
-                        <a
-                          href='#'
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                        >
-                          <KTIcon iconName='trash' className='fs-3' />
-                        </a>
-                      </div>
-                    </td> */}
+                      <td>
+                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                          <KTIcon iconName='dislike' className='fs-3' />
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </>

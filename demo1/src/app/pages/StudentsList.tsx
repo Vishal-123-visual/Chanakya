@@ -172,6 +172,9 @@ const StudentsList: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <div className='d-flex justify-content-end flex-shrink-0'>
+                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                          <KTIcon iconName='dislike' className='fs-3' />
+                        </button>
                         <button
                           onClick={() =>
                             navigate(`/update-addmission-form/${student?._id}`, {state: student})
