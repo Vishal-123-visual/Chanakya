@@ -30,9 +30,24 @@ const PendingFeesStudents = () => {
         searchStudent?.email?.toLowerCase().includes(searchValue.toLowerCase()) ||
         searchStudent.mobile_number.includes(searchValue)
     )
-    ?.filter((student) => student?.companyName === data?._id && student?.no_of_installments > 0)
+    ?.filter(
+      (student) =>
+        student?.companyName === data?._id &&
+        student?.no_of_installments > 0 &&
+        student?.dropOutStudent === false
+    )
 
   // console.log(filteredStudents?.length)
+
+  const dorpOutStudentHandler = (dropOutStudent, isDropOutStudent) => {
+    if (!window.confirm('Are you sure do you want to drop out this student!')) {
+      return
+    }
+    studentsCTX.updateDropOutStudentMutation.mutate({
+      studentId: dropOutStudent._id,
+      isDropOutStudent,
+    })
+  }
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -156,9 +171,21 @@ const PendingFeesStudents = () => {
                         {moment(studentData?.date_of_joining).format('DD-MM-YYYY')}
                       </td>
                       <td>
-                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                        <label
+                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                          style={{cursor: 'pointer'}}
+                        >
+                          <input
+                            className='form-check-input me-3'
+                            type='checkbox'
+                            value=''
+                            id='drop-out-student'
+                            hidden
+                            onChange={(e) => dorpOutStudentHandler(studentData, e.target.checked)}
+                            checked={studentData?.dropOutStudent}
+                          />
                           <KTIcon iconName='dislike' className='fs-3' />
-                        </button>
+                        </label>
                       </td>
                       {/* <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
