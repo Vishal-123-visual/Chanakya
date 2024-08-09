@@ -50,8 +50,8 @@ const ListAlertPendingStudent = () => {
                       {studentAlertData?.particulars}
                     </span>
                     <span className='text-muted fw-semibold d-block'>
-                      Due in{' '}
-                      {moment(studentAlertData?.RemainderDateAndTime).date() - moment().date()} Days
+                      Due in {moment(studentAlertData?.RemainderDateAndTime).diff(moment(), 'days')}{' '}
+                      Days
                     </span>
                   </div>
                   <span className='badge badge-light-danger fs-8 fw-bold'>

@@ -7,7 +7,7 @@ import {useParams} from 'react-router-dom'
 const AddAlertStudentFees = ({}) => {
   const params = useParams()
   //console.log(params.id)
-  const [amountDate, setAmountDate] = useState(null)
+  const [amountDate, setAmountDate] = useState(Date.now())
   const [dateTime, setDateTime] = useState(null)
   const [status, setStatus] = useState('pending') // State to handle status selection
   const [particulars, setParticulars] = useState('') // State to handle status selection

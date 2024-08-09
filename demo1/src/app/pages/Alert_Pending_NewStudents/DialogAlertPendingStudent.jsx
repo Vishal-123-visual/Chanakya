@@ -5,9 +5,9 @@ const DialogAlertPendingStudent = () => {
   const studentCTX = useAdmissionContext()
   const filteredStudentsAlertData =
     studentCTX.getAllStudentsAlertStudentPendingFeesQuery?.data?.filter(
-      (s) =>
-        s.Status === 'pending' && moment(s?.RemainderDateAndTime).date() - moment().date() === 0
+      (s) => s.Status === 'pending' && moment(s?.RemainderDateAndTime).diff(moment(), 'days') === 0
     )
+  // moment(studentAlertData?.RemainderDateAndTime).diff(moment(), 'days')
 
   //console.log(filteredStudentsAlertData)
 
@@ -38,8 +38,8 @@ const DialogAlertPendingStudent = () => {
                       {studentAlertData?.particulars}
                     </span>
                     <span className='text-muted fw-semibold d-block'>
-                      Due in{' '}
-                      {moment(studentAlertData?.RemainderDateAndTime).date() - moment().date()} Days
+                      Due in {moment(studentAlertData?.RemainderDateAndTime).diff(moment(), 'days')}{' '}
+                      Days
                     </span>
                   </div>
                   <span className='badge badge-light-danger fs-8 fw-bold'>

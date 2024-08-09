@@ -458,9 +458,6 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
       // Fetch admin and super admin emails
       const adminUsers = await userModel.find({});
       adminUsers.forEach((user) => {
-        if (user.role === "Admin") {
-          adminEmail = user.email;
-        }
         if (user.role === "SuperAdmin") {
           superAdminEmail = user.email;
         }
@@ -475,13 +472,14 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
         // Check if RemainderDateAndTime is valid
         if (
           RemainderDateAndTime &&
-          moment(currentTime).isSame(RemainderDateAndTime, "minute") &&
+          moment(RemainderDateAndTime).diff(moment(), "days") === 0 &&
           !isEmailSent
         ) {
           // console.log(
           //   `Reminder time for student ${studentData.studentId.name} is now.`
           // );
-          const toEmails = `${req?.user?.email}, thakurarvindkr10@gmail.com, ${adminEmail}, ${superAdminEmail}`;
+
+          const toEmails = `${req?.user?.email}, ${superAdminEmail}`;
 
           try {
             // Send email
