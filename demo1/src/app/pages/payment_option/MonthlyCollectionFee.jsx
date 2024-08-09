@@ -162,7 +162,15 @@ const MonthlyCollectionFee = () => {
                       </td>
                       <td>{collectionFees?.studentInfo.name}</td>
                       <td>{courseIdToName[collectionFees?.studentInfo?.courseName]}</td>
-                      <td>
+                      <td
+                        className={
+                          calculateMonthDiff(
+                            collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
+                          ) > 0
+                            ? 'text-danger text-decoration-underline'
+                            : ''
+                        }
+                      >
                         {calculateMonthDiff(
                           collectionFees?.studentInfo?.no_of_installments_expireTimeandAmount
                         )}

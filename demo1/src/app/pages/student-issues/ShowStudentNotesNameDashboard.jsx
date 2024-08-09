@@ -20,13 +20,13 @@ const ShowStudentNotesNameDashboard = ({className}) => {
           {filteredData?.map((row, index) => (
             <Fragment key={`lw26-rows-${index}`}>
               <div className='d-flex flex-stack'>
-                <a className='text-primary fw-semibold fs-6 me-2'>{row?.studentName}</a>
+                <a className='text-danger fw-semibold fs-6 me-2'>{row?.studentName}</a>
                 <button
                   onClick={() => navigate(`/profile/student/${row.studentId}`)}
                   type='button'
                   className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
                 >
-                  <KTIcon iconName='exit-right-corner' className='fs-2' />
+                  <KTIcon iconName='flag' className='fs-2 text-danger' />
                 </button>
               </div>
               {/* <div className='separator separator-dashed my-3' /> */}
