@@ -298,6 +298,42 @@ export const AdmissionContextProvider = ({children}) => {
       }
     },
   })
+
+  const updateDropOutStudentMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      const res = await axios.put(
+        `${BASE_URL}/api/students/dropOutStudents/${data.studentId}`,
+        data,
+        config
+      )
+
+      if (res.data.success) {
+        toast(res.data.message, {
+          type: 'success',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        throw new Error('Error while updating alert student pending fees')
+      }
+
+      return res.data
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        // toast(`Error while updating student... ${error}`, {
+        //   type: 'error',
+        //   bodyStyle: {
+        //     fontSize: '18px',
+        //   },
+        // })
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getStudents']})
+      }
+    },
+  })
   /********************** Student Fees Alert End  *******************/
 
   return (
@@ -319,6 +355,9 @@ export const AdmissionContextProvider = ({children}) => {
         updateAlertPendingStudentFeesMutation,
         getAllStudentsAlertStudentPendingFeesQuery,
         /********************** Student Fees Alert End  *******************/
+        // ------------------ drop out students available here -------------------
+        updateDropOutStudentMutation,
+        // ------------------ drop out students available here -------------------
       }}
     >
       {children}

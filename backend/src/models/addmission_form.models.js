@@ -116,9 +116,9 @@ const admissionFormSchema = new mongoose.Schema(
       default: false,
     },
 
-    showNotesDashBoard: {
+    dropOutStudent: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   {

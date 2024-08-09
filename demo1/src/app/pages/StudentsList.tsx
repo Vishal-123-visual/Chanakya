@@ -13,6 +13,7 @@ type Props = {
 const BASE_URL_Image = `${BASE_URL}/api/images`
 const StudentsList: React.FC<Props> = ({className}) => {
   const [searchValue, setSearchValue] = useState('')
+  // console.log(dropOutStudent)
   const ctx = useAdmissionContext()
   const companyCTX = useCompanyContext()
   const params = useParams()
@@ -22,6 +23,13 @@ const StudentsList: React.FC<Props> = ({className}) => {
   // console.log(new Date(ctx.studentsLists.data.users[0].commision_date).toLocaleDateString())
   // console.log(params)
   //console.log(params.id)
+
+  const dorpOutStudentHandler = (dropOutStudent, isDropOutStudent) => {
+    if (!window.confirm('Are you sure do you want to drop out this student!')) {
+      return
+    }
+    ctx.updateDropOutStudentMutation.mutate({studentId: dropOutStudent._id, isDropOutStudent})
+  }
 
   const studentDeleteHandler = (studentId: string) => {
     if (!window.confirm('Are you sure you want to delete this student?')) {
@@ -36,7 +44,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
   }
 
   const countStudentCompanyWise = ctx.studentsLists?.data?.users?.filter(
-    (c: any) => params?.id === c?.companyName
+    (c: any) => params?.id === c?.companyName && c.dropOutStudent === false
   )
   //console.log(countStudentCompanyWise?.length)
 
@@ -108,7 +116,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
             {/* begin::Table body */}
             <tbody>
               {ctx.studentsLists?.data?.users
-                ?.filter((c: any) => params?.id === c?.companyName)
+                ?.filter((c: any) => params?.id === c?.companyName && c.dropOutStudent === false)
                 ?.filter(
                   (searchStudent: any) =>
                     searchValue.trim() === '' ||
@@ -172,9 +180,22 @@ const StudentsList: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <div className='d-flex justify-content-end flex-shrink-0'>
-                        <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                        <label
+                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                          style={{cursor: 'pointer'}}
+                        >
+                          <input
+                            className='form-check-input me-3'
+                            type='checkbox'
+                            value=''
+                            id='drop-out-student'
+                            hidden
+                            onChange={(e) => dorpOutStudentHandler(student, e.target.checked)}
+                            checked={student?.dropOutStudent}
+                          />
                           <KTIcon iconName='dislike' className='fs-3' />
-                        </button>
+                        </label>
+
                         <button
                           onClick={() =>
                             navigate(`/update-addmission-form/${student?._id}`, {state: student})

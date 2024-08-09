@@ -28,7 +28,9 @@ const MonthlyCollectionFee = () => {
 
   // Filter data based on installments
   const filteredData = data?.filter(
-    (item) => item?.studentInfo?.no_of_installments === item?.installment_number
+    (item) =>
+      item?.studentInfo?.no_of_installments === item?.installment_number &&
+      item.dropOutStudent === false
   )
 
   const companyCTX = useCompanyContext()
@@ -36,7 +38,7 @@ const MonthlyCollectionFee = () => {
   const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
 
   const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
-  console.log(filteredData)
+  //console.log(filteredData)
   const navigate = useNavigate()
 
   const calculateMonthDiff = (expireDate) => {
@@ -130,6 +132,7 @@ const MonthlyCollectionFee = () => {
                 </tr>
               ) : (
                 filteredData
+                  ?.filter((dropStud) => dropStud.dropOutStudent === false)
                   ?.filter((searchStudent) => {
                     return (
                       searchValue?.trim() === '' ||

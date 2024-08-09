@@ -26,6 +26,10 @@ const installmentExpireTimeSchema = new mongoose.Schema(
       type: Number, // Use Number for floating-point numbers
       required: true,
     },
+    dropOutStudent: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

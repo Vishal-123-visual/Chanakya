@@ -14,11 +14,19 @@ import {
   deleteAlertStudentPendingFeesController,
   updateAlertStudentPendingFeesController,
   getAllStudentsAlertPendingFeesDataController,
+  updateStudentAsDropOutController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 import sendRemainderFeesStudent from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 
 const router = Router();
+
+router.put(
+  "/dropOutStudents/:id",
+  requireSignIn,
+  isAdmin,
+  updateStudentAsDropOutController
+);
 
 // Student Commission Start here -------------------------------------
 router.post("/commission", requireSignIn, addStudentComissionController);

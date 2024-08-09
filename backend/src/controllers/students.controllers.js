@@ -20,6 +20,34 @@ import moment from "moment";
 
 const __dirname = path.resolve();
 
+export const updateStudentAsDropOutController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const dropOutStudent = await admissionFormModel.findById(req.params.id);
+      dropOutStudent.dropOutStudent = req.body.isDropOutStudent;
+      await dropOutStudent.save();
+
+      // now add the drop student expire installment time also
+      //console.log(dropOutStudent.no_of_installments);
+      const studentMonthlyCollectionExpireData =
+        await PaymentInstallmentTimeExpireModel.findOne({
+          studentInfo: req.params.id,
+          installment_number: dropOutStudent.no_of_installments,
+        });
+      //console.log(studentMonthlyCollectionExpireData);
+      studentMonthlyCollectionExpireData.dropOutStudent =
+        req.body.isDropOutStudent;
+      await studentMonthlyCollectionExpireData.save();
+
+      res
+        .status(200)
+        .json({ success: true, message: "drop out student successfully!!" });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  }
+);
+
 export const getAllStudentsController = asyncHandler(async (req, res, next) => {
   try {
     const users = await admissionFormModel
