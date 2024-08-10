@@ -17,6 +17,7 @@ import sendRemainderFeesStudent, {
   sendEmail,
 } from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 import moment from "moment";
+import ShowStudentDashboardModel from "../models/student-issues/showstudentdashboard.models.js";
 
 const __dirname = path.resolve();
 
@@ -213,6 +214,9 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
   try {
     // Find the student
     const student = await admissionFormModel.findById(req.params.id);
+    const studentIssueDashboard = await ShowStudentDashboardModel.findOne({
+      studentId: req.params.id,
+    });
 
     // Handle case where student is not found
     if (!student) {
@@ -221,6 +225,8 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Student not found!" });
     }
 
+    // delete the student issue from dashboard
+    await studentIssueDashboard.deleteOne();
     // image path
 
     let imagePath = student.image;

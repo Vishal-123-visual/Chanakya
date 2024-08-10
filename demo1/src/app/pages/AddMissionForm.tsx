@@ -177,7 +177,10 @@ const AddMissionForm: React.FC = () => {
     onSubmit: async (values) => {
       let formData = new FormData()
 
-      //console.log(values)
+      if (values.companyName === '') {
+        toast.error('Please provide company name')
+        return
+      }
 
       // Append each field of values to formData
       Object.entries(values).forEach(([key, value]) => {
