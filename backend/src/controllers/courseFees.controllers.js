@@ -85,6 +85,15 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber = student.companyName.reciptNumber;
       }
 
+      const alreadyExistsReciptNumberInCourseFees =
+        await CourseFeesModel.findOne({ reciptNumber: reciptNumber });
+      if (alreadyExistsReciptNumberInCourseFees) {
+        return res.status(404).json({
+          success: false,
+          error: `Already Exists this recipt number ${reciptNumber}.to solve this problem you have to increase the recipt number by 1 from manage company`,
+        });
+      }
+
       const newDayBookData = new DayBookDataModel({
         studentInfo: student._id,
         rollNo: student.rollNumber,
