@@ -70,7 +70,7 @@ const StudentProfile: React.FC = () => {
   }
 
   const [updateUserId, setUpdateUserId] = useState<any>(location?.state)
-  //console.log(updateUserId)
+  console.log(updateUserId)
 
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(updateUserId?.companyName)
   // console.log(singleComapnyData)
@@ -741,6 +741,25 @@ const StudentProfile: React.FC = () => {
                           <div className='fv-help-block'>{formik.errors.select_course}</div>
                         </div>
                       )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className='col-6 mt-5'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className=''>Course Remainder Duration</span>
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <DatePicker
+                        readOnly
+                        selected={updateUserId?.courseDuration}
+                        //onChange={(date) => formik.setFieldValue('courseRemainderDuration', date)}
+                        dateFormat='dd/MM/yyyy'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholderText='DD/MM/YYYY'
+                      />
                     </div>
                   </div>
                 </div>

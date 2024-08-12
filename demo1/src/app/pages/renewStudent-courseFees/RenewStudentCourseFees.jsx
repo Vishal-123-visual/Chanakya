@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-dom'
 const RenewStudentCourseFees = ({studentInfoData}) => {
   const studentCTX = useAdmissionContext()
   const navigate = useNavigate()
-  // console.log(studentInfoData._id)
+  //console.log(studentInfoData.companyName)
   const [renewStudentData, setRenewStudentData] = useState({
     extraFees: '',
     noOfInstallments: '',

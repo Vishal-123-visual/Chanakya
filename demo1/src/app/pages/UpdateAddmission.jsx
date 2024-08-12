@@ -26,6 +26,7 @@ const addmissionFormSchema = Yup.object().shape({
   present_address: Yup.string().required('Present Address is required!'),
   //permanent_address: Yup.string().required('Permanent Address is required!'),
   date_of_birth: Yup.string().required('Date of birth is required!'),
+  courseDuration: Yup.string(),
   city: Yup.string().required('city is required!'),
   email: Yup.string().required('email is required!'),
   // student_status: Yup.string().required('Student status is required!'),
@@ -56,7 +57,7 @@ const UpdateAddmission = () => {
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState({})
   const [updateUserId, setUpdateUserId] = useState(location.state)
-  //console.log(updateUserId)
+  console.log(updateUserId.courseDuration)
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
@@ -597,6 +598,25 @@ const UpdateAddmission = () => {
                           <div className='fv-help-block'>{formik.errors.select_course}</div>
                         </div>
                       )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className='col-6 mt-5'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className=''>Course Remainder Duration</span>
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <DatePicker
+                        selected={formik.values.courseDuration}
+                        //selected={studentInfoData?.courseDuration}
+                        onChange={(date) => formik.setFieldValue('courseDuration', date)}
+                        dateFormat='dd/MM/yyyy'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholderText='DD/MM/YYYY'
+                      />
                     </div>
                   </div>
                 </div>

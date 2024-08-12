@@ -26,6 +26,7 @@ export interface AddMissionFormInterface {
   mobile_number: string
   phone_number: string
   present_address: string
+  courseRemainderDuration?: string
 
   date_of_birth: Date
   city: string
@@ -93,6 +94,7 @@ export interface updateMissionFormInterface {
   no_of_installments: string | number
   no_of_installments_amount: string | number
   date: string | Date
+  courseRemainderDuration?: string
 }
 
 export const addMissionFormInitialValues: AddMissionFormInterface = {
@@ -128,6 +130,7 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   no_of_installments_amount: '',
   createdAt: '',
   updatedAt: '',
+  courseRemainderDuration: '',
   __v: 0,
 }
 

@@ -18,6 +18,7 @@ import sendRemainderFeesStudent, {
 } from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 import moment from "moment";
 import ShowStudentDashboardModel from "../models/student-issues/showstudentdashboard.models.js";
+import CompanyModels from "../models/company/company.models.js";
 
 const __dirname = path.resolve();
 
@@ -186,6 +187,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.date_of_joining = date_of_joining || student.date_of_joining;
     student.no_of_installments =
       no_of_installments || student.no_of_installments;
+    student.courseDuration = req.body.courseDuration || student.courseDuration;
 
     if (file) {
       let imagePath = student.image;
@@ -556,15 +558,27 @@ export const updateStudentRenewCourseFeesController = asyncHandler(
       const studentRenewCourseFees = await admissionFormModel.findById(
         req.params.id
       );
+
+      const currentStudentCompany = await CompanyModels.findById(
+        studentRenewCourseFees.companyName
+      );
+
+      const [prefix, number] = currentStudentCompany.reciptNumber.split("-");
+      const increasedReciptNumber = `${prefix}-${parseInt(number, 10) + 1}`;
+      // console.log("increased recipt number", increasedReciptNumber);
+
+      // const studentCompanyName = await
       if (studentRenewCourseFees.remainingCourseFees === 0) {
         studentRenewCourseFees.netCourseFees =
           Number(studentRenewCourseFees.netCourseFees) +
           Number(req.body.extraFees);
         studentRenewCourseFees.no_of_installments = req.body.noOfInstallments;
-        studentRenewCourseFees.duration = req.body.duration;
+        studentRenewCourseFees.courseDuration = req.body.duration;
         studentRenewCourseFees.remainingCourseFees = Number(req.body.extraFees);
+        currentStudentCompany.reciptNumber = increasedReciptNumber;
 
         await studentRenewCourseFees.save();
+        await currentStudentCompany.save();
       } else {
         return res.status(404).json({
           success: false,

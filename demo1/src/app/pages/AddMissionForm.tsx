@@ -15,6 +15,7 @@ import {toAbsoluteUrl} from '../../_metronic/helpers'
 import {useCourseContext} from './course/CourseContext'
 import {useCompanyContext} from './compay/CompanyContext'
 import {toast} from 'react-toastify'
+
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
@@ -51,6 +52,7 @@ const addmissionFormSchema = Yup.object().shape({
   date_of_joining: Yup.string().required('Date of joining is required!'),
   no_of_installments: Yup.string().required('Number of installments  is required!'),
   no_of_installments_amount: Yup.string(),
+  courseRemainderDuration: Yup.string(),
 })
 
 const AddMissionForm: React.FC = () => {
@@ -58,6 +60,7 @@ const AddMissionForm: React.FC = () => {
   const [image, setImage] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const location = useLocation()
+
   const [selectedCourseNameData, setSelectedCourseNameData] = useState<any>({})
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
   //console.log(updateUserId)
@@ -85,6 +88,7 @@ const AddMissionForm: React.FC = () => {
     if (updateUserId) {
       formik.setFieldValue('netCourseFees', formik?.values?.remainingCourseFees)
     }
+    formik.setFieldValue('companyName', params.id)
   }, [])
 
   const studentStatusHandler = (e) => {
@@ -533,32 +537,6 @@ const AddMissionForm: React.FC = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6 mt-5'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                      Company Name
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <select
-                        className='form-select form-select-solid form-select-lg'
-                        {...formik.getFieldProps('companyName')}
-                      >
-                        <option value=''>-select-</option>
-                        {companyCTX.getCompanyLists?.data?.map((companyData) => (
-                          <option key={companyData?._id} value={companyData?._id}>
-                            {companyData?.companyName}
-                          </option>
-                        ))}
-                      </select>
-                      {formik.touched.companyName && formik.errors.companyName && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.companyName}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
               </div>
               {/* ---------------------------QUALIFICATION END HERE ----------------------- */}
 
@@ -606,6 +584,23 @@ const AddMissionForm: React.FC = () => {
                           <div className='fv-help-block'>{formik.errors.select_course}</div>
                         </div>
                       )}
+                    </div>
+                  </div>
+                </div>
+                <div className='col-6 mt-5'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className=''>Course Remainder Duration</span>
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <DatePicker
+                        selected={formik.values.courseRemainderDuration}
+                        onChange={(date) => formik.setFieldValue('courseRemainderDuration', date)}
+                        dateFormat='dd/MM/yyyy'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholderText='DD/MM/YYYY'
+                      />
                     </div>
                   </div>
                 </div>

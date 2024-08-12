@@ -10,6 +10,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import StudentCourseFee from '../student-profile/StudentCourseFee'
 import StudentIssue from '../student-issues/StudentIssue'
+import RenewStudentCourseFees from '../renewStudent-courseFees/RenewStudentCourseFees'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -564,6 +565,25 @@ const StudentProfileDetailsPage = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className='col-6 mt-5'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className=''>Course Remainder Duration</span>
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <DatePicker
+                        readOnly
+                        selected={studentInfoData?.courseDuration}
+                        //onChange={(date) => formik.setFieldValue('courseRemainderDuration', date)}
+                        dateFormat='dd/MM/yyyy'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholderText='DD/MM/YYYY'
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* ---------------------------COURSE END HERE ----------------------- */}
@@ -757,6 +777,24 @@ const StudentProfileDetailsPage = () => {
           </form>
         </div>
       </div>
+
+      {currentUser?.role !== 'Student' && (
+        <div className='card-toolbar mb-3'>
+          {/* begin::Menu */}
+          <button
+            type='button'
+            className='btn  btn-color-white btn-active-dark-danger bg-danger '
+            data-kt-menu-trigger='click'
+            data-kt-menu-placement='bottom-start'
+            data-kt-menu-flip='top-end'
+          >
+            <KTIcon iconName='plus' className='fs-2' /> Renew Fees
+          </button>
+          <RenewStudentCourseFees studentInfoData={studentInfoData} />
+          {/* end::Menu */}
+        </div>
+      )}
+
       <StudentCourseFee className={''} studentInfoData={studentInfoData} />
       {currentUser?.role !== 'Student' && (
         <div className='d-flex flex-column gap-10 mt-4'>

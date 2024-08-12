@@ -31,6 +31,7 @@ export const createAddMissionController = asyncHandler(
       //down_payment,
       date_of_joining,
       no_of_installments,
+      courseRemainderDuration,
     } = req.body;
 
     // console.log(req.file);
@@ -130,6 +131,7 @@ export const createAddMissionController = asyncHandler(
     let newAddmission = await addMissionFormModel.create({
       ...req.body,
       image: file,
+      courseDuration: courseRemainderDuration,
     });
 
     res.status(200).json({
