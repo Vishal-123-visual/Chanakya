@@ -15,11 +15,19 @@ import {
   updateAlertStudentPendingFeesController,
   getAllStudentsAlertPendingFeesDataController,
   updateStudentAsDropOutController,
+  updateStudentRenewCourseFeesController,
 } from "../controllers/students.controllers.js";
 import upload from "../../multer-config/storageConfig.js";
 import sendRemainderFeesStudent from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 
 const router = Router();
+
+router.put(
+  "/renewStudentCourseFees/:id",
+  requireSignIn,
+  isAdmin,
+  updateStudentRenewCourseFeesController
+);
 
 router.put(
   "/dropOutStudents/:id",

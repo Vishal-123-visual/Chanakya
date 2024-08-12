@@ -336,6 +336,33 @@ export const AdmissionContextProvider = ({children}) => {
   })
   /********************** Student Fees Alert End  *******************/
 
+  // student renew course fees
+  const updateStudentRenewCourseFeesMutation = useMutation({
+    mutationFn: async (updateStudent) => {
+      return axios
+        .put(
+          `${BASE_URL}/api/students/renewStudentCourseFees/${updateStudent.studentId}`,
+          updateStudent,
+          config
+        ) // Corrected order of arguments
+        .then((res) => res.data)
+    },
+    onSettled: async (_, error) => {
+      // console.log()
+      if (error) {
+        toast(error.response.data.message, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+        return
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getStudents']})
+      }
+    },
+  })
+
   return (
     <AdmissionContext.Provider
       value={{
@@ -357,6 +384,7 @@ export const AdmissionContextProvider = ({children}) => {
         /********************** Student Fees Alert End  *******************/
         // ------------------ drop out students available here -------------------
         updateDropOutStudentMutation,
+        updateStudentRenewCourseFeesMutation,
         // ------------------ drop out students available here -------------------
       }}
     >

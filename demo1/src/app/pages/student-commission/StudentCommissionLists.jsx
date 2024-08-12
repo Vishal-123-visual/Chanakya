@@ -6,7 +6,7 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const StudentCommissionLists = ({studentInfoData}) => {
-  console.log(studentInfoData)
+  //console.log(studentInfoData)
   const navigate = useNavigate()
   const studentCTX = useCompanyContext()
   let studentName = studentInfoData?.name?.split(' ').join('_') + '-' + studentInfoData?.rollNumber

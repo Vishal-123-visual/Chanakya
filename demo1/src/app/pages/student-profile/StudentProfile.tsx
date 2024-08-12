@@ -22,6 +22,7 @@ import StudentCommissionLists from '../student-commission/StudentCommissionLists
 import {useAuth} from '../../modules/auth'
 import AlertPendingFeesNewStudents from '../Alert_Pending_NewStudents/AlertPendingNewStudents'
 import StudentIssue from '../student-issues/StudentIssue'
+import RenewStudentCourseFees from '../renewStudent-courseFees/RenewStudentCourseFees'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -949,6 +950,22 @@ const StudentProfile: React.FC = () => {
           </form>
         </div>
       </div>
+      {currentUser?.role !== 'Student' && (
+        <div className='card-toolbar mb-3'>
+          {/* begin::Menu */}
+          <button
+            type='button'
+            className='btn  btn-color-white btn-active-dark-danger bg-danger '
+            data-kt-menu-trigger='click'
+            data-kt-menu-placement='bottom-start'
+            data-kt-menu-flip='top-end'
+          >
+            <KTIcon iconName='plus' className='fs-2' /> Renew Fees
+          </button>
+          <RenewStudentCourseFees studentInfoData={updateUserId} />
+          {/* end::Menu */}
+        </div>
+      )}
       <StudentCourseFee className={''} studentInfoData={updateUserId} />
       {currentUser?.role !== 'Student' && (
         <div className='d-flex flex-column gap-10 mt-4'>

@@ -549,3 +549,35 @@ export const updateAlertStudentPendingFeesController = asyncHandler(
     }
   }
 );
+
+export const updateStudentRenewCourseFeesController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const studentRenewCourseFees = await admissionFormModel.findById(
+        req.params.id
+      );
+      if (studentRenewCourseFees.remainingCourseFees === 0) {
+        studentRenewCourseFees.netCourseFees =
+          Number(studentRenewCourseFees.netCourseFees) +
+          Number(req.body.extraFees);
+        studentRenewCourseFees.no_of_installments = req.body.noOfInstallments;
+        studentRenewCourseFees.duration = req.body.duration;
+        studentRenewCourseFees.remainingCourseFees = Number(req.body.extraFees);
+
+        await studentRenewCourseFees.save();
+      } else {
+        return res.status(404).json({
+          success: false,
+          message: "Student has Course Fees to Pay, you can't renew it now",
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "student course renewed successfully",
+      });
+    } catch (error) {
+      res.status(500).json({ success: false, error: "Something went wrong" });
+    }
+  }
+);
