@@ -729,7 +729,9 @@ export const createCourseFeesController = asyncHandler(
         }
 
         await student.save();
-        return res.status(200).json({ message: "all course fees paid" });
+        return res
+          .status(200)
+          .json({ status: true, message: "all course fees paid" });
       }
 
       // Save course fees
@@ -1409,7 +1411,9 @@ export const createCourseFeesController = asyncHandler(
         );
       }
 
-      res.status(201).json(savedCourseFees);
+      res
+        .status(201)
+        .json({ status: true, message: "student paid fees successfully!" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: "Internal server error" });

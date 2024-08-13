@@ -3,7 +3,7 @@ import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import moment from 'moment'
 import PayStudentFee from './PayStudentFee'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
-import {useQuery} from 'react-query'
+import {useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
 import {useAuth} from '../../modules/auth'
 import {useNavigate} from 'react-router-dom'
@@ -16,6 +16,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const navigate = useNavigate()
   const {currentUser} = useAuth()
   const companyCtx = useCompanyContext()
+
   // console.log(companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus)
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
@@ -35,6 +36,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const studentPayFeeCtx = useStudentCourseFeesContext()
   const result = studentPayFeeCtx.useSingleStudentCourseFees(studentInfoData?._id)
   // console.log(result)
+  //console.log(studentPayFeeCtx.createStudentCourseFeesMutation.data)
 
   const addStudentFeeFormToggleHandler = () => {
     setAddStudentFeeFormToggle((prev) => !prev)
@@ -44,7 +46,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     if (window.confirm('Are you sure you want to delete this student course fee?')) {
       studentPayFeeCtx.useDeleteSingleStudentCourseFees.mutate(id)
     }
-    navigate(`/students/${studentInfoData?.companyName}`)
+    navigate(`/profile/student/${studentInfoData?._id}`)
     window.location.reload()
     return
   }
@@ -113,6 +115,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
               no_of_installments: studentInfoData.no_of_installments,
               courseName: studentInfoData?.courseName,
             })
+
             setPayStudentFeesAdd({
               netCourseFees: 0,
               remainingFees: 0,
@@ -124,15 +127,21 @@ const StudentCourseFee = ({className, studentInfoData}) => {
             if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
               window.open(url)
             }
-            navigate(`/students/${studentInfoData?.companyName}`)
-            window.location.reload()
+            if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
+              navigate(`/profile/student/${studentInfoData?._id}`)
+              window.location.reload()
+            }
             return
           }
 
           toast.error(
             'If student have 1 installment then you have to pay complete remaining fees. else you have to increase student installment'
           )
-          navigate(`/students/${studentInfoData?.companyName}`)
+
+          if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
+            navigate(`/profile/student/${studentInfoData?._id}`)
+            // window.location.reload()
+          }
           return
         }
 
@@ -143,6 +152,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           no_of_installments: studentInfoData.no_of_installments,
           courseName: studentInfoData?.courseName,
         })
+
         setPayStudentFeesAdd({
           netCourseFees: 0,
           remainingFees: 0,
@@ -154,15 +164,20 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
           window.open(url)
         }
-        navigate(`/students/${studentInfoData?.companyName}`)
-        window.location.reload()
+
+        if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
+          navigate(`/profile/student/${studentInfoData?._id}`)
+          window.location.reload()
+        }
+
         return
       } catch (error) {
         console.log(error)
       }
     } else {
       toast.error('Amount paid should not be more than Net Course  fees')
-      navigate(`/students/${studentInfoData?.companyName}`)
+      // navigate(`/profile/student/${studentInfoData?._id}`)
+      // window.location.reload()
       return
     }
   }
@@ -172,7 +187,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     e.preventDefault()
     studentPayFeeCtx.updateStudentSingleCourseFeesMutation.mutate(editStudentCourseFees)
     setStudentCourseFeesEditId(null)
-    navigate(`/students/${studentInfoData?.companyName}`)
+    navigate(`/profile/student/${studentInfoData?._id}`)
     window.location.reload()
     return
   }

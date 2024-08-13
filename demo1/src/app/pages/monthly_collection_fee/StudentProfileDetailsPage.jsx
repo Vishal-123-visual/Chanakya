@@ -11,6 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import StudentCourseFee from '../student-profile/StudentCourseFee'
 import StudentIssue from '../student-issues/StudentIssue'
 import RenewStudentCourseFees from '../renewStudent-courseFees/RenewStudentCourseFees'
+import {useEffect, useMemo} from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -24,10 +25,11 @@ const StudentProfileDetailsPage = () => {
   const {currentUser} = useAuth()
   //console.log(params)
   const {data: studentInfoData} = studentCTX.useGetSingleStudentUsingById(params.id)
-  //console.log(studentInfoData)
+  //console.log(studentCTX.useGetSingleStudentUsingById())
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(
     studentInfoData?.companyName
   )
+
   // console.log(singleComapnyData)
   let cutWithGSTAmount =
     singleComapnyData?.isGstBased === 'Yes'

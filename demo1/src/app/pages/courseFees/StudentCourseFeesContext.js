@@ -101,27 +101,39 @@ export const StudentCourseFeesContextProvider = ({children}) => {
   //console.log(studentsLists)
   const createStudentCourseFeesMutation = useMutation({
     mutationFn: async (data) => {
-      //console.log(data)
-      return axios.post(`${BASE_URL}/api/courseFees`, data, config).then((res) => res.data)
+      try {
+        const res = await axios.post(`${BASE_URL}/api/courseFees`, data, config)
+        return res.data
+      } catch (error) {
+        // Throwing the error will trigger the onError callback
+        throw error
+      }
     },
+
     onMutate: () => {
-      //console.log('mutate')
+      console.log('Mutation started')
     },
 
-    onError: () => {
-      console.log('error')
+    onError: (error) => {
+      // Display the error message to the user before any page reload
+      console.error('Mutation failed:', error)
+      toast.error(`Error: ${error.response?.data?.error || error.message}`)
+      // Optionally, you can prevent a page reload by stopping event propagation or further actions here
     },
 
-    onSuccess: () => {
-      //alert('Added Student  Course fee  Successfully!')
-      //console.log('success')
+    onSuccess: (data) => {
+      //console.log('Mutation succeeded:', data)
+      toast.success('Added Student Course fee Successfully!')
     },
 
     onSettled: async (_, error) => {
-      //console.log('settled')
       if (error) {
-        //console.log(error)
-        alert(error.response.data.error)
+        // Display the error message before any further actions
+        console.error('Error during mutation:', error.response?.data?.error || error.message)
+        toast.error(`Error: ${error.response?.data?.error || error.message}`)
+
+        // Optionally, throw the error again if you need to trigger global error handling
+        throw new Error(error.response?.data?.error || 'An unknown error occurred')
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['getStudentCourseFeesLists'],
