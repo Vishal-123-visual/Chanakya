@@ -46,8 +46,8 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     if (window.confirm('Are you sure you want to delete this student course fee?')) {
       studentPayFeeCtx.useDeleteSingleStudentCourseFees.mutate(id)
     }
-    navigate(`/profile/student/${studentInfoData?._id}`)
-    window.location.reload()
+    // navigate(`/profile/student/${studentInfoData?._id}`)
+    // window.location.reload()
     return
   }
   const [payStudentFeesAdd, setPayStudentFeesAdd] = useState()
@@ -127,10 +127,10 @@ const StudentCourseFee = ({className, studentInfoData}) => {
             if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
               window.open(url)
             }
-            if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
-              navigate(`/profile/student/${studentInfoData?._id}`)
-              window.location.reload()
-            }
+            // if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
+            //   navigate(`/profile/student/${studentInfoData?._id}`)
+            //   window.location.reload()
+            // }
             return
           }
 
@@ -138,10 +138,10 @@ const StudentCourseFee = ({className, studentInfoData}) => {
             'If student have 1 installment then you have to pay complete remaining fees. else you have to increase student installment'
           )
 
-          if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
-            navigate(`/profile/student/${studentInfoData?._id}`)
-            // window.location.reload()
-          }
+          // if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
+          //   navigate(`/profile/student/${studentInfoData?._id}`)
+          //   // window.location.reload()
+          // }
           return
         }
 
@@ -165,10 +165,10 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           window.open(url)
         }
 
-        if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
-          navigate(`/profile/student/${studentInfoData?._id}`)
-          window.location.reload()
-        }
+        // if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
+        //   navigate(`/profile/student/${studentInfoData?._id}`)
+        //   window.location.reload()
+        // }
 
         return
       } catch (error) {
@@ -187,8 +187,8 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     e.preventDefault()
     studentPayFeeCtx.updateStudentSingleCourseFeesMutation.mutate(editStudentCourseFees)
     setStudentCourseFeesEditId(null)
-    navigate(`/profile/student/${studentInfoData?._id}`)
-    window.location.reload()
+    // navigate(`/profile/student/${studentInfoData?._id}`)
+    //window.location.reload()
     return
   }
 
