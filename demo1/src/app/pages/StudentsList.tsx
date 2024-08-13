@@ -137,7 +137,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
                         </div>
                         <div className='d-flex justify-content-start flex-column'>
                           <div
-                            onClick={() => navigate(`/student/${student?._id}`, {state: student})}
+                            onClick={() => navigate(`/profile/student/${student?._id}`)}
                             style={{cursor: 'pointer'}}
                             className='text-dark fw-bold text-hover-primary fs-6'
                           >
@@ -151,7 +151,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <div
-                        onClick={() => navigate(`/student/${student?._id}`, {state: student})}
+                        onClick={() => navigate(`/profile/student/${student?._id}`)}
                         style={{cursor: 'pointer'}}
                         className='text-dark fw-bold text-hover-primary d-block fs-6'
                       >
@@ -164,11 +164,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
                     <td className='text-end'>
                       <div className='d-flex flex-column w-100 me-2'>
                         <div
-                          onClick={() =>
-                            navigate(`/student/${student?._id}`, {
-                              state: student,
-                            })
-                          }
+                          onClick={() => navigate(`/profile/student/${student?._id}`)}
                           style={{cursor: 'pointer'}}
                           className='d-flex flex-stack mb-2'
                         >

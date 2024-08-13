@@ -135,9 +135,7 @@ const PendingFeesStudents = () => {
                       <td>
                         <div
                           className='d-flex align-items-center'
-                          onClick={() =>
-                            navigate(`/student/${studentData?._id}`, {state: studentData})
-                          }
+                          onClick={() => navigate(`/profile/student/${studentData?._id}`)}
                         >
                           <div className='symbol symbol-45px me-5'>
                             <img src={BASE_URL_Image + `/${studentData?.image}`} alt='' />
@@ -152,11 +150,7 @@ const PendingFeesStudents = () => {
                           </div>
                         </div>
                       </td>
-                      <td
-                        onClick={() =>
-                          navigate(`/student/${studentData?._id}`, {state: studentData})
-                        }
-                      >
+                      <td onClick={() => navigate(`/profile/student/${studentData?._id}`)}>
                         <div className='text-dark fw-bold text-hover-primary d-block fs-6'>
                           +91 {studentData.mobile_number}
                         </div>
