@@ -37,6 +37,17 @@ export const addEmailRemainderController = asyncHandler(
   }
 );
 
+export const getEmailRemainderTextController = asyncHandler(
+  async (req, res) => {
+    try {
+      const data = await EmailRemainderModel.find({});
+      res.status(200).json(data);
+    } catch (error) {
+      res.status(500).json({ success: false, error: "Internal server error" });
+    }
+  }
+);
+
 export const addEmailSuggestionController = asyncHandler(
   async (req, res, next) => {
     try {

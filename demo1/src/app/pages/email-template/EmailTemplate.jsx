@@ -1,13 +1,22 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useCompanyContext} from '../compay/CompanyContext'
 
 const EmailTemplate = () => {
   const companyCTX = useCompanyContext()
+  const {data: emailRemainderData} = companyCTX.getEmailRemainderTextMessage
   const [textEmailsData, setTextEmailsData] = useState({
-    firstRemainder: '',
-    secondRemainder: '',
-    thirdRemainder: '',
+    firstRemainder: emailRemainderData[0]?.firstRemainder,
+    secondRemainder: emailRemainderData[0]?.secondRemainder,
+    thirdRemainder: emailRemainderData[0]?.thirdRemainder,
   })
+
+  useEffect(() => {
+    setTextEmailsData({
+      firstRemainder: emailRemainderData[0]?.firstRemainder,
+      secondRemainder: emailRemainderData[0]?.secondRemainder,
+      thirdRemainder: emailRemainderData[0]?.thirdRemainder,
+    })
+  }, [emailRemainderData])
 
   const onChangeHandler = (e) => {
     setTextEmailsData({...textEmailsData, [e.target.name]: e.target.value})

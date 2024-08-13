@@ -206,6 +206,18 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  const getEmailRemainderTextMessage = useQuery({
+    queryKey: ['getRemainderText'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/emailRemainder`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
   const getWhatsAppMessageuggestionStatus = useQuery({
     queryKey: ['getWhatsAppMessageSuggesstions'],
     queryFn: async () => {
@@ -562,6 +574,7 @@ export const CompanyContextProvider = ({children}) => {
         /***************************  whatsapp Message Suggestion start   *****************************/
         postWhatsAppMessageSuggestionStatus,
         getWhatsAppMessageuggestionStatus,
+        getEmailRemainderTextMessage,
         /***************************  whatsapp Message Suggestion end   *****************************/
 
         // student issues start here --------------------------------------
