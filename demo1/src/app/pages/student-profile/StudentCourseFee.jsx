@@ -17,6 +17,8 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const {currentUser} = useAuth()
   const companyCtx = useCompanyContext()
 
+  const {data: sendWhatsAppMessageSuggestion} = companyCtx.getWhatsAppMessageuggestionStatus
+
   // console.log(companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus)
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
@@ -115,6 +117,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
               no_of_installments: studentInfoData.no_of_installments,
               courseName: studentInfoData?.courseName,
             })
+            setAddStudentFeeFormToggle(false)
 
             setPayStudentFeesAdd({
               netCourseFees: 0,
@@ -124,14 +127,13 @@ const StudentCourseFee = ({className, studentInfoData}) => {
               paymentOption: '',
               lateFees: 0,
             })
-            if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
+            if (sendWhatsAppMessageSuggestion[0]?.whatsappSuggestionStatus) {
               window.open(url)
             }
             // if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
             //   navigate(`/profile/student/${studentInfoData?._id}`)
-            //   window.location.reload()
+            //window.location.reload()
             // }
-            return
           }
 
           toast.error(
@@ -152,6 +154,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           no_of_installments: studentInfoData.no_of_installments,
           courseName: studentInfoData?.courseName,
         })
+        setAddStudentFeeFormToggle(false)
 
         setPayStudentFeesAdd({
           netCourseFees: 0,
@@ -161,16 +164,14 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           paymentOption: '',
           lateFees: 0,
         })
-        if (companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus) {
+        if (sendWhatsAppMessageSuggestion[0]?.whatsappSuggestionStatus) {
           window.open(url)
         }
 
         // if (studentPayFeeCtx.createStudentCourseFeesMutation.isError === false) {
         //   navigate(`/profile/student/${studentInfoData?._id}`)
-        //   window.location.reload()
+        //window.location.reload()
         // }
-
-        return
       } catch (error) {
         console.log(error)
       }

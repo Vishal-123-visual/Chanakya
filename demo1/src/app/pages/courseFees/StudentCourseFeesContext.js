@@ -111,7 +111,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
     },
 
     onMutate: () => {
-      console.log('Mutation started')
+      //console.log('Mutation started')
     },
 
     onError: (error) => {
@@ -121,8 +121,14 @@ export const StudentCourseFeesContextProvider = ({children}) => {
       // Optionally, you can prevent a page reload by stopping event propagation or further actions here
     },
 
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       //console.log('Mutation succeeded:', data)
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudents'],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentCourseFeesLists'],
+      })
       toast.success('Added Student Course fee Successfully!')
     },
 
