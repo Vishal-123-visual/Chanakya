@@ -117,9 +117,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
   //console.log(req.body);
   try {
-    const existingDataModel = await DayBookDataModel.find({ companyId }).sort({
-      createdAt: -1,
-    });
+    const existingDataModel = await DayBookDataModel.find({ companyId }).sort();
     if (existingDataModel.length === 0) {
       return res.status(400).json({
         error:
@@ -128,10 +126,6 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     }
     const newDayBookData = new DayBookDataModel({
       ...req.body,
-      balance:
-        Number(credit) > 0
-          ? existingDataModel[0].balance + Number(credit)
-          : existingDataModel[0].balance - Number(debit),
     });
     await newDayBookData.save();
     res.status(201).json(newDayBookData);
@@ -144,9 +138,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
-    const dayBookData = await DayBookDataModel.find({})
-      .sort({ createdAt: -1 })
-      .populate("studentInfo");
+    const dayBookData = await DayBookDataModel.find({}).populate("studentInfo");
     res.status(200).json(dayBookData);
   } catch (error) {
     res.status(500).json({

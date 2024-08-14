@@ -65,8 +65,9 @@ const EditDayBookData = ({setEditBayBookDataId, dayBookEntry, totalBalance}) => 
     }
 
     //console.log(debit)
+    //console.log(totalBalance < Number(debit), totalBalance, debit)
 
-    if (dayBookEntry.debit + dayBookEntry.balancedebit > Number(debit)) {
+    if (totalBalance < Number(debit)) {
       toast.error(`Your total balance is less than the debit amount ${debit}`, {
         bodyStyle: {fontSize: '18px'},
       })

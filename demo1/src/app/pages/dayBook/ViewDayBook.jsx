@@ -20,13 +20,24 @@ const ViewDayBook = () => {
   const navigate = useNavigate()
   const params = useParams()
   const [searchValue, setSearchValue] = useState('')
-
+  let balanceOfDayBookData = 0
   const companyCTX = useCompanyContext()
   const result = companyCTX.useGetSingleCompanyData(params.id)
 
   const dayBookDataCtx = usePaymentOptionContextContext()
 
-  //console.log(dayBookDataCtx.getDayBookDataQuery?.data)
+  const grossTotalOfDayBookData = dayBookDataCtx.getDayBookDataQuery?.data
+    ?.filter((item) => item?.companyId === params.id)
+    .reduce((acc, cur) => {
+      if (acc.credit !== 0) {
+        return acc + cur.credit + cur.studentLateFees
+      } else {
+        return acc - cur.debit
+      }
+    }, 0)
+  //console.log(grossTotalOfDayBookData)
+
+  // console.log(dayBookDataCtx.getDayBookDataQuery?.data)
 
   const filteredData =
     dayBookDataCtx.getDayBookDataQuery?.data
@@ -38,7 +49,7 @@ const ViewDayBook = () => {
         return createdAt.isBetween(startDate, endDate, null, '[]')
       }) || []
 
-  //console.table(filteredData)
+  // console.log(filteredData)
   //console.log(filteredData[0]?.balance)
 
   const navigateHandler = (accountId, accountName) => {
@@ -64,6 +75,8 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{result?.data?.companyName} Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
+          <span className=' mt-1  fs-1'>Total Balance : {grossTotalOfDayBookData.toFixed(2)}</span>
+
           <span className='mt-3'>
             <button
               onClick={() => setShowAddAccountBtn((prev) => !prev)}
@@ -146,7 +159,7 @@ const ViewDayBook = () => {
               {!showAddAccountBtn ? (
                 <AddDayBookData
                   key={1}
-                  totalBalance={filteredData[0]?.balance}
+                  totalBalance={grossTotalOfDayBookData}
                   companyId={params.id}
                 />
               ) : (
@@ -161,13 +174,20 @@ const ViewDayBook = () => {
 
               {/* Day Book Data */}
               {filteredData?.map((dayBookEntry, index) => {
+                if (dayBookEntry.credit !== 0) {
+                  balanceOfDayBookData =
+                    balanceOfDayBookData + dayBookEntry.credit + dayBookEntry.studentLateFees
+                } else {
+                  balanceOfDayBookData = balanceOfDayBookData - dayBookEntry.debit
+                }
+
                 return (
                   <Fragment key={index}>
                     {dayBookEntry._id === editBayBookDataId ? (
                       <EditDayBookData
                         setEditBayBookDataId={setEditBayBookDataId}
                         dayBookEntry={dayBookEntry}
-                        totalBalance={filteredData[0]?.balance}
+                        totalBalance={grossTotalOfDayBookData}
                       />
                     ) : (
                       <tr>
@@ -227,7 +247,7 @@ const ViewDayBook = () => {
                           {dayBookEntry?.studentLateFees || 0}
                         </td>
                         <td className='text-dark fw-bold text-hover-primary fs-6'>
-                          {dayBookEntry.balance.toFixed(2)}
+                          {balanceOfDayBookData.toFixed(2)}
                         </td>
                         {dayBookEntry.naretion && (
                           <td>
