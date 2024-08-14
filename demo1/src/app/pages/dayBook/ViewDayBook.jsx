@@ -13,7 +13,7 @@ import AddDayBookAccountFromDayBook from './AddDayBookAccountFromDayBook'
 import EditDayBookData from './EditDayBookData'
 
 const ViewDayBook = () => {
-  const [fromDate, setFromDate] = useState(moment().subtract(6, 'days').toDate())
+  const [fromDate, setFromDate] = useState(moment().subtract(30, 'days').toDate())
   const [showAddAccountBtn, setShowAddAccountBtn] = useState(false)
   const [toDate, setToDate] = useState(new Date())
   const [editBayBookDataId, setEditBayBookDataId] = useState(null)
@@ -29,18 +29,15 @@ const ViewDayBook = () => {
   const grossTotalOfDayBookData = dayBookDataCtx?.getDayBookDataQuery?.data
     ?.filter((item) => item?.companyId === params?.id)
     .reduce((acc, cur) => {
-      if (acc.credit !== 0) {
-        return acc + cur.credit + cur.studentLateFees
-      } else {
-        return acc - cur.debit
-      }
+      return acc + cur.credit - cur.debit + cur.studentLateFees
     }, 0)
+
   //console.log(grossTotalOfDayBookData)
 
   // console.log(dayBookDataCtx.getDayBookDataQuery?.data)
 
   const filteredData =
-    dayBookDataCtx.getDayBookDataQuery?.data
+    dayBookDataCtx?.getDayBookDataQuery?.data
       ?.filter((item) => item?.companyId === params.id)
       ?.filter((item) => {
         const createdAt = moment(item.dayBookDatadate)
@@ -75,7 +72,7 @@ const ViewDayBook = () => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>{result?.data?.companyName} Day Book</span>
           <span className=' mt-1 fw-semibold fs-7'>Fees and Expense, Income</span>
-          <span className=' mt-1  fs-1'>Total Balance : {grossTotalOfDayBookData.toFixed(2)}</span>
+          <span className=' mt-1  fs-1'>Total Balance : {grossTotalOfDayBookData?.toFixed(2)}</span>
 
           <span className='mt-3'>
             <button
@@ -86,8 +83,8 @@ const ViewDayBook = () => {
             </button>
           </span>
         </h3>
-
-        {/* <div className=''>
+        {/* 
+        <div className=''>
           <input
             type='text'
             placeholder='search student'
