@@ -168,33 +168,6 @@ export const deleteDayBookDataByIdController = asyncHandler(
     try {
       const singleDayBookData = await DayBookDataModel.findById(req.params.id);
       await singleDayBookData.deleteOne();
-      const getAllDayBookDataByCompanyId = await DayBookDataModel.find({
-        companyId: singleDayBookData.companyId,
-      });
-
-      for (let i = 0; i < getAllDayBookDataByCompanyId.length; i++) {
-        if (i === 0) {
-          getAllDayBookDataByCompanyId[i].balance =
-            getAllDayBookDataByCompanyId[i].credit +
-            getAllDayBookDataByCompanyId[i].studentLateFees;
-        } else {
-          if (getAllDayBookDataByCompanyId[i - 1]) {
-            if (getAllDayBookDataByCompanyId[i].credit !== 0) {
-              getAllDayBookDataByCompanyId[i].balance =
-                getAllDayBookDataByCompanyId[i].credit +
-                getAllDayBookDataByCompanyId[i].studentLateFees +
-                getAllDayBookDataByCompanyId[i - 1].balance;
-            } else {
-              getAllDayBookDataByCompanyId[i].balance =
-                getAllDayBookDataByCompanyId[i - 1].balance -
-                getAllDayBookDataByCompanyId[i].debit;
-            }
-            getAllDayBookDataByCompanyId[i].balance;
-          }
-        }
-
-        await getAllDayBookDataByCompanyId[i].save();
-      }
       res.status(200).json({
         success: true,
         message: "Day Book Data deleted successfully",
@@ -210,52 +183,19 @@ export const deleteDayBookDataByIdController = asyncHandler(
 export const updateDayBookDataByIdController = asyncHandler(
   async (req, res, next) => {
     try {
-      const dayBookData = await DayBookDataModel.find({
-        companyId: req.body.companyId,
-      });
+      const updateDayBookData = await DayBookDataModel.findById(req.params.id);
 
-      for (let i = 0; i < dayBookData.length; i++) {
-        if (i === 0) {
-          dayBookData[i].balance =
-            dayBookData[i].credit + dayBookData[i].studentLateFees;
-        } else {
-          if (dayBookData[i - 1]) {
-            if (dayBookData[i]._id.toString() === req.params.id.toString()) {
-              dayBookData[i].dayBookDatadate =
-                req.body.dayBookDatadate || dayBookData[i].dayBookDatadate;
-              dayBookData[i].accountName =
-                req.body.accountName || dayBookData[i].accountName;
-              dayBookData[i].naretion =
-                req.body.naretion || dayBookData[i].naretion;
-              dayBookData[i].debit = req.body.debit || dayBookData[i].debit;
-              dayBookData[i].credit = req.body.credit || dayBookData[i].credit;
-              dayBookData[i].balance =
-                req.body.credit !== 0
-                  ? dayBookData[i - 1].balance + Number(req.body.credit)
-                  : dayBookData[i - 1].balance - req.body.debit ||
-                    dayBookData[i].balance;
-              dayBookData[i].companyId =
-                req.body.companyId || dayBookData[i].companyId;
-              dayBookData[i].companyId =
-                req.body.companyId || dayBookData[i].companyId;
-              dayBookData[i].dayBookAccountId =
-                req.body.dayBookAccountId || dayBookData[i].dayBookAccountId;
-            } else {
-              if (dayBookData[i].credit !== 0) {
-                dayBookData[i].balance =
-                  dayBookData[i - 1].balance +
-                  dayBookData[i].credit +
-                  dayBookData[i].studentLateFees;
-              } else {
-                dayBookData[i].balance =
-                  dayBookData[i - 1].balance - dayBookData[i].debit;
-              }
-            }
-          }
-        }
+      updateDayBookData.dayBookDatadate =
+        req.body.dayBookDatadate || updateDayBookData.dayBookDatadate;
+      updateDayBookData.accountName =
+        req.body.accountName || updateDayBookData.accountName;
+      updateDayBookData.naretion =
+        req.body.naretion || updateDayBookData.naretion;
+      updateDayBookData.debit = req.body.debit || updateDayBookData.debit;
+      updateDayBookData.credit = req.body.credit || updateDayBookData.credit;
 
-        await dayBookData[i].save();
-      }
+      await updateDayBookData.save();
+
       res.status(200).json({
         success: true,
         message: "Day Book Data updated successfully",
