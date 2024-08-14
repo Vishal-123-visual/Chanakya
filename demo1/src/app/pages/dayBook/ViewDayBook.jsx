@@ -26,8 +26,8 @@ const ViewDayBook = () => {
 
   const dayBookDataCtx = usePaymentOptionContextContext()
 
-  const grossTotalOfDayBookData = dayBookDataCtx.getDayBookDataQuery?.data
-    ?.filter((item) => item?.companyId === params.id)
+  const grossTotalOfDayBookData = dayBookDataCtx?.getDayBookDataQuery?.data
+    ?.filter((item) => item?.companyId === params?.id)
     .reduce((acc, cur) => {
       if (acc.credit !== 0) {
         return acc + cur.credit + cur.studentLateFees
