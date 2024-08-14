@@ -56,12 +56,6 @@ export const createCourseFeesController = asyncHandler(
       if (!student) {
         return res.status(404).json({ message: "Student not found" });
       }
-      //console.log("from student create fees", student);
-      const existingDataModel = await DayBookDataModel.find({
-        companyId: student?.companyName._id,
-      }).sort({
-        createdAt: -1,
-      });
       //console.log("day book data model", existingDataModel);
 
       //console.log(BACKEND_URL + "/api/images/" + student.companyName.logo);
@@ -103,10 +97,6 @@ export const createCourseFeesController = asyncHandler(
         dayBookDatadate: amountDate,
         reciptNumber,
         credit: +amountPaid,
-        balance:
-          (existingDataModel[0]?.balance || 0) +
-          Number(amountPaid) +
-          Number(lateFees),
       });
 
       await newDayBookData.save();
@@ -1520,7 +1510,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       const oldStudentCourseFees = await CourseFeesModel.findById(
         req.params.id
       );
-      console.log(oldStudentCourseFees);
+      //console.log(oldStudentCourseFees);
 
       let getSingleStudentDayBookDataById = await DayBookDataModel.find({
         studentInfo: currentStudent._id,
@@ -1531,22 +1521,11 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         studentInfo: studentInfo,
       });
 
-      // console.log(
-      //   "day basdfnaldfkasfasfasfd",
-      //   singleStudentAllCourseFees[0].reciptNumber,
-      //   getSingleStudentDayBookDataById[0].reciptNumber
-      // );
       for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
         getSingleStudentDayBookDataById[i].reciptNumber =
           singleStudentAllCourseFees[i].reciptNumber;
         await getSingleStudentDayBookDataById[i].save();
       }
-
-      let getSingleStudentDayBookData = await DayBookDataModel.find({
-        companyId: currentStudent.companyName,
-      });
-
-      let updateDataWhichYouWantReciptNumberData;
 
       for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
         if (singleStudentAllCourseFees[i]._id.toString() === req.params.id) {
@@ -1625,60 +1604,26 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       currentStudent.totalPaid = totalPaid;
       await currentStudent.save();
 
-      getSingleStudentDayBookData = await DayBookDataModel.find({
-        companyId: currentStudent.companyName,
-      });
+      let getSingleStudentDayBookDataWithReciptNumber =
+        await DayBookDataModel.findOne({
+          companyId: currentStudent.companyName,
+          reciptNumber: oldStudentCourseFees.reciptNumber,
+        });
 
-      // now update the day book data
-      // console.log(updateDataWhichYouWantReciptNumberData);
-      for (let i = 0; i < getSingleStudentDayBookData.length; i++) {
-        if (
-          oldStudentCourseFees.reciptNumber ===
-          getSingleStudentDayBookData[i].reciptNumber
-        ) {
-          if (i === 0) {
-            getSingleStudentDayBookData[i].reciptNumber =
-              reciptNumber || oldStudentCourseFees.reciptNumber;
-            getSingleStudentDayBookData[i].credit = amountPaid;
-            getSingleStudentDayBookData[i].studentLateFees = lateFees;
-            getSingleStudentDayBookData[i].balance = amountPaid + lateFees;
-            getSingleStudentDayBookData[i].dayBookDatadate =
-              amountDate || getSingleStudentDayBookData[i].dayBookDatadate;
-            await getSingleStudentDayBookData[i].save();
-          } else {
-            getSingleStudentDayBookData[i].reciptNumber =
-              reciptNumber || oldStudentCourseFees.reciptNumber;
-            getSingleStudentDayBookData[i].credit = amountPaid;
-            getSingleStudentDayBookData[i].studentLateFees = lateFees;
-            getSingleStudentDayBookData[i].balance =
-              getSingleStudentDayBookData[i - 1].balance +
-              amountPaid +
-              lateFees;
-            getSingleStudentDayBookData[i].dayBookDatadate =
-              amountDate || getSingleStudentDayBookData[i].dayBookDatadate;
-            await getSingleStudentDayBookData[i].save();
-          }
-          await getSingleStudentDayBookData[i].save();
-        } else {
-          if (i === 0) {
-            getSingleStudentDayBookData[i].balance =
-              getSingleStudentDayBookData[i].credit +
-              getSingleStudentDayBookData[i].studentLateFees;
-          } else {
-            if (getSingleStudentDayBookData[i].credit !== 0) {
-              getSingleStudentDayBookData[i].balance =
-                getSingleStudentDayBookData[i - 1].balance +
-                getSingleStudentDayBookData[i].credit +
-                getSingleStudentDayBookData[i].studentLateFees;
-            } else {
-              getSingleStudentDayBookData[i].balance =
-                getSingleStudentDayBookData[i - 1].balance -
-                getSingleStudentDayBookData[i].debit;
-            }
-          }
-        }
-        await getSingleStudentDayBookData[i].save();
-      }
+      getSingleStudentDayBookDataWithReciptNumber.reciptNumber =
+        reciptNumber ||
+        getSingleStudentDayBookDataWithReciptNumber?.reciptNumber;
+      getSingleStudentDayBookDataWithReciptNumber.studentInfo =
+        studentInfo || getSingleStudentDayBookDataWithReciptNumber.studentInfo;
+      getSingleStudentDayBookDataWithReciptNumber.studentLateFees =
+        lateFees || getSingleStudentDayBookDataWithReciptNumber.studentLateFees;
+      getSingleStudentDayBookDataWithReciptNumber.credit =
+        amountPaid || getSingleStudentDayBookDataWithReciptNumber.credit;
+      getSingleStudentDayBookDataWithReciptNumber.dayBookDatadate =
+        amountDate ||
+        getSingleStudentDayBookDataWithReciptNumber.dayBookDatadate;
+
+      await getSingleStudentDayBookDataWithReciptNumber.save();
 
       currentStudent = await admissionFormModel.findById(studentInfo);
       const lastPaymentInstallment =
@@ -1716,6 +1661,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
     }
   }
 );
+
 export const deleteSingleStudentCourseFeesController = asyncHandler(
   async (req, res, next) => {
     try {
@@ -1730,6 +1676,7 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
 
       let singleStudentDayBooksData = await DayBookDataModel.find({
         companyId: singleStudentFee.companyName,
+        studentInfo: singleStudentFee.studentInfo,
       });
 
       // Update receipt numbers if they are not present in the DayBook data
@@ -1798,20 +1745,20 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
       }
 
       // Update DayBook data
-      for (let i = 1; i < singleStudentDayBooksData.length; i++) {
-        const previousDayBookData = singleStudentDayBooksData[i - 1];
-        const currentDayBookData = singleStudentDayBooksData[i];
-        if (currentDayBookData.credit !== 0) {
-          currentDayBookData.balance =
-            previousDayBookData.balance +
-            currentDayBookData.credit +
-            currentDayBookData.studentLateFees;
-        } else {
-          currentDayBookData.balance =
-            previousDayBookData.balance - currentDayBookData.debit;
-        }
-        await currentDayBookData.save();
-      }
+      // for (let i = 1; i < singleStudentDayBooksData.length; i++) {
+      //   const previousDayBookData = singleStudentDayBooksData[i - 1];
+      //   const currentDayBookData = singleStudentDayBooksData[i];
+      //   if (currentDayBookData.credit !== 0) {
+      //     currentDayBookData.balance =
+      //       previousDayBookData.balance +
+      //       currentDayBookData.credit +
+      //       currentDayBookData.studentLateFees;
+      //   } else {
+      //     currentDayBookData.balance =
+      //       previousDayBookData.balance - currentDayBookData.debit;
+      //   }
+      //   await currentDayBookData.save();
+      // }
 
       // Update the student's total paid and remaining course fees
       if (allCourseFeesSingleStudent.length === 0) {

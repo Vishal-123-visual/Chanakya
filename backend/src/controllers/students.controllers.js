@@ -372,7 +372,7 @@ export const addStudentComissionController = asyncHandler(
 
       const totalBalanceOfDayBookData = existingDataModel.reduce((acc, cur) => {
         if (cur.credit) {
-          acc += cur.credit;
+          acc += cur?.credit + cur?.studentLateFees;
         } else {
           acc -= cur.debit;
         }
