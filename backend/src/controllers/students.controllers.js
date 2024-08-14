@@ -368,17 +368,27 @@ export const addStudentComissionController = asyncHandler(
         ...req.body,
       });
 
-      const existingDataModel = await DayBookDataModel.find({ companyId }).sort(
-        {
-          createdAt: -1,
-        }
-      );
-      //console.log("day book data model", existingDataModel);
+      const existingDataModel = await DayBookDataModel.find({ companyId });
 
-      if ((existingDataModel[0]?.balance || 0) < Number(commissionAmount)) {
+      const totalBalanceOfDayBookData = existingDataModel.reduce((acc, cur) => {
+        if (cur.credit) {
+          acc += cur.credit;
+        } else {
+          acc -= cur.debit;
+        }
+        return acc;
+      }, 0);
+      // console.log(
+      //   "day book data model",
+      //   totalBalanceOfDayBookData,
+      //   Number(commissionAmount),
+      //   Number(totalBalanceOfDayBookData) > Number(commissionAmount)
+      // );
+
+      if (totalBalanceOfDayBookData > Number(commissionAmount) === false) {
         return res.status(401).json({
           error:
-            `Your day Book is Balance ${existingDataModel[0]?.balance} is less than your commission amount ` +
+            `Your day Book is Balance ${totalBalanceOfDayBookData} is less than your commission amount ` +
             commissionAmount,
         });
       }
@@ -390,8 +400,6 @@ export const addStudentComissionController = asyncHandler(
         debit: +commissionAmount,
         companyId,
         naretion: commissionNaretion,
-        balance:
-          (existingDataModel[0]?.balance || 0) - Number(commissionAmount),
       });
 
       await newDayBookData.save();
