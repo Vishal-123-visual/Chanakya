@@ -50,21 +50,11 @@ const StudentProfileDetailsPage = () => {
     return value.toFixed(2)
   }
   return (
-    <div>
+    <div className='relative'>
+      <div className='' style={{position: 'fixed', top: '30px', zIndex: 10000}}>
+        <h3 className='fw-bolder m-0'>{singleComapnyData?.companyName} =: Student Profile</h3>
+      </div>
       <div className='card mb-5 mb-xl-10'>
-        <div
-          className='card-header border-0 cursor-pointer'
-          role='button'
-          data-bs-toggle='collapse'
-          data-bs-target='#kt_account_profile_details'
-          aria-expanded='true'
-          aria-controls='kt_account_profile_details'
-        >
-          <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0'>{singleComapnyData?.companyName} =: Student Profile</h3>
-          </div>
-        </div>
-
         <div className='card mb-5 mb-xl-10'>
           <div className='card-body pt-9 pb-0'>
             <div className='d-flex flex-wrap flex-sm-nowrap mb-3'>
