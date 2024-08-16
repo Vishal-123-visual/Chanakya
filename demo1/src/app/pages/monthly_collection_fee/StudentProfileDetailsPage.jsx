@@ -50,7 +50,7 @@ const StudentProfileDetailsPage = () => {
     return value.toFixed(2)
   }
   return (
-    <>
+    <div>
       <div className='card mb-5 mb-xl-10'>
         <div
           className='card-header border-0 cursor-pointer'
@@ -805,7 +805,7 @@ const StudentProfileDetailsPage = () => {
           <StudentIssue studentInfoData={studentInfoData} />
         </div>
       )}
-    </>
+    </div>
   )
 }
 export default StudentProfileDetailsPage

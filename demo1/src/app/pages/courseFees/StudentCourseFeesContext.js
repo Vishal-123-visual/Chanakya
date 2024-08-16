@@ -190,14 +190,22 @@ export const StudentCourseFeesContextProvider = ({children}) => {
         throw error
       }
     },
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudents'],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentCourseFeesLists'],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getDayBookDataLists'],
+      })
       // Success message
       toast.success('Student Course fees updated successfully!', {
         bodyStyle: {
           fontSize: '18px',
         },
       })
-      queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
     },
     onError: (error) => {
       // Check if error.response exists to get the server error message
