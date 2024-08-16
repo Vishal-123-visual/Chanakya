@@ -84,14 +84,21 @@ export const StudentCourseFeesContextProvider = ({children}) => {
     mutationFn: async (id) => {
       return axios.delete(`${BASE_URL}/api/courseFees/${id}`, config).then((res) => res.data)
     },
-    onSuccess: () => {
-      alert('Course  deleted successfully')
+    onSuccess: async () => {
+      alert('Student Course Fees deleted successfully')
+      await queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+      await queryClient.invalidateQueries({
+        queryKey: ['getDayBookDataLists'],
+      })
     },
     onSettled: async (_, error) => {
       if (error) {
         alert(error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+        await queryClient.invalidateQueries({
+          queryKey: ['getDayBookDataLists'],
+        })
       }
     },
   })
@@ -116,7 +123,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
 
     onError: (error) => {
       // Display the error message to the user before any page reload
-      console.error('Mutation failed:', error)
+      //console.error('Mutation failed:', error)
       toast.error(`Error: ${error.response?.data?.error || error.message}`)
       // Optionally, you can prevent a page reload by stopping event propagation or further actions here
     },
@@ -128,6 +135,9 @@ export const StudentCourseFeesContextProvider = ({children}) => {
       })
       await queryClient.invalidateQueries({
         queryKey: ['getStudentCourseFeesLists'],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getDayBookDataLists'],
       })
       toast.success('Added Student Course fee Successfully!')
     },
@@ -182,7 +192,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
     },
     onSuccess: (data) => {
       // Success message
-      toast.success('Course fees updated successfully!', {
+      toast.success('Student Course fees updated successfully!', {
         bodyStyle: {
           fontSize: '18px',
         },
