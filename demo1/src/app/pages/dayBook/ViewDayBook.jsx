@@ -171,12 +171,18 @@ const ViewDayBook = () => {
 
               {/* Day Book Data */}
               {filteredData?.map((dayBookEntry, index) => {
-                if (dayBookEntry.credit !== 0) {
-                  balanceOfDayBookData =
-                    balanceOfDayBookData + dayBookEntry.credit + dayBookEntry.studentLateFees
-                } else {
-                  balanceOfDayBookData = balanceOfDayBookData - dayBookEntry.debit
-                }
+                // if (dayBookEntry.credit !== 0) {
+                //   balanceOfDayBookData =
+                //     balanceOfDayBookData + dayBookEntry.credit + dayBookEntry.studentLateFees
+                // } else {
+                //   balanceOfDayBookData = balanceOfDayBookData - dayBookEntry.debit
+                // }
+
+                balanceOfDayBookData =
+                  balanceOfDayBookData +
+                  dayBookEntry.credit -
+                  dayBookEntry.debit +
+                  dayBookEntry.studentLateFees
 
                 return (
                   <Fragment key={index}>
