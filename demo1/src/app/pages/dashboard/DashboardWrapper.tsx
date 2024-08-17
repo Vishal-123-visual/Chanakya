@@ -21,6 +21,7 @@ import ListAlertPendingStudent from '../Alert_Pending_NewStudents/ListAlertPendi
 import DialogAlertPendingStudent from '../Alert_Pending_NewStudents/DialogAlertPendingStudent'
 import {useAuth} from '../../modules/auth'
 import ShowStudentNotesNameDashboard from '../student-issues/ShowStudentNotesNameDashboard'
+import CompleteCourseStudents from '../complete_course_students/CompleteCourseStudents'
 
 const DashboardPage: FC = () => (
   <>
@@ -90,7 +91,16 @@ const DashboardPage: FC = () => (
         {/* --------------------------- End here  Alert Pending Student Show here ------------------- */}
       </div>
       <div className='col-xl-8'>
-        <TablesWidget10 className='card-xxl-stretch mb-5 mb-xl-8' />
+        {/* <TablesWidget10 className='card-xxl-stretch mb-5 mb-xl-8' /> */}
+        <div className={`card card-xxl-stretch mb-5 mb-xl-8`}>
+          <div className='card-header border-0 pt-5'>
+            <h3 className='card-title align-items-start flex-column'>
+              <span className='card-label fw-bold fs-3 mb-1'>Complete Course Students</span>
+              <span className='text-muted mt-1 fw-semibold fs-7'>Over 500 members</span>
+            </h3>
+          </div>
+          <CompleteCourseStudents  />
+        </div>
       </div>
     </div>
     {/* end::Row */}
