@@ -1,9 +1,9 @@
-import {useNavigate, useParams} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
-import {useCompanyContext} from '../compay/CompanyContext'
-import {useAdmissionContext} from '../../modules/auth/core/Addmission'
+import { useNavigate, useParams } from 'react-router-dom'
+import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
+import { useCompanyContext } from '../compay/CompanyContext'
+import { useAdmissionContext } from '../../modules/auth/core/Addmission'
 import moment from 'moment'
-import {useState} from 'react'
+import { useState } from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -19,7 +19,7 @@ const PendingFeesStudents = () => {
 
   const params = useParams()
   //console.log(params)
-  const {data} = companyCTX?.useGetSingleCompanyData(params?.id)
+  const { data } = companyCTX?.useGetSingleCompanyData(params?.id)
   //console.log(data)
 
   const filteredStudents = studentsCTX?.studentsLists?.data?.users
@@ -28,7 +28,8 @@ const PendingFeesStudents = () => {
         searchValue?.trim() === '' ||
         searchStudent?.name?.toLowerCase().includes(searchValue.toLowerCase()) ||
         searchStudent?.email?.toLowerCase().includes(searchValue.toLowerCase()) ||
-        searchStudent.mobile_number.includes(searchValue)
+        searchStudent.mobile_number.includes(searchValue) ||
+        searchStudent?.select_course.toLowerCase().includes(searchValue.toLowerCase())
     )
     ?.filter(
       (student) =>
@@ -167,7 +168,7 @@ const PendingFeesStudents = () => {
                       <td>
                         <label
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                          style={{cursor: 'pointer'}}
+                          style={{ cursor: 'pointer' }}
                         >
                           <input
                             className='form-check-input me-3'
