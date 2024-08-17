@@ -1,7 +1,7 @@
-import {useState} from 'react'
+import { useState } from 'react'
 import moment from 'moment'
 import './studentFeesRecipt.css'
-import {useCompanyContext} from '../compay/CompanyContext'
+import { useCompanyContext } from '../compay/CompanyContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -30,7 +30,7 @@ const PrintStudentFeesRecipt = () => {
   }
 
   return (
-    <div style={{backgroundColor: 'white', height: '100%'}}>
+    <div style={{ backgroundColor: 'white', height: '100%' }}>
       {/* Start body */}
       <table border='0' cellPadding='0' cellSpacing='0' width='100%'>
         {/* Start logo */}
@@ -41,15 +41,15 @@ const PrintStudentFeesRecipt = () => {
               cellPadding='0'
               cellSpacing='0'
               width='100%'
-              style={{maxWidth: '600px'}}
+              style={{ maxWidth: '600px' }}
             >
               <tr>
-                <td align='center' valign='top' style={{padding: '36px 24px'}}>
+                <td align='center' valign='top' style={{ padding: '36px 24px' }}>
                   <a
                     href='http://www.visualmedia.co.in/'
                     target='_blank'
                     rel='noopener noreferrer'
-                    style={{display: 'inline-block'}}
+                    style={{ display: 'inline-block' }}
                   >
                     <img
                       src={BASE_URL_Image + '/' + studentInfoData?.companyName?.logo}
@@ -81,7 +81,7 @@ const PrintStudentFeesRecipt = () => {
               cellPadding='0'
               cellSpacing='0'
               width='100%'
-              style={{maxWidth: '600px'}}
+              style={{ maxWidth: '600px' }}
             >
               <tr>
                 <td
@@ -121,10 +121,10 @@ const PrintStudentFeesRecipt = () => {
               cellPadding='0'
               cellSpacing='0'
               width='100%'
-              style={{maxWidth: '600px'}}
+              style={{ maxWidth: '600px' }}
             >
               <tr>
-                <td align='center' valign='top' style={{fontSize: 0}}>
+                <td align='center' valign='top' style={{ fontSize: 0 }}>
                   <div
                     style={{
                       display: 'inline-block',
@@ -139,7 +139,7 @@ const PrintStudentFeesRecipt = () => {
                       cellPadding='0'
                       cellSpacing='0'
                       width='100%'
-                      style={{maxWidth: '300px'}}
+                      style={{ maxWidth: '300px' }}
                     >
                       <tr>
                         <td
@@ -149,22 +149,22 @@ const PrintStudentFeesRecipt = () => {
                             fontSize: '15px',
                           }}
                         >
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             <strong>Student Name</strong>
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             <strong>Father Name</strong>
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             <strong>Roll Number</strong>
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             <strong>Course Name</strong>
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             <strong>Payment Method</strong>
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             <strong>Payment Date</strong>
                           </span>
                         </td>
@@ -185,7 +185,7 @@ const PrintStudentFeesRecipt = () => {
                       cellPadding='0'
                       cellSpacing='0'
                       width='100%'
-                      style={{maxWidth: '300px'}}
+                      style={{ maxWidth: '300px' }}
                     >
                       <tr>
                         <td
@@ -195,22 +195,22 @@ const PrintStudentFeesRecipt = () => {
                             fontSize: '15px',
                           }}
                         >
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             {studentInfoData.studentInfo.name}
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             {studentInfoData.studentInfo.father_name}
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             {studentInfoData.studentInfo.rollNumber}
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             {studentInfoData.courseName.courseName}
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             {studentInfoData.paymentOption.name}
                           </span>
-                          <span style={{display: 'block', width: 'max-content'}}>
+                          <span style={{ display: 'block', width: 'max-content' }}>
                             {moment(studentInfoData?.amountDate).format('DD-MM-YYYY')}
                           </span>
                         </td>
@@ -232,7 +232,7 @@ const PrintStudentFeesRecipt = () => {
               cellPadding='0'
               cellSpacing='0'
               width='100%'
-              style={{maxWidth: '600px'}}
+              style={{ maxWidth: '600px' }}
             >
               {/* Start receipt table */}
               <tr>
@@ -247,7 +247,7 @@ const PrintStudentFeesRecipt = () => {
                   }}
                 >
                   <table
-                    style={{marginTop: '10px'}}
+                    style={{ marginTop: '10px' }}
                     border='0'
                     cellPadding='0'
                     cellSpacing='0'
@@ -281,7 +281,7 @@ const PrintStudentFeesRecipt = () => {
                         <strong>{studentInfoData.reciptNumber}</strong>
                       </td>
                     </tr>
-                    <tr style={{border: '2px dotted black'}}>
+                    <tr style={{ border: '2px dotted black' }}>
                       <td
                         align='left'
                         width='75%'
@@ -323,7 +323,7 @@ const PrintStudentFeesRecipt = () => {
                         </td>
                       )}
                     </tr>
-                    <tr style={{border: '2px dotted black'}}>
+                    <tr style={{ border: '2px dotted black' }}>
                       <td
                         align='left'
                         width='75%'
@@ -352,7 +352,7 @@ const PrintStudentFeesRecipt = () => {
                     </tr>
 
                     {studentInfoData?.companyName?.isGstBased === 'Yes' && (
-                      <tr style={{border: '2px dotted black'}}>
+                      <tr style={{ border: '2px dotted black' }}>
                         <td
                           align='left'
                           width='75%'
@@ -380,7 +380,7 @@ const PrintStudentFeesRecipt = () => {
                         </td>
                       </tr>
                     )}
-                    <tr style={{border: '2px dotted black'}}>
+                    <tr style={{ border: '2px dotted black' }}>
                       <td
                         align='left'
                         width='75%'
@@ -447,7 +447,7 @@ const PrintStudentFeesRecipt = () => {
                     borderBottom: '3px solid #d4dadf',
                   }}
                 >
-                  <p style={{textAlign: 'center'}}>
+                  <p style={{ textAlign: 'center' }}>
                     {studentInfoData.companyName.companyAddress} <br /> Contact Us : +91{' '}
                     {studentInfoData.companyName.companyPhone} <br />
                     <span>
@@ -481,7 +481,7 @@ const PrintStudentFeesRecipt = () => {
               cellPadding='0'
               cellSpacing='0'
               width='100%'
-              style={{maxWidth: '600px'}}
+              style={{ maxWidth: '600px' }}
             >
               {/* Start permission */}
               <tr>
@@ -503,7 +503,7 @@ const PrintStudentFeesRecipt = () => {
                     <a
                       href='http://www.visualmedia.co.in/'
                       target='_blank'
-                      style={{textDecoration: 'underline'}}
+                      style={{ textDecoration: 'underline' }}
                     >
                       unsubscribe
                     </a>{' '}

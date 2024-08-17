@@ -131,7 +131,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
     onSuccess: async (data) => {
       //console.log('Mutation succeeded:', data)
       await queryClient.invalidateQueries({
-        queryKey: ['getStudents'],
+        queryKey: ['getStudents', data?.id],
       })
       await queryClient.invalidateQueries({
         queryKey: ['getStudentCourseFeesLists'],
@@ -191,8 +191,9 @@ export const StudentCourseFeesContextProvider = ({children}) => {
       }
     },
     onSuccess: async (data) => {
+      //console.log(data.updatedData[0].studentInfo)
       await queryClient.invalidateQueries({
-        queryKey: ['getStudents'],
+        queryKey: ['getStudents', data?.updatedData[0]?.studentInfo],
       })
       await queryClient.invalidateQueries({
         queryKey: ['getStudentCourseFeesLists'],
