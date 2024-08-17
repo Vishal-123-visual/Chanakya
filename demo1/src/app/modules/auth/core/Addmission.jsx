@@ -1,16 +1,16 @@
-import {createContext, useContext, useState} from 'react'
+import { createContext, useContext, useState } from 'react'
 import axios from 'axios'
-import {useQueryClient, useMutation, useQuery} from 'react-query'
-import {useAuth} from './Auth'
-import {toast} from 'react-toastify'
+import { useQueryClient, useMutation, useQuery } from 'react-query'
+import { useAuth } from './Auth'
+import { toast } from 'react-toastify'
 
 const AdmissionContext = createContext()
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
-export const AdmissionContextProvider = ({children}) => {
+export const AdmissionContextProvider = ({ children }) => {
   const [studentId, setStudentId] = useState('')
   const queryClient = useQueryClient()
-  let {auth} = useAuth()
+  let { auth } = useAuth()
   const [admissionFormData, setAdmissionFormData] = useState([])
   let config = {
     headers: {
@@ -97,7 +97,7 @@ export const AdmissionContextProvider = ({children}) => {
       if (error) {
         //console.log(error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudents']})
+        await queryClient.invalidateQueries({ queryKey: ['getStudents'] })
       }
     },
   })
@@ -119,7 +119,7 @@ export const AdmissionContextProvider = ({children}) => {
       if (error) {
         alert(error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudents']})
+        await queryClient.invalidateQueries({ queryKey: ['getStudents'] })
       }
     },
   })
@@ -141,7 +141,7 @@ export const AdmissionContextProvider = ({children}) => {
           },
         })
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudents']})
+        await queryClient.invalidateQueries({ queryKey: ['getStudents'] })
       }
     },
   })
@@ -253,12 +253,12 @@ export const AdmissionContextProvider = ({children}) => {
       }
       return res.data
     },
-    onSuccess: () => {},
+    onSuccess: () => { },
     onSettled: async (_, error) => {
       if (error) {
         alert(error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudentsAlertPendingFessDetails']})
+        await queryClient.invalidateQueries({ queryKey: ['getStudentsAlertPendingFessDetails'] })
       }
     },
   })
@@ -294,7 +294,7 @@ export const AdmissionContextProvider = ({children}) => {
         //   },
         // })
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudentsAlertPendingFessDetails']})
+        await queryClient.invalidateQueries({ queryKey: ['getStudentsAlertPendingFessDetails'] })
       }
     },
   })
@@ -330,7 +330,7 @@ export const AdmissionContextProvider = ({children}) => {
         //   },
         // })
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudents']})
+        await queryClient.invalidateQueries({ queryKey: ['getStudents'] })
       }
     },
   })
@@ -358,7 +358,7 @@ export const AdmissionContextProvider = ({children}) => {
         })
         return
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudents']})
+        await queryClient.invalidateQueries({ queryKey: ['getStudents'] })
       }
     },
   })
