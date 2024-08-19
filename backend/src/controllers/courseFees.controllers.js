@@ -146,7 +146,7 @@ export const createCourseFeesController = asyncHandler(
 
         if (emailSuggestionsStatus[0].emailSuggestionStatus) {
           sendEmail(
-            `${student.email}, ${student.companyName.email},${superAdminEmail}, visualmediatechnology@gmail.com`,
+            `${student.email}, ${student.companyName.email},${superAdminEmail}`,
             ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
             `Hello ${student.name} you have submitted fees `,
             `<!DOCTYPE html>
@@ -755,17 +755,6 @@ export const createCourseFeesController = asyncHandler(
 
       // Calculate and store new installment expiration times
       let expirationDate = moment(amountDate).toDate();
-      //console.log(expirationDate);
-      // if (student.no_of_installments_expireTimeandAmount) {
-      //   // Get the expiration date of the last installment
-      //   const lastExpirationDate = moment(
-      //     student.no_of_installments_expireTimeandAmount
-      //   );
-      //   // Set the expiration date of the next installment to be one month after the last one
-      //   expirationDate = lastExpirationDate.add(1, "months");
-      // } else {
-      //   // If there are no previous installments, set the expiration date to be one month from now
-      // }
 
       const nextInstallment = Number(req.body.no_of_installments) - 1;
       const installmentAmount = Math.floor(
@@ -777,13 +766,7 @@ export const createCourseFeesController = asyncHandler(
         await PaymentInstallmentTimeExpireModel.findOne({
           studentInfo,
         }).sort({ createdAt: -1 });
-      // console.log(
-      //   "last payment installment time",
-      //   moment(lastPaymentInstallmentExpirationTime.expiration_date)
-      //     .format("DD-MM-YYYY")
-      //     .split("-")[1],
-      //   moment().format("DD-MM-YYYY").split("-")[1]
-      // );
+
       if (lastPaymentInstallmentExpirationTime) {
         if (
           Number(lastPaymentInstallmentExpirationTime.installment_number) ===
@@ -833,7 +816,7 @@ export const createCourseFeesController = asyncHandler(
         BACKEND_URL + "/api/images/" + student.companyName.logo;
       if (emailSuggestionsStatus[0].emailSuggestionStatus) {
         sendEmail(
-          ` ${student.email}, ${student.companyName.email},${superAdminEmail}, visualmediatechnology@gmail.com`,
+          ` ${student.email}, ${student.companyName.email},${superAdminEmail}`,
           ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
           `Hello ${student.name} you have submitted fees `,
           `<!DOCTYPE html>
