@@ -1,13 +1,13 @@
-import React, {useState, useEffect, Fragment} from 'react'
-import {KTIcon} from '../../../_metronic/helpers'
-import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import React, { useState, useEffect, Fragment } from 'react'
+import { KTIcon } from '../../../_metronic/helpers'
+import { useStudentCourseFeesContext } from '../courseFees/StudentCourseFeesContext'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
-import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {Link, useNavigate, useParams} from 'react-router-dom'
-import {useCompanyContext} from '../compay/CompanyContext'
+import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useCompanyContext } from '../compay/CompanyContext'
 import AddAccountDayBook from './AddAccountDayBook'
 import AddDayBookAccountFromDayBook from './AddDayBookAccountFromDayBook'
 import EditDayBookData from './EditDayBookData'
@@ -178,6 +178,8 @@ const ViewDayBook = () => {
                 //   balanceOfDayBookData = balanceOfDayBookData - dayBookEntry.debit
                 // }
 
+                // console.log(dayBookEntry.studentInfo._id)
+
                 balanceOfDayBookData =
                   balanceOfDayBookData +
                   dayBookEntry.credit -
@@ -200,7 +202,7 @@ const ViewDayBook = () => {
                         <td className='text-dark fw-bold text-hover-primary fs-6 '>{index + 1}</td>
                         <td
                           className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: '#f2f2ff' }}
                         >
                           {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
                         </td>
@@ -208,23 +210,23 @@ const ViewDayBook = () => {
                           {dayBookEntry.rollNo}
                         </td>
                         <td
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: '#f2f2ff' }}
                           className='text-dark fw-bold text-hover-primary fs-6'
                         >
                           {dayBookEntry?.reciptNumber}
                         </td>
-                        <td className='' style={{background: '#f2f2ff'}}>
+                        <td className='' style={{ background: '#f2f2ff' }}>
                           <Link
                             className={
                               dayBookEntry.accountName
                                 ? 'text-dark fw-bold text-hover-primary fs-6'
                                 : 'text-dark fw-bold text-hover-primary fs-6'
                             }
-                            target={dayBookEntry.accountName && '_blank'}
+                            target={'_blank'}
                             to={
                               dayBookEntry.accountName
                                 ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
-                                : `/daybook/viewDaybook/${params.id}`
+                                : `/profile/student/${dayBookEntry?.studentInfo?._id}`
                             }
                           >
                             {dayBookEntry.accountName || dayBookEntry.StudentName}
@@ -235,7 +237,7 @@ const ViewDayBook = () => {
                         </td>
                         <td
                           className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: '#f2f2ff' }}
                         >
                           {dayBookEntry.credit}
                         </td>
@@ -244,7 +246,7 @@ const ViewDayBook = () => {
                         </td>
 
                         <td
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: '#f2f2ff' }}
                           className='text-dark fw-bold text-hover-primary fs-6'
                         >
                           {dayBookEntry?.studentLateFees || 0}

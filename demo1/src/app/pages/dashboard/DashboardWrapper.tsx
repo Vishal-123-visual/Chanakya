@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {FC, useState} from 'react'
+import {FC, useEffect, useState} from 'react'
 import {useIntl} from 'react-intl'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
@@ -134,6 +134,13 @@ const DashboardWrapper: FC = () => {
   const {currentUser} = useAuth()
 
   const [showDialog, setShowDialog] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowDialog(false)
+    }, 5000)
+  }, [])
+
   return (
     <div style={{position: 'relative'}}>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</PageTitle>
