@@ -1,12 +1,12 @@
-import {Link, useNavigate, useParams} from 'react-router-dom'
-import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
-import React, {useState} from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useStudentCourseFeesContext } from '../courseFees/StudentCourseFeesContext'
+import React, { useState } from 'react'
 import moment from 'moment'
 
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import {useCompanyContext} from '../compay/CompanyContext'
-import {useCourseContext} from '../course/CourseContext'
+import { useCompanyContext } from '../compay/CompanyContext'
+import { useCourseContext } from '../course/CourseContext'
 
 const MonthlyCollectionFee = () => {
   const [fromDate, setFromDate] = useState(new Date())
@@ -15,10 +15,10 @@ const MonthlyCollectionFee = () => {
   const paramsData = useParams()
   const ctx = useStudentCourseFeesContext()
   const studentCourseCTX = useCourseContext()
-  const {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
+  const { data, isLoading } = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
 
   // Fetch all courses data at once
-  const {data: coursesData} = studentCourseCTX.getCourseLists // Assuming there's a hook to fetch all courses
+  const { data: coursesData } = studentCourseCTX.getCourseLists // Assuming there's a hook to fetch all courses
 
   // Map course IDs to names for quick lookup
   const courseIdToName = coursesData?.reduce((acc, course) => {
@@ -30,12 +30,14 @@ const MonthlyCollectionFee = () => {
   const filteredData = data?.filter(
     (item) =>
       item?.studentInfo?.no_of_installments === item?.installment_number &&
-      item.dropOutStudent === false
+      item.dropOutStudent === false && Number(item?.expiration_date?.split("-")[1]) === toDate?.getMonth() + 1
   )
+
+  // console.log(Number(filteredData[0].expiration_date.split("-")[1]), toDate.getMonth() + 1)
 
   const companyCTX = useCompanyContext()
   const params = useParams()
-  const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
+  const { data: CompanyInfo } = companyCTX?.useGetSingleCompanyData(params?.id)
 
   const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
   //console.log(filteredData)
