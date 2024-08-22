@@ -23,9 +23,9 @@ export const getCourseCompleteStudentsController = asyncHandler(
       });
       let toEmails = "";
       users.forEach((user) => {
-        toEmails += `${user.email}`;
+        toEmails += `${user.email},`;
       });
-      console.log(toEmails);
+      // console.log(toEmails);
 
       //console.log(filteredStudents);
       // send the email to the students
