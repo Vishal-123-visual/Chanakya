@@ -29,6 +29,17 @@ export const AdmissionContextProvider = ({ children }) => {
       }
     },
   })
+  const getCompleteCourseStudentsLists = useQuery({
+    queryKey: ['getCompleteCourseStudentsLists'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/complete/course/students`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
 
   const useGetSingleStudentUsingWithEmail = (studentId) => {
     return useQuery({
@@ -370,6 +381,7 @@ export const AdmissionContextProvider = ({ children }) => {
         setAdmissionFormData,
         createStudentMutation,
         studentsLists,
+        getCompleteCourseStudentsLists,
         deleteStudentMutation,
         updateStudentMutation,
         setStudentId,

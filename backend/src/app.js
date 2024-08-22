@@ -15,6 +15,7 @@ import dayBookRoutes from "./routes/dayBook.routes.js";
 import studentGstSuggestionsRoutes from "./routes/studentGstSuggestions.routes.js";
 import { BACKEND_URL, FRONTEND_URL } from "./config/config.js";
 import studentIssuesRoutes from "./routes/student.issues.routes.js";
+import completeCourseStudentsRoutes from "./routes/completeCourseStudentsRoutes.routes.js";
 const app = express();
 
 // Apply CORS middleware with options
@@ -27,6 +28,7 @@ app.use("/api", userRoutes);
 app.use("/api/addmission_form", addMissionFormRoutes);
 app.use("/api/students", studentsRoutes);
 app.use("/api/student-issues", studentIssuesRoutes);
+app.use("/api/complete/course/students", completeCourseStudentsRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/subjects", subjectRoutes);
 app.use("/api/courseFees", courseFeesRoutes);

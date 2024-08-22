@@ -1,5 +1,3 @@
-import moment from 'moment';
-import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
 import { useAdmissionContext } from '../../modules/auth/core/Addmission'
 import { useCompanyContext } from '../compay/CompanyContext';
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +8,9 @@ const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const CompleteCourseStudents = () => {
   const studentCTX = useAdmissionContext();
-  const { data: studentInfoData } = studentCTX.studentsLists
-  //console.log(studentInfoData?.users)
-  const filteredStudents = studentInfoData?.users?.filter(student => student.netCourseFees >= student.course_fees && moment(student?.courseDuration).diff(moment(), 'days') === 0)
+  const filteredStudents = studentCTX.getCompleteCourseStudentsLists?.data
 
   const companyCtx = useCompanyContext();
-  //console.log(companyCtx.getCompanyLists.data)
 
   const getSingleCompanyOfStudent = (companyId) => {
     let data = companyCtx.getCompanyLists.data.find(companyData => companyData?._id === companyId)
