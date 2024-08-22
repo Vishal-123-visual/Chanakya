@@ -115,7 +115,6 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     companyId,
   } = req.body;
 
-  //console.log(req.body);
   try {
     const existingDataModel = await DayBookDataModel.find({ companyId }).sort();
     if (existingDataModel.length === 0) {
@@ -124,11 +123,25 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
           "Day Book Account Balance is not sufficient for this transaction",
       });
     }
+
+    const totalBalance = existingDataModel.reduce((acc, cur) => {
+      return acc + cur.credit - cur.debit + cur.studentLateFees;
+    }, 0);
+
+    if (parseInt(totalBalance) < debit === true) {
+      return res.status(404).json({
+        success: false,
+        message: "Total balance is less than of debit amount!",
+      });
+    }
+
     const newDayBookData = new DayBookDataModel({
       ...req.body,
     });
     await newDayBookData.save();
-    res.status(201).json(newDayBookData);
+    res
+      .status(201)
+      .json({ success: true, message: "day book data created successfully!!" });
   } catch (error) {
     res.status(500).json({
       error: "Error: while creating the day book data " || error.message,

@@ -156,8 +156,8 @@ const ViewDayBook = () => {
               {!showAddAccountBtn ? (
                 <AddDayBookData
                   key={1}
-                  totalBalance={grossTotalOfDayBookData}
                   companyId={params.id}
+                  totalBalance={grossTotalOfDayBookData}
                 />
               ) : (
                 <AddDayBookAccountFromDayBook key={1} setShowAddAccountBtn={setShowAddAccountBtn} />

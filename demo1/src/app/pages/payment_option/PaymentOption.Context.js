@@ -183,19 +183,25 @@ export const PaymentOptionContextProvider = ({children}) => {
     },
 
     onError: () => {
-      console.log('error')
+      //console.log('error')
     },
 
-    onSuccess: () => {
+    onSuccess: async (data) => {
+      //console.log(data)
+      if (data.success === true) {
+        toast.success(data.message, {bodyStyle: {fontSize: '18px'}})
+      }
       //alert('Added Student  Course fee  Successfully!')
       //console.log('success')
+      await queryClient.invalidateQueries({
+        queryKey: ['getDayBookDataLists'],
+      })
     },
 
     onSettled: async (_, error) => {
       //console.log('settled')
       if (error) {
-        //console.log(error)
-        alert(error.response.data.error)
+        toast.error(error.response.data.message)
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['getDayBookDataLists'],
