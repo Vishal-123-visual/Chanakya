@@ -1620,23 +1620,27 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         });
       //console.log(lastPaymentInstallment);
       lastPaymentInstallment.installment_amount =
-        totalPaid / currentStudent.no_of_installments;
+        currentStudent["remainingCourseFees"] === undefined
+          ? currentStudent.netCourseFees / currentStudent.no_of_installments
+          : currentStudent.remainingCourseFees /
+            currentStudent.no_of_installments;
       await lastPaymentInstallment.save();
 
-      if (currentStudent.remainingCourseFees === 0) {
-        currentStudent.no_of_installments_expireTimeandAmount = null;
-        currentStudent.no_of_installments = 0;
-        const allPaymentInstallments =
-          await PaymentInstallmentTimeExpireModel.find({
-            studentInfo: currentStudent._id,
-          });
-        allPaymentInstallments.map(async (paymentInstallment) => {
-          if (paymentInstallment) {
-            await paymentInstallment.deleteOne();
-          }
-        });
-        await currentStudent.save();
-      }
+      // if (currentStudent.remainingCourseFees === 0) {
+      //   currentStudent.no_of_installments_expireTimeandAmount = null;
+      //   currentStudent.no_of_installments = 0;
+      //   const allPaymentInstallments =
+      //     await PaymentInstallmentTimeExpireModel.find({
+      //       studentInfo: currentStudent._id,
+      //     });
+      //   allPaymentInstallments.map(async (paymentInstallment) => {
+      //     if (paymentInstallment) {
+      //       await paymentInstallment.deleteOne();
+      //     }
+      //   });
+      //   await currentStudent.save();
+      // }
+      await currentStudent.save();
 
       res.status(200).json({
         success: true,
@@ -1731,22 +1735,6 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
         await currentFees.save();
       }
 
-      // Update DayBook data
-      // for (let i = 1; i < singleStudentDayBooksData.length; i++) {
-      //   const previousDayBookData = singleStudentDayBooksData[i - 1];
-      //   const currentDayBookData = singleStudentDayBooksData[i];
-      //   if (currentDayBookData.credit !== 0) {
-      //     currentDayBookData.balance =
-      //       previousDayBookData.balance +
-      //       currentDayBookData.credit +
-      //       currentDayBookData.studentLateFees;
-      //   } else {
-      //     currentDayBookData.balance =
-      //       previousDayBookData.balance - currentDayBookData.debit;
-      //   }
-      //   await currentDayBookData.save();
-      // }
-
       // Update the student's total paid and remaining course fees
       if (allCourseFeesSingleStudent.length === 0) {
         currentStudent.totalPaid = 0;
@@ -1781,7 +1769,26 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
             .no_of_installments + 1;
       }
 
-      await currentStudent.save();
+      const updatedStudent = await currentStudent.save();
+
+      const newPaymentInstallmentOfStudent =
+        new PaymentInstallmentTimeExpireModel({
+          studentInfo: updatedStudent._id,
+          companyName: updatedStudent.companyName,
+          courseName: updatedStudent.courseName,
+          expiration_date:
+            updatedStudent.no_of_installments_expireTimeandAmount,
+          installment_number: updatedStudent.no_of_installments,
+          installment_amount:
+            updatedStudent["remainingCourseFees"] !== undefined
+              ? updatedStudent.remainingCourseFees /
+                updatedStudent.no_of_installments
+              : updatedStudent.netCourseFees /
+                updatedStudent.no_of_installments,
+          dropOutStudent: updatedStudent.dropOutStudent,
+        });
+
+      await newPaymentInstallmentOfStudent.save();
 
       res.status(200).json({ message: "Student fee deleted" });
     } catch (error) {

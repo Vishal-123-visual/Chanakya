@@ -102,16 +102,10 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       return; // Added return to exit the function if student is not found
     }
 
-    if (student.no_of_installments === 1) {
-      if (expirePaymentInstallments[0]) {
-        try {
-          await expirePaymentInstallments[0].deleteOne();
-          student.no_of_installments_expireTimeandAmount = null;
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    }
+    // delete all installments of the payment expiration
+    await PaymentInstallmentTimeExpireModel.deleteMany({
+      studentInfo: req.params?.id,
+    });
 
     // console.log(student);
 
@@ -205,6 +199,23 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     }
 
     let updatedStudent = await student.save();
+
+    const newPaymentInstallmentOfStudent =
+      new PaymentInstallmentTimeExpireModel({
+        studentInfo: updatedStudent._id,
+        companyName: updatedStudent.companyName,
+        courseName: updatedStudent.courseName,
+        expiration_date: updatedStudent.no_of_installments_expireTimeandAmount,
+        installment_number: updatedStudent.no_of_installments,
+        installment_amount:
+          updatedStudent["remainingCourseFees"] !== undefined
+            ? updatedStudent.remainingCourseFees /
+              updatedStudent.no_of_installments
+            : updatedStudent.netCourseFees / updatedStudent.no_of_installments,
+        dropOutStudent: updatedStudent.dropOutStudent,
+      });
+
+    await newPaymentInstallmentOfStudent.save();
 
     res.status(200).json(updatedStudent);
   } catch (error) {
