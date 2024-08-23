@@ -95,7 +95,6 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       await PaymentInstallmentTimeExpireModel.find({
         studentInfo: req.params?.id,
       }).sort({ createdAt: -1 });
-    //console.log(expirePaymentInstallments[0]);
     const student = await admissionFormModel.findOne({ _id: req.params?.id });
     if (!student) {
       res.status(404).json({ success: false, message: "Student not found!" });
@@ -103,8 +102,13 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     }
 
     // delete all installments of the payment expiration
-    await PaymentInstallmentTimeExpireModel.deleteMany({
-      studentInfo: req.params?.id,
+    // await PaymentInstallmentTimeExpireModel.deleteMany({
+    //   studentInfo: req.params?.id,
+    // });
+    expirePaymentInstallments.forEach(async (studentInstallment) => {
+      if (studentInstallment) {
+        await studentInstallment.deleteOne();
+      }
     });
 
     // console.log(student);
@@ -200,22 +204,25 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
 
     let updatedStudent = await student.save();
 
-    const newPaymentInstallmentOfStudent =
-      new PaymentInstallmentTimeExpireModel({
-        studentInfo: updatedStudent._id,
-        companyName: updatedStudent.companyName,
-        courseName: updatedStudent.courseName,
-        expiration_date: updatedStudent.no_of_installments_expireTimeandAmount,
-        installment_number: updatedStudent.no_of_installments,
-        installment_amount:
-          updatedStudent["remainingCourseFees"] !== undefined
-            ? updatedStudent.remainingCourseFees /
-              updatedStudent.no_of_installments
-            : updatedStudent.netCourseFees / updatedStudent.no_of_installments,
-        dropOutStudent: updatedStudent.dropOutStudent,
-      });
-
-    await newPaymentInstallmentOfStudent.save();
+    if (updatedStudent.no_of_installments_expireTimeandAmount) {
+      const newPaymentInstallmentOfStudent =
+        new PaymentInstallmentTimeExpireModel({
+          studentInfo: updatedStudent?._id,
+          companyName: updatedStudent?.companyName,
+          courseName: updatedStudent?.courseName,
+          expiration_date:
+            updatedStudent?.no_of_installments_expireTimeandAmount,
+          installment_number: updatedStudent?.no_of_installments,
+          installment_amount:
+            updatedStudent["remainingCourseFees"] !== undefined
+              ? updatedStudent?.remainingCourseFees /
+                updatedStudent?.no_of_installments
+              : updatedStudent?.netCourseFees /
+                updatedStudent?.no_of_installments,
+          dropOutStudent: updatedStudent?.dropOutStudent,
+        });
+      await newPaymentInstallmentOfStudent.save();
+    }
 
     res.status(200).json(updatedStudent);
   } catch (error) {
