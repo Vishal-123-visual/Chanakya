@@ -1790,7 +1790,11 @@ export const deleteSingleStudentCourseFeesController = asyncHandler(
 
       await newPaymentInstallmentOfStudent.save();
 
-      res.status(200).json({ message: "Student fee deleted" });
+      res.status(200).json({
+        success: true,
+        studentId: updatedStudent._id,
+        message: "Student Course fee deleted Successfully",
+      });
     } catch (error) {
       res.status(500).json({ success: false, message: error.message });
     }

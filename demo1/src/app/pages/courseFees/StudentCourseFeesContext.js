@@ -82,20 +82,35 @@ export const StudentCourseFeesContextProvider = ({children}) => {
   // })
   const useDeleteSingleStudentCourseFees = useMutation({
     mutationFn: async (id) => {
-      return axios.delete(`${BASE_URL}/api/courseFees/${id}`, config).then((res) => res.data)
+      // return axios.delete().then((res) => res.data)
+      const res = await axios.delete(`${BASE_URL}/api/courseFees/${id}`, config)
+      return res.data
     },
-    onSuccess: async () => {
-      alert('Student Course Fees deleted successfully')
-      await queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+    onSuccess: async (data) => {
+      // console.log(data)
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudents', data?.studentId],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentCourseFeesLists'],
+      })
       await queryClient.invalidateQueries({
         queryKey: ['getDayBookDataLists'],
       })
+      if (data.success) {
+        toast.success(data.message)
+      }
     },
     onSettled: async (_, error) => {
       if (error) {
         alert(error)
       } else {
-        await queryClient.invalidateQueries({queryKey: ['getStudentCourseFeesLists']})
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudents'],
+        })
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentCourseFeesLists'],
+        })
         await queryClient.invalidateQueries({
           queryKey: ['getDayBookDataLists'],
         })
