@@ -189,9 +189,9 @@ const StudentCourseFee = ({ className, studentInfoData }) => {
   const delelteStudentCourseFeesHandler = (id) => {
     if (window.confirm('Are you sure you want to delete this student course fee?')) {
       studentPayFeeCtx.useDeleteSingleStudentCourseFees.mutate(id)
+      window.location.reload()
     }
     // navigate(`/profile/student/${studentInfoData?._id}`)
-    // window.location.reload()
     return
   }
 
