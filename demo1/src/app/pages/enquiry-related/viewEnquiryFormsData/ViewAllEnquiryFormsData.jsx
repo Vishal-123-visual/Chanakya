@@ -145,8 +145,8 @@ export default function ViewAllEnquiryFormsData() {
 
         // Map the filteredRowData to extract relevant fields
         const updatedFilteredFormData = filteredRowData.map((row) => ({
-          id: row._id,
-          fields: row.rows ? row.rows.flatMap((r) => r.fields || []) : [],
+          id: row?._id,
+          fields: row.rows ? row?.rows?.flatMap((r) => r?.fields || []) : [],
         }))
 
         // Log the updated filtered form data for debugging
@@ -154,11 +154,11 @@ export default function ViewAllEnquiryFormsData() {
 
         // Extract all fields, filtering out the 'companyId' field
         const allFields = updatedFilteredFormData
-          .flatMap((entry) => entry.fields)
-          .filter((field) => field.name !== 'companyId')
+          .flatMap((entry) => entry?.fields)
+          .filter((field) => field?.name !== 'companyId')
 
         // Create a set of unique field names
-        const uniqueNames = Array.from(new Set(allFields.map((field) => field.name)))
+        const uniqueNames = Array.from(new Set(allFields.map((field) => field?.name)))
 
         // Log unique field names for debugging
         // console.log('Unique Field Names:', uniqueNames)
@@ -273,7 +273,7 @@ export default function ViewAllEnquiryFormsData() {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>All Enquiry Forms</span>
         </h3>
-        {formOptions.length > 0 && (
+        {formOptions?.length > 0 && (
           <>
             <div className='search-bar'>
               <input
@@ -290,9 +290,9 @@ export default function ViewAllEnquiryFormsData() {
                 onChange={(e) => setSelectedFormId(e.target.value)}
                 value={selectedFormId}
               >
-                {formOptions.map((form) => (
-                  <option key={form.id} value={form.id}>
-                    {form.name}
+                {formOptions?.map((form) => (
+                  <option key={form?.id} value={form?.id}>
+                    {form?.name}
                   </option>
                 ))}
               </select>
@@ -339,26 +339,29 @@ export default function ViewAllEnquiryFormsData() {
                   </thead>
                   <tbody>
                     {filteredGroupedData.length > 0 ? (
-                      filteredGroupedData.map((rowData) => (
-                        <tr key={rowData.id}>
-                          <td>
-                            <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                              <input
-                                className='form-check-input widget-9-check'
-                                type='checkbox'
-                                value='1'
-                              />
-                            </div>
-                          </td>
+                      filteredGroupedData?.map((rowData) => (
+                        <tr key={rowData?.id}>
+                          <td></td>
                           {uniqueFieldNames.map((fieldName) => {
-                            const fieldData = rowData.fields.find(
-                              (field) => field.name === fieldName
-                            )
+                            const fieldData = rowData.fields.find((field) => field.name === fieldName);
+
                             return (
-                              <td onClick={() => navigate(`/update-form-data/${rowData.id}`)} key={fieldName} className='cursor-pointer'>
-                                {fieldData ? fieldData.value : ''}
-                              </td>
-                            )
+                              <>
+                                <td
+                                  onClick={() => navigate(`/update-form-data/${rowData.id}`)}
+                                  key={fieldName}
+                                  className="cursor-pointer"
+                                >
+                                  {fieldData
+                                    ? typeof fieldData?.value === "object"
+                                      ? Object.keys(fieldData.value).map((key) => (
+                                        <span key={key}>{fieldData?.value[key]} {" "}</span>
+                                      ))
+                                      : fieldData?.value
+                                    : ""}
+                                </td>
+                              </>
+                            );
                           })}
                           <td>{companyInfo?.companyName}</td>
                           <td>
