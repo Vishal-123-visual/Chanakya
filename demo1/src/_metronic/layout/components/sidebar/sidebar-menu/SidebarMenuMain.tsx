@@ -63,6 +63,41 @@ const SidebarMenuMain = () => {
                   />
                 </SidebarMenuItemWithSub>
 
+                <SidebarMenuItemWithSub
+                  to='/apps/chat'
+                  title={'Forms'}
+                  fontIcon='bi-chat-left'
+                  icon='message-text-2'
+                >
+                  <SidebarMenuItem
+                    to={`/add-form/${CompanyListData?._id}`}
+                    title='Add Forms'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
+                    to={`/view-form/${CompanyListData?._id}`}
+                    title='View Forms'
+                    hasBullet={true}
+                  />
+                </SidebarMenuItemWithSub>
+                <SidebarMenuItemWithSub
+                  to='/apps/chat'
+                  title={'View All Enquirys'}
+                  fontIcon='bi-chat-left'
+                  icon='message-text-2'
+                >
+                  <SidebarMenuItem
+                    to={`/add-enquiry/${CompanyListData?._id}`}
+                    title='Add Enquirys'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
+                    to={`/view-form-data/${CompanyListData?._id}`}
+                    title='View All Enquiry Forms'
+                    hasBullet={true}
+                  />
+                </SidebarMenuItemWithSub>
+
                 <SidebarMenuItem
                   to={`/monthlyCollectionFees/${CompanyListData?._id}`}
                   title='Monthly Collections'

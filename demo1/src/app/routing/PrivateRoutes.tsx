@@ -53,6 +53,18 @@ import CourseStudentSubjectMarks from '../pages/courseStudentSubjectsMarks/Cours
 import StudentMarksResult from '../pages/courseStudentSubjectsMarks/StudentMarksResult'
 import StudentProfileDetailsPage from '../pages/monthly_collection_fee/StudentProfileDetailsPage'
 import DropOutStudents from '../pages/drop-out-students/DropOutStudents'
+
+import AddForm from '../pages/enquiry-related/dynamicForms/AddForm'
+import EditFormName from '../pages/enquiry-related/dynamicForms/EditFormName'
+import UpdateFormData from '../pages/enquiry-related/dynamicForms/UpdateFormData'
+import ViewForms from '../pages/enquiry-related/dynamicForms/ViewForms'
+import ViewAllEnquiryFormsData from '../pages/enquiry-related/viewEnquiryFormsData/ViewAllEnquiryFormsData'
+import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
+import ProfileForm from '../pages/enquiry-related/dynamicForms/ProfileForm'
+// import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
+// import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
+// import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
+
 const PrivateRoutes = () => {
   const {currentUser} = useAuth()
   //console.log(currentUser)
@@ -269,6 +281,14 @@ const PrivateRoutes = () => {
                 </>
               }
             />
+            {/* <Route path='/enquiry-form/:id' element={<DynamicEnquiryForm companyName='' />} /> */}
+            <Route path='/add-form/:id' element={<AddForm />} />
+            <Route path='/update-form/:id' element={<EditFormName />} />
+            <Route path='/update-form-data/:id' element={<UpdateFormData />} />
+            <Route path='/view-form/:id' element={<ViewForms />} />
+            <Route path='/view-form-data/:id' element={<ViewAllEnquiryFormsData />} />
+            <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
+            <Route path='/profile-form/:id' element={<ProfileForm />} />
             <Route path='/student/:id' element={<StudentProfile />} />
             <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
             {/* *************************************** Monthly Collection fees start here.************************** */}
@@ -322,6 +342,16 @@ const PrivateRoutes = () => {
                 </>
               }
             />
+            {/* <Route
+              path='/form-settings'
+              element={
+                <>
+                  <div className='d-flex flex-column gap-10'>
+                    <GeneralSettingForm />
+                  </div>
+                </>
+              }
+            /> */}
             <Route
               path='/course-subjects-addMarks'
               element={

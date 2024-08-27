@@ -31,6 +31,8 @@ import {PaymentOptionContextProvider} from './app/pages/payment_option/PaymentOp
 import {CompanyContextProvider} from './app/pages/compay/CompanyContext'
 import {ToastContainer, toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import {DynamicFieldContextProvider} from './app/pages/enquiry-related/DynamicFieldsContext'
+import {CustomFormFieldDataContextProvider} from './app/pages/enquiry-related/dynamicForms/CustomFormFieldDataContext'
 
 setupAxios(axios)
 Chart.register(...registerables)
@@ -43,23 +45,27 @@ if (container) {
       <MetronicI18nProvider>
         <AuthProvider>
           <CourseContextProvider>
-            <CourseCategoryContextProvider>
-              <NumberOfYearsCourseTypesContextProvider>
-                <CourseTypesContextProvider>
-                  <CourseSubjectContextProvider>
-                    <AdmissionContextProvider>
-                      <StudentCourseFeesContextProvider>
-                        <PaymentOptionContextProvider>
-                          <CompanyContextProvider>
-                            <AppRoutes />
-                          </CompanyContextProvider>
-                        </PaymentOptionContextProvider>
-                      </StudentCourseFeesContextProvider>
-                    </AdmissionContextProvider>
-                  </CourseSubjectContextProvider>
-                </CourseTypesContextProvider>
-              </NumberOfYearsCourseTypesContextProvider>
-            </CourseCategoryContextProvider>
+            <DynamicFieldContextProvider>
+              <CustomFormFieldDataContextProvider>
+                <CourseCategoryContextProvider>
+                  <NumberOfYearsCourseTypesContextProvider>
+                    <CourseTypesContextProvider>
+                      <CourseSubjectContextProvider>
+                        <AdmissionContextProvider>
+                          <StudentCourseFeesContextProvider>
+                            <PaymentOptionContextProvider>
+                              <CompanyContextProvider>
+                                <AppRoutes />
+                              </CompanyContextProvider>
+                            </PaymentOptionContextProvider>
+                          </StudentCourseFeesContextProvider>
+                        </AdmissionContextProvider>
+                      </CourseSubjectContextProvider>
+                    </CourseTypesContextProvider>
+                  </NumberOfYearsCourseTypesContextProvider>
+                </CourseCategoryContextProvider>
+              </CustomFormFieldDataContextProvider>
+            </DynamicFieldContextProvider>
           </CourseContextProvider>
         </AuthProvider>
       </MetronicI18nProvider>
