@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { KTIcon } from '../../../../_metronic/helpers'
-import { useCustomFormFieldContext } from '../dynamicForms/CustomFormFieldDataContext'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDynamicFieldContext } from '../DynamicFieldsContext'
-import { useCompanyContext } from '../../compay/CompanyContext'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import React, {useState, useEffect} from 'react'
+import {toast} from 'react-toastify'
+import {KTIcon} from '../../../../_metronic/helpers'
+import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useDynamicFieldContext} from '../DynamicFieldsContext'
+import {useCompanyContext} from '../../compay/CompanyContext'
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)
@@ -47,7 +47,7 @@ export default function ViewAllEnquiryFormsData() {
     getReorderedRowData,
     deleteSingleRowDataMutation,
   } = useCustomFormFieldContext()
-  const { getAllAddedFormsName } = useDynamicFieldContext()
+  const {getAllAddedFormsName} = useDynamicFieldContext()
   const companyCTX = useCompanyContext()
   const params = useParams()
   const companyId = params?.id
@@ -60,7 +60,7 @@ export default function ViewAllEnquiryFormsData() {
   // console.log(useReorderedRowData)
   // console.log(object)
 
-  const { data: companyInfo } = companyCTX?.useGetSingleCompanyData(companyId)
+  const {data: companyInfo} = companyCTX?.useGetSingleCompanyData(companyId)
   const [selectedFormId, setSelectedFormId] = useState('')
   const [filteredData, setFilteredData] = useState([])
   const [formOptions, setFormOptions] = useState([])
@@ -123,7 +123,7 @@ export default function ViewAllEnquiryFormsData() {
       try {
         // Fetch all the rowData
         const allRowData = getReorderedRowData?.data?.rowData || []
-
+        // console.log(allRowData);
         // Ensure that allRowData is an array
         if (!Array.isArray(allRowData)) {
           console.error('Expected rowData to be an array, but got:', typeof allRowData)
@@ -148,7 +148,7 @@ export default function ViewAllEnquiryFormsData() {
           id: row?._id,
           fields: row.rows ? row?.rows?.flatMap((r) => r?.fields || []) : [],
         }))
-
+        // console.log(updatedFilteredFormData)
         // Log the updated filtered form data for debugging
         // console.log('Updated Filtered Form Data:', updatedFilteredFormData)
 
@@ -156,7 +156,7 @@ export default function ViewAllEnquiryFormsData() {
         const allFields = updatedFilteredFormData
           .flatMap((entry) => entry?.fields)
           .filter((field) => field?.name !== 'companyId')
-
+        // console.log(allFields)
         // Create a set of unique field names
         const uniqueNames = Array.from(new Set(allFields.map((field) => field?.name)))
 
@@ -164,6 +164,7 @@ export default function ViewAllEnquiryFormsData() {
         // console.log('Unique Field Names:', uniqueNames)
         // setFilteredData(updatedFilteredFormData)
         setUniqueFieldNames(uniqueNames)
+        // console.log(uniqueNames)
         // No further actions, just reading and logging data
       } catch (error) {
         // Show an error toast if something goes wrong
@@ -171,6 +172,12 @@ export default function ViewAllEnquiryFormsData() {
       }
     }
   }
+
+  const allRowData = getReorderedRowData?.data?.rowData?.filter(
+    (form) => form.formId === selectedFormId
+  )
+  const rowId = allRowData?.[0]?.rows?.map((row) => row._id)
+  // console.log(rowId)
 
   useEffect(() => {
     fetchUpdatedData()
@@ -232,7 +239,7 @@ export default function ViewAllEnquiryFormsData() {
     )
 
   const onDragEnd = async (result) => {
-    const { source, destination, type } = result
+    const {source, destination, type} = result
 
     if (!destination) return
 
@@ -343,38 +350,46 @@ export default function ViewAllEnquiryFormsData() {
                         <tr key={rowData?.id}>
                           <td></td>
                           {uniqueFieldNames.map((fieldName) => {
-                            const fieldData = rowData.fields.find((field) => field.name === fieldName);
+                            const fieldData = rowData.fields.find(
+                              (field) => field.name === fieldName
+                            )
 
                             return (
                               <>
                                 <td
                                   onClick={() => navigate(`/update-form-data/${rowData.id}`)}
                                   key={fieldName}
-                                  className="cursor-pointer"
+                                  className='cursor-pointer'
                                 >
                                   {fieldData
-                                    ? typeof fieldData?.value === "object"
+                                    ? typeof fieldData?.value === 'object'
                                       ? Object.keys(fieldData.value).map((key) => (
-                                        <span key={key}>{fieldData?.value[key]} {" "}</span>
-                                      ))
+                                          <span key={key}>{fieldData?.value[key]} </span>
+                                        ))
                                       : fieldData?.value
-                                    : ""}
+                                    : ''}
                                 </td>
                               </>
-                            );
+                            )
                           })}
                           <td>{companyInfo?.companyName}</td>
                           <td>
                             <div className='d-flex justify-content-end flex-shrink-0'>
                               <a
-                                onClick={() => navigate(`/update-form-data/${rowData.id}`)}
+                                onClick={() => {
+                                  console.log(rowData.id)
+                                  navigate(`/update-form-data/${rowData.id}`)
+                                }}
                                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                               >
                                 <KTIcon iconName='pencil' className='fs-3' />
                               </a>
                               <a
                                 className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm'
-                                onClick={() => formDataDeleteHandler(rowData.id)}
+                                onClick={() => {
+                                  console.log(rowData.id)
+                                  formDataDeleteHandler(rowData.id)
+                                }}
                               >
                                 <KTIcon iconName='trash' className='fs-3' />
                               </a>

@@ -52,6 +52,7 @@ const UpdateFormData = () => {
   }, [singleFormValueData])
 
   const handleInputChange = (fieldName, value) => {
+    console.log(value)
     setFormFieldValues((prevState) => ({
       ...prevState,
       [fieldName]: value,
@@ -130,25 +131,61 @@ const UpdateFormData = () => {
               <div className='row'>
                 {singleFormValueData?.formFiledValue
                   ?.filter((formFieldData) => formFieldData.name !== 'companyId')
-                  .map((formFieldData, index) => (
-                    <div className='col-6' key={index}>
-                      <div className='row mb-6'>
-                        <label className='col-lg-4 col-form-label required fw-bold fs-6'>
-                          {formFieldData.name}
-                        </label>
-                        <div className='col-lg-6 fv-row'>
-                          <input
-                            type='text'
-                            className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
-                            placeholder='Name'
-                            name='Name'
-                            value={formFieldValues[formFieldData.name] || ''}
-                            onChange={(e) => handleInputChange(formFieldData.name, e.target.value)}
-                          />
+                  .map((formFieldData, index) => {
+                    //console.log(formFieldData)
+                    if (
+                      formFieldData.type === 'text' ||
+                      formFieldData.type === 'url' ||
+                      formFieldData.type === 'currency'
+                    ) {
+                      return (
+                        <div className='col-6' key={index}>
+                          <div className='row mb-6'>
+                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                              {formFieldData.name}
+                            </label>
+                            <div className='col-lg-6 fv-row'>
+                              <input
+                                type='text'
+                                className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                                placeholder='Name'
+                                name='Name'
+                                value={formFieldValues[formFieldData.name] || ''}
+                                onChange={(e) =>
+                                  handleInputChange(formFieldData.name, e.target.value)
+                                }
+                              />
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      )
+                    } else if (
+                      formFieldData.type === 'date' ||
+                      formFieldData.type === 'datetime-local'
+                    ) {
+                      return (
+                        <div className='col-6' key={index}>
+                          <div className='row mb-6'>
+                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                              {formFieldData.name}
+                            </label>
+                            <div className='col-lg-6 fv-row'>
+                              <input
+                                type={formFieldData.type === 'date' ? 'date' : 'datetime-local'}
+                                className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                                placeholder='Name'
+                                name='Name'
+                                value={formFieldValues[formFieldData.name] || ''}
+                                onChange={(e) =>
+                                  handleInputChange(formFieldData.name, e.target.value)
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    }
+                  })}
                 {getAllCustomFormFieldDataQuery.data
                   ?.filter((form) => form.formId[form.formId.length - 1] === formId)
                   .map((field, index) => {
@@ -294,6 +331,41 @@ const UpdateFormData = () => {
                         )
                       default:
                         return null
+                      // return (
+                      //   <div className='col-6' key={index}>
+                      //     <div className='row mb-6'>
+                      //       <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
+                      //         <span className={`${field.mandatory === true ? 'required' : ''}`}>
+                      //           {field.name}
+                      //         </span>
+                      //       </label>
+                      //       <div className='col-lg-8 d-flex align-items-center'>
+                      //         <input
+                      //           id={`${field.type}-${index}`}
+                      //           type={field.type}
+                      //           className='form-control form-control-lg form-control-solid flex-grow-1'
+                      //           placeholder={field.name}
+                      //           value={formFieldValues[field.name] || ''}
+                      //           onChange={(event) =>
+                      //             handleInputChange(
+                      //               index,
+                      //               event.target.value,
+                      //               field.name,
+                      //               field.type
+                      //             )
+                      //           }
+                      //         />
+                      //         <button
+                      //           type='button'
+                      //           className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                      //           onClick={() => fieldDeleteHandler(field._id)}
+                      //         >
+                      //           <KTIcon iconName='trash' className='fs-3' />
+                      //         </button>
+                      //       </div>
+                      //     </div>
+                      //   </div>
+                      // )
                     }
                   })}
               </div>
