@@ -9,10 +9,10 @@ const rowSchema = new mongoose.Schema({
       fields: { type: [mongoose.Schema.Types.Mixed], required: true }, // Adapt this to your fields structure
     },
   ],
-  formFiledValue: {
-    type: [mongoose.Schema.Types.Mixed],
-    ref: "FormFieldValue",
-  },
+  // formFiledValue: {
+  //   type: [mongoose.Schema.Types.Mixed],
+  //   ref: "FormFieldValue",
+  // },
 });
 
 const Row = mongoose.model("Row", rowSchema);
