@@ -45,6 +45,7 @@ export default function ViewAllEnquiryFormsData() {
     useSaveReorderedRows,
     getReorderedColumnData,
     getReorderedRowData,
+    deleteReorderedColumnsMutation,
     deleteSingleRowDataMutation,
   } = useCustomFormFieldContext()
   const {getAllAddedFormsName} = useDynamicFieldContext()
@@ -126,7 +127,7 @@ export default function ViewAllEnquiryFormsData() {
         // console.log(allRowData);
         // Ensure that allRowData is an array
         if (!Array.isArray(allRowData)) {
-          console.error('Expected rowData to be an array, but got:', typeof allRowData)
+          // console.error('Expected rowData to be an array, but got:', typeof allRowData)
           return
         }
 
@@ -168,16 +169,40 @@ export default function ViewAllEnquiryFormsData() {
         // No further actions, just reading and logging data
       } catch (error) {
         // Show an error toast if something goes wrong
-        toast.error(`Error fetching updated data: ${error.message}`)
+        // toast.error(`Error fetching updated data: ${error.message}`)
       }
     }
   }
 
-  const allRowData = getReorderedRowData?.data?.rowData?.filter(
-    (form) => form.formId === selectedFormId
-  )
-  const rowId = allRowData?.[0]?.rows?.map((row) => row._id)
-  // console.log(rowId)
+  const allRowData = getReorderedRowData?.data?.rowData
+    ?.filter((form) => form.formId === selectedFormId)
+    ?.map((id) => id._id)
+  // console.log(allRowData)
+
+  let allRowsId
+  if (allRowData && allRowData.length > 0) {
+    allRowsId = allRowData[0]
+  } else {
+    // console.warn('allRowData is undefined or empty')
+    // allRowsId = null // or set a default value
+  }
+
+  // console.log(allRowsId)
+
+  const allColumnsData = getReorderedColumnData?.data?.columnData
+    ?.filter((form) => form.formId === selectedFormId)
+    ?.map((id) => id._id)
+  // Store the first element in a variable if it exists
+  let firstColumnData
+
+  if (allColumnsData && allColumnsData.length > 0) {
+    firstColumnData = allColumnsData[0]
+  } else {
+    // console.warn('allColumnsData is undefined or empty')
+    firstColumnData = null // or set a default value
+  }
+
+  // console.log(firstColumnData)
 
   useEffect(() => {
     fetchUpdatedData()
@@ -218,10 +243,21 @@ export default function ViewAllEnquiryFormsData() {
         }
       },
       onError: (error) => {
-        toast.error(`Error deleting Data: ${error.message}`)
+        // toast.error(`Error deleting Data: ${error.message}`)
       },
     })
   }
+
+  // const columnsDeleteHandler = (columnsId) => {
+  //   deleteReorderedColumnsMutation.mutate(columnsId, {
+  //     onSuccess: () => {
+  //       // toast.success('Field deleted successfully!')
+  //     },
+  //     onError: (error) => {
+  //       toast.error(`Error deleting form: ${error.message}`)
+  //     },
+  //   })
+  // }
 
   const filteredGroupedData = filteredData
     ?.map((entry) => ({
@@ -237,6 +273,55 @@ export default function ViewAllEnquiryFormsData() {
         )
       })
     )
+  // const formRowDataBeforeDragging = filteredGroupedData?.map((rowData) => rowData.id)
+  // console.log(formRowDataBeforeDragging)
+
+  const rowsDeleteHandler = (rowsId, columnsId, formDataId) => {
+    if (!window.confirm('Are you sure you want to delete All this Row Fields?')) {
+      return
+    }
+    deleteSingleRowDataMutation.mutate(rowsId, {
+      onSuccess: () => {
+        toast.success('Field deleted successfully!')
+      },
+      onError: (error) => {
+        // toast.error(`Error deleting form: ${error.message}`)
+      },
+    })
+
+    deleteReorderedColumnsMutation.mutate(columnsId, {
+      onSuccess: () => {
+        // toast.success('Field deleted successfully!')
+      },
+      onError: (error) => {
+        // toast.error(`Error deleting form: ${error.message}`)
+      },
+    })
+
+    const formDataIds = filteredData.map((item) => item.id)
+
+    formDataIds.forEach((formDataId) => {
+      deleteFormDataMutation.mutate(formDataId, {
+        onSuccess: () => {
+          toast.success(`All Form Field Data Deleted SuccessFully !!`)
+
+          // Remove the deleted data from the filtered data
+          const updatedFilteredData = filteredData.filter((item) => item.id !== formDataId)
+          setFilteredData(updatedFilteredData)
+
+          // If no data is left for the selected form, update the state accordingly
+          if (updatedFilteredData.length === 0) {
+            setSelectedFormId('')
+            setFilteredData([])
+            setUniqueFieldNames([])
+          }
+        },
+        onError: (error) => {
+          // toast.error(`Error deleting Data: ${error.message}`)
+        },
+      })
+    })
+  }
 
   const onDragEnd = async (result) => {
     const {source, destination, type} = result
@@ -268,7 +353,7 @@ export default function ViewAllEnquiryFormsData() {
 
         toast.success('Reordered columns and rows saved and updated successfully!')
       } catch (error) {
-        toast.error(`Error saving reordered columns and rows: ${error.message}`)
+        // toast.error(`Error saving reordered columns and rows: ${error.message}`)
       }
     }
   }
@@ -342,6 +427,24 @@ export default function ViewAllEnquiryFormsData() {
                       {uniqueFieldNames.length > 0 && (
                         <th className='min-w-100px text-end'>Actions</th>
                       )}
+                      {filteredGroupedData.length > 0 ? (
+                        <div className='d-flex justify-content-end flex-shrink-0'>
+                          <a
+                            className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm'
+                            onClick={() =>
+                              rowsDeleteHandler(
+                                allRowsId,
+                                firstColumnData
+                                // formRowDataBeforeDragging
+                              )
+                            }
+                          >
+                            <KTIcon iconName='trash' className='fs-2' />
+                          </a>
+                        </div>
+                      ) : (
+                        ''
+                      )}
                     </tr>
                   </thead>
                   <tbody>
@@ -377,7 +480,7 @@ export default function ViewAllEnquiryFormsData() {
                             <div className='d-flex justify-content-end flex-shrink-0'>
                               <a
                                 onClick={() => {
-                                  console.log(rowData.id)
+                                  // console.log(rowData.id)
                                   navigate(`/update-form-data/${rowData.id}`)
                                 }}
                                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
@@ -387,7 +490,7 @@ export default function ViewAllEnquiryFormsData() {
                               <a
                                 className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm'
                                 onClick={() => {
-                                  console.log(rowData.id)
+                                  // console.log(rowData.id)
                                   formDataDeleteHandler(rowData.id)
                                 }}
                               >

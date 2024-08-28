@@ -62,3 +62,21 @@ export const getColumns = async (req, res, next) => {
     res.status(500).json({ success: false, message: "Internal Server Error!" });
   }
 };
+
+export const deleteColumnsController = async (req, res, next) => {
+  // console.log(req.params);
+  try {
+    const { id } = req.params;
+    const columnData = await Column.findByIdAndDelete(id);
+    if (!columnData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Column not found !!" });
+    }
+    res
+      .status(200)
+      .json({ success: true, message: "Column deleted successfully!" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

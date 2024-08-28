@@ -201,6 +201,23 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
   })
 
+  const deleteReorderedColumnsMutation = useMutation({
+    mutationFn: async (id) => {
+      // console.log(id)
+      return axios.delete(`${BASE_URL}/api/${id}`, config).then((res) => res.data)
+    },
+    onSuccess: () => {
+      // toast.success('Field Deleted  Successfully!!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        toast.error('Error While Deleting the Field !!', error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getReorderingRowsAndColumnsData']})
+      }
+    },
+  })
+
   // console.log('204', getReorderedColumnData)
 
   // Save Reordered Rows Mutation
@@ -323,21 +340,22 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
   })
 
-  // const deleteSingleRowDataMutation = useMutation({
-  //   mutationFn: async (id) => {
-  //     return axios.delete(`${BASE_URL}/api/${id}`, config).then((res) => res.data)
-  //   },
-  //   onSuccess: () => {
-  //     // toast.success('Form Deleted  Successfully!!')
-  //   },
-  //   onSettled: async (_, error) => {
-  //     if (error) {
-  //       toast.error('Error While Deleting Form:', error)
-  //     } else {
-  //       await queryClient.invalidateQueries({queryKey: ['getReorderingRowsData']})
-  //     }
-  //   },
-  // })
+  const deleteSingleRowDataMutation = useMutation({
+    mutationFn: async (id) => {
+      // console.log(id)
+      return axios.delete(`${BASE_URL}/api/rows/${id}`, config).then((res) => res.data)
+    },
+    onSuccess: () => {
+      // toast.success('Form Deleted  Successfully!!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        toast.error('Error While Deleting Form:', error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getReorderingRowsData']})
+      }
+    },
+  })
 
   return (
     <CustomFormFieldDataContext.Provider
@@ -361,7 +379,8 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
         getReorderedRowData,
         useGetSingleFormValueById,
         updateFormFieldMutation,
-        // deleteSingleRowDataMutation
+        deleteReorderedColumnsMutation,
+        deleteSingleRowDataMutation,
       }}
     >
       {children}
