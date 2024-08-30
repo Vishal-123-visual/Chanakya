@@ -234,9 +234,12 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
   try {
     // Find the student
     const student = await admissionFormModel.findById(req.params.id);
+    // console.log("delete single student from controller ", student);
     const studentIssueDashboard = await ShowStudentDashboardModel.findOne({
       studentId: req.params.id,
     });
+
+    //console.log("student issue on dashboard ", studentIssueDashboard);
 
     // Handle case where student is not found
     if (!student) {
@@ -246,7 +249,9 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
     }
 
     // delete the student issue from dashboard
-    await studentIssueDashboard.deleteOne();
+    if (studentIssueDashboard) {
+      await studentIssueDashboard.deleteOne();
+    }
     // image path
 
     let imagePath = student.image;
@@ -270,13 +275,17 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
 
     // console.log(installMentFees);
 
-    installMentFees?.map(
-      async (installMentFee) => await installMentFee?.deleteOne()
-    );
+    installMentFees?.map(async (installMentFee) => {
+      if (installMentFee) {
+        await installMentFee?.deleteOne();
+      }
+    });
 
-    studentCourseFeesRecord?.map(
-      async (studentFeeRecord) => await studentFeeRecord?.deleteOne()
-    );
+    studentCourseFeesRecord?.map(async (studentFeeRecord) => {
+      if (studentFeeRecord) {
+        await studentFeeRecord?.deleteOne();
+      }
+    });
     // Delete the student
 
     // delete Student Marks Subjects
@@ -288,9 +297,11 @@ export const deleteStudentController = asyncHandler(async (req, res, next) => {
     //   "Student Marks data from student delete ",
     //   studentMarksSubjects
     // );
-    studentMarksSubjects?.map(
-      async (studentMarksSubject) => await studentMarksSubject?.deleteOne()
-    );
+    studentMarksSubjects?.map(async (studentMarksSubject) => {
+      if (studentMarksSubject) {
+        await studentMarksSubject?.deleteOne();
+      }
+    });
 
     await student.deleteOne();
 
