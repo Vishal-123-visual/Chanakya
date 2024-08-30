@@ -27,7 +27,7 @@ const AddCourseTypeEdit = () => {
       try {
         ctx.updateCourseTypeMutation.mutate({...values, id: resLocation.state._id})
       } catch (error) {
-        console.log(ctx.createAddCourseTypeMutation.error)
+        // console.log(ctx.createAddCourseTypeMutation.error)
       } finally {
         setLoading(false)
         navigate('/course/course-type')

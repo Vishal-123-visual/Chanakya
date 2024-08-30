@@ -493,7 +493,7 @@ export const CompanyContextProvider = ({children}) => {
     },
 
     onSuccess: async (res) => {
-      console.log(res)
+      //console.log(res)
       if (res.data.success) {
         toast.success(res.data.message)
       }

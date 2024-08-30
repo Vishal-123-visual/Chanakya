@@ -29,7 +29,7 @@ export const CourseSubjectContextProvider = ({children}) => {
     },
 
     onError: () => {
-      console.log('error')
+      // console.log('error')
     },
 
     onSuccess: () => {

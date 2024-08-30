@@ -42,7 +42,7 @@ const EditAlertStudentFees = ({studentAlertData, setEditAlertStudentId}) => {
         studentId: params.id,
       })
     } catch (error) {
-      console.log(error.message)
+      //console.log(error.message)
       return
     }
     //console.log('Save button clicked', amountDate, dateTime, status, particulars)
