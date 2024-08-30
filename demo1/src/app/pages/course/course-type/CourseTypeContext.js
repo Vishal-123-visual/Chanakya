@@ -41,7 +41,7 @@ export const CourseTypesContextProvider = ({children}) => {
     },
 
     onError: () => {
-      console.log('error')
+      // console.log('error')
     },
 
     onSuccess: () => {

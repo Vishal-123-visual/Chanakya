@@ -10,7 +10,7 @@ router.post(
   requireSignIn,
   isAdmin,
   asyncHandler(async (req, res, next) => {
-    console.log(req.body);
+    //console.log(req.body);
     try {
       const whatsAppMessageSuggestions = await WhatsAppSuggestionModel.find({});
       whatsAppMessageSuggestions.forEach(

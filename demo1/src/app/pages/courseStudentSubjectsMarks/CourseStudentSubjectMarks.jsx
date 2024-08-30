@@ -98,7 +98,7 @@ const CourseStudentSubjectMarks = () => {
         },
       })
     } catch (error) {
-      console.log(error)
+      //console.log(error)
       toast.error('Error adding marks', {
         style: {
           fontSize: '16px',

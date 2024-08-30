@@ -44,7 +44,7 @@ const AddSubject = ({className, editCourse = {}}) => {
             numberOfYears: numberOfYearsRes?.data?.numberOfYears,
           })
         } catch (error) {
-          console.log(error)
+          //console.log(error)
         }
       } else {
         // If editCourse is not empty, perform edit functionality
@@ -66,7 +66,7 @@ const AddSubject = ({className, editCourse = {}}) => {
             numberOfYears: numberOfYearsRes?.data?.numberOfYears,
           })
         } catch (error) {
-          console.log(error)
+          // console.log(error)
         }
       }
     }

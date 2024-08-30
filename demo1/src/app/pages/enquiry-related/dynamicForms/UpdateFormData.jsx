@@ -52,7 +52,7 @@ const UpdateFormData = () => {
   }, [singleFormValueData])
 
   const handleInputChange = (fieldName, value) => {
-    console.log(value)
+    // console.log(value)
     setFormFieldValues((prevState) => ({
       ...prevState,
       [fieldName]: value,

@@ -30,7 +30,7 @@ const AddCourseEditAndAdd: React.FC = () => {
       try {
         ctx.createAddCourseTypeMutation.mutate(values)
       } catch (error) {
-        console.log(ctx.createAddCourseTypeMutation.error)
+        //console.log(ctx.createAddCourseTypeMutation.error)
       }
       //console.log(values)
       navigate('/course/course-type')
