@@ -2,7 +2,7 @@ import cron from "node-cron";
 import admissionFormModel from "../src/models/addmission_form.models.js";
 import { userModel } from "../src/models/user.models.js";
 import EmailRemainderModel from "../src/models/email-remainder/email.remainder.models.js";
-import sendRemainderFeesStudent from "../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
+import { sendEmail } from "../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 
 const studentInfoToSendMailToStudent = async () => {
   try {
@@ -18,9 +18,11 @@ const studentInfoToSendMailToStudent = async () => {
     const adminUsers = await userModel.find({});
     adminUsers.forEach((user) => {
       if (user.role === "SuperAdmin") {
-        toEmails = toEmails + user.email + ",";
+        toEmails = user.email;
       }
     });
+
+    console.log(currentDate);
 
     // Fetch the email remainder data
     const emailRemainderData = await EmailRemainderModel.findOne({});
@@ -45,17 +47,13 @@ const studentInfoToSendMailToStudent = async () => {
       }
     });
 
-    console.log(toEmails);
+    //console.log(toEmails);
 
     // Send the reminder email using the selected content
     if (toEmails) {
-      console.log(`Sending reminder to: ${toEmails}`);
+      //console.log(`Sending reminder to: ${toEmails}`);
       // Uncomment and adjust the function to send the actual email
-      await sendRemainderFeesStudent(
-        toEmails,
-        "Installment Payment Reminder",
-        emailContent
-      );
+      await sendEmail(toEmails, "Installment Payment Reminder", emailContent);
     }
   } catch (error) {
     console.error("Error fetching student or user data:", error);
@@ -64,7 +62,6 @@ const studentInfoToSendMailToStudent = async () => {
 
 export default function startSchedulerStudentRemainderFeesToStudents() {
   // Schedule the task to run at 9:00 AM on the 15th, 20th, and 28th of each month
-  // cron.schedule("0 9 15,20,28 * *", studentInfoToSendMailToStudent);
-  cron.schedule("* * * * * *", studentInfoToSendMailToStudent);
+  cron.schedule("0 9 15,20,28 * *", studentInfoToSendMailToStudent);
   // console.log("Scheduler for sending remainder fees to students has started.");
 }
