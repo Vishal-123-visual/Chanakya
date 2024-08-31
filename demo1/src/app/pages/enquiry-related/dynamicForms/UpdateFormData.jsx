@@ -64,7 +64,8 @@ const UpdateFormData = () => {
       ...prevState,
       [fieldName]: {
         ...prevState[fieldName],
-        [optionValue]: checked,
+        [optionValue]: checked ? optionValue : '',
+        // [fieldName]: [optionValue],
       },
     }))
   }
@@ -219,13 +220,14 @@ const UpdateFormData = () => {
                                           checked={
                                             formFieldValues[field.name]?.[option.value] || false
                                           }
-                                          onChange={(event) =>
+                                          onChange={(event) => {
+                                            console.log(formFieldValues[field.name]?.[option.value])
                                             handleCheckboxChange(
                                               field.name,
                                               option.value,
                                               event.target.checked
                                             )
-                                          }
+                                          }}
                                           className='form-check-input'
                                         />
                                         <label className='form-check-label'>{option.label}</label>
@@ -246,6 +248,7 @@ const UpdateFormData = () => {
                             </div>
                           </div>
                         )
+
                       case 'radio':
                         return (
                           <div className='col-6' key={index}>

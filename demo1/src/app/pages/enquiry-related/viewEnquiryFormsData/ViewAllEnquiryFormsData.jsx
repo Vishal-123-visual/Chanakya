@@ -215,9 +215,9 @@ export default function ViewAllEnquiryFormsData() {
   ])
 
   const formDataDeleteHandler = (formDataId) => {
-    if (!window.confirm('Are you sure you want to delete this Form Data?')) {
-      return
-    }
+    // if (!window.confirm('Are you sure you want to delete this Form Data?')) {
+    //   return
+    // }
 
     deleteFormDataMutation.mutate(formDataId, {
       onSuccess: () => {
@@ -460,7 +460,11 @@ export default function ViewAllEnquiryFormsData() {
                             return (
                               <>
                                 <td
-                                  onClick={() => navigate(`/update-form-data/${rowData.id}`)}
+                                  onClick={() =>
+                                    fieldData && fieldData.name === 'Name'
+                                      ? navigate(`/update-form-data/${rowData.id}`)
+                                      : ''
+                                  }
                                   key={fieldName}
                                   className='cursor-pointer'
                                 >
