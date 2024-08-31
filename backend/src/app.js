@@ -21,6 +21,7 @@ import customField from "./routes/customField.routes.js";
 import addForms from "./routes/addForms.routes.js";
 import submitForm from "./routes/submitForm.routes.js";
 import reOrderingColumnsAndRows from "./routes/reorderingColumnsAndRows.routes.js";
+import startSchedulerStudentRemainderFeesToStudents from "../cron-jobs/SendRemainderFeesToStudent.cron_job.js";
 const app = express();
 
 // Apply CORS middleware with options
@@ -28,6 +29,8 @@ app.use(cors({ origin: [BACKEND_URL, FRONTEND_URL], credentials: true }));
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+startSchedulerStudentRemainderFeesToStudents();
 
 app.use("/api", userRoutes);
 app.use("/api/addmission_form", addMissionFormRoutes);
@@ -52,7 +55,7 @@ const __dirname = path.resolve();
 app.use("/api/images", express.static(path.join(__dirname + "/images")));
 app.use(express.static(path.join(__dirname, "./build")));
 
-app.use(sendRemainderFeesStudent);
+// app.use(sendRemainderFeesStudent);
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "/build/index.html"));
 });

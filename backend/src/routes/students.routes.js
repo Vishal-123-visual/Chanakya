@@ -49,7 +49,6 @@ router.post(
 router.get(
   "/getStudentAlertStudentPendingFees",
   requireSignIn,
-  sendRemainderFeesStudent,
   getAllStudentsAlertPendingFeesDataController
 );
 router.get(

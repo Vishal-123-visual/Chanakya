@@ -1,4 +1,3 @@
-import asyncHandler from "../../src/middlewares/asyncHandler.js";
 import moment from "moment";
 import { userModel } from "../../src/models/user.models.js";
 import admissionFormModel from "../../src/models/addmission_form.models.js";
@@ -25,6 +24,8 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
     const studentInfo = await admissionFormModel
       .find()
       .populate(["courseName", "companyName"]);
+
+    console.log("students info", studentInfo);
     //console.log(studentInfo);
     for (const student of studentInfo) {
       const installmentExpireDate = moment(
@@ -83,12 +84,11 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
     }
 
     // Proceed to next middleware or route handler
-    next();
+
     //console.log("send mail");
   } catch (error) {
     console.error("Error in sendRemainderFeesStudent:", error);
     // Handle error appropriately, e.g., send response or log further
-    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 };
 
