@@ -16,11 +16,12 @@ import studentGstSuggestionsRoutes from "./routes/studentGstSuggestions.routes.j
 import { BACKEND_URL, FRONTEND_URL } from "./config/config.js";
 import studentIssuesRoutes from "./routes/student.issues.routes.js";
 import completeCourseStudentsRoutes from "./routes/completeCourseStudentsRoutes.routes.js";
-
 import customField from "./routes/customField.routes.js";
 import addForms from "./routes/addForms.routes.js";
 import submitForm from "./routes/submitForm.routes.js";
 import reOrderingColumnsAndRows from "./routes/reorderingColumnsAndRows.routes.js";
+import addTrainer from "./routes/addTrainer.routes.js";
+
 const app = express();
 
 // Apply CORS middleware with options
@@ -46,13 +47,14 @@ app.use("/api/dayBook", dayBookRoutes);
 app.use("/api/custom-field", customField);
 app.use("/api/add-form", addForms);
 app.use("/api/submit-form", submitForm);
+app.use("/api/add-trainer", addTrainer);
 app.use("/api", reOrderingColumnsAndRows);
 
 const __dirname = path.resolve();
 app.use("/api/images", express.static(path.join(__dirname + "/images")));
 app.use(express.static(path.join(__dirname, "./build")));
 
-app.use(sendRemainderFeesStudent);
+// app.use(sendRemainderFeesStudent);
 app.get("/*", (req, res) => {
   res.sendFile(path.join(__dirname, "/build/index.html"));
 });

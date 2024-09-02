@@ -57,7 +57,7 @@ const UpdateAddmission = () => {
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState({})
   const [updateUserId, setUpdateUserId] = useState(location.state)
-  console.log(updateUserId.courseDuration)
+  // console.log(updateUserId.courseDuration)
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
