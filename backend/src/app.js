@@ -22,6 +22,7 @@ import submitForm from "./routes/submitForm.routes.js";
 import reOrderingColumnsAndRows from "./routes/reorderingColumnsAndRows.routes.js";
 import addTrainer from "./routes/addTrainer.routes.js";
 
+import startSchedulerStudentRemainderFeesToStudents from "../cron-jobs/SendRemainderFeesToStudent.cron_job.js";
 const app = express();
 
 // Apply CORS middleware with options
@@ -29,6 +30,8 @@ app.use(cors({ origin: [BACKEND_URL, FRONTEND_URL], credentials: true }));
 
 app.use(express.json({ limit: "20mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+startSchedulerStudentRemainderFeesToStudents();
 
 app.use("/api", userRoutes);
 app.use("/api/addmission_form", addMissionFormRoutes);
