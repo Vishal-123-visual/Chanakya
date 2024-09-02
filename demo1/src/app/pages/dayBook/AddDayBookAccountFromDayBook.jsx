@@ -1,22 +1,15 @@
 import {useNavigate, useParams} from 'react-router-dom'
 import * as Yup from 'yup'
 import {toast} from 'react-toastify'
-import {useCompanyContext} from '../compay/CompanyContext'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {useState} from 'react'
 
-const addAccountSchema = Yup.object().shape({
-  accountName: Yup.string().required('Account Name is required'),
-  accountType: Yup.string().required('Account Type is required'),
-})
-
 const AddDayBookAccountFromDayBook = ({setShowAddAccountBtn}) => {
-  const navigate = useNavigate()
   const params = useParams()
   const [initialValues, setInitialValues] = useState({
     accountName: '',
     accountType: '',
-    companyId: params.id,
+    companyId: params?.id,
   })
 
   const dayBookAccountCtx = usePaymentOptionContextContext()

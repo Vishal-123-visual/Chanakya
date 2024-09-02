@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
-import { toast } from 'react-toastify'
-import { useParams } from 'react-router-dom'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {toast} from 'react-toastify'
+import {useParams} from 'react-router-dom'
 
-const AddDayBookData = ({ totalBalance, companyId }) => {
+const AddDayBookData = ({totalBalance, companyId}) => {
   //console.log(totalBalance, companyId)
   const params = useParams()
   // console.log(params.id)
@@ -25,12 +25,12 @@ const AddDayBookData = ({ totalBalance, companyId }) => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
-    setFormData((prevState) => ({ ...prevState, dayBookDatadate: date }))
+    setFormData((prevState) => ({...prevState, dayBookDatadate: date}))
   }
 
   const handleAccountNameChange = (event) => {
     const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data
-      ?.filter((cp) => cp.companyId === params.id)
+      ?.filter((cp) => cp.companyId === params?.id)
       ?.find((item) => item.accountName === event.target.value)
     setFormData((prevState) => ({
       ...prevState,
@@ -41,7 +41,7 @@ const AddDayBookData = ({ totalBalance, companyId }) => {
   }
 
   const handleInputChange = (event) => {
-    const { name, value } = event.target
+    const {name, value} = event.target
     setFormData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -50,25 +50,25 @@ const AddDayBookData = ({ totalBalance, companyId }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    const { accountName, naretion, debit, credit } = formData
+    const {accountName, naretion, debit, credit} = formData
 
     if (!accountName) {
-      toast.error('Please select account name', { bodyStyle: { fontSize: '18px' } })
+      toast.error('Please select account name', {bodyStyle: {fontSize: '18px'}})
       return
     }
 
     if (!naretion) {
-      toast.error('Please enter narration', { bodyStyle: { fontSize: '18px' } })
+      toast.error('Please enter narration', {bodyStyle: {fontSize: '18px'}})
       return
     }
 
     if (credit === 0 && debit === 0) {
-      toast.error('Please enter either credit or debit', { bodyStyle: { fontSize: '18px' } })
+      toast.error('Please enter either credit or debit', {bodyStyle: {fontSize: '18px'}})
       return
     }
 
     try {
-      dayBookAccountCtx.createDayBookDataMutation.mutate({ ...formData, companyId: params?.id })
+      dayBookAccountCtx.createDayBookDataMutation.mutate({...formData, companyId: params?.id})
       setFormData({
         dayBookDatadate: new Date(),
         accountName: '',

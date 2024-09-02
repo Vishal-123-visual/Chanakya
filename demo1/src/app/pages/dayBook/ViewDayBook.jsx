@@ -1,14 +1,13 @@
-import React, { useState, useEffect, Fragment } from 'react'
-import { KTIcon } from '../../../_metronic/helpers'
-import { useStudentCourseFeesContext } from '../courseFees/StudentCourseFeesContext'
+import React, {useState, useEffect, Fragment} from 'react'
+import {KTIcon} from '../../../_metronic/helpers'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
-import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useCompanyContext } from '../compay/CompanyContext'
-import AddAccountDayBook from './AddAccountDayBook'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {Link, useParams} from 'react-router-dom'
+import {useCompanyContext} from '../compay/CompanyContext'
 import AddDayBookAccountFromDayBook from './AddDayBookAccountFromDayBook'
 import EditDayBookData from './EditDayBookData'
 
@@ -17,12 +16,12 @@ const ViewDayBook = () => {
   const [showAddAccountBtn, setShowAddAccountBtn] = useState(false)
   const [toDate, setToDate] = useState(new Date())
   const [editBayBookDataId, setEditBayBookDataId] = useState(null)
-  const navigate = useNavigate()
   const params = useParams()
-  const [searchValue, setSearchValue] = useState('')
+
   let balanceOfDayBookData = 0
   const companyCTX = useCompanyContext()
-  const result = companyCTX.useGetSingleCompanyData(params.id)
+  const result = companyCTX.useGetSingleCompanyData(params?.id)
+  //console.log(result)
 
   const dayBookDataCtx = usePaymentOptionContextContext()
 
@@ -38,7 +37,7 @@ const ViewDayBook = () => {
 
   const filteredData =
     dayBookDataCtx?.getDayBookDataQuery?.data
-      ?.filter((item) => item?.companyId === params.id)
+      ?.filter((item) => item?.companyId === params?.id)
       ?.filter((item) => {
         const createdAt = moment(item.dayBookDatadate)
         const startDate = moment(fromDate).startOf('day')
@@ -49,11 +48,11 @@ const ViewDayBook = () => {
   // console.log(filteredData)
   //console.log(filteredData[0]?.balance)
 
-  const navigateHandler = (accountId, accountName) => {
-    if (accountName) {
-      navigate(`/daybook/singleAccount/${accountId}`)
-    }
-  }
+  // const navigateHandler = (accountId, accountName) => {
+  //   if (accountName) {
+  //     navigate(`/daybook/singleAccount/${accountId}`)
+  //   }
+  // }
 
   const deleteDayBookSingleDataHandler = (dayBookDataId) => {
     if (window.confirm('Are you sure you want to delete')) {
@@ -156,7 +155,7 @@ const ViewDayBook = () => {
               {!showAddAccountBtn ? (
                 <AddDayBookData
                   key={1}
-                  companyId={params.id}
+                  companyId={params?.id}
                   totalBalance={grossTotalOfDayBookData}
                 />
               ) : (
@@ -188,7 +187,7 @@ const ViewDayBook = () => {
 
                 return (
                   <Fragment key={index}>
-                    {dayBookEntry._id === editBayBookDataId ? (
+                    {dayBookEntry?._id === editBayBookDataId ? (
                       <EditDayBookData
                         setEditBayBookDataId={setEditBayBookDataId}
                         dayBookEntry={dayBookEntry}
@@ -202,7 +201,7 @@ const ViewDayBook = () => {
                         <td className='text-dark fw-bold text-hover-primary fs-6 '>{index + 1}</td>
                         <td
                           className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{ background: '#f2f2ff' }}
+                          style={{background: '#f2f2ff'}}
                         >
                           {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
                         </td>
@@ -210,12 +209,12 @@ const ViewDayBook = () => {
                           {dayBookEntry.rollNo}
                         </td>
                         <td
-                          style={{ background: '#f2f2ff' }}
+                          style={{background: '#f2f2ff'}}
                           className='text-dark fw-bold text-hover-primary fs-6'
                         >
                           {dayBookEntry?.reciptNumber}
                         </td>
-                        <td className='' style={{ background: '#f2f2ff' }}>
+                        <td className='' style={{background: '#f2f2ff'}}>
                           <Link
                             className={
                               dayBookEntry.accountName
@@ -225,11 +224,13 @@ const ViewDayBook = () => {
                             target={'_blank'}
                             to={
                               dayBookEntry.accountName
-                                ? `/daybook/singleAccount/${dayBookEntry.dayBookAccountId}`
-                                : `/profile/student/${dayBookEntry?.studentInfo?._id}`
+                                ? `/daybook/singleAccount/${dayBookEntry?.dayBookAccountId}`
+                                : dayBookEntry.studentInfo?._id
+                                ? `/profile/student/${dayBookEntry?.studentInfo?._id}`
+                                : `/daybook/viewDaybook/${params?.id}`
                             }
                           >
-                            {dayBookEntry.accountName || dayBookEntry.StudentName}
+                            {dayBookEntry?.accountName || dayBookEntry?.StudentName}
                           </Link>
                         </td>
                         <td className='text-dark fw-bold text-hover-primary fs-6'>
@@ -237,7 +238,7 @@ const ViewDayBook = () => {
                         </td>
                         <td
                           className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{ background: '#f2f2ff' }}
+                          style={{background: '#f2f2ff'}}
                         >
                           {dayBookEntry.credit}
                         </td>
@@ -246,7 +247,7 @@ const ViewDayBook = () => {
                         </td>
 
                         <td
-                          style={{ background: '#f2f2ff' }}
+                          style={{background: '#f2f2ff'}}
                           className='text-dark fw-bold text-hover-primary fs-6'
                         >
                           {dayBookEntry?.studentLateFees || 0}
