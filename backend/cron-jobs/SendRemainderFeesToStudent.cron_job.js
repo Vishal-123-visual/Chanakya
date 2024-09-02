@@ -22,7 +22,7 @@ const studentInfoToSendMailToStudent = async () => {
       }
     });
 
-    console.log(currentDate);
+    // console.log(currentDate);
 
     // Fetch the email remainder data
     const emailRemainderData = await EmailRemainderModel.findOne({});
@@ -42,7 +42,12 @@ const studentInfoToSendMailToStudent = async () => {
 
     // Append student emails who have remaining fees to the recipients list
     students.forEach((student) => {
-      if (student.remainingCourseFees && student.remainingCourseFees !== 0) {
+      console.log(student);
+      if (
+        student.remainingCourseFees &&
+        student.remainingCourseFees !== 0 &&
+        student.dropOutStudent === false
+      ) {
         toEmails = `${toEmails},${student?.email}, ${student?.companyName.email},`;
       }
     });
@@ -62,6 +67,7 @@ const studentInfoToSendMailToStudent = async () => {
 
 export default function startSchedulerStudentRemainderFeesToStudents() {
   // Schedule the task to run at 9:00 AM on the 15th, 20th, and 28th of each month
-  cron.schedule("0 9 15,20,28 * *", studentInfoToSendMailToStudent);
+  // cron.schedule("0 9 15,20,28 * *", studentInfoToSendMailToStudent);
+  cron.schedule("* * * * * *", studentInfoToSendMailToStudent);
   // console.log("Scheduler for sending remainder fees to students has started.");
 }
