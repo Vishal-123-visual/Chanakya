@@ -1,8 +1,24 @@
 import { Router } from "express";
-import { addTrainerDataController } from "../controllers/attendance/addTrainers.controllers.js";
+import {
+  addTrainerDataController,
+  deleteSingleTrainerByIdController,
+  getAllTrainersDataController,
+  getSingleTrainerDataByIdController,
+  updateSingleTrainerDataByIdController,
+} from "../controllers/attendance/addTrainers.controllers.js";
+import upload from "../../multer-config/storageConfig.js";
 
 const router = Router();
 
-router.route("/").post(addTrainerDataController);
+router
+  .route("/")
+  .post(upload.single("trainerImage"), addTrainerDataController)
+  .get(getAllTrainersDataController);
+
+router
+  .route("/:id")
+  .get(getSingleTrainerDataByIdController)
+  .put(updateSingleTrainerDataByIdController)
+  .delete(deleteSingleTrainerByIdController);
 
 export default router;

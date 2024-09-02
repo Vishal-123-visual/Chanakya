@@ -1,44 +1,83 @@
-import {useState} from 'react'
-import {toAbsoluteUrl} from '../../../_metronic/helpers'
-import {useAttendanceContext} from './AttendanceContext'
+import { useState, useEffect } from 'react';
+import { toAbsoluteUrl } from '../../../../_metronic/helpers';
+import { useAttendanceContext } from '../AttendanceContext';
+import { useLocation, useParams } from 'react-router-dom';
 
-const TrainerFormField = ({setOpenModal}) => {
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+const BASE_URL_Image = `${BASE_URL}/api/images`;
+
+const TrainerFormField = ({ setOpenModal }) => {
+  const location = useLocation();
   const [formData, setFormData] = useState({
     trainerName: '',
     trainerEmail: '',
     trainerDesignation: '',
-  })
-  const [preview, setPreview] = useState('')
+  });
+  const [preview, setPreview] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [updateUserId, setUpdateUserId] = useState(location.state);
+  const params = useParams()
+  const companyId = params?.id
 
-  const {createTrainerData} = useAttendanceContext()
+  const { createTrainerData } = useAttendanceContext();
+
+  useEffect(() => {
+    if (imageFile) {
+      setPreview(URL.createObjectURL(imageFile));
+    } else {
+      setPreview('');
+    }
+    // Clean up URL object when component unmounts or imageFile changes
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [imageFile]);
 
   const handleInputChange = (e) => {
-    const {name, value} = e.target
+    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }))
-  }
-
-  // console.log(handleInputChange)
+    }));
+  };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    setPreview((prevData) => ({
-      ...prevData,
-      image: file,
-    }))
-  }
+    const file = e.target.files[0];
+    setImageFile(file); // Store the selected image file
+  };
 
   const handleSubmit = () => {
-    createTrainerData.mutate({...formData})
-    setOpenModal(false)
-  }
+    const data = new FormData();
+    data.append('trainerName', formData.trainerName);
+    data.append('trainerEmail', formData.trainerEmail);
+    data.append('trainerDesignation', formData.trainerDesignation);
+    data.append('companyId', companyId)
+    if (imageFile) {
+      data.append('trainerImage', imageFile);
+    }
+
+    // Send the form data and image to the backend
+    createTrainerData.mutate(data, {
+      onSuccess: () => {
+        setOpenModal(false);
+      },
+      onError: (error) => {
+        console.error('Error saving trainer data:', error);
+      },
+    });
+  };
 
   return (
     <form className='dynamic-form'>
       <div className='symbol symbol-100px symbol-lg-160px symbol-fixed position-relative d-flex justify-content-center'>
-        <img src={toAbsoluteUrl('/media/avatars/300-1.jpg')} alt='Metronic' />
+        {updateUserId ? (
+          <img
+            src={preview ? preview : `${BASE_URL_Image}/${updateUserId?.image}`}
+            alt='Metronic'
+          />
+        ) : (
+          <img src={preview ? preview : toAbsoluteUrl('/media/avatars/300-1.jpg')} alt='Metronic' />
+        )}
       </div>
       <label className='col-lg-4 col-form-label required fw-bold fs-6'>Image</label>
       <input
@@ -84,7 +123,7 @@ const TrainerFormField = ({setOpenModal}) => {
         </button>
       </div>
     </form>
-  )
-}
+  );
+};
 
-export default TrainerFormField
+export default TrainerFormField;

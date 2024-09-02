@@ -1,6 +1,6 @@
 import {createContext, useContext} from 'react'
 import {useAuth} from '../../modules/auth'
-import {useMutation, useQueryClient} from 'react-query'
+import {useMutation, useQuery, useQueryClient} from 'react-query'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 
@@ -44,8 +44,82 @@ export const AttendanceContextProvider = ({children}) => {
     },
   })
 
+  const getAllTrainersData = useQuery({
+    queryKey: ['getTrainerData'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/add-trainer`, config)
+        // console.log(response.data.trainers)
+        return response.data.trainers
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
+  const useGetSingleTrainerDataById = (id) => {
+    return useQuery({
+      queryKey: ['getTrainerData', id],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/add-Tainer-/${id}`, config)
+          return response.data
+          //console.log(response)
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
+
+  const updateTrainerDataMutation = useMutation({
+    mutationFn: async (id) => {
+      // Perform the PUT request using the `id`
+      return axios.put(`${BASE_URL}/api/add-trainer/${id.id}`, id, config).then((res) => res.data)
+    },
+
+    onSuccess: () => {
+      toast.success('Form Updated Successfully !!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        toast.error('Error while updating form:', error)
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getTrainerData'],
+        })
+      }
+    },
+  })
+
+  const deleteTrainerDataMutation = useMutation({
+    mutationFn: async (id) => {
+      return axios.delete(`${BASE_URL}/api/add-trainer/${id}`, config).then((res) => res.data)
+    },
+    onSuccess: () => {
+      // toast.success('Form Deleted  Successfully!!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        // toast.error('Error While Deleting Form:', error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getTrainerData']})
+      }
+    },
+  })
+
   return (
-    <attendanceContext.Provider value={{createTrainerData}}>{children}</attendanceContext.Provider>
+    <attendanceContext.Provider
+      value={{
+        createTrainerData,
+        getAllTrainersData,
+        updateTrainerDataMutation,
+        deleteTrainerDataMutation,
+        useGetSingleTrainerDataById,
+      }}
+    >
+      {children}
+    </attendanceContext.Provider>
   )
 }
 
