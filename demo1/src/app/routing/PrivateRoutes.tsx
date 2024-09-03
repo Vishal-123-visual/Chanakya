@@ -62,6 +62,7 @@ import ViewAllEnquiryFormsData from '../pages/enquiry-related/viewEnquiryFormsDa
 import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
 import ProfileForm from '../pages/enquiry-related/dynamicForms/ProfileForm'
 import TrainersList from '../pages/attendance-related/Trainers/TrainersList'
+import EditTrainer from '../pages/attendance-related/Trainers/EditTrainer'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -294,6 +295,7 @@ const PrivateRoutes = () => {
             <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
             {/* *************************************** Attendance Related Routes Starts Here ***************************************  */}
             <Route path='/add-trainer/:id' element={<TrainersList />} />
+            {/* <Route path='/edit-trainer/:id' element={<EditTrainer />} /> */}
             {/* *************************************** Monthly Collection fees start here.************************** */}
             <Route
               path='/monthlyCollectionFees/:id'

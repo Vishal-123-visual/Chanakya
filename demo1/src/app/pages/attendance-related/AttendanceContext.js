@@ -19,7 +19,9 @@ export const AttendanceContextProvider = ({children}) => {
   const createTrainerData = useMutation({
     mutationFn: async (data) => {
       // console.log(data)
-      return axios.post(`${BASE_URL}/api/add-trainer`, data, config)
+      const res = await axios.post(`${BASE_URL}/api/add-trainer`, data, config)
+      // console.log(res)
+      return res.data
     },
     onMutate: () => {
       //console.log('mutate')
@@ -62,11 +64,11 @@ export const AttendanceContextProvider = ({children}) => {
       queryKey: ['getTrainerData', id],
       queryFn: async () => {
         try {
-          const response = await axios.get(`${BASE_URL}/api/add-Tainer-/${id}`, config)
+          const response = await axios.get(`${BASE_URL}/api/add-trainer/${id}`, config)
           return response.data
           //console.log(response)
         } catch (error) {
-          throw new Error('Error fetching student data: ' + error.message)
+          throw new Error('Error fetching trainer data: ' + error.message)
         }
       },
     })
@@ -74,12 +76,14 @@ export const AttendanceContextProvider = ({children}) => {
 
   const updateTrainerDataMutation = useMutation({
     mutationFn: async (id) => {
+      // console.log(id)
       // Perform the PUT request using the `id`
       return axios.put(`${BASE_URL}/api/add-trainer/${id.id}`, id, config).then((res) => res.data)
+      // console.log(res)
     },
 
     onSuccess: () => {
-      toast.success('Form Updated Successfully !!')
+      toast.success('Trainer Updated Successfully !!')
     },
     onSettled: async (_, error) => {
       if (error) {

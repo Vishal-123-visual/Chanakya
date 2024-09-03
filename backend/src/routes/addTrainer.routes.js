@@ -18,7 +18,7 @@ router
 router
   .route("/:id")
   .get(getSingleTrainerDataByIdController)
-  .put(updateSingleTrainerDataByIdController)
+  .put(upload.single("trainerImage"), updateSingleTrainerDataByIdController)
   .delete(deleteSingleTrainerByIdController);
 
 export default router;

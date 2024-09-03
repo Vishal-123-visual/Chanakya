@@ -11,6 +11,8 @@ export const addTrainerDataController = async (req, res, next) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    console.log(req.body, req.file);
+
     // Multer will store the file in req.file
     const trainerImage = req.file ? req.file.filename : null;
 
@@ -19,7 +21,9 @@ export const addTrainerDataController = async (req, res, next) => {
     }
 
     // Check if a trainer with the same email already exists
-    const existingTrainer = await trainerFormModel.findOne({ trainerEmail });
+    const existingTrainer = await trainerFormModel.findOne({
+      trainerEmail: trainerEmail,
+    });
     if (existingTrainer) {
       return res.status(400).json({ message: "Trainer already exists" });
     }
@@ -32,6 +36,7 @@ export const addTrainerDataController = async (req, res, next) => {
       trainerEmail,
       companyId,
     });
+    console.log(newTrainer);
 
     await newTrainer.save();
     res
@@ -48,7 +53,7 @@ export const addTrainerDataController = async (req, res, next) => {
 export const getAllTrainersDataController = async (req, res, next) => {
   try {
     // console.log("Request body:", req.body);
-    const trainers = await trainerFormModel.find({}).populate("trainerImage");
+    const trainers = await trainerFormModel.find({});
     res.status(200).json({ trainers });
   } catch (error) {
     res
@@ -61,9 +66,7 @@ export const getSingleTrainerDataByIdController = async (req, res, next) => {
   try {
     // console.log(req.params);
     const { id } = req.params;
-    const trainer = await trainerFormModel
-      .findById(id)
-      .populate("trainerImage");
+    const trainer = await trainerFormModel.findById(id);
     if (!trainer) {
       return res.status(404).json({ message: "Trainer not found" });
     }
@@ -77,6 +80,7 @@ export const getSingleTrainerDataByIdController = async (req, res, next) => {
 
 export const updateSingleTrainerDataByIdController = async (req, res, next) => {
   try {
+    // console.log(req.body);
     const { id } = req.params;
     const { trainerName, trainerDesignation, trainerEmail } = req.body;
 
@@ -107,6 +111,9 @@ export const updateSingleTrainerDataByIdController = async (req, res, next) => {
           console.log("Old image not found:", oldImagePath);
         }
       }
+
+      // Set the new image filename
+      trainer.trainerImage = req.file.filename;
     }
 
     // Save updated trainer
@@ -118,9 +125,10 @@ export const updateSingleTrainerDataByIdController = async (req, res, next) => {
     });
   } catch (error) {
     console.error("Error updating trainer data:", error);
-    res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error !!" });
+    res.status(500).json({
+      success: false,
+      message: `Internal Server Error ${error.message} !!`,
+    });
   }
 };
 
