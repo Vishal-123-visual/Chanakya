@@ -36,7 +36,7 @@ const studentInfoToSendMailToStudent = async () => {
     } else if (currentDate === 28) {
       emailContent = emailRemainderData.thirdRemainder; // Third remainder content
     } else {
-      console.log("No remainder scheduled for today.");
+      //console.log("No remainder scheduled for today.");
       return; // Exit if today is not one of the scheduled days
     }
 
@@ -67,7 +67,7 @@ const studentInfoToSendMailToStudent = async () => {
 
 export default function startSchedulerStudentRemainderFeesToStudents() {
   // Schedule the task to run at 9:00 AM on the 15th, 20th, and 28th of each month
-  // cron.schedule("0 9 15,20,28 * *", studentInfoToSendMailToStudent);
-  cron.schedule("* * * * * *", studentInfoToSendMailToStudent);
+  cron.schedule("0 9 15,20,28 * *", studentInfoToSendMailToStudent);
+  // cron.schedule("* * * * * *", studentInfoToSendMailToStudent);
   // console.log("Scheduler for sending remainder fees to students has started.");
 }

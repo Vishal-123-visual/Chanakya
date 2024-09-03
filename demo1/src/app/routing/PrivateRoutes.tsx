@@ -1,4 +1,4 @@
-import {lazy, FC, Suspense} from 'react'
+import {FC, Suspense} from 'react'
 import {Route, Routes, Navigate} from 'react-router-dom'
 import {MasterLayout} from '../../_metronic/layout/MasterLayout'
 import TopBarProgress from 'react-topbar-progress-indicator'
@@ -342,16 +342,6 @@ const PrivateRoutes = () => {
                 </>
               }
             />
-            {/* <Route
-              path='/form-settings'
-              element={
-                <>
-                  <div className='d-flex flex-column gap-10'>
-                    <GeneralSettingForm />
-                  </div>
-                </>
-              }
-            /> */}
             <Route
               path='/course-subjects-addMarks'
               element={
