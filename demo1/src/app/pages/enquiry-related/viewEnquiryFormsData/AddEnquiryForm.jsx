@@ -1,18 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useDynamicFieldContext} from '../DynamicFieldsContext'
-import {KTIcon} from '../../../../_metronic/helpers'
-import {toast} from 'react-toastify'
-import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
-import DynamicFields from '../DynamicFields'
-import {useCompanyContext} from '../../compay/CompanyContext'
-import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import { toast } from 'react-toastify'
+import { useCompanyContext } from '../../compay/CompanyContext'
+import { useCustomFormFieldContext } from '../dynamicForms/CustomFormFieldDataContext'
 
 const AddEnquiryForm = () => {
   const params = useParams()
   const navigate = useNavigate()
-  const {deleteFieldMutation} = useDynamicFieldContext()
-  const {getAllCustomFormFieldDataQuery, getAllAddedFormsName} = useDynamicFieldContext()
+  const { deleteFieldMutation } = useDynamicFieldContext()
+  const { getAllCustomFormFieldDataQuery, getAllAddedFormsName } = useDynamicFieldContext()
   const {
     handleSelectChange,
     handleCheckboxChange,
@@ -44,7 +41,7 @@ const AddEnquiryForm = () => {
     handleSelectChange(index, event, fieldName, type)
   }
 
-  const {getCompanyLists} = useCompanyContext()
+  const { getCompanyLists } = useCompanyContext()
 
   const formName = getAllAddedFormsName?.data
     ?.filter((company) => company.companyName === params.id)
@@ -62,8 +59,8 @@ const AddEnquiryForm = () => {
   const companyId =
     companyDataNameAndId.length > 0
       ? getCompanyLists?.data
-          ?.filter((companyNameById) => companyNameById?._id === companyDataNameAndId[0]?.id)
-          .map((company) => company._id)
+        ?.filter((companyNameById) => companyNameById?._id === companyDataNameAndId[0]?.id)
+        .map((company) => company._id)
       : []
 
   const fieldDeleteHandler = (fieldId) => {
@@ -82,9 +79,9 @@ const AddEnquiryForm = () => {
   // console.log(formNameById)
 
   const handleChange = (event) => {
-    const {name, value} = event.target
-    setInput((prevInput) => ({...prevInput, [name]: value}))
-    setFormData((prev) => ({...prev, [name]: value}))
+    const { name, value } = event.target
+    setInput((prevInput) => ({ ...prevInput, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSave = (event) => {
@@ -226,10 +223,9 @@ const AddEnquiryForm = () => {
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
                                     htmlFor={`${field.type}-${index}`}
-                                    className={`col-form-label fw-bold fs-6 ${
-                                      field.mandatory === true ? 'required' : ''
-                                    }`}
-                                    style={{whiteSpace: 'nowrap'}}
+                                    className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                      }`}
+                                    style={{ whiteSpace: 'nowrap' }}
                                   >
                                     {field.name}
                                   </label>
@@ -275,10 +271,9 @@ const AddEnquiryForm = () => {
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
                                     htmlFor={`${field.type}-${index}`}
-                                    className={`col-form-label fw-bold fs-6 ${
-                                      field.mandatory === true ? 'required' : ''
-                                    }`}
-                                    style={{whiteSpace: 'nowrap'}}
+                                    className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                      }`}
+                                    style={{ whiteSpace: 'nowrap' }}
                                   >
                                     {field.name}
                                   </label>
