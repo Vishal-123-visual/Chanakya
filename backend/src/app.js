@@ -16,11 +16,12 @@ import studentGstSuggestionsRoutes from "./routes/studentGstSuggestions.routes.j
 import { BACKEND_URL, FRONTEND_URL } from "./config/config.js";
 import studentIssuesRoutes from "./routes/student.issues.routes.js";
 import completeCourseStudentsRoutes from "./routes/completeCourseStudentsRoutes.routes.js";
-
 import customField from "./routes/customField.routes.js";
 import addForms from "./routes/addForms.routes.js";
 import submitForm from "./routes/submitForm.routes.js";
 import reOrderingColumnsAndRows from "./routes/reorderingColumnsAndRows.routes.js";
+import addTrainer from "./routes/addTrainer.routes.js";
+
 import startSchedulerStudentRemainderFeesToStudents from "../cron-jobs/SendRemainderFeesToStudent.cron_job.js";
 const app = express();
 
@@ -49,6 +50,7 @@ app.use("/api/dayBook", dayBookRoutes);
 app.use("/api/custom-field", customField);
 app.use("/api/add-form", addForms);
 app.use("/api/submit-form", submitForm);
+app.use("/api/add-trainer", addTrainer);
 app.use("/api", reOrderingColumnsAndRows);
 
 const __dirname = path.resolve();

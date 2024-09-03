@@ -97,6 +97,18 @@ const SidebarMenuMain = () => {
                     hasBullet={true}
                   />
                 </SidebarMenuItemWithSub>
+                <SidebarMenuItemWithSub
+                  to='/apps/chat'
+                  title={'Attendance'}
+                  fontIcon='bi-chat-left'
+                  icon='message-text-2'
+                >
+                  <SidebarMenuItem
+                    to={`/add-trainer/${CompanyListData?._id}`}
+                    title='Add Trainers'
+                    hasBullet={true}
+                  />
+                </SidebarMenuItemWithSub>
 
                 <SidebarMenuItem
                   to={`/monthlyCollectionFees/${CompanyListData?._id}`}

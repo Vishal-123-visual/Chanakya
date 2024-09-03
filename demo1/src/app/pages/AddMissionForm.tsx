@@ -63,7 +63,7 @@ const AddMissionForm: React.FC = () => {
 
   const [selectedCourseNameData, setSelectedCourseNameData] = useState<any>({})
   const [updateUserId, setUpdateUserId] = useState<any>(location.state)
-  //console.log(updateUserId)
+  // console.log(updateUserId)
 
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
