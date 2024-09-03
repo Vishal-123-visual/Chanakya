@@ -11,7 +11,7 @@ export const addTrainerDataController = async (req, res, next) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    console.log(req.body, req.file);
+    // console.log(req.body, req.file);
 
     // Multer will store the file in req.file
     const trainerImage = req.file ? req.file.filename : null;
@@ -36,7 +36,7 @@ export const addTrainerDataController = async (req, res, next) => {
       trainerEmail,
       companyId,
     });
-    console.log(newTrainer);
+    // console.log(newTrainer);
 
     await newTrainer.save();
     res

@@ -4,15 +4,15 @@ import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpMod
 import TrainerFormField from './TrainerFormField'
 import { useAttendanceContext } from '../AttendanceContext'
 import { useCompanyContext } from '../../compay/CompanyContext'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import EditTrainer from './EditTrainer'
 
 const BASE_URL_IMAGE = `${process.env.REACT_APP_BASE_URL}/api/images/default-image.jpg`
 
 const TrainersList = () => {
   const [openModal, setOpenModal] = useState(false)
-  const [modalMode, setModalMode] = useState('add') 
-  const [selectedTrainer, setSelectedTrainer] = useState(null) 
+  const [modalMode, setModalMode] = useState('add')
+  const [selectedTrainer, setSelectedTrainer] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const { getAllTrainersData, deleteTrainerDataMutation } = useAttendanceContext()
   const companyCTX = useCompanyContext()
@@ -26,11 +26,11 @@ const TrainersList = () => {
 
   const { data: companyInfo } = companyCTX?.useGetSingleCompanyData(companyId)
 
-  const filteredTrainers = getAllTrainersData?.data?.filter(trainer =>
+  const filteredTrainers = getAllTrainersData?.data?.filter(trainer => searchTerm.trim() === "" ||
     trainer?.trainerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     trainer?.trainerDesignation.toLowerCase().includes(searchTerm.toLowerCase()) ||
     trainer?.trainerEmail.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  ).filter((company) => company.companyId === companyId)
 
   const deleteHandler = (trainerId) => {
     deleteTrainerDataMutation.mutate(trainerId)
@@ -43,7 +43,6 @@ const TrainersList = () => {
   }
 
   const openEditTrainerModal = (trainer) => {
-    // navigate('/edit-trainer', { state: { trainerId: trainer._id } });
     setModalMode('edit')
     setSelectedTrainer(trainer)
     setOpenModal(true)
@@ -92,69 +91,77 @@ const TrainersList = () => {
                   <th className='min-w-100px text-end'>Actions</th>
                 </tr>
               </thead>
-              <tbody>
-                {filteredTrainers?.filter((company) => company.companyId === companyId).map((trainer) => (
-                  <tr key={trainer?._id}>
-                    <td>
-                      <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-                    </td>
-                    <td>
-                      <div className='d-flex align-items-center'>
-                        <div className='symbol symbol-45px me-5'>
-                          <img src={getTrainerImageUrl(trainer?.trainerImage)} alt='image' className='w-100' />
-                        </div>
-                        <div className='d-flex justify-content-start flex-column'>
-                          <div
-                            style={{ cursor: 'pointer' }}
-                            className='text-dark fw-bold text-hover-primary fs-6'
-                          >
-                            {trainer?.trainerName}
+              {filteredTrainers && filteredTrainers.length > 0 ? (
+                <tbody>
+                  {filteredTrainers.map((trainer) => (
+                    <tr key={trainer?._id}>
+                      <td>
+                        <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                      </td>
+                      <td>
+                        <div className='d-flex align-items-center'>
+                          <div className='symbol symbol-45px me-5'>
+                            <img src={getTrainerImageUrl(trainer?.trainerImage)} alt='image' className='w-100' />
+                          </div>
+                          <div className='d-flex justify-content-start flex-column'>
+                            <div
+                              style={{ cursor: 'pointer' }}
+                              className='text-dark fw-bold text-hover-primary fs-6'
+                            >
+                              {trainer?.trainerName}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        style={{ cursor: 'pointer' }}
-                        className='text-dark fw-bold text-hover-primary d-block fs-6'
-                      >
-                        {trainer?.trainerDesignation}
-                      </div>
-                    </td>
-                    <td>
-                      <div
-                        style={{ cursor: 'pointer' }}
-                        className='text-dark fw-bold text-hover-primary d-block fs-6'
-                      >
-                        {trainer?.trainerEmail}
-                      </div>
-                    </td>
-                    <td className='text-end'>
-                      <div className='d-flex flex-column w-100 me-2'>
-                        <div style={{ cursor: 'pointer' }} className='d-flex flex-stack mb-2'>
-                          <span className='text-muted me-2 fs-7 fw-semibold'>{companyInfo?.companyName}</span>
+                      </td>
+                      <td>
+                        <div
+                          style={{ cursor: 'pointer' }}
+                          className='text-dark fw-bold text-hover-primary d-block fs-6'
+                        >
+                          {trainer?.trainerDesignation}
                         </div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className='d-flex justify-content-end flex-shrink-0'>
-                        <button
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                          onClick={() => openEditTrainerModal(trainer)}
+                      </td>
+                      <td>
+                        <div
+                          style={{ cursor: 'pointer' }}
+                          className='text-dark fw-bold text-hover-primary d-block fs-6'
                         >
-                          <KTIcon iconName='pencil' className='fs-3' />
-                        </button>
-                        <button
-                          onClick={() => deleteHandler(trainer?._id)}
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                        >
-                          <KTIcon iconName='trash' className='fs-3' />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+                          {trainer?.trainerEmail}
+                        </div>
+                      </td>
+                      <td className='text-end'>
+                        <div className='d-flex flex-column w-100 me-2'>
+                          <div style={{ cursor: 'pointer' }} className='d-flex flex-stack mb-2'>
+                            <span className='text-muted me-2 fs-7 fw-semibold'>{companyInfo?.companyName}</span>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className='d-flex justify-content-end flex-shrink-0'>
+                          <button
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            onClick={() => openEditTrainerModal(trainer)}
+                          >
+                            <KTIcon iconName='pencil' className='fs-3' />
+                          </button>
+                          <button
+                            onClick={() => deleteHandler(trainer?._id)}
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                          >
+                            <KTIcon iconName='trash' className='fs-3' />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center fw-bold text-muted">
+                    No Trainer Data Found !!
+                  </td>
+                </tr>
+              )}
             </table>
           </div>
         </div>

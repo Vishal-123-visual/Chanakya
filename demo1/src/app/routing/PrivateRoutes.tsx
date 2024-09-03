@@ -53,7 +53,6 @@ import CourseStudentSubjectMarks from '../pages/courseStudentSubjectsMarks/Cours
 import StudentMarksResult from '../pages/courseStudentSubjectsMarks/StudentMarksResult'
 import StudentProfileDetailsPage from '../pages/monthly_collection_fee/StudentProfileDetailsPage'
 import DropOutStudents from '../pages/drop-out-students/DropOutStudents'
-
 import AddForm from '../pages/enquiry-related/dynamicForms/AddForm'
 import EditFormName from '../pages/enquiry-related/dynamicForms/EditFormName'
 import UpdateFormData from '../pages/enquiry-related/dynamicForms/UpdateFormData'
@@ -62,7 +61,7 @@ import ViewAllEnquiryFormsData from '../pages/enquiry-related/viewEnquiryFormsDa
 import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
 import ProfileForm from '../pages/enquiry-related/dynamicForms/ProfileForm'
 import TrainersList from '../pages/attendance-related/Trainers/TrainersList'
-import EditTrainer from '../pages/attendance-related/Trainers/EditTrainer'
+import LabsList from '../pages/attendance-related/Labs/LabsList'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -295,7 +294,7 @@ const PrivateRoutes = () => {
             <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
             {/* *************************************** Attendance Related Routes Starts Here ***************************************  */}
             <Route path='/add-trainer/:id' element={<TrainersList />} />
-            {/* <Route path='/edit-trainer/:id' element={<EditTrainer />} /> */}
+            <Route path='/add-lab/:id' element={<LabsList />} />
             {/* *************************************** Monthly Collection fees start here.************************** */}
             <Route
               path='/monthlyCollectionFees/:id'
