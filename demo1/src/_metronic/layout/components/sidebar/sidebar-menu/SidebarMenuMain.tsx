@@ -108,6 +108,16 @@ const SidebarMenuMain = () => {
                     title='Add Trainers'
                     hasBullet={true}
                   />
+                  <SidebarMenuItem
+                    to={`/add-lab/${CompanyListData?._id}`}
+                    title='Add Labs'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
+                    to={`/add-batch/${CompanyListData?._id}`}
+                    title='Add Batches'
+                    hasBullet={true}
+                  />
                 </SidebarMenuItemWithSub>
 
                 <SidebarMenuItem

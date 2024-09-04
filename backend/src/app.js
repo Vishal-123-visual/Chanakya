@@ -21,8 +21,10 @@ import addForms from "./routes/addForms.routes.js";
 import submitForm from "./routes/submitForm.routes.js";
 import reOrderingColumnsAndRows from "./routes/reorderingColumnsAndRows.routes.js";
 import addTrainer from "./routes/addTrainer.routes.js";
-
+import labRoutes from "./routes/lab.routes.js";
 import startSchedulerStudentRemainderFeesToStudents from "../cron-jobs/SendRemainderFeesToStudent.cron_job.js";
+import batchRoutes from "./routes/batch.routes.js";
+
 const app = express();
 
 // Apply CORS middleware with options
@@ -49,8 +51,10 @@ app.use("/api/student-gst-suggestions", studentGstSuggestionsRoutes);
 app.use("/api/dayBook", dayBookRoutes);
 app.use("/api/custom-field", customField);
 app.use("/api/add-form", addForms);
-app.use("/api/submit-form", submitForm);
 app.use("/api/add-trainer", addTrainer);
+app.use("/api/add-lab", labRoutes);
+app.use("/api/add-batch", batchRoutes);
+app.use("/api/submit-form", submitForm);
 app.use("/api", reOrderingColumnsAndRows);
 
 const __dirname = path.resolve();

@@ -1,36 +1,51 @@
 import { useState } from 'react'
-import { KTIcon, toAbsoluteUrl } from '../../../../_metronic/helpers'
+import { KTIcon } from '../../../../_metronic/helpers'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 import TrainerFormField from './TrainerFormField'
 import { useAttendanceContext } from '../AttendanceContext'
 import { useCompanyContext } from '../../compay/CompanyContext'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import EditTrainer from './EditTrainer'
 
 const BASE_URL_IMAGE = `${process.env.REACT_APP_BASE_URL}/api/images/default-image.jpg`
 
 const TrainersList = () => {
   const [openModal, setOpenModal] = useState(false)
+  const [modalMode, setModalMode] = useState('add')
+  const [selectedTrainer, setSelectedTrainer] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const { getAllTrainersData, deleteTrainerDataMutation } = useAttendanceContext()
   const companyCTX = useCompanyContext()
+  const navigate = useNavigate()
   const params = useParams()
   const companyId = params?.id
-  // Function to handle image URL
+
   const getTrainerImageUrl = (image) => {
     return image ? `${process.env.REACT_APP_BASE_URL}/api/images/${image}` : BASE_URL_IMAGE
   }
 
   const { data: companyInfo } = companyCTX?.useGetSingleCompanyData(companyId)
 
-  // Function to filter trainers based on search term
-  const filteredTrainers = getAllTrainersData?.data?.filter(trainer =>
+  const filteredTrainers = getAllTrainersData?.data?.filter(trainer => searchTerm.trim() === "" ||
     trainer?.trainerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     trainer?.trainerDesignation.toLowerCase().includes(searchTerm.toLowerCase()) ||
     trainer?.trainerEmail.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  ).filter((company) => company.companyId === companyId)
 
   const deleteHandler = (trainerId) => {
     deleteTrainerDataMutation.mutate(trainerId)
+  }
+
+  const openAddTrainerModal = () => {
+    setModalMode('add')
+    setSelectedTrainer(null)
+    setOpenModal(true)
+  }
+
+  const openEditTrainerModal = (trainer) => {
+    setModalMode('edit')
+    setSelectedTrainer(trainer)
+    setOpenModal(true)
   }
 
   return (
@@ -40,9 +55,6 @@ const TrainersList = () => {
         <div className='card-header border-0 pt-5'>
           <h3 className='card-title align-items-start flex-column'>
             <span className='card-label fw-bold fs-3 mb-1'>Trainers</span>
-            <span className='card-label fw-bold fs-3 mb-1'>
-              {/* Students {countStudentCompanyWise?.length} */}
-            </span>
           </h3>
           <div className='search-bar'>
             <input
@@ -53,18 +65,10 @@ const TrainersList = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <div
-            className='card-toolbar'
-            data-bs-toggle='tooltip'
-            data-bs-placement='top'
-            data-bs-trigger='hover'
-            title='Click to add a user'
-          >
+          <div className='card-toolbar'>
             <button
               className='btn btn-sm btn-light-primary'
-              onClick={() => setOpenModal(true)}
-            // data-bs-toggle='modal'
-            // data-bs-target='#kt_modal_invite_friends'
+              onClick={openAddTrainerModal}
             >
               <KTIcon iconName='plus' className='fs-3' />
               Add New Trainer
@@ -76,9 +80,7 @@ const TrainersList = () => {
         <div className='card-body py-3'>
           {/* begin::Table container */}
           <div className='table-responsive'>
-            {/* begin::Table */}
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-              {/* begin::Table head */}
               <thead>
                 <tr className='fw-bold text-muted'>
                   <th className='w-25px'></th>
@@ -89,16 +91,12 @@ const TrainersList = () => {
                   <th className='min-w-100px text-end'>Actions</th>
                 </tr>
               </thead>
-              {/* end::Table head */}
-              {/* begin::Table body */}
-              <tbody>
-                {
-                  filteredTrainers?.filter((company) => company.companyId === companyId).map((trainer) =>
-                    <tr key={trainer._id}>
+              {filteredTrainers && filteredTrainers.length > 0 ? (
+                <tbody>
+                  {filteredTrainers.map((trainer) => (
+                    <tr key={trainer?._id}>
                       <td>
-                        <div className='form-check form-check-sm form-check-custom form-check-solid'>
-                          {/* <input className='form-check-input widget-9-check' type='checkbox' value='1' /> */}
-                        </div>
+                        <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                       </td>
                       <td>
                         <div className='d-flex align-items-center'>
@@ -140,39 +138,40 @@ const TrainersList = () => {
                       </td>
                       <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
-                          <button className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                          <button
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            onClick={() => openEditTrainerModal(trainer)}
+                          >
                             <KTIcon iconName='pencil' className='fs-3' />
                           </button>
-                          <button onClick={deleteHandler(trainer?.id)} className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'>
+                          <button
+                            onClick={() => deleteHandler(trainer?._id)}
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                          >
                             <KTIcon iconName='trash' className='fs-3' />
                           </button>
                         </div>
                       </td>
                     </tr>
-                  )
-                }
+                  ))}
+                </tbody>
+              ) : (
                 <tr>
-                  <td></td>
-                  <td></td>
-                  {/* <td>
-                  <h4 className='text-center'>
-                    No Student Available ? <b>Create Student</b>
-                  </h4>
-              </td> */}
-                  <td></td>
-                  <td></td>
+                  <td colSpan="6" className="text-center fw-bold text-muted">
+                    No Trainer Data Found !!
+                  </td>
                 </tr>
-              </tbody>
-              {/* end::Table body */}
+              )}
             </table>
-            {/* end::Table */}
           </div>
-          {/* end::Table container */}
         </div>
-        {/* begin::Body */}
       </div>
       <PopUpModal show={openModal} handleClose={() => setOpenModal(false)}>
-        <TrainerFormField setOpenModal={setOpenModal} />
+        {modalMode === 'add' ? (
+          <TrainerFormField setOpenModal={setOpenModal} />
+        ) : (
+          <EditTrainer setOpenModal={setOpenModal} trainer={selectedTrainer?._id} />
+        )}
       </PopUpModal>
     </>
   )

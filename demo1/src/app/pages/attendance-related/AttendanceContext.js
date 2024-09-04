@@ -16,10 +16,14 @@ export const AttendanceContextProvider = ({children}) => {
     },
   }
 
+  // Trainers Query's Start here
+
   const createTrainerData = useMutation({
     mutationFn: async (data) => {
       // console.log(data)
-      return axios.post(`${BASE_URL}/api/add-trainer`, data, config)
+      const res = await axios.post(`${BASE_URL}/api/add-trainer`, data, config)
+      // console.log(res)
+      return res.data
     },
     onMutate: () => {
       //console.log('mutate')
@@ -52,7 +56,7 @@ export const AttendanceContextProvider = ({children}) => {
         // console.log(response.data.trainers)
         return response.data.trainers
       } catch (error) {
-        throw new Error('Error fetching student data: ' + error.message)
+        throw new Error('Error fetching Trainer data: ' + error.message)
       }
     },
   })
@@ -62,11 +66,11 @@ export const AttendanceContextProvider = ({children}) => {
       queryKey: ['getTrainerData', id],
       queryFn: async () => {
         try {
-          const response = await axios.get(`${BASE_URL}/api/add-Tainer-/${id}`, config)
+          const response = await axios.get(`${BASE_URL}/api/add-trainer/${id}`, config)
           return response.data
           //console.log(response)
         } catch (error) {
-          throw new Error('Error fetching student data: ' + error.message)
+          throw new Error('Error fetching trainer data: ' + error.message)
         }
       },
     })
@@ -74,16 +78,18 @@ export const AttendanceContextProvider = ({children}) => {
 
   const updateTrainerDataMutation = useMutation({
     mutationFn: async (id) => {
+      // console.log(id)
       // Perform the PUT request using the `id`
       return axios.put(`${BASE_URL}/api/add-trainer/${id.id}`, id, config).then((res) => res.data)
+      // console.log(res)
     },
 
     onSuccess: () => {
-      toast.success('Form Updated Successfully !!')
+      toast.success('Trainer Updated Successfully !!')
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error while updating form:', error)
+        toast.error('Error while updating trainer:', error)
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['getTrainerData'],
@@ -108,14 +114,119 @@ export const AttendanceContextProvider = ({children}) => {
     },
   })
 
+  // Lab Query's Start here
+
+  const createLabData = useMutation({
+    mutationFn: async (data) => {
+      // console.log(data)
+      const res = await axios.post(`${BASE_URL}/api/add-lab`, data, config)
+      // console.log(res)
+      return res.data
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.error(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getLabData']})
+      }
+    },
+  })
+
+  const getAllLabsData = useQuery({
+    queryKey: ['getLabData'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/add-lab`, config)
+        // console.log(response.data.trainers)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
+  const useGetSingleLabDataById = (id) => {
+    return useQuery({
+      queryKey: ['getLabData', id],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/add-lab/${id}`, config)
+          return response.data
+          //console.log(response)
+        } catch (error) {
+          throw new Error('Error fetching lab data: ' + error.message)
+        }
+      },
+    })
+  }
+
+  const updateLabDataMutation = useMutation({
+    mutationFn: async (id) => {
+      // console.log(id)
+      // Perform the PUT request using the `id`
+      return axios.put(`${BASE_URL}/api/add-lab/${id.id}`, id, config).then((res) => res.data)
+      // console.log(res)
+    },
+
+    onSuccess: () => {
+      toast.success('Lab Updated Successfully !!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        toast.error('Error while updating Lab:', error)
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getLabData'],
+        })
+      }
+    },
+  })
+
+  const deleteLabDataMutation = useMutation({
+    mutationFn: async (id) => {
+      return axios.delete(`${BASE_URL}/api/add-lab/${id}`, config).then((res) => res.data)
+    },
+    onSuccess: () => {
+      // toast.success('Form Deleted  Successfully!!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        // toast.error('Error While Deleting Form:', error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getLabData']})
+      }
+    },
+  })
+
   return (
     <attendanceContext.Provider
       value={{
+        // Trainers
         createTrainerData,
         getAllTrainersData,
         updateTrainerDataMutation,
         deleteTrainerDataMutation,
         useGetSingleTrainerDataById,
+        // Labs
+        createLabData,
+        getAllLabsData,
+        useGetSingleLabDataById,
+        updateLabDataMutation,
+        deleteLabDataMutation,
       }}
     >
       {children}
