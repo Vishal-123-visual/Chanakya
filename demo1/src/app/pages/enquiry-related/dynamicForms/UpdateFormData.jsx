@@ -1,12 +1,12 @@
-import {useState, useEffect} from 'react'
-import {toast} from 'react-toastify'
-import {KTIcon} from '../../../../_metronic/helpers'
+import { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { KTIcon } from '../../../../_metronic/helpers'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 import DynamicFields from '../DynamicFields'
-import {useDynamicFieldContext} from '../DynamicFieldsContext'
-import {useCompanyContext} from '../../compay/CompanyContext'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
+import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import { useCompanyContext } from '../../compay/CompanyContext'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useCustomFormFieldContext } from './CustomFormFieldDataContext'
 
 const UpdateFormData = () => {
   const navigate = useNavigate()
@@ -18,11 +18,11 @@ const UpdateFormData = () => {
     getAllAddedFormsName,
     deleteFieldMutation,
   } = useDynamicFieldContext()
-  const {useGetSingleFormValueById, updateFormFieldMutation} = useCustomFormFieldContext()
-  const {getCompanyLists} = useCompanyContext()
+  const { useGetSingleFormValueById, updateFormFieldMutation } = useCustomFormFieldContext()
+  const { getCompanyLists } = useCompanyContext()
   const params = useParams()
 
-  const {data: singleFormValueData} = useGetSingleFormValueById(params.id)
+  const { data: singleFormValueData } = useGetSingleFormValueById(params.id)
   const companyId = singleFormValueData?.companyId
   const formId = singleFormValueData?.formId
 
@@ -133,7 +133,7 @@ const UpdateFormData = () => {
                 {singleFormValueData?.formFiledValue
                   ?.filter((formFieldData) => formFieldData.name !== 'companyId')
                   .map((formFieldData, index) => {
-                    //console.log(formFieldData)
+                    console.log(formFieldData)
                     if (
                       formFieldData.type === 'text' ||
                       formFieldData.type === 'url' ||
@@ -149,7 +149,7 @@ const UpdateFormData = () => {
                               <input
                                 type='text'
                                 className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
-                                placeholder='Name'
+                                placeholder={formFieldData?.name}
                                 name='Name'
                                 value={formFieldValues[formFieldData.name] || ''}
                                 onChange={(e) =>
@@ -174,7 +174,7 @@ const UpdateFormData = () => {
                               <input
                                 type={formFieldData.type === 'date' ? 'date' : 'datetime-local'}
                                 className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
-                                placeholder='Name'
+                                placeholder={formFieldData.name}
                                 name='Name'
                                 value={formFieldValues[formFieldData.name] || ''}
                                 onChange={(e) =>
@@ -198,10 +198,9 @@ const UpdateFormData = () => {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
-                                  }`}
-                                  style={{whiteSpace: 'nowrap'}}
+                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                    }`}
+                                  style={{ whiteSpace: 'nowrap' }}
                                 >
                                   {field.name}
                                 </label>
@@ -232,7 +231,7 @@ const UpdateFormData = () => {
                                         />
                                         <label className='form-check-label'>{option.label}</label>
                                       </div>
-                                      {optionIndex === field.options.length - 1 && (
+                                      {/* {optionIndex === field.options.length - 1 && (
                                         <button
                                           type='button'
                                           className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
@@ -240,7 +239,7 @@ const UpdateFormData = () => {
                                         >
                                           <KTIcon iconName='trash' className='fs-3' />
                                         </button>
-                                      )}
+                                      )} */}
                                     </div>
                                   ))}
                                 </div>
@@ -248,7 +247,6 @@ const UpdateFormData = () => {
                             </div>
                           </div>
                         )
-
                       case 'radio':
                         return (
                           <div className='col-6' key={index}>
@@ -256,10 +254,9 @@ const UpdateFormData = () => {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
-                                  }`}
-                                  style={{whiteSpace: 'nowrap'}}
+                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                    }`}
+                                  style={{ whiteSpace: 'nowrap' }}
                                 >
                                   {field.name}
                                 </label>
@@ -292,7 +289,7 @@ const UpdateFormData = () => {
                                           {option.label}
                                         </label>
                                       </div>
-                                      {optionIndex === field.options.length - 1 && (
+                                      {/* {optionIndex === field.options.length - 1 && (
                                         <button
                                           type='button'
                                           className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
@@ -300,7 +297,7 @@ const UpdateFormData = () => {
                                         >
                                           <KTIcon iconName='trash' className='fs-3' />
                                         </button>
-                                      )}
+                                      )} */}
                                     </div>
                                   ))}
                                 </div>

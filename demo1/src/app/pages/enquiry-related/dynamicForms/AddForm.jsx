@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useDynamicFieldContext} from '../DynamicFieldsContext'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDynamicFieldContext } from '../DynamicFieldsContext'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 // import PopUpModal from ""
 import DynamicFields from '../DynamicFields'
-import {KTIcon} from '../../../../_metronic/helpers'
-import {useCompanyContext} from '../../compay/CompanyContext'
-import {toast} from 'react-toastify'
-import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
+import { KTIcon } from '../../../../_metronic/helpers'
+import { useCompanyContext } from '../../compay/CompanyContext'
+import { toast } from 'react-toastify'
+import { useCustomFormFieldContext } from './CustomFormFieldDataContext'
 import EditDynamicFields from './EditDynamicFields'
 
 export default function AddForm() {
@@ -16,14 +16,14 @@ export default function AddForm() {
   const [modalMode, setModalMode] = useState('add')
   const [selectedField, setSelectedField] = useState(null)
   const [isCreatingNewForm, setIsCreatingNewForm] = useState(false)
-  const {deleteFieldMutation} = useDynamicFieldContext()
+  const { deleteFieldMutation } = useDynamicFieldContext()
   const [isTouched, setIsTouched] = useState(false)
   const navigate = useNavigate()
   const companyCTX = useCompanyContext()
   const params = useParams()
   const companyId = params?.id
 
-  const {data} = companyCTX?.useGetSingleCompanyData(companyId)
+  const { data } = companyCTX?.useGetSingleCompanyData(companyId)
   // console.log(data)
 
   const fieldDeleteHandler = (fieldId) => {
@@ -92,9 +92,9 @@ export default function AddForm() {
   }
 
   const handleChange = (event) => {
-    const {name, value} = event.target
-    setInput((prevInput) => ({...prevInput, [name]: value, newValue: value}))
-    setFormData((prev) => ({...prev, [name]: value}))
+    const { name, value } = event.target
+    setInput((prevInput) => ({ ...prevInput, [name]: value, newValue: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const formList = getAllAddedFormsName?.data?.filter((form) => form?.companyName === data?._id)
@@ -105,7 +105,7 @@ export default function AddForm() {
   const handleSubmit = () => {
     //console.log('form data from ', formData)
     if (inputData.trim() !== '') {
-      createaddFormFieldData.mutate({formName: inputData, companyName: companyId})
+      createaddFormFieldData.mutate({ formName: inputData, companyName: companyId })
       setIsCreatingNewForm(false)
       setInputData('')
       setFieldValues([{}])
@@ -125,20 +125,11 @@ export default function AddForm() {
 
   const formNameAdded =
     getAllAddedFormsName.data &&
-    getAllAddedFormsName.data.length > 0 &&
-    getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].companyName.toString() ===
+      getAllAddedFormsName.data.length > 0 &&
+      getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].companyName.toString() ===
       companyId.toString()
       ? getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].formName
       : ''
-
-  const handleSave = (event) => {
-    event.preventDefault()
-
-    // Save the form data
-    createCustomFromFieldValuesMutation.mutate({...formData, formId, companyId})
-    // navigate(`/view-form-data/${companyId}`)
-    window.location.reload()
-  }
 
   const handleBlur = () => {
     setIsTouched(true)
@@ -164,8 +155,8 @@ export default function AddForm() {
                     autoFocus
                   />
                   {!inputData && isTouched && (
-                    <div className='fv-plugins-message-container'>
-                      <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                    <div className='fv-plugins-message-container mx-5'>
+                      <div className='fv-help-block' style={{ whiteSpace: 'nowrap' }}>
                         Form Name is required!
                       </div>
                     </div>
@@ -173,7 +164,7 @@ export default function AddForm() {
                 </>
               ) : (
                 <>
-                  <h3 style={{fontWeight: 'bolder', margin: 0}}>{formNameAdded}</h3>
+                  <h3 style={{ fontWeight: 'bolder', margin: 0 }}>{formNameAdded}</h3>
                   <button
                     className='btn btn-sm btn-light-primary mx-4 mb-1'
                     onClick={() => navigate(`/update-form/${updateForm._id}`)}
@@ -284,9 +275,8 @@ export default function AddForm() {
       <div className='card mb-5 mb-xl-10'>
         <div className='card-header border-0 cursor-pointer'>
           <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0'>{` ${data?.companyName} -> ${
-              formNameAdded ? `${formNameAdded} ->` : ''
-            } Customized Fields `}</h3>
+            <h3 className='fw-bolder m-0'>{` ${data?.companyName} -> ${formNameAdded ? `${formNameAdded} ->` : ''
+              } Customized Fields `}</h3>
           </div>
         </div>
         <div id='kt_account_profile_details' className='collapse show'>
@@ -305,10 +295,9 @@ export default function AddForm() {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
-                                  }`}
-                                  style={{whiteSpace: 'nowrap'}}
+                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                    }`}
+                                  style={{ whiteSpace: 'nowrap' }}
                                 >
                                   {field.name}
                                 </label>
@@ -372,10 +361,9 @@ export default function AddForm() {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
-                                  }`}
-                                  style={{whiteSpace: 'nowrap'}}
+                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                    }`}
+                                  style={{ whiteSpace: 'nowrap' }}
                                 >
                                   {field.name}
                                 </label>

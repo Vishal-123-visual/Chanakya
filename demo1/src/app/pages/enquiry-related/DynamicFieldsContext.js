@@ -174,7 +174,7 @@ export const DynamicFieldContextProvider = ({children}) => {
       //console.log('settled')
       if (error) {
         //console.log(error)
-        toast.error(error.response.data.error)
+        // toast.error(error.response.data.error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getCustomFormFieldData']})
       }
