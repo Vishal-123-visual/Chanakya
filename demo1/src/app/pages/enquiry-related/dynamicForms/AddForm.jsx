@@ -1,27 +1,29 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import React, {useEffect, useState} from 'react'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useDynamicFieldContext} from '../DynamicFieldsContext'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 // import PopUpModal from ""
-import DynamicFields from "../DynamicFields"
-import { KTIcon } from '../../../../_metronic/helpers'
-import { useCompanyContext } from '../../compay/CompanyContext'
-import { toast } from 'react-toastify'
-import { useCustomFormFieldContext } from './CustomFormFieldDataContext'
+import DynamicFields from '../DynamicFields'
+import {KTIcon} from '../../../../_metronic/helpers'
+import {useCompanyContext} from '../../compay/CompanyContext'
+import {toast} from 'react-toastify'
+import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
+import EditDynamicFields from './EditDynamicFields'
 
 export default function AddForm() {
   const [inputData, setInputData] = useState('')
   const [open, setOpen] = useState(true)
-
+  const [modalMode, setModalMode] = useState('add')
+  const [selectedField, setSelectedField] = useState(null)
   const [isCreatingNewForm, setIsCreatingNewForm] = useState(false)
-  const { deleteFieldMutation } = useDynamicFieldContext()
+  const {deleteFieldMutation} = useDynamicFieldContext()
 
   const navigate = useNavigate()
   const companyCTX = useCompanyContext()
   const params = useParams()
   const companyId = params?.id
 
-  const { data } = companyCTX?.useGetSingleCompanyData(companyId)
+  const {data} = companyCTX?.useGetSingleCompanyData(companyId)
   // console.log(data)
 
   const fieldDeleteHandler = (fieldId) => {
@@ -33,6 +35,18 @@ export default function AddForm() {
         toast.error(`Error deleting form: ${error.message}`)
       },
     })
+  }
+
+  const openAddFieldModal = () => {
+    setModalMode('add')
+    setSelectedField(null)
+    // setOpenModal(true)
+  }
+
+  const openEditFieldModal = (trainer) => {
+    setModalMode('edit')
+    setSelectedField(trainer)
+    // setOpenModal(true)
   }
 
   const {
@@ -78,109 +92,10 @@ export default function AddForm() {
   }
 
   const handleChange = (event) => {
-    const { name, value } = event.target
-    setInput((prevInput) => ({ ...prevInput, [name]: value, newValue: value }))
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    const {name, value} = event.target
+    setInput((prevInput) => ({...prevInput, [name]: value, newValue: value}))
+    setFormData((prev) => ({...prev, [name]: value}))
   }
-  // const [fieldValues, setFieldValues] = useState(
-  //   getAllCustomFormFieldDataQuery?.data?.map((field) => field.value) || []
-  // )
-
-  // useEffect(() => {
-  //   if (getAllCustomFormFieldDataQuery?.data) {
-  //     setFieldValues(getAllCustomFormFieldDataQuery.data.map((field) => field.value))
-  //   }
-  // }, [getAllCustomFormFieldDataQuery?.data])
-
-  // Function to handle the change
-  // const handleInputChange = (index, newValue, fieldName) => {
-  //   const updatedValues = [...fieldValues]
-  //   updatedValues[index] = newValue
-  //   setFieldValues(updatedValues)
-
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     [fieldName]: newValue,
-  //   }))
-  // }
-
-  // const handleOptionChange = (index, event, fieldName) => {
-  //   const {value} = event.target
-  //   const values = [...fields]
-
-  //   // Ensure the name is correctly applied
-  //   const updatedField = {
-  //     ...values[index],
-  //     value: value,
-  //     name: fieldName || values[index].name, // Fallback to existing name if not provided
-  //   }
-
-  //   values[index] = updatedField
-  //   setFields(values)
-
-  //   // Update form data
-  //   setFormData({
-  //     ...formData,
-  //     [updatedField.name]: updatedField.value,
-  //   })
-  // }
-
-  // const handleCheckboxChange = (index, optionValue, event, fieldName) => {
-  //   // console.log('Handling checkbox change...')
-  //   // console.log('Index:', index)
-  //   // console.log('Option Value:', optionValue)
-  //   // console.log('Checked:', event.target.checked)
-  //   // console.log('Name:', fieldName)
-
-  //   const values = [...fields]
-  //   const updatedField = {...values[index], name: fieldName || values[index].name}
-  //   // Ensure updatedField.value is always an array
-  //   if (!Array.isArray(updatedField.value)) {
-  //     updatedField.value = []
-  //   }
-
-  //   if (event.target.checked) {
-  //     // Add optionValue if it is checked
-  //     updatedField.value = [...updatedField.value, optionValue]
-  //   } else {
-  //     // Remove optionValue if it is unchecked
-  //     updatedField.value = updatedField.value.filter((val) => val !== optionValue)
-  //   }
-
-  //   // Update fields state
-  //   values[index] = updatedField
-  //   setFields(values)
-
-  //   // Update formData state
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     [updatedField.name]: updatedField.value,
-  //   }))
-  // }
-
-  // const handleSelectChange = (index, event, fieldName) => {
-  //   const selectedValue = event.target.value
-  //   // console.log('Handling select change...')
-  //   // console.log('Index:', index)
-  //   // console.log('Selected Value:', selectedValue)
-  //   // console.log('Namwe', fieldName)
-
-  //   const values = [...fields]
-  //   const updatedField = {...values[index], name: fieldName || values[index].name}
-
-  //   // Update the value for the select field
-  //   updatedField.value = selectedValue
-
-  //   // Update fields state
-  //   values[index] = updatedField
-  //   setFields(values)
-
-  //   // Update formData state
-  //   setFormData((prevFormData) => ({
-  //     ...prevFormData,
-  //     [updatedField.name]: selectedValue,
-  //   }))
-  // }
 
   const formList = getAllAddedFormsName?.data?.filter((form) => form?.companyName === data?._id)
   const formId = formList?.length > 0 ? formList[formList?.length - 1]?._id : undefined
@@ -190,7 +105,7 @@ export default function AddForm() {
   const handleSubmit = () => {
     //console.log('form data from ', formData)
     if (inputData.trim() !== '') {
-      createaddFormFieldData.mutate({ formName: inputData, companyName: companyId })
+      createaddFormFieldData.mutate({formName: inputData, companyName: companyId})
       setIsCreatingNewForm(false)
       setInputData('')
       setFieldValues([{}])
@@ -210,8 +125,8 @@ export default function AddForm() {
 
   const formNameAdded =
     getAllAddedFormsName.data &&
-      getAllAddedFormsName.data.length > 0 &&
-      getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].companyName.toString() ===
+    getAllAddedFormsName.data.length > 0 &&
+    getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].companyName.toString() ===
       companyId.toString()
       ? getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].formName
       : ''
@@ -220,7 +135,7 @@ export default function AddForm() {
     event.preventDefault()
 
     // Save the form data
-    createCustomFromFieldValuesMutation.mutate({ ...formData, formId, companyId })
+    createCustomFromFieldValuesMutation.mutate({...formData, formId, companyId})
     // navigate(`/view-form-data/${companyId}`)
     window.location.reload()
   }
@@ -242,13 +157,10 @@ export default function AddForm() {
                     onChange={(e) => setInputData(e.target.value)}
                     onClick={() => setOpen(true)}
                   />
-                  <button className='btn btn-sm btn-light-primary mx-4 mb-1' onClick={handleSubmit}>
-                    <KTIcon iconName='plus' className='fs-3' />
-                  </button>
                 </>
               ) : (
                 <>
-                  <h3 style={{ fontWeight: 'bolder', margin: 0 }}>{formNameAdded}</h3>
+                  <h3 style={{fontWeight: 'bolder', margin: 0}}>{formNameAdded}</h3>
                   <button
                     className='btn btn-sm btn-light-primary mx-4 mb-1'
                     onClick={() => navigate(`/update-form/${updateForm._id}`)}
@@ -359,8 +271,9 @@ export default function AddForm() {
       <div className='card mb-5 mb-xl-10'>
         <div className='card-header border-0 cursor-pointer'>
           <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0'>{` ${data?.companyName} -> ${formNameAdded ? `${formNameAdded} ->` : ''
-              } Customized Fields `}</h3>
+            <h3 className='fw-bolder m-0'>{` ${data?.companyName} -> ${
+              formNameAdded ? `${formNameAdded} ->` : ''
+            } Customized Fields `}</h3>
           </div>
         </div>
         <div id='kt_account_profile_details' className='collapse show'>
@@ -379,9 +292,10 @@ export default function AddForm() {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
-                                    }`}
-                                  style={{ whiteSpace: 'nowrap' }}
+                                  className={`col-form-label fw-bold fs-6 ${
+                                    field.mandatory === true ? 'required' : ''
+                                  }`}
+                                  style={{whiteSpace: 'nowrap'}}
                                 >
                                   {field.name}
                                 </label>
@@ -414,13 +328,23 @@ export default function AddForm() {
                                       </div>
                                       {/* Display the delete button only for the last option */}
                                       {optionIndex === field.options.length - 1 && (
-                                        <button
-                                          type='button'
-                                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2'
-                                          onClick={() => fieldDeleteHandler(field._id)}
-                                        >
-                                          <KTIcon iconName='trash' className='fs-3' />
-                                        </button>
+                                        <>
+                                          <a
+                                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                            onClick={() =>
+                                              navigate(`/update-form/${updateForm._id}`)
+                                            }
+                                          >
+                                            <KTIcon iconName='pencil' className='fs-3' />
+                                          </a>
+                                          <a
+                                            type='button'
+                                            className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                            onClick={() => fieldDeleteHandler(field._id)}
+                                          >
+                                            <KTIcon iconName='trash' className='fs-3' />
+                                          </a>
+                                        </>
                                       )}
                                     </div>
                                   ))}
@@ -437,9 +361,10 @@ export default function AddForm() {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
-                                    }`}
-                                  style={{ whiteSpace: 'nowrap' }}
+                                  className={`col-form-label fw-bold fs-6 ${
+                                    field.mandatory === true ? 'required' : ''
+                                  }`}
+                                  style={{whiteSpace: 'nowrap'}}
                                 >
                                   {field.name}
                                 </label>
@@ -478,13 +403,23 @@ export default function AddForm() {
                                       </div>
                                       {/* Display the delete button only for the last option */}
                                       {optionIndex === field.options.length - 1 && (
-                                        <button
-                                          type='button'
-                                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2'
-                                          onClick={() => fieldDeleteHandler(field._id)}
-                                        >
-                                          <KTIcon iconName='trash' className='fs-3' />
-                                        </button>
+                                        <>
+                                          <a
+                                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                            onClick={() =>
+                                              navigate(`/update-form/${updateForm._id}`)
+                                            }
+                                          >
+                                            <KTIcon iconName='pencil' className='fs-3' />
+                                          </a>
+                                          <a
+                                            type='button'
+                                            className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                            onClick={() => fieldDeleteHandler(field._id)}
+                                          >
+                                            <KTIcon iconName='trash' className='fs-3' />
+                                          </a>
+                                        </>
                                       )}
                                     </div>
                                   ))}
@@ -521,13 +456,21 @@ export default function AddForm() {
                                     </option>
                                   ))}
                                 </select>
-                                <button
-                                  type='button'
-                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2'
-                                  onClick={() => fieldDeleteHandler(field._id)}
-                                >
-                                  <KTIcon iconName='trash' className='fs-3' />
-                                </button>
+                                <>
+                                  <a
+                                    className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                    onClick={() => navigate(`/update-form/${updateForm._id}`)}
+                                  >
+                                    <KTIcon iconName='pencil' className='fs-3' />
+                                  </a>
+                                  <a
+                                    type='button'
+                                    className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                    onClick={() => fieldDeleteHandler(field._id)}
+                                  >
+                                    <KTIcon iconName='trash' className='fs-3' />
+                                  </a>
+                                </>
                               </div>
                             </div>
                           </div>
@@ -557,13 +500,21 @@ export default function AddForm() {
                                     )
                                   }
                                 />
-                                <button
-                                  type='button'
-                                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2'
-                                  onClick={() => fieldDeleteHandler(field._id)}
-                                >
-                                  <KTIcon iconName='trash' className='fs-3' />
-                                </button>
+                                <>
+                                  <a
+                                    className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                    onClick={() => setSelectedField(field)}
+                                  >
+                                    <KTIcon iconName='pencil' className='fs-3' />
+                                  </a>
+                                  <a
+                                    type='button'
+                                    className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                    onClick={() => fieldDeleteHandler(field._id)}
+                                  >
+                                    <KTIcon iconName='trash' className='fs-3' />
+                                  </a>
+                                </>
                               </div>
                             </div>
                           </div>
@@ -576,18 +527,30 @@ export default function AddForm() {
           {/* ------------------------------- FOOTER STARTS HERE ------------------------------- */}
           <div className='card card-footer'>
             <div className='d-flex justify-content-between'>
-              <button
-                type='button'
-                className='btn btn-info'
-                onClick={() => setcontextOpenModal(true)}
-              >
-                Add Field
-              </button>
-              <button className='btn btn-primary' onClick={handleSave}>
-                Save
-              </button>
+              {!isCreatingNewForm && formNameAdded ? (
+                <button
+                  type='button'
+                  className='btn btn-info'
+                  onClick={() => setcontextOpenModal(true)}
+                >
+                  Add Field
+                </button>
+              ) : (
+                ''
+              )}
+              {formNameAdded ? (
+                ''
+              ) : (
+                <button className='btn btn-primary' onClick={handleSave}>
+                  Save
+                </button>
+              )}
               <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
-                <DynamicFields companyName={data?._id} formId={formId} />
+                {modalMode === 'add' ? (
+                  <DynamicFields companyName={data?._id} formId={formId} />
+                ) : (
+                  <EditDynamicFields setOpenModal={contextOpenModal} />
+                )}
               </PopUpModal>
             </div>
           </div>

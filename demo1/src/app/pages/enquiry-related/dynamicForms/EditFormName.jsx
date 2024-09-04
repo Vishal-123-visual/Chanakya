@@ -53,9 +53,9 @@ export default function EditFormName() {
               value={formName}
               onChange={(e) => setFormName(e.target.value)}
             />
-            <button className='btn btn-sm btn-light-primary mx-4 mb-1' onClick={handleSubmit}>
+            {/* <button className='btn btn-sm btn-light-primary mx-4 mb-1' >
               <KTIcon iconName='plus' className='fs-3' />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>
@@ -120,7 +120,9 @@ export default function EditFormName() {
           </div>
           <div className='card-footer'>
             <div className='d-flex justify-content-end'>
-              <button className='btn btn-primary'>Save</button>
+              <button className='btn btn-primary' onClick={handleSubmit}>
+                Save
+              </button>
             </div>
           </div>
         </form>

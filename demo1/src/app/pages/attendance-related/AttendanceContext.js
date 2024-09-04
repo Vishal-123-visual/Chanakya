@@ -77,10 +77,13 @@ export const AttendanceContextProvider = ({children}) => {
   }
 
   const updateTrainerDataMutation = useMutation({
-    mutationFn: async (id) => {
-      // console.log(id)
+    mutationFn: async (formData) => {
+      const trainerId = formData.get('id')
+      // console.log(trainerId)
       // Perform the PUT request using the `id`
-      return axios.put(`${BASE_URL}/api/add-trainer/${id.id}`, id, config).then((res) => res.data)
+      return axios
+        .put(`${BASE_URL}/api/add-trainer/${trainerId}`, formData, config)
+        .then((res) => res.data)
       // console.log(res)
     },
 
@@ -176,7 +179,7 @@ export const AttendanceContextProvider = ({children}) => {
 
   const updateLabDataMutation = useMutation({
     mutationFn: async (id) => {
-      // console.log(id)
+      //console.log(id)
       // Perform the PUT request using the `id`
       return axios.put(`${BASE_URL}/api/add-lab/${id.id}`, id, config).then((res) => res.data)
       // console.log(res)

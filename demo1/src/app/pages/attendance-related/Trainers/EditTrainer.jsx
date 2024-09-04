@@ -21,6 +21,8 @@ const EditTrainer = ({trainer, setOpenModal}) => {
     }
   }, [data])
 
+  //console.log('image files ', imageFile)
+
   useEffect(() => {
     if (imageFile) {
       setPreview(URL.createObjectURL(imageFile))
@@ -40,15 +42,15 @@ const EditTrainer = ({trainer, setOpenModal}) => {
   const handleUpdate = async (e) => {
     e.preventDefault()
     try {
-      const trainerImage = imageFile ? imageFile : trainerData?.trainerImage
-      await updateTrainerDataMutation.mutate({
-        trainerName: trainerData?.trainerName,
-        trainerEmail: trainerData?.trainerEmail,
-        trainerDesignation: trainerData?.trainerDesignation,
-        trainerImage: trainerImage || trainerData?.trainerImage,
-        CompanyId: trainerData?.CompanyId,
-        id: trainer, // Ensure this is the correct id
-      })
+      const formData = new FormData()
+      formData.append('traninerName', trainerData?.trainerName)
+      formData.append('trainerEmail', trainerData?.trainerEmail)
+      formData.append('trainerDesignation', trainerData?.trainerDesignation)
+      formData.append('trainerImage', imageFile)
+      formData.append('CompanyId', trainerData?.CompanyId)
+      formData.append('id', trainer)
+      //const trainerImage = imageFile ? imageFile : trainerData?.trainerImage
+      await updateTrainerDataMutation.mutate(formData)
       setOpenModal(false)
     } catch (error) {
       console.error('Error submitting form:', error)

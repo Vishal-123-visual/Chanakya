@@ -478,16 +478,24 @@ const ProfileForm = () => {
           {/* ------------------------------- FOOTER STARTS HERE ------------------------------- */}
           <div className='card card-footer'>
             <div className='d-flex justify-content-between'>
-              <button
-                type='button'
-                className='btn btn-info'
-                onClick={() => setcontextOpenModal(true)}
-              >
-                Add Field
-              </button>
-              <button className='btn btn-primary' onClick={handleSave}>
-                Save
-              </button>
+              {!isCreatingNewForm && formNameAdded ? (
+                <button
+                  type='button'
+                  className='btn btn-info'
+                  onClick={() => setcontextOpenModal(true)}
+                >
+                  Add Field
+                </button>
+              ) : (
+                ''
+              )}
+              {formNameAdded ? (
+                ''
+              ) : (
+                <button className='btn btn-primary' onClick={handleSave}>
+                  Save
+                </button>
+              )}
               <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
                 <DynamicFields formId={data?._id} />
               </PopUpModal>

@@ -1,7 +1,7 @@
 import trainerFormModel from "../../models/attendance/trainer.models.js";
 import path from "path";
 import fs from "fs";
-
+const __dirname = path.resolve();
 export const addTrainerDataController = async (req, res, next) => {
   try {
     const { trainerName, trainerDesignation, trainerEmail, companyId } =
@@ -80,43 +80,36 @@ export const getSingleTrainerDataByIdController = async (req, res, next) => {
 
 export const updateSingleTrainerDataByIdController = async (req, res, next) => {
   try {
-    // console.log(req.body);
+    //console.log(req.file);
     const { id } = req.params;
     const { trainerName, trainerDesignation, trainerEmail } = req.body;
+    console.log(req.body);
 
     const trainer = await trainerFormModel.findById(id);
     if (!trainer) {
       return res.status(404).json({ message: "Trainer not found" });
     }
 
-    // Update trainer information
-    trainer.trainerName = trainerName || trainer.trainerName;
+    trainer.trainerName = req.body.traninerName || trainer.trainerName;
     trainer.trainerDesignation =
       trainerDesignation || trainer.trainerDesignation;
     trainer.trainerEmail = trainerEmail || trainer.trainerEmail;
 
-    // Check if a new image file is provided
     if (req.file) {
-      // Delete old image if it exists
-      if (trainer.trainerImage) {
-        const oldImagePath = path.join(
-          __dirname,
-          "uploads",
-          trainer.trainerImage
-        );
-        if (fs.existsSync(oldImagePath)) {
-          fs.unlinkSync(oldImagePath);
-          console.log("Old image deleted:", oldImagePath);
+      let imagePath = trainer.trainerImage;
+      if (imagePath) {
+        imagePath = path.join(__dirname + `/images/${imagePath}`);
+        if (fs.existsSync(imagePath)) {
+          fs.unlinkSync(imagePath);
         } else {
-          console.log("Old image not found:", oldImagePath);
+          console.log("File does not exist:", imagePath);
         }
       }
-
-      // Set the new image filename
       trainer.trainerImage = req.file.filename;
+    } else {
+      trainer.trainerImage = trainer.trainerImage;
     }
 
-    // Save updated trainer
     await trainer.save();
     res.status(200).json({
       success: true,

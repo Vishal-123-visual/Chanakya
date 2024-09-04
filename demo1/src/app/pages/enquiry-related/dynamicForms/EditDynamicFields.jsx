@@ -1,10 +1,7 @@
-import {ToastContainer, toast} from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
-import './Dynamic.css'
-import {useDynamicFieldContext} from './DynamicFieldsContext'
 import {useParams} from 'react-router-dom'
+import {useDynamicFieldContext} from '../DynamicFieldsContext'
 
-const Dynamic = ({companyName, formId}) => {
+const EditDynamicFields = () => {
   const {
     handleChange,
     handlePropertyChange,
@@ -19,38 +16,15 @@ const Dynamic = ({companyName, formId}) => {
     setNewOption,
     newOptionIndex,
     setNewOptionIndex,
-    createCustomFormFieldData,
-    getAllAddedFormsName,
-    getAllCustomFormFieldDataQuery,
     setOpenModal,
   } = useDynamicFieldContext()
 
   const params = useParams()
-  const singleCompanyId = params.id
 
   const isAddButtonDisabled =
     !fields[0].name ||
     (['select', 'checkbox', 'radio'].includes(fields[0].type) && fields[0].options.length === 0)
 
-  const submitHandler = (e) => {
-    e.preventDefault()
-    createCustomFormFieldData.mutate({...fields[0], companyName: companyName, formId: formId})
-    setFields([
-      {
-        type: 'text',
-        name: '',
-        value: '',
-        mandatory: false,
-        quickCreate: false,
-        keyField: false,
-        headerView: false,
-        options: [],
-      },
-    ])
-    setOpenModal(false)
-  }
-
-  //console.log(fields)
   return (
     <>
       <form className='dynamic-form'>
@@ -281,18 +255,18 @@ const Dynamic = ({companyName, formId}) => {
         </div>
         <div>
           <button
-            onClick={submitHandler}
+            // onClick={submitHandler}
             disabled={!fields[0].name || isAddButtonDisabled}
             type='button'
             className='btn btn-primary'
           >
-            Add
+            Update
           </button>
         </div>
       </form>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   )
 }
 
-export default Dynamic
+export default EditDynamicFields
