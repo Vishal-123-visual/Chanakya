@@ -12,12 +12,12 @@ import EditDynamicFields from './EditDynamicFields'
 
 export default function AddForm() {
   const [inputData, setInputData] = useState('')
-  const [open, setOpen] = useState(true)
+  // const [open, setOpen] = useState(true)
   const [modalMode, setModalMode] = useState('add')
   const [selectedField, setSelectedField] = useState(null)
   const [isCreatingNewForm, setIsCreatingNewForm] = useState(false)
   const {deleteFieldMutation} = useDynamicFieldContext()
-
+  const [isTouched, setIsTouched] = useState(false)
   const navigate = useNavigate()
   const companyCTX = useCompanyContext()
   const params = useParams()
@@ -40,13 +40,13 @@ export default function AddForm() {
   const openAddFieldModal = () => {
     setModalMode('add')
     setSelectedField(null)
-    // setOpenModal(true)
+    setcontextOpenModal(true)
   }
 
   const openEditFieldModal = (trainer) => {
     setModalMode('edit')
     setSelectedField(trainer)
-    // setOpenModal(true)
+    setcontextOpenModal(true)
   }
 
   const {
@@ -140,6 +140,10 @@ export default function AddForm() {
     window.location.reload()
   }
 
+  const handleBlur = () => {
+    setIsTouched(true)
+  }
+
   return (
     <>
       <div className='card mb-5 mb-xl-10'>
@@ -155,8 +159,17 @@ export default function AddForm() {
                     className='form-control form-control-solid mb-3'
                     value={inputData}
                     onChange={(e) => setInputData(e.target.value)}
-                    onClick={() => setOpen(true)}
+                    onClick={() => setIsTouched(true)}
+                    onBlur={handleBlur}
+                    autoFocus
                   />
+                  {!inputData && isTouched && (
+                    <div className='fv-plugins-message-container'>
+                      <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                        Form Name is required!
+                      </div>
+                    </div>
+                  )}
                 </>
               ) : (
                 <>
@@ -331,9 +344,7 @@ export default function AddForm() {
                                         <>
                                           <a
                                             className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                                            onClick={() =>
-                                              navigate(`/update-form/${updateForm._id}`)
-                                            }
+                                            onClick={() => openEditFieldModal(field)}
                                           >
                                             <KTIcon iconName='pencil' className='fs-3' />
                                           </a>
@@ -406,9 +417,7 @@ export default function AddForm() {
                                         <>
                                           <a
                                             className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                                            onClick={() =>
-                                              navigate(`/update-form/${updateForm._id}`)
-                                            }
+                                            onClick={() => openEditFieldModal(field)}
                                           >
                                             <KTIcon iconName='pencil' className='fs-3' />
                                           </a>
@@ -459,7 +468,7 @@ export default function AddForm() {
                                 <>
                                   <a
                                     className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                                    onClick={() => navigate(`/update-form/${updateForm._id}`)}
+                                    onClick={() => openEditFieldModal(field)}
                                   >
                                     <KTIcon iconName='pencil' className='fs-3' />
                                   </a>
@@ -503,7 +512,7 @@ export default function AddForm() {
                                 <>
                                   <a
                                     className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                                    onClick={() => setSelectedField(field)}
+                                    onClick={() => openEditFieldModal(field)}
                                   >
                                     <KTIcon iconName='pencil' className='fs-3' />
                                   </a>
@@ -531,7 +540,7 @@ export default function AddForm() {
                 <button
                   type='button'
                   className='btn btn-info'
-                  onClick={() => setcontextOpenModal(true)}
+                  onClick={() => openAddFieldModal(true)}
                 >
                   Add Field
                 </button>
@@ -541,7 +550,7 @@ export default function AddForm() {
               {formNameAdded ? (
                 ''
               ) : (
-                <button className='btn btn-primary' onClick={handleSave}>
+                <button className='btn btn-primary' onClick={handleSubmit}>
                   Save
                 </button>
               )}
