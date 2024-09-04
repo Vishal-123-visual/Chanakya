@@ -174,7 +174,7 @@ const StudentMarksResult = () => {
                   <tbody>
                     <tr>
                       <td style={{borderRight: '1px solid black'}}>
-                        {studentMarksResultData.state.data[0].studentInfo.rollNumber}
+                        RN-{studentMarksResultData.state.data[0].studentInfo.rollNumber}
                       </td>
                       <td style={{borderRight: '1px solid black'}}>
                         {studentMarksResultData.state.courseType}
@@ -183,7 +183,7 @@ const StudentMarksResult = () => {
                         {studentMarksResultData.state.courseType.split(' ')[0]}
                       </td>
                       <td>
-                        {studentMarksResultData.state.data[0].companyName.companyName}-
+                        CN-
                         {studentMarksResultData.state.data[0].studentInfo.rollNumber}
                       </td>
                     </tr>
@@ -259,23 +259,19 @@ const StudentMarksResult = () => {
                     <tr>
                       <th align='center' className='line'>
                         <br />
-                        THEORY
+                        PRACTICAL
                       </th>
                       <th align='center' className='line'>
                         <br />
-                        IA/
-                        <br />
-                        PR.
+                        THEORY
                       </th>
+
                       <th align='center' className='line'>
                         &nbsp;
                         <br />
                         TOTAL
                       </th>
-                      {/* <th width='12%' align='center' className='line'>
-                        <br />
-                        POSITIONAL GRADE
-                      </th> */}
+                      {/* <th width='12%' align='center' className='line'></th> */}
                     </tr>
                   </thead>
                   <tbody>
@@ -293,11 +289,12 @@ const StudentMarksResult = () => {
                               {marksStudentData.Subjects.fullMarks}
                             </td>
                             <td style={{borderRight: '1px solid black'}} align='center'>
-                              {marksStudentData.theory}
-                            </td>
-                            <td style={{borderRight: '1px solid black'}} align='center'>
                               {marksStudentData.practical}
                             </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.theory}
+                            </td>
+
                             <td align='center'>{marksStudentData.totalMarks}</td>
 
                             {/* <td align='center'>A</td> */}
@@ -323,9 +320,11 @@ const StudentMarksResult = () => {
                 <table width='98%' cellPadding='0' cellSpacing='0' className='stu-details'>
                   <tbody>
                     <tr>
-                      <td width='14%'>DIVISION:</td>
+                      <td width='14%'>
+                        <h1>Grade:</h1>
+                      </td>
                       <td width='21%' className='division'>
-                        First Division
+                        <h1>B</h1>
                       </td>
                       <td width='35%'>&nbsp;</td>
                       <td width='30%' rowSpan='4' align='center' valign='bottom'>
@@ -345,9 +344,9 @@ const StudentMarksResult = () => {
                     </tr>
                     <tr>
                       <td colSpan='2' className='line'>
-                        General Awareness & life skills grade:
+                        &nbsp;
                       </td>
-                      <td>A</td>
+                      <td>&nbsp;</td>
                     </tr>
                     <tr>
                       <td className='line'>&nbsp;</td>
@@ -355,7 +354,13 @@ const StudentMarksResult = () => {
                         <span className='line'>&nbsp;</span>
                       </td>
                       <td rowSpan='2' align='center'>
-                        <img src='/qr code.png' width='20%' alt='qr' title='Website QR' />
+                        <img
+                          src='/VMS.png'
+                          width='
+                        40%'
+                          alt='qr'
+                          title='Website QR'
+                        />
                       </td>
                     </tr>
                     <tr>
