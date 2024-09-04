@@ -12,7 +12,7 @@ const ReadOnlyCourseFee = ({
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
-  //console.log(StudentFee)
+  console.log(StudentFee)
   const {auth, currentUser} = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()
@@ -43,6 +43,8 @@ Thanks,
 Visual Media Academy`
     window.open(url)
   }
+
+  const sendMailToStudentAgainIfNotAccept = () => {}
 
   const formatDate = (date) => {
     // console.log('1717140043978'.length)
@@ -89,11 +91,18 @@ Visual Media Academy`
                 Print Recipt
               </Link>
               <button
+                onClick={() => sendMailToStudentAgainIfNotAccept(StudentFee)}
+                type='button'
+                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+              >
+                <img src='/gmail.png' className='img-thumbnail' alt='gmail' />
+              </button>
+              <button
                 onClick={() => sendDataWhatsappAsMessage()}
                 type='button'
                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
               >
-                <img src='/whatsapp.png' className='img-thumbnail' />
+                <img src='/whatsapp.png' className='img-thumbnail' alt='whatsapp' />
               </button>
             </>
           )}
