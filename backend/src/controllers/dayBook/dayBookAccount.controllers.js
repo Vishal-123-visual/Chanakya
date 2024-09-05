@@ -57,6 +57,7 @@ export const getSingleDayBookAccountController = asyncHandler(
       const daybookAccounts = await DayBookAccountModel.findById(
         req.params.id
       ).populate("companyId");
+
       res.status(200).json(daybookAccounts);
     } catch (error) {
       res.status(500).json({
@@ -151,7 +152,9 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
-    const dayBookData = await DayBookDataModel.find({}).populate("studentInfo");
+    const dayBookData = await DayBookDataModel.find({})
+      .populate("studentInfo")
+      .sort({ dayBookDatadate: 1 });
     res.status(200).json(dayBookData);
   } catch (error) {
     res.status(500).json({
@@ -165,7 +168,7 @@ export const getSingleDayBookDataController = asyncHandler(
       const dayBookData = await DayBookDataModel.find({
         dayBookAccountId: req.params.id,
       }).sort({
-        createdAt: 1,
+        createdAt: -1,
       });
       res.status(200).json(dayBookData);
     } catch (error) {

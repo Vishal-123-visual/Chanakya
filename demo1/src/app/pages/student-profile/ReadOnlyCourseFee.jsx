@@ -1,10 +1,11 @@
 import moment from 'moment'
 import React from 'react'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
-import {useAuth} from '../../modules/auth/core/Auth'
-import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {Link} from 'react-router-dom'
-import {toast} from 'react-toastify'
+import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
+import { useAuth } from '../../modules/auth/core/Auth'
+import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 const ReadOnlyCourseFee = ({
   studentInfoData,
   StudentFee,
@@ -12,8 +13,8 @@ const ReadOnlyCourseFee = ({
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
-  console.log(StudentFee)
-  const {auth, currentUser} = useAuth()
+  // console.log(StudentFee)
+  const { auth, currentUser } = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()
   //console.log(paymentOptionCtx.getPaymentOptionsData.data)
@@ -44,7 +45,17 @@ Visual Media Academy`
     window.open(url)
   }
 
-  const sendMailToStudentAgainIfNotAccept = () => {}
+  const sendMailToStudentAgainIfNotAccept = async (
+    studentData
+  ) => {
+    try {
+      // console.log(studentData)
+      const res = await axios.post("")
+
+    } catch (error) {
+
+    }
+  }
 
   const formatDate = (date) => {
     // console.log('1717140043978'.length)

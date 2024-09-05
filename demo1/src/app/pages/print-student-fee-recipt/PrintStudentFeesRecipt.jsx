@@ -57,8 +57,7 @@ const PrintStudentFeesRecipt = () => {
                       border='0'
                       width='200px'
                       style={{
-                        border: '1px solid black',
-                        borderRadius: '5px',
+                        borderRadius: '2px',
                         display: 'block',
                         width: '200px',
                         maxWidth: '200px',

@@ -1,15 +1,15 @@
-import {useNavigate, useParams} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
-import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import { useNavigate, useParams } from 'react-router-dom'
+import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
+import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
 import moment from 'moment'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
 
 const ShowSingleAccountDayBookData = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
-  const {id} = useParams()
-  const {data, isLoading} = dayBookAccountCtx.useGetSingleDayBookAccountNameDataQuery(id)
-  //console.log('data from single day book account ', data[0], isLoading)
+  const { id } = useParams()
+  const { data, isLoading } = dayBookAccountCtx.useGetSingleDayBookAccountNameDataQuery(id)
+  //console.log('data from single day book account ', data, isLoading)
   const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
   //  console.log(result.data.companyId.companyName)
   let debitAmount = 0
@@ -70,7 +70,7 @@ const ShowSingleAccountDayBookData = () => {
                           </div>
                         </td>
                         <td className='fw-bold'>{index + 1}</td>
-                        <td style={{background: '#f2f2ff'}}>
+                        <td style={{ background: '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {moment(dayBookAccountData?.dayBookDatadate).format('DD-MM-YYYY')}
                           </a>
@@ -80,7 +80,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.accountName}
                           </a>
                         </td>
-                        <td style={{background: '#f2f2ff'}}>
+                        <td style={{ background: '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.naretion}
                           </a>
@@ -90,7 +90,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.credit}
                           </a>
                         </td>
-                        <td style={{background: '#f2f2ff'}}>
+                        <td style={{ background: '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.debit}
                           </a>

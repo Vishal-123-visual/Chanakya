@@ -22,6 +22,8 @@ import sendRemainderFeesStudent from "../../helpers/sendRemainderFees/SendRemain
 
 const router = Router();
 
+router.post("/sendMailStudent", (req, res, next) => {});
+
 router.put(
   "/renewStudentCourseFees/:id",
   requireSignIn,
