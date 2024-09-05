@@ -3,15 +3,43 @@ import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
 import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
 import moment from 'moment'
 import { toast } from 'react-toastify'
+import { useQuery } from 'react-query'
+import { useAuth } from '../../modules/auth'
+import axios from 'axios'
+
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const ShowSingleAccountDayBookData = () => {
+  const { auth } = useAuth()
+  let config = {
+    headers: {
+      Authorization: `Bearer ${auth?.api_token}`,
+    },
+  }
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
   const { id } = useParams()
-  const { data, isLoading } = dayBookAccountCtx.useGetSingleDayBookAccountNameDataQuery(id)
-  //console.log('data from single day book account ', data, isLoading)
-  const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
-  //  console.log(result.data.companyId.companyName)
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['getDayBookDataLists', id],
+    queryFn: async () => {
+      return axios
+        .get(`${BASE_URL}/api/dayBook/singleAccountDayBookLists/${id}`, config)
+        .then((res) => res.data)
+    },
+  })
+
+  // const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
+
+  const result = useQuery({
+    queryKey: ['getDayBookAccountsLists', id],
+    queryFn: async () => {
+      return axios
+        .get(`${BASE_URL}/api/dayBook/singleAccountAccount/${id}`)
+        .then((res) => res.data)
+    },
+  })
+  //console.log(result.data)
   let debitAmount = 0
   let creditAmount = 0
 

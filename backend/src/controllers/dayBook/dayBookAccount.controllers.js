@@ -168,8 +168,9 @@ export const getSingleDayBookDataController = asyncHandler(
       const dayBookData = await DayBookDataModel.find({
         dayBookAccountId: req.params.id,
       }).sort({
-        createdAt: -1,
+        dayBookDatadate: 1,
       });
+      console.log(dayBookData);
       res.status(200).json(dayBookData);
     } catch (error) {
       res.status(500).json({
