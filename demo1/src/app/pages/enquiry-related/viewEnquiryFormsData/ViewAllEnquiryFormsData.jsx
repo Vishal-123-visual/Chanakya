@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
-import {toast} from 'react-toastify'
-import {KTIcon} from '../../../../_metronic/helpers'
-import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useDynamicFieldContext} from '../DynamicFieldsContext'
-import {useCompanyContext} from '../../compay/CompanyContext'
-import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
+import React, { useState, useEffect } from 'react'
+import { toast } from 'react-toastify'
+import { KTIcon } from '../../../../_metronic/helpers'
+import { useCustomFormFieldContext } from '../dynamicForms/CustomFormFieldDataContext'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import { useCompanyContext } from '../../compay/CompanyContext'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)
@@ -48,7 +48,7 @@ export default function ViewAllEnquiryFormsData() {
     deleteReorderedColumnsMutation,
     deleteSingleRowDataMutation,
   } = useCustomFormFieldContext()
-  const {getAllAddedFormsName} = useDynamicFieldContext()
+  const { getAllAddedFormsName } = useDynamicFieldContext()
   const companyCTX = useCompanyContext()
   const params = useParams()
   const companyId = params?.id
@@ -61,7 +61,7 @@ export default function ViewAllEnquiryFormsData() {
   // console.log(useReorderedRowData)
   // console.log(object)
 
-  const {data: companyInfo} = companyCTX?.useGetSingleCompanyData(companyId)
+  const { data: companyInfo } = companyCTX?.useGetSingleCompanyData(companyId)
   const [selectedFormId, setSelectedFormId] = useState('')
   const [filteredData, setFilteredData] = useState([])
   const [formOptions, setFormOptions] = useState([])
@@ -324,7 +324,7 @@ export default function ViewAllEnquiryFormsData() {
   }
 
   const onDragEnd = async (result) => {
-    const {source, destination, type} = result
+    const { source, destination, type } = result
 
     if (!destination) return
 
@@ -471,8 +471,8 @@ export default function ViewAllEnquiryFormsData() {
                                   {fieldData
                                     ? typeof fieldData?.value === 'object'
                                       ? Object.keys(fieldData.value).map((key) => (
-                                          <span key={key}>{fieldData?.value[key]} </span>
-                                        ))
+                                        <span key={key}>{fieldData?.value[key]} </span>
+                                      ))
                                       : fieldData?.value
                                     : ''}
                                 </td>
