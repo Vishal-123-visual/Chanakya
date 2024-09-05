@@ -23,13 +23,6 @@ router.get(
 router
   .route("/allCourseFess")
   .get(requireSignIn, isAdmin, getAllCourseFeesController);
-// router
-//   .route("/nextinstallment")
-//   .get(
-//     requireSignIn,
-//     isAdmin,
-//     getAllStudentCourseFeesNextInstallmentController
-//   );
 
 router
   .route("/:id")

@@ -1,17 +1,45 @@
-import {useNavigate, useParams} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
-import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import { useNavigate, useParams } from 'react-router-dom'
+import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
+import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
 import moment from 'moment'
-import {toast} from 'react-toastify'
+import { toast } from 'react-toastify'
+import { useQuery } from 'react-query'
+import { useAuth } from '../../modules/auth'
+import axios from 'axios'
+
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const ShowSingleAccountDayBookData = () => {
+  const { auth } = useAuth()
+  let config = {
+    headers: {
+      Authorization: `Bearer ${auth?.api_token}`,
+    },
+  }
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
-  const {id} = useParams()
-  const {data, isLoading} = dayBookAccountCtx.useGetSingleDayBookAccountNameDataQuery(id)
-  //console.log('data from single day book account ', data[0], isLoading)
-  const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
-  //  console.log(result.data.companyId.companyName)
+  const { id } = useParams()
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['getDayBookDataLists', id],
+    queryFn: async () => {
+      return axios
+        .get(`${BASE_URL}/api/dayBook/singleAccountDayBookLists/${id}`, config)
+        .then((res) => res.data)
+    },
+  })
+
+  // const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
+
+  const result = useQuery({
+    queryKey: ['getDayBookAccountsLists', id],
+    queryFn: async () => {
+      return axios
+        .get(`${BASE_URL}/api/dayBook/singleAccountAccount/${id}`)
+        .then((res) => res.data)
+    },
+  })
+  //console.log(result.data)
   let debitAmount = 0
   let creditAmount = 0
 
@@ -70,7 +98,7 @@ const ShowSingleAccountDayBookData = () => {
                           </div>
                         </td>
                         <td className='fw-bold'>{index + 1}</td>
-                        <td style={{background: '#f2f2ff'}}>
+                        <td style={{ background: '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {moment(dayBookAccountData?.dayBookDatadate).format('DD-MM-YYYY')}
                           </a>
@@ -80,7 +108,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.accountName}
                           </a>
                         </td>
-                        <td style={{background: '#f2f2ff'}}>
+                        <td style={{ background: '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.naretion}
                           </a>
@@ -90,7 +118,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.credit}
                           </a>
                         </td>
-                        <td style={{background: '#f2f2ff'}}>
+                        <td style={{ background: '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.debit}
                           </a>
