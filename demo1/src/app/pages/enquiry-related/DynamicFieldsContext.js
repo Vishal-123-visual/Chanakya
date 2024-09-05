@@ -243,6 +243,42 @@ export const DynamicFieldContextProvider = ({children}) => {
     },
   })
 
+  const useGetSingleCustomFieldById = (id) => {
+    // console.log(id)
+    return useQuery({
+      queryKey: ['getCustomFormFieldData', id],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/custom-field/${id}`, config)
+          return response.data
+          //console.log(response)
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
+  }
+
+  const updateFieldMutation = useMutation({
+    mutationFn: async (id) => {
+      // Perform the PUT request using the `id`
+      return axios.put(`${BASE_URL}/api/custom-field/${id.id}`, id, config).then((res) => res.data)
+    },
+
+    onSuccess: () => {
+      toast.success('Form Updated Successfully !!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        toast.error('Error while updating form:', error)
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getCustomFormFieldData'],
+        })
+      }
+    },
+  })
+
   const updateFormNameMutation = useMutation({
     mutationFn: async (id) => {
       // Perform the PUT request using the `id`
@@ -345,6 +381,8 @@ export const DynamicFieldContextProvider = ({children}) => {
         updateFormNameMutation,
         deleteFormMutation,
         deleteFieldMutation,
+        useGetSingleCustomFieldById,
+        updateFieldMutation,
       }}
     >
       {children}

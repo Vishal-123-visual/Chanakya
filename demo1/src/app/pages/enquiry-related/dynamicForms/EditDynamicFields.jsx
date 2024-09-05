@@ -1,7 +1,7 @@
 import {useParams} from 'react-router-dom'
 import {useDynamicFieldContext} from '../DynamicFieldsContext'
 
-const EditDynamicFields = () => {
+const EditDynamicFields = ({trainer}) => {
   const {
     handleChange,
     handlePropertyChange,
@@ -16,10 +16,17 @@ const EditDynamicFields = () => {
     setNewOption,
     newOptionIndex,
     setNewOptionIndex,
+    useGetSingleCustomFieldById,
+    updateFieldMutation,
     setOpenModal,
   } = useDynamicFieldContext()
-
   const params = useParams()
+
+  const fieldId = useGetSingleCustomFieldById(trainer._id)
+  const currentField = fieldId?.data?.customField
+  // console.log(fieldId)
+
+  const handleSelectTypeChange = () => {}
 
   const isAddButtonDisabled =
     !fields[0].name ||
@@ -31,10 +38,10 @@ const EditDynamicFields = () => {
         <div className='field-container'>
           <select
             className='form-select form-select-solid form-select-lg'
-            value={fields[0].type}
+            value={currentField?.type || ''}
             onChange={(event) => {
-              handleFieldTypeChange(fields[0], event.target.value)
-              handleFieldTypeChange(0, event.target.value)
+              handleFieldTypeChange(event.target.value)
+              handleFieldTypeChange(event.target.value)
             }}
           >
             <option value='text'>Text Field</option>
@@ -42,7 +49,7 @@ const EditDynamicFields = () => {
             <option value='radio'>Radio</option>
             <option value='select'>Select</option>
             <option value='date'>Date</option>
-            <option value='number'>Number</option>=
+            <option value='number'>Number</option>
             <option value='datetime-local'>DateTime Local</option>
             <option value='textarea'>Textarea</option>
             <option value='url'>URL</option>
@@ -53,83 +60,87 @@ const EditDynamicFields = () => {
             name='name'
             className='form-control form-control-lg form-control-solid'
             placeholder='Field Name'
-            value={fields[0].name}
+            value={currentField?.name || ''}
             onChange={(event) => {
               const values = [...fields]
               values[0].name = event.target.value
               setFields(values)
             }}
           />
-          {fields[0].type === 'text' && (
+
+          {currentField?.type === 'text' && (
             <input
               type='text'
-              name={fields[0]?.name}
+              name={currentField.name}
               className='form-control form-control-lg form-control-solid'
               placeholder='Field Value'
-              value={fields[0]?.value}
+              value={fields[0]?.value || ''}
               onChange={(event) => handleChange(0, event, fields[0].type)}
             />
           )}
-          {fields[0].type === 'checkbox' &&
-            fields[0].options &&
-            fields[0].options.map((option, optionIndex) => (
+
+          {currentField?.type === 'checkbox' &&
+            currentField?.options &&
+            currentField.options.map((option, optionIndex) => (
               <div key={optionIndex} className='position-relative checkbox-option'>
                 <input
                   type='checkbox'
                   id={`checkbox-${0}-${optionIndex}`}
-                  name={fields[0].name}
+                  name={currentField.name}
                   value={option.value}
                   className='form-check-input'
                   checked={Array.isArray(fields[0].value) && fields[0].value.includes(option.value)}
-                  onChange={(event) => handleCheckboxChange(0, option.value, event, fields[0].type)}
+                  onChange={(event) =>
+                    handleCheckboxChange(0, option.value, event, currentField.type)
+                  }
                 />
                 <label htmlFor={`checkbox-${0}-${optionIndex}`}>{option.label}</label>
                 <i
                   className='bi bi-x-circle position-absolute top-0 end-0 m-2 cursor-pointer'
-                  onClick={() => handleRemoveOption(0, optionIndex)}
+                  onClick={() => handleRemoveOption(option._id)}
                 ></i>
               </div>
             ))}
 
-          {fields[0].type === 'radio' &&
-            fields[0].options &&
-            fields[0].options.map((option, optionIndex) => (
+          {currentField?.type === 'radio' &&
+            currentField?.options &&
+            currentField.options.map((option, optionIndex) => (
               <div key={optionIndex} className='position-relative radio-option'>
                 <input
                   type='radio'
                   id={`radio-${0}-${optionIndex}`}
-                  name={fields[0].name}
+                  name={currentField.name}
                   value={option.value}
                   className='form-check-input'
                   checked={fields[0].value === option.value}
-                  onChange={() => handleRadioChange(0, option.value, fields[0].type)}
+                  onChange={() => handleRadioChange(0, option.value, currentField.type)}
                 />
                 <label htmlFor={`radio-${0}-${optionIndex}`}>{option.label}</label>
                 <i
                   className='bi bi-x-circle position-absolute end-0 m-2 cursor-pointer'
-                  onClick={() => handleRemoveOption(0, optionIndex)}
+                  onClick={() => handleRemoveOption(option._id)}
                 ></i>
               </div>
             ))}
 
-          {fields[0].type === 'select' && (
+          {currentField?.type === 'select' && (
             <div>
               <select
-                name={fields[0].name}
+                name={currentField.name}
                 className='form-select form-select-solid form-select-lg'
-                value={fields[0].value}
-                onChange={(event) => handleChange(0, event, fields[0].type)}
+                value={fields[0]?.value || ''}
+                onChange={(event) => handleChange(0, event, currentField.type)}
               >
                 <option value=''>Select an option</option>
-                {fields[0].options &&
-                  fields[0].options.map((option, optionIndex) => (
+                {currentField?.options &&
+                  currentField.options.map((option, optionIndex) => (
                     <option key={optionIndex} value={option.value}>
                       {option.label}
                     </option>
                   ))}
               </select>
               <div className='mt-2'>
-                {fields[0].options.map((option, optionIndex) => (
+                {currentField.options.map((option, optionIndex) => (
                   <div
                     key={optionIndex}
                     className='d-flex justify-content-between align-items-center'
@@ -137,72 +148,78 @@ const EditDynamicFields = () => {
                     <span>{option.label}</span>
                     <i
                       className='bi bi-x-circle cursor-pointer'
-                      onClick={() => handleRemoveOption(0, optionIndex)}
+                      onClick={() => handleRemoveOption(option._id)}
                     ></i>
                   </div>
                 ))}
               </div>
             </div>
           )}
-          {fields[0].type === 'textarea' && (
+
+          {currentField?.type === 'textarea' && (
             <textarea
-              name={fields[0].name}
+              name={currentField.name}
               className='form-control form-control-lg form-control-solid'
               placeholder='Field Value'
-              value={fields[0].value}
-              onChange={(event) => handleChange(0, event, fields[0].type)}
-            />
-          )}
-          {fields[0].type === 'url' && (
-            <input
-              type='url'
-              name={fields[0].name}
-              className='form-control form-control-lg form-control-solid'
-              placeholder='Field Value'
-              value={fields[0].value}
-              onChange={(event) => handleChange(0, event, fields[0].type)}
-            />
-          )}
-          {fields[0].type === 'currency' && (
-            <input
-              type='number'
-              step='0.01'
-              name={fields[0].name}
-              className='form-control form-control-lg form-control-solid'
-              placeholder='Field Value'
-              value={fields[0].value}
-              onChange={(event) => handleChange(0, event, fields[0].type)}
-            />
-          )}
-          {fields[0].type === 'date' && (
-            <input
-              type='date'
-              name={fields[0].name}
-              className='form-control form-control-lg form-control-solid'
-              value={fields[0].value}
-              onChange={(event) => handleChange(0, event, fields[0].type)}
-            />
-          )}
-          {fields[0].type === 'number' && (
-            <input
-              type='number'
-              name={fields[0].name}
-              className='form-control form-control-lg form-control-solid'
-              value={fields[0].value}
-              onChange={(event) => handleChange(0, event, fields[0].type)}
-            />
-          )}
-          {fields[0].type === 'datetime-local' && (
-            <input
-              type='datetime-local'
-              name={fields[0].name}
-              className='form-control form-control-lg form-control-solid'
-              value={fields[0].value}
-              onChange={(event) => handleChange(0, event, fields[0].type)}
+              value={fields[0]?.value || ''}
+              onChange={(event) => handleChange(0, event, currentField.type)}
             />
           )}
 
-          {['checkbox', 'radio', 'select'].includes(fields[0].type) && (
+          {currentField?.type === 'url' && (
+            <input
+              type='url'
+              name={currentField.name}
+              className='form-control form-control-lg form-control-solid'
+              placeholder='Field Value'
+              value={fields[0]?.value || ''}
+              onChange={(event) => handleChange(0, event, currentField.type)}
+            />
+          )}
+
+          {currentField?.type === 'currency' && (
+            <input
+              type='number'
+              step='0.01'
+              name={currentField.name}
+              className='form-control form-control-lg form-control-solid'
+              placeholder='Field Value'
+              value={fields[0]?.value || ''}
+              onChange={(event) => handleChange(0, event, currentField.type)}
+            />
+          )}
+
+          {currentField?.type === 'date' && (
+            <input
+              type='date'
+              name={currentField.name}
+              className='form-control form-control-lg form-control-solid'
+              value={fields[0]?.value || ''}
+              onChange={(event) => handleChange(0, event, currentField.type)}
+            />
+          )}
+
+          {currentField?.type === 'number' && (
+            <input
+              type='number'
+              name={currentField.name}
+              className='form-control form-control-lg form-control-solid'
+              value={fields[0]?.value || ''}
+              onChange={(event) => handleChange(0, event, currentField.type)}
+            />
+          )}
+
+          {currentField?.type === 'datetime-local' && (
+            <input
+              type='datetime-local'
+              name={currentField.name}
+              className='form-control form-control-lg form-control-solid'
+              value={fields[0]?.value || ''}
+              onChange={(event) => handleChange(0, event, currentField.type)}
+            />
+          )}
+
+          {['checkbox', 'radio', 'select'].includes(currentField?.type) && (
             <div>
               <input
                 type='text'
@@ -216,7 +233,7 @@ const EditDynamicFields = () => {
               />
               <button
                 type='button'
-                onClick={() => handleAddOption(0)}
+                onClick={() => handleAddOption(currentField?.options?._id)}
                 className='btn btn-primary mt-2'
               >
                 <i className='bi bi-plus-circle'></i> Add Option
@@ -230,7 +247,7 @@ const EditDynamicFields = () => {
                 <input
                   type='checkbox'
                   id={`mandatory-${0}`}
-                  checked={fields[0].mandatory}
+                  checked={currentField?.mandatory || false}
                   onChange={() => handlePropertyChange(0, 'mandatory')}
                   className='form-check-input'
                 />
@@ -238,33 +255,18 @@ const EditDynamicFields = () => {
                   Mandatory Field
                 </label>
               </div>
-              <div className='form-check'>
-                <input
-                  type='checkbox'
-                  id={`headerView-${0}`}
-                  checked={fields[0].headerView}
-                  onChange={() => handlePropertyChange(0, 'headerView')}
-                  className='form-check-input'
-                />
-                <label htmlFor={`headerView-${0}`} className='form-check-label'>
-                  Header View
-                </label>
-              </div>
             </div>
           </div>
         </div>
-        <div>
-          <button
-            // onClick={submitHandler}
-            disabled={!fields[0].name || isAddButtonDisabled}
-            type='button'
-            className='btn btn-primary'
-          >
-            Update
-          </button>
-        </div>
+
+        <button
+          type='submit'
+          disabled={isAddButtonDisabled}
+          className='btn btn-primary btn-lg mt-4'
+        >
+          Update
+        </button>
       </form>
-      {/* <ToastContainer /> */}
     </>
   )
 }

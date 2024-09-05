@@ -3,6 +3,8 @@ import {
   addCustomFieldController,
   deleteSingleFieldById,
   getAllCustomFieldController,
+  getSingleFieldById,
+  updateCustomFieldController,
 } from "../controllers/customField/customField.controllers.js";
 
 const router = Router();
@@ -12,6 +14,10 @@ router
   .post(addCustomFieldController)
   .get(getAllCustomFieldController);
 
-router.route("/:id").delete(deleteSingleFieldById);
+router
+  .route("/:id")
+  .delete(deleteSingleFieldById)
+  .get(getSingleFieldById)
+  .put(updateCustomFieldController);
 
 export default router;
