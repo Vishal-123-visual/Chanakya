@@ -6,6 +6,10 @@ import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import axios from 'axios'
+
+const BASE_URL = process.env.REACT_APP_BASE_URL
+
+
 const ReadOnlyCourseFee = ({
   studentInfoData,
   StudentFee,
@@ -50,8 +54,16 @@ Visual Media Academy`
   ) => {
     try {
       // console.log(studentData)
-      const res = await axios.post("")
-
+      const res = await axios.post(`${BASE_URL}/api/students/sendMailStudent`, studentData)
+      if (res.data.success) {
+        toast.success(res.data.message, {
+          style: {
+            fontSize: '18px',
+            color: 'white',
+            background: 'black',
+          },
+        })
+      }
     } catch (error) {
 
     }
