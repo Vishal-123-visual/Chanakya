@@ -55,7 +55,7 @@ export const getAllStudentsController = asyncHandler(async (req, res, next) => {
     const users = await admissionFormModel
       .find({})
       .populate(["courseName"])
-      .sort({ createdAt: -1 });
+      .sort({ name: "asc" });
 
     //console.log(users);
 
@@ -101,6 +101,8 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       return; // Added return to exit the function if student is not found
     }
 
+    //console.log(student);
+
     // delete all installments of the payment expiration
     // await PaymentInstallmentTimeExpireModel.deleteMany({
     //   studentInfo: req.params?.id,
@@ -145,7 +147,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       date_of_joining,
       no_of_installments,
     } = req.body;
-    //console.log(req.body);
+    //console.log("req body ", req.body);
 
     // Use || for conditional updates
     student.companyName = req.body.companyName || student.companyName;
@@ -185,7 +187,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
     student.date_of_joining = date_of_joining || student.date_of_joining;
     student.no_of_installments =
       no_of_installments || student.no_of_installments;
-    student.courseDuration = req.body.courseDuration || student.courseDuration;
+    student.courseduration = req.body.courseduration || student?.courseduration;
 
     if (file) {
       let imagePath = student.image;

@@ -579,7 +579,7 @@ const StudentProfileDetailsPage = () => {
                     <div className='col-lg-8 fv-row'>
                       <DatePicker
                         readOnly
-                        selected={studentInfoData?.courseDuration}
+                        selected={studentInfoData?.courseduration}
                         //onChange={(date) => formik.setFieldValue('courseRemainderDuration', date)}
                         dateFormat='dd/MM/yyyy'
                         className='form-control form-control-lg form-control-solid'
