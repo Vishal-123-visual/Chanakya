@@ -6,7 +6,7 @@ export const saveReorderedColumns = async (req, res, next) => {
 
   try {
     if (!companyId || !formId || !reorderedColumns) {
-      console.error("Missing required parameters");
+      // console.error("Missing required parameters");
       return res
         .status(400)
         .json({ success: false, message: "Missing required parameters" });
@@ -24,11 +24,11 @@ export const saveReorderedColumns = async (req, res, next) => {
     let columnData = await Column.findOne({ companyId, formId });
 
     if (!columnData) {
-      console.log("Creating new Column document");
+      // console.log("Creating new Column document");
       // If no document exists, create a new one
       columnData = new Column({ companyId, formId, columns });
     } else {
-      console.log("Updating existing Column document");
+      // console.log("Updating existing Column document");
       // Update the existing document with the new column order
       columnData.columns = columns;
     }
@@ -40,7 +40,7 @@ export const saveReorderedColumns = async (req, res, next) => {
       .status(200)
       .json({ success: true, message: "Columns reordered successfully!" });
   } catch (error) {
-    console.error("Error saving columns:", error); // Log the full error
+    // console.error("Error saving columns:", error); // Log the full error
     res.status(500).json({ success: false, message: "Internal Server Error!" });
   }
 };
@@ -58,7 +58,7 @@ export const getColumns = async (req, res, next) => {
 
     res.status(200).json({ success: true, columnData });
   } catch (error) {
-    console.error("Error fetching columns:", error); // Log the full error
+    // console.error("Error fetching columns:", error); // Log the full error
     res.status(500).json({ success: false, message: "Internal Server Error!" });
   }
 };

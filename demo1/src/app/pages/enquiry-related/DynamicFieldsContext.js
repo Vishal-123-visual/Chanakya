@@ -22,6 +22,9 @@ export const DynamicFieldContextProvider = ({children}) => {
       selectValue: '',
     },
   ])
+
+  // console.log(fields)
+
   const [formName, setFormName] = useState({
     formName: '',
   })
@@ -261,6 +264,7 @@ export const DynamicFieldContextProvider = ({children}) => {
 
   const updateFieldMutation = useMutation({
     mutationFn: async (id) => {
+      console.log('Dynamic Field Context', id)
       // Perform the PUT request using the `id`
       return axios.put(`${BASE_URL}/api/custom-field/${id.id}`, id, config).then((res) => res.data)
     },
@@ -270,7 +274,7 @@ export const DynamicFieldContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error while updating form:', error)
+        //toast.error('Error while updating form:', error)
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['getCustomFormFieldData'],
@@ -290,7 +294,7 @@ export const DynamicFieldContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error while updating form:', error)
+        //toast.error('Error while updating form:', error)
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['getaddFormData'],
@@ -324,7 +328,7 @@ export const DynamicFieldContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error While Deleting the Field !!', error)
+        //toast.error('Error While Deleting the Field !!', error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getCustomFormFieldData']})
       }

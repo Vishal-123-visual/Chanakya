@@ -45,8 +45,8 @@ export const getAllCustomFieldController = async (req, res, next) => {
 
 export const getSingleFieldById = async (req, res, next) => {
   try {
-    // console.log(req.params);
-    // console.log(req.body);
+    console.log("single", req.params);
+    console.log("single", req.body);
     const { id } = req.params;
     const customField = await customFieldModel.findById(id);
     if (!customField) {
@@ -64,35 +64,40 @@ export const getSingleFieldById = async (req, res, next) => {
       .json({ success: false, message: "Internal Server Error!!" });
   }
 };
-
 export const updateCustomFieldController = async (req, res, next) => {
   try {
     const { id } = req.params;
-    // console.log(req.body);
-    const { type, name, value, mandatory, options } = req.body;
+    const { type, name, value, mandatory, options } = req.body.fields;
+    //console.log(req.body.fields);
+
+    // Find the existing custom field
     const customField = await customFieldModel.findById(id);
     if (!customField) {
-      res
+      return res
         .status(404)
-        .json({ message: false, message: "Custom Field not found !!" });
+        .json({ success: false, message: "Custom Field not found" });
     }
+
+    // Update the custom field properties
     customField.type = type || customField.type;
     customField.name = name || customField.name;
     customField.value = value || customField.value;
-    // customField.options = options || customField.options;
     customField.mandatory = mandatory || customField.mandatory;
 
-    // console.log("Optionss:", customField.options);
+    // Update options if provided
+    if (options !== undefined) {
+      customField.options = options;
+    }
 
-    customField.save();
+    // Save the updated custom field
+    await customField.save();
 
     res
       .status(200)
-      .json({ success: true, message: "Field Updated SuccessFully !!" });
+      .json({ success: true, message: "Field Updated Successfully" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: true, message: "Internal Server Error !!" });
+    console.error("Error updating field:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 };
 

@@ -1,18 +1,13 @@
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
 import {useDynamicFieldContext} from '../DynamicFieldsContext'
-import {KTIcon} from '../../../../_metronic/helpers'
-import {toast} from 'react-toastify'
-import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
-import DynamicFields from '../DynamicFields'
 import {useCompanyContext} from '../../compay/CompanyContext'
 import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
 
 const AddEnquiryForm = () => {
+  const [isTouched, setIsTouched] = useState(false)
   const params = useParams()
-  const navigate = useNavigate()
-  const {deleteFieldMutation} = useDynamicFieldContext()
-  const {getAllCustomFormFieldDataQuery, getAllAddedFormsName} = useDynamicFieldContext()
+  const {getAllCustomFormFieldDataQuery, getAllAddedFormsName, fields} = useDynamicFieldContext()
   const {
     handleSelectChange,
     handleCheckboxChange,
@@ -40,9 +35,9 @@ const AddEnquiryForm = () => {
 
   // console.log(selectedFormId)
 
-  const selectChangeHandler = (index, event, fieldName, type) => {
-    handleSelectChange(index, event, fieldName, type)
-  }
+  // const selectChangeHandler = (index, event, fieldName, type) => {
+  //   handleSelectChange(index, event, fieldName, type)
+  // }
 
   const {getCompanyLists} = useCompanyContext()
 
@@ -66,16 +61,6 @@ const AddEnquiryForm = () => {
           .map((company) => company._id)
       : []
 
-  const fieldDeleteHandler = (fieldId) => {
-    deleteFieldMutation.mutate(fieldId, {
-      onSuccess: () => {
-        toast.success('Field deleted successfully!')
-      },
-      onError: (error) => {
-        toast.error(`Error deleting field: ${error.message}`)
-      },
-    })
-  }
   const formNameById = getAllAddedFormsName?.data
     ?.filter((formId) => formId._id === selectedFormId)
     .map((form) => form.formName)
@@ -85,6 +70,10 @@ const AddEnquiryForm = () => {
     const {name, value} = event.target
     setInput((prevInput) => ({...prevInput, [name]: value}))
     setFormData((prev) => ({...prev, [name]: value}))
+  }
+
+  const handleBlur = () => {
+    setIsTouched(true)
   }
 
   const handleSave = (event) => {
@@ -108,17 +97,13 @@ const AddEnquiryForm = () => {
     }
   }, [selectedFormId])
 
+  // const select = fields?.map((value) => value)
+  // console.log(select)
+
   return (
     <>
       <div className='card mb-5 mb-xl-10'>
-        <div
-          className='card-header border-0 cursor-pointer'
-          role='button'
-          data-bs-toggle='collapse'
-          data-bs-target='#kt_account_profile_details'
-          aria-expanded='true'
-          aria-controls='kt_account_profile_details'
-        >
+        <div className='card-header border-0 cursor-pointer'>
           <div className='card-title m-0'>
             <h3 className='fw-bolder m-0 w-5'>{`${companyDataNameAndId[0]?.name} -> ${formNameById}   `}</h3>
           </div>
@@ -154,9 +139,18 @@ const AddEnquiryForm = () => {
                             className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                             placeholder='Name'
                             name='Name'
-                            value={input}
+                            value={input.Name || ''}
+                            onClick={() => setIsTouched(true)}
                             onChange={handleChange}
+                            onBlur={handleBlur}
                           />
+                          {!input.Name && isTouched && (
+                            <div className='fv-plugins-message-container mx-5'>
+                              <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                                Name is required!
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -171,9 +165,18 @@ const AddEnquiryForm = () => {
                             className='form-control form-control-lg form-control-solid'
                             placeholder='Mobile Number'
                             name='Mobile Number'
-                            value={input}
+                            value={input['Mobile Number'] || ''}
                             onChange={handleChange}
+                            onClick={() => setIsTouched(true)}
+                            onBlur={handleBlur}
                           />
+                          {!input['Mobile Number'] && isTouched && (
+                            <div className='fv-plugins-message-container mx-5'>
+                              <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                                Mobile Number is required!
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -189,7 +192,7 @@ const AddEnquiryForm = () => {
                             className='form-control form-control-lg form-control-solid'
                             placeholder='City'
                             name='City'
-                            value={input}
+                            value={input.City || ''}
                             onChange={handleChange}
                           />
                         </div>
@@ -204,9 +207,18 @@ const AddEnquiryForm = () => {
                             className='form-control form-control-lg form-control-solid'
                             placeholder='Email'
                             name='Email'
-                            value={input}
+                            value={input.Email || ''}
                             onChange={handleChange}
+                            onClick={() => setIsTouched(true)}
+                            onBlur={handleBlur}
                           />
+                          {!input.Email && isTouched && (
+                            <div className='fv-plugins-message-container mx-5'>
+                              <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                                Email is required!
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -256,6 +268,8 @@ const AddEnquiryForm = () => {
                                                 field.type
                                               )
                                             }
+                                            onBlur={handleBlur}
+                                            onClick={() => setIsTouched(true)}
                                             className='form-check-input'
                                           />
                                           <label className='form-check-label'>{option.label}</label>
@@ -263,6 +277,18 @@ const AddEnquiryForm = () => {
                                         {/* Display the delete button only for the last option */}
                                       </div>
                                     ))}
+                                    {!field.value === true &&
+                                      field.mandatory === true &&
+                                      isTouched && (
+                                        <div className='fv-plugins-message-container mx-5'>
+                                          <div
+                                            className='fv-help-block'
+                                            style={{whiteSpace: 'nowrap'}}
+                                          >
+                                            {`${field.name} is Required`}
+                                          </div>
+                                        </div>
+                                      )}
                                   </div>
                                 </div>
                               </div>
@@ -306,6 +332,8 @@ const AddEnquiryForm = () => {
                                                 option.value
                                               )
                                             }
+                                            onBlur={handleBlur}
+                                            onClick={() => setIsTouched(true)}
                                             className='form-check-input'
                                           />
                                           <label
@@ -318,42 +346,67 @@ const AddEnquiryForm = () => {
                                         {/* Display the delete button only for the last option */}
                                       </div>
                                     ))}
+                                    {!field.value && field.mandatory === true && isTouched && (
+                                      <div className='fv-plugins-message-container mx-5'>
+                                        <div
+                                          className='fv-help-block'
+                                          style={{whiteSpace: 'nowrap'}}
+                                        >
+                                          {`${field.name} is Required`}
+                                        </div>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                               </div>
                             </div>
                           )
                         case 'select':
-                          // console.log(field)
                           return (
                             <div className='col-6' key={index}>
                               <div className='row mb-6'>
-                                <label className={`col-lg-4 col-form-label fw-bold fs-6 `}>
-                                  <span className={`${field.mandatory === true ? 'required' : ''}`}>
+                                <div className='col-lg-4 d-flex align-items-center'>
+                                  <label
+                                    className={`col-form-label fw-bold fs-6 ${
+                                      field.mandatory ? 'required' : ''
+                                    }`}
+                                  >
                                     {field.name}
-                                  </span>
-                                </label>
-                                <div className='col-lg-8 d-flex align-items-center'>
+                                  </label>
+                                </div>
+                                <div className='col-lg-8 d-flex flex-column'>
                                   <select
                                     id={`${field.type}-${index}`}
                                     name={field.name}
                                     className='form-select form-select-solid form-select-lg flex-grow-1'
                                     value={field.selectValue}
+                                    onBlur={handleBlur}
+                                    onClick={() => setIsTouched(true)}
                                     onChange={(event) => {
-                                      selectChangeHandler(index, event, field.name, field.type)
+                                      // console.log(event.target.value)
+                                      handleSelectChange(index, event, field.name, field.type)
                                     }}
                                   >
                                     <option value=''>Select an option</option>
                                     {field.options.map((option, optionIndex) => (
                                       <option key={optionIndex} value={option.value}>
-                                        {option.value}
+                                        {option.value} {/* Display the option label or value */}
                                       </option>
                                     ))}
                                   </select>
+                                  {/* Error message displayed below the select field */}
+                                  {isTouched && field.mandatory === true && !field.selectValue && (
+                                    <div className='fv-plugins-message-container mt-2'>
+                                      <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                                        {`${field.name} is required!`}
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
                           )
+
                         default:
                           return (
                             <div className='col-6' key={index}>
@@ -378,7 +431,16 @@ const AddEnquiryForm = () => {
                                         field.type
                                       )
                                     }
+                                    onBlur={handleBlur}
+                                    onClick={() => setIsTouched(true)}
                                   />
+                                  {!fieldValues[index] && field.mandatory === true && isTouched && (
+                                    <div className='fv-plugins-message-container mx-5'>
+                                      <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                                        {`${field.name} is Required`}
+                                      </div>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                             </div>
