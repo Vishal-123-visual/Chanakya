@@ -43,6 +43,16 @@ const ShowSingleAccountDayBookData = () => {
   let debitAmount = 0
   let creditAmount = 0
 
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <div className={`card`}>
       {/* begin::Header */}
@@ -98,7 +108,7 @@ const ShowSingleAccountDayBookData = () => {
                           </div>
                         </td>
                         <td className='fw-bold'>{index + 1}</td>
-                        <td style={{ background: '#f2f2ff' }}>
+                        <td style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {moment(dayBookAccountData?.dayBookDatadate).format('DD-MM-YYYY')}
                           </a>
@@ -108,7 +118,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.accountName}
                           </a>
                         </td>
-                        <td style={{ background: '#f2f2ff' }}>
+                        <td style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.naretion}
                           </a>
@@ -118,7 +128,7 @@ const ShowSingleAccountDayBookData = () => {
                             {dayBookAccountData?.credit}
                           </a>
                         </td>
-                        <td style={{ background: '#f2f2ff' }}>
+                        <td style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}>
                           <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                             {dayBookAccountData?.debit}
                           </a>
