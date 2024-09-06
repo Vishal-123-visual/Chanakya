@@ -14,7 +14,7 @@ export const getCourseCompleteStudentsController = asyncHandler(
       const filteredStudents = students.filter((student) => {
         return (
           student.netCourseFees >= student.course_fees &&
-          moment(student?.courseDuration).diff(moment(), "days") === 0
+          moment(student?.courseduration).diff(moment(), "days") === 0
         );
       });
 
