@@ -115,10 +115,7 @@ const admissionFormSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    courseDuration: {
-      type: Date,
-      default: Date.now(),
-    },
+    courseduration: { type: Date, default: () => new Date() },
 
     dropOutStudent: {
       type: Boolean,

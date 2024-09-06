@@ -1,7 +1,28 @@
 import moment from 'moment'
-import {useAdmissionContext} from '../../modules/auth/core/Addmission'
+import { useAdmissionContext } from '../../modules/auth/core/Addmission'
+
+// import KTThemeMode from "../../../../src/"
 
 const DialogAlertPendingStudent = () => {
+  // let mode = KTThemeMode.getMode();
+  // console.log(mode)
+
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
+  document.documentElement.setAttribute('data-bs-theme', themeMode)
+
+  //console.log(themeMode)
+
+
+
   const studentCTX = useAdmissionContext()
   const filteredStudentsAlertData =
     studentCTX.getAllStudentsAlertStudentPendingFeesQuery?.data?.filter(
@@ -12,7 +33,7 @@ const DialogAlertPendingStudent = () => {
   //console.log(filteredStudentsAlertData)
 
   return (
-    <div className='card' style={{backgroundColor: '#f8f9fa'}}>
+    <div className='card' style={{ backgroundColor: themeMode === 'light' ? '#f8f9fa' : 'InfoBackground' }}>
       {/* begin::Header */}
       <div className='card-header border-0'>
         <h3 className='card-title fw-bold text-dark'>Alert Student Pending Fees</h3>
@@ -20,7 +41,7 @@ const DialogAlertPendingStudent = () => {
       </div>
       {/* end::Header */}
       {/* begin::Body */}
-      <div className='card-body pt-2 overflow-y-scroll' style={{maxHeight: '300px'}}>
+      <div className='card-body pt-2 overflow-y-scroll' style={{ maxHeight: '300px' }}>
         {filteredStudentsAlertData?.length === 0 ? (
           <div className=''>No Pending Alert Student Available</div>
         ) : (

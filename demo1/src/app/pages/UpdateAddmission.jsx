@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-calendar/dist/Calendar.css'
 
 import * as Yup from 'yup'
-import {useFormik} from 'formik'
-import {useAdmissionContext} from '../modules/auth/core/Addmission'
-import {useLocation, useNavigate, useParams} from 'react-router-dom'
-import {toAbsoluteUrl} from '../../_metronic/helpers'
-import {useCourseContext} from './course/CourseContext'
-import {useCompanyContext} from './compay/CompanyContext'
-import {toast} from 'react-toastify'
+import { useFormik } from 'formik'
+import { useAdmissionContext } from '../modules/auth/core/Addmission'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { toAbsoluteUrl } from '../../_metronic/helpers'
+import { useCourseContext } from './course/CourseContext'
+import { useCompanyContext } from './compay/CompanyContext'
+import { toast } from 'react-toastify'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
@@ -26,7 +26,7 @@ const addmissionFormSchema = Yup.object().shape({
   present_address: Yup.string().required('Present Address is required!'),
   //permanent_address: Yup.string().required('Permanent Address is required!'),
   date_of_birth: Yup.string().required('Date of birth is required!'),
-  courseDuration: Yup.string(),
+  courseduration: Yup.string(),
   city: Yup.string().required('city is required!'),
   email: Yup.string().required('email is required!'),
   // student_status: Yup.string().required('Student status is required!'),
@@ -64,7 +64,7 @@ const UpdateAddmission = () => {
 
   const params = useParams()
   //console.log(params)
-  const {data} = companyCTX?.useGetSingleCompanyData(
+  const { data } = companyCTX?.useGetSingleCompanyData(
     updateUserId === null ? params?.id : updateUserId?.companyName
   )
 
@@ -610,9 +610,9 @@ const UpdateAddmission = () => {
 
                     <div className='col-lg-8 fv-row'>
                       <DatePicker
-                        selected={formik.values.courseDuration}
+                        selected={formik.values.courseduration}
                         //selected={studentInfoData?.courseDuration}
-                        onChange={(date) => formik.setFieldValue('courseDuration', date)}
+                        onChange={(date) => formik.setFieldValue('courseduration', date)}
                         dateFormat='dd/MM/yyyy'
                         className='form-control form-control-lg form-control-solid'
                         placeholderText='DD/MM/YYYY'
@@ -620,36 +620,6 @@ const UpdateAddmission = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* <div className='col-6 mt-5'>
-                  <div className='row mb-6'>
-                    <label className='col-lg-4 col-form-label  fw-bold fs-6'>
-                      Student Status
-                    </label>
-
-                    <div className='col-lg-8 fv-row'>
-                      <select
-                        className='form-select form-select-solid form-select-lg'
-                        onChange={(e) => {
-                          formik.getFieldProps('student_status').onChange(e)
-                          // studentStatusHandler(e)
-                        }}
-                        value={formik.values.student_status}
-                        id='student_status'
-                        name='student_status'
-                      >
-                        <option value=''>--select--</option>
-                        <option value='GST'>GST</option>
-                        <option value='NOGST'>NO GST</option>
-                      </select>
-                      {formik.touched.student_status && formik.errors.student_status && (
-                        <div className='fv-plugins-message-container'>
-                          <div className='fv-help-block'>{formik.errors.student_status}</div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div> */}
               </div>
 
               {/* ---------------------------COURSE END HERE ----------------------- */}
@@ -796,7 +766,7 @@ const UpdateAddmission = () => {
                         name='no_of_installments'
                       >
                         <option value=''>-select-</option>
-                        {Array.from({length: 60}, (_, index) => (
+                        {Array.from({ length: 60 }, (_, index) => (
                           <option key={index} value={index}>
                             {index}
                           </option>
@@ -837,7 +807,7 @@ const UpdateAddmission = () => {
                 {!context.createStudentMutation.isLoading &&
                   (updateUserId ? 'Save Changes' : 'Submit')}
                 {context.createStudentMutation.loading && (
-                  <span className='indicator-progress' style={{display: 'block'}}>
+                  <span className='indicator-progress' style={{ display: 'block' }}>
                     Please wait...{' '}
                     <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
                   </span>
