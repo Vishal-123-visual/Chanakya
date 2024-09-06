@@ -75,6 +75,9 @@ export const createCourseFeesController = asyncHandler(
 
       // generate the recipt number from
       let reciptNumber;
+      const currentCompany = await CompanyModels.findById(
+        student.companyName._id
+      );
       if (student.companyName.reciptNumber) {
         reciptNumber = student.companyName.reciptNumber;
       }
@@ -82,10 +85,19 @@ export const createCourseFeesController = asyncHandler(
       const alreadyExistsReciptNumberInCourseFees =
         await CourseFeesModel.findOne({ reciptNumber: reciptNumber });
       if (alreadyExistsReciptNumberInCourseFees) {
-        return res.status(404).json({
-          success: false,
-          error: `Already Exists this recipt number ${reciptNumber}.to solve this problem you have to increase the recipt number by 1 from manage company`,
-        });
+        // return res.status(404).json({
+        //   success: false,
+        //   error: `Already Exists this recipt number ${reciptNumber}.to solve this problem you have to increase the recipt number by 1 from manage company`,
+        // });
+        currentCompany.reciptNumber = `${reciptNumber.split("-")[0]}-${
+          Number(reciptNumber.split("-")[1]) + 1
+        }`;
+        await currentCompany.save();
+        reciptNumber = currentCompany.reciptNumber;
+        // console.log(
+        //   "current company recipt number ",
+        //   currentCompany.reciptNumber
+        // );
       }
 
       const newDayBookData = new DayBookDataModel({
@@ -735,9 +747,6 @@ export const createCourseFeesController = asyncHandler(
       });
       let reciptNumberString = Number(reciptNumber.split("-")[1]) + 1;
       const savedCourseFees = await newCourseFees.save();
-      const currentCompany = await CompanyModels.findById(
-        student.companyName._id
-      );
 
       //console.log(reciptNumberString);
 
