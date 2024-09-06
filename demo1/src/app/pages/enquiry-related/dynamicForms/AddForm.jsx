@@ -204,7 +204,7 @@ export default function AddForm() {
                         className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                         placeholder='Name'
                         name='Name'
-                        value={input}
+                        value={input.Name}
                         onChange={handleChange}
                       />
                     </div>
@@ -221,7 +221,7 @@ export default function AddForm() {
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Mobile Number'
                         name='Mobile Number'
-                        value={input}
+                        value={input['Mobile Number']}
                         onChange={handleChange}
                       />
                     </div>
@@ -241,7 +241,7 @@ export default function AddForm() {
                         className='form-control form-control-lg form-control-solid'
                         placeholder='City'
                         name='City'
-                        value={input}
+                        value={input.City}
                         onChange={handleChange}
                       />
                     </div>
@@ -258,7 +258,7 @@ export default function AddForm() {
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Email'
                         name='Email'
-                        value={input}
+                        value={input.Email}
                         onChange={handleChange}
                       />
                     </div>
@@ -550,7 +550,7 @@ export default function AddForm() {
                 {modalMode === 'add' ? (
                   <DynamicFields companyName={data?._id} formId={formId} />
                 ) : (
-                  <EditDynamicFields setOpenModal={contextOpenModal} trainer={selectedField} />
+                  <EditDynamicFields setOpenModal={setcontextOpenModal} field={selectedField} />
                 )}
               </PopUpModal>
             </div>

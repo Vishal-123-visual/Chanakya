@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { KTIcon } from '../../../../_metronic/helpers'
+import {useState, useEffect} from 'react'
+import {toast} from 'react-toastify'
+import {KTIcon} from '../../../../_metronic/helpers'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 import DynamicFields from '../DynamicFields'
-import { useDynamicFieldContext } from '../DynamicFieldsContext'
-import { useCompanyContext } from '../../compay/CompanyContext'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useCustomFormFieldContext } from './CustomFormFieldDataContext'
+import {useDynamicFieldContext} from '../DynamicFieldsContext'
+import {useCompanyContext} from '../../compay/CompanyContext'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
 
 const UpdateFormData = () => {
   const navigate = useNavigate()
@@ -18,11 +18,11 @@ const UpdateFormData = () => {
     getAllAddedFormsName,
     deleteFieldMutation,
   } = useDynamicFieldContext()
-  const { useGetSingleFormValueById, updateFormFieldMutation } = useCustomFormFieldContext()
-  const { getCompanyLists } = useCompanyContext()
+  const {useGetSingleFormValueById, updateFormFieldMutation} = useCustomFormFieldContext()
+  const {getCompanyLists} = useCompanyContext()
   const params = useParams()
 
-  const { data: singleFormValueData } = useGetSingleFormValueById(params.id)
+  const {data: singleFormValueData} = useGetSingleFormValueById(params.id)
   const companyId = singleFormValueData?.companyId
   const formId = singleFormValueData?.formId
 
@@ -109,7 +109,7 @@ const UpdateFormData = () => {
         toast.success('Field deleted successfully!')
       },
       onError: (error) => {
-        toast.error(`Error deleting form: ${error.message}`)
+        // toast.error(`Error deleting form: ${error.message}`)
       },
     })
   }
@@ -133,7 +133,7 @@ const UpdateFormData = () => {
                 {singleFormValueData?.formFiledValue
                   ?.filter((formFieldData) => formFieldData.name !== 'companyId')
                   .map((formFieldData, index) => {
-                    console.log(formFieldData)
+                    // console.log(formFieldData)
                     if (
                       formFieldData.type === 'text' ||
                       formFieldData.type === 'url' ||
@@ -198,9 +198,10 @@ const UpdateFormData = () => {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
-                                    }`}
-                                  style={{ whiteSpace: 'nowrap' }}
+                                  className={`col-form-label fw-bold fs-6 ${
+                                    field.mandatory === true ? 'required' : ''
+                                  }`}
+                                  style={{whiteSpace: 'nowrap'}}
                                 >
                                   {field.name}
                                 </label>
@@ -254,9 +255,10 @@ const UpdateFormData = () => {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
-                                    }`}
-                                  style={{ whiteSpace: 'nowrap' }}
+                                  className={`col-form-label fw-bold fs-6 ${
+                                    field.mandatory === true ? 'required' : ''
+                                  }`}
+                                  style={{whiteSpace: 'nowrap'}}
                                 >
                                   {field.name}
                                 </label>

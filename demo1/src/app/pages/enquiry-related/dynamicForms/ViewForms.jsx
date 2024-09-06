@@ -31,7 +31,7 @@ export default function ViewForms() {
         toast.success('Form deleted successfully!')
       },
       onError: (error) => {
-        toast.error(`Error deleting form: ${error.message}`)
+        // toast.error(`Error deleting form: ${error.message}`)
       },
     })
   }

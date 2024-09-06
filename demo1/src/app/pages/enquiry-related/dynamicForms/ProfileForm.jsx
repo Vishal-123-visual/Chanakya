@@ -7,10 +7,13 @@ import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpMod
 import DynamicFields from '../DynamicFields'
 import {useCompanyContext} from '../../compay/CompanyContext'
 import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
+import EditDynamicFields from './EditDynamicFields'
 
 const ProfileForm = () => {
   const [inputData, setInputData] = useState('')
   const [open, setOpen] = useState(true)
+  const [modalMode, setModalMode] = useState('add')
+  const [selectedField, setSelectedField] = useState(null)
   const [isCreatingNewForm, setIsCreatingNewForm] = useState(false)
   const params = useParams()
   const navigate = useNavigate()
@@ -62,6 +65,19 @@ const ProfileForm = () => {
     .map((company) => company.companyName)
   //   console.log(companyData)
 
+  const openAddFieldModal = () => {
+    setModalMode('add')
+    setSelectedField(null)
+    setcontextOpenModal(true)
+  }
+
+  const openEditFieldModal = (field) => {
+    // console.log(field)
+    setModalMode('edit')
+    setSelectedField(field)
+    setcontextOpenModal(true)
+  }
+
   const companyId = getCompanyLists?.data
     ?.filter((companyNameById) => companyNameById?._id === data?.companyName)
     .map((company) => company._id)
@@ -73,7 +89,7 @@ const ProfileForm = () => {
         // toast.success('Field deleted successfully!')
       },
       onError: (error) => {
-        toast.error(`Error deleting form: ${error.message}`)
+        // toast.error(`Error deleting form: ${error.message}`)
       },
     })
   }
@@ -189,7 +205,7 @@ const ProfileForm = () => {
                         className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                         placeholder='Name'
                         name='Name'
-                        value={input}
+                        value={input.Name}
                         onChange={handleChange}
                       />
                     </div>
@@ -206,7 +222,7 @@ const ProfileForm = () => {
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Mobile Number'
                         name='Mobile Number'
-                        value={input}
+                        value={input['Mobile Number']}
                         onChange={handleChange}
                       />
                     </div>
@@ -226,7 +242,7 @@ const ProfileForm = () => {
                         className='form-control form-control-lg form-control-solid'
                         placeholder='City'
                         name='City'
-                        value={input}
+                        value={input.City}
                         onChange={handleChange}
                       />
                     </div>
@@ -243,7 +259,7 @@ const ProfileForm = () => {
                         className='form-control form-control-lg form-control-solid'
                         placeholder='Email'
                         name='Email'
-                        value={input}
+                        value={input.Email}
                         onChange={handleChange}
                       />
                     </div>
@@ -317,13 +333,21 @@ const ProfileForm = () => {
                                       </div>
                                       {/* Display the delete button only for the last option */}
                                       {optionIndex === field.options.length - 1 && (
-                                        <button
-                                          type='button'
-                                          className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
-                                          onClick={() => fieldDeleteHandler(field._id)}
-                                        >
-                                          <KTIcon iconName='trash' className='fs-3' />
-                                        </button>
+                                        <>
+                                          <a
+                                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                            onClick={() => openEditFieldModal(field)}
+                                          >
+                                            <KTIcon iconName='pencil' className='fs-3' />
+                                          </a>
+                                          <a
+                                            type='button'
+                                            className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                            onClick={() => fieldDeleteHandler(field._id)}
+                                          >
+                                            <KTIcon iconName='trash' className='fs-3' />
+                                          </a>
+                                        </>
                                       )}
                                     </div>
                                   ))}
@@ -381,13 +405,21 @@ const ProfileForm = () => {
                                       </div>
                                       {/* Display the delete button only for the last option */}
                                       {optionIndex === field.options.length - 1 && (
-                                        <button
-                                          type='button'
-                                          className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
-                                          onClick={() => fieldDeleteHandler(field._id)}
-                                        >
-                                          <KTIcon iconName='trash' className='fs-3' />
-                                        </button>
+                                        <>
+                                          <a
+                                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                            onClick={() => openEditFieldModal(field)}
+                                          >
+                                            <KTIcon iconName='pencil' className='fs-3' />
+                                          </a>
+                                          <a
+                                            type='button'
+                                            className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                            onClick={() => fieldDeleteHandler(field._id)}
+                                          >
+                                            <KTIcon iconName='trash' className='fs-3' />
+                                          </a>
+                                        </>
                                       )}
                                     </div>
                                   ))}
@@ -423,13 +455,21 @@ const ProfileForm = () => {
                                     </option>
                                   ))}
                                 </select>
-                                <button
-                                  type='button'
-                                  className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
-                                  onClick={() => fieldDeleteHandler(field._id)}
-                                >
-                                  <KTIcon iconName='trash' className='fs-3' />
-                                </button>
+                                <>
+                                  <a
+                                    className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                    onClick={() => openEditFieldModal(field)}
+                                  >
+                                    <KTIcon iconName='pencil' className='fs-3' />
+                                  </a>
+                                  <a
+                                    type='button'
+                                    className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                    onClick={() => fieldDeleteHandler(field._id)}
+                                  >
+                                    <KTIcon iconName='trash' className='fs-3' />
+                                  </a>
+                                </>{' '}
                               </div>
                             </div>
                           </div>
@@ -459,13 +499,21 @@ const ProfileForm = () => {
                                     )
                                   }
                                 />
-                                <button
-                                  type='button'
-                                  className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
-                                  onClick={() => fieldDeleteHandler(field._id)}
-                                >
-                                  <KTIcon iconName='trash' className='fs-3' />
-                                </button>
+                                <>
+                                  <a
+                                    className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                    onClick={() => openEditFieldModal(field)}
+                                  >
+                                    <KTIcon iconName='pencil' className='fs-3' />
+                                  </a>
+                                  <a
+                                    type='button'
+                                    className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
+                                    onClick={() => fieldDeleteHandler(field._id)}
+                                  >
+                                    <KTIcon iconName='trash' className='fs-3' />
+                                  </a>
+                                </>
                               </div>
                             </div>
                           </div>
@@ -482,22 +530,26 @@ const ProfileForm = () => {
                 <button
                   type='button'
                   className='btn btn-info'
-                  onClick={() => setcontextOpenModal(true)}
+                  onClick={() => openAddFieldModal(true)}
                 >
                   Add Field
                 </button>
               ) : (
                 ''
               )}
-              {formNameAdded ? (
+              {/* {formNameAdded ? (
                 ''
               ) : (
                 <button className='btn btn-primary' onClick={handleSave}>
                   Save
                 </button>
-              )}
+              )} */}
               <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
-                <DynamicFields formId={data?._id} />
+                {modalMode === 'add' ? (
+                  <DynamicFields companyName={data?._id} />
+                ) : (
+                  <EditDynamicFields setOpenModal={setcontextOpenModal} field={selectedField} />
+                )}
               </PopUpModal>
             </div>
           </div>

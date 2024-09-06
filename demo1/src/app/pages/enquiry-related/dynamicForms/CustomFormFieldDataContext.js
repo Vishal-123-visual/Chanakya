@@ -19,7 +19,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
   }
   const [input, setInput] = useState({})
   const {fields, setFields, getAllCustomFormFieldDataQuery} = useDynamicFieldContext()
-  //console.log('fields from custom', fields)
+  // console.log('fields from custom', fields)
   const [formData, setFormData] = useState([{}])
   // console.log(formData)
   const [fieldValues, setFieldValues] = useState([])
@@ -164,7 +164,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
       //console.log('settled')
       if (error) {
         //console.log(error)
-        toast.error(error.response.data.error)
+        //toast.error(error.response.data.error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getCustomFormFieldValuesData']})
       }
@@ -179,7 +179,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
         return axios.post(`${BASE_URL}/api/columns/save`, data, config)
       },
       onError: (error) => {
-        toast.error(`Error saving columns: ${error.response?.data?.error || error.message}`)
+        // toast.error(`Error saving columns: ${error.response?.data?.error || error.message}`)
       },
       onSuccess: () => {
         queryClient.invalidateQueries({queryKey: ['getReorderingRowsAndColumnsData']})
@@ -211,7 +211,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error While Deleting the Field !!', error)
+        // toast.error('Error While Deleting the Field !!', error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getReorderingRowsAndColumnsData']})
       }
@@ -230,7 +230,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
         return axios.post(`${BASE_URL}/api/rows/save`, data, config)
       },
       onError: (error) => {
-        toast.error(`Error saving rows: ${error.response?.data?.error || error.message}`)
+        //toast.error(`Error saving rows: ${error.response?.data?.error || error.message}`)
       },
       onSuccess: () => {
         queryClient.invalidateQueries({queryKey: ['getReorderingRowsData']})
@@ -315,7 +315,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error while updating form:', error)
+        // toast.error('Error while updating form:', error)
       } else {
         await queryClient.invalidateQueries({
           queryKey: ['getCustomFormFieldValuesData'],
@@ -333,7 +333,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error While Deleting Form:', error)
+        //6toast.error('Error While Deleting Form:', error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getCustomFormFieldValuesData']})
       }
@@ -350,7 +350,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
     onSettled: async (_, error) => {
       if (error) {
-        toast.error('Error While Deleting Form:', error)
+        // toast.error('Error While Deleting Form:', error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getReorderingRowsData']})
       }
@@ -366,6 +366,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
         handleOptionChange,
         handleInputChange,
         fieldValues,
+        input,
         setInput,
         formData,
         setFormData,
