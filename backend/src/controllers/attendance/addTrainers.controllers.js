@@ -1,7 +1,9 @@
 import trainerFormModel from "../../models/attendance/trainer.models.js";
 import path from "path";
 import fs from "fs";
+
 const __dirname = path.resolve();
+
 export const addTrainerDataController = async (req, res, next) => {
   try {
     const { trainerName, trainerDesignation, trainerEmail, companyId } =
@@ -83,7 +85,7 @@ export const updateSingleTrainerDataByIdController = async (req, res, next) => {
     //console.log(req.file);
     const { id } = req.params;
     const { trainerName, trainerDesignation, trainerEmail } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     const trainer = await trainerFormModel.findById(id);
     if (!trainer) {
