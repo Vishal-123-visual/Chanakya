@@ -546,7 +546,7 @@ const ProfileForm = () => {
               )} */}
               <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
                 {modalMode === 'add' ? (
-                  <DynamicFields companyName={data?._id} />
+                  <DynamicFields formId={data?._id} />
                 ) : (
                   <EditDynamicFields setOpenModal={setcontextOpenModal} field={selectedField} />
                 )}

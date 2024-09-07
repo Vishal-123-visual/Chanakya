@@ -117,8 +117,9 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     const updatedField = {
       ...values[index],
       name: fieldName || values[index].name,
-      selectValue: selectedValue,
+      selectValue: selectedValue || values[index].selectValue,
     }
+    // console.log(updatedField)
     values[index] = updatedField
 
     setFields(values)
@@ -128,7 +129,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
       [updatedField.name]: {newValue: selectedValue, type},
     }))
 
-    //console.log('Updated Fields:', values)
+    // console.log('Updated Fields:', values)
   }
 
   const handleRadioChange = (index, optionValue, type) => {

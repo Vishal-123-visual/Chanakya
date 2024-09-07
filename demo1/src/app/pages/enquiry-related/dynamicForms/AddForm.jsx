@@ -288,6 +288,7 @@ export default function AddForm() {
                 {getAllCustomFormFieldDataQuery.data
                   ?.filter((form) => form.formId[form.formId.length - 1] === formId)
                   .map((field, index) => {
+                    // console.log(field)
                     switch (field.type) {
                       case 'checkbox':
                         //console.log(field)

@@ -7,6 +7,7 @@ export const addCustomFieldController = async (req, res, next) => {
       type,
       name,
       value,
+      selectValue,
       mandatory,
       quickCreate,
       keyField,
@@ -19,6 +20,7 @@ export const addCustomFieldController = async (req, res, next) => {
       type,
       name,
       value: type === "checkbox" ? value[0] : value,
+      selectValue,
       mandatory,
       quickCreate,
       keyField,
@@ -45,8 +47,8 @@ export const getAllCustomFieldController = async (req, res, next) => {
 
 export const getSingleFieldById = async (req, res, next) => {
   try {
-    console.log("single", req.params);
-    console.log("single", req.body);
+    // console.log("single", req.params);
+    // console.log("single", req.body);
     const { id } = req.params;
     const customField = await customFieldModel.findById(id);
     if (!customField) {
@@ -64,11 +66,12 @@ export const getSingleFieldById = async (req, res, next) => {
       .json({ success: false, message: "Internal Server Error!!" });
   }
 };
+
 export const updateCustomFieldController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { type, name, value, mandatory, options } = req.body.fields;
-    //console.log(req.body.fields);
+    console.log(req.body.fields);
 
     // Find the existing custom field
     const customField = await customFieldModel.findById(id);
@@ -82,6 +85,8 @@ export const updateCustomFieldController = async (req, res, next) => {
     customField.type = type || customField.type;
     customField.name = name || customField.name;
     customField.value = value || customField.value;
+    console.log(mandatory);
+    // console.log(customField.mandatory);
     customField.mandatory = mandatory || customField.mandatory;
 
     // Update options if provided

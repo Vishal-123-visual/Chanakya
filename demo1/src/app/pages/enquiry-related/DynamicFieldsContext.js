@@ -264,7 +264,7 @@ export const DynamicFieldContextProvider = ({children}) => {
 
   const updateFieldMutation = useMutation({
     mutationFn: async (id) => {
-      console.log('Dynamic Field Context', id)
+      // console.log('Dynamic Field Context', id)
       // Perform the PUT request using the `id`
       return axios.put(`${BASE_URL}/api/custom-field/${id.id}`, id, config).then((res) => res.data)
     },
