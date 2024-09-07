@@ -18,6 +18,16 @@ const CompleteCourseStudents = () => {
   }
   const navigate = useNavigate()
 
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <>
       <div className='card-header border-0 pt-5'>
@@ -32,7 +42,7 @@ const CompleteCourseStudents = () => {
           {/* begin::Table */}
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
             {/* begin::Table head */}
-            <thead style={{ position: 'sticky', top: '0', backgroundColor: 'white', zIndex: '1' }}>
+            <thead style={{ position: 'sticky', top: '0', backgroundColor: themeMode === 'dark' ? '' : 'white', zIndex: '1' }}>
               <tr className='fw-bold text-muted'>
                 <th className='w-25px'>
                   <div className='form-check form-check-sm form-check-custom form-check-solid'>

@@ -1,13 +1,13 @@
-import React, {useState, useEffect, Fragment} from 'react'
-import {KTIcon} from '../../../_metronic/helpers'
-import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import React, { useState, useEffect, Fragment } from 'react'
+import { KTIcon } from '../../../_metronic/helpers'
+import { useStudentCourseFeesContext } from '../courseFees/StudentCourseFeesContext'
 import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AddDayBookData from './AddDayBookData'
-import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {Link, useParams} from 'react-router-dom'
-import {useCompanyContext} from '../compay/CompanyContext'
+import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
+import { Link, useParams } from 'react-router-dom'
+import { useCompanyContext } from '../compay/CompanyContext'
 import AddDayBookAccountFromDayBook from './AddDayBookAccountFromDayBook'
 import EditDayBookData from './EditDayBookData'
 
@@ -63,6 +63,19 @@ const ViewDayBook = () => {
   const editDayBookSingleDataHandler = (dayBookDataId) => {
     setEditBayBookDataId(dayBookDataId)
   }
+
+
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
+  // console.log(themeMode)
 
   return (
     <div className={`card`}>
@@ -201,7 +214,7 @@ const ViewDayBook = () => {
                         <td className='text-dark fw-bold text-hover-primary fs-6 '>{index + 1}</td>
                         <td
                           className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}
                         >
                           {moment(dayBookEntry.dayBookDatadate).format('DD-MM-YYYY')}
                         </td>
@@ -209,12 +222,12 @@ const ViewDayBook = () => {
                           {dayBookEntry.rollNo}
                         </td>
                         <td
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}
                           className='text-dark fw-bold text-hover-primary fs-6'
                         >
                           {dayBookEntry?.reciptNumber}
                         </td>
-                        <td className='' style={{background: '#f2f2ff'}}>
+                        <td className='' style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}>
                           <Link
                             className={
                               dayBookEntry.accountName
@@ -226,8 +239,8 @@ const ViewDayBook = () => {
                               dayBookEntry.accountName
                                 ? `/daybook/singleAccount/${dayBookEntry?.dayBookAccountId}`
                                 : dayBookEntry.studentInfo?._id
-                                ? `/profile/student/${dayBookEntry?.studentInfo?._id}`
-                                : `/daybook/viewDaybook/${params?.id}`
+                                  ? `/profile/student/${dayBookEntry?.studentInfo?._id}`
+                                  : `/daybook/viewDaybook/${params?.id}`
                             }
                           >
                             {dayBookEntry?.accountName || dayBookEntry?.StudentName}
@@ -238,7 +251,7 @@ const ViewDayBook = () => {
                         </td>
                         <td
                           className='text-dark fw-bold text-hover-primary fs-6 '
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}
                         >
                           {dayBookEntry.credit}
                         </td>
@@ -247,7 +260,7 @@ const ViewDayBook = () => {
                         </td>
 
                         <td
-                          style={{background: '#f2f2ff'}}
+                          style={{ background: themeMode === 'dark' ? 'black' : '#f2f2ff' }}
                           className='text-dark fw-bold text-hover-primary fs-6'
                         >
                           {dayBookEntry?.studentLateFees || 0}
