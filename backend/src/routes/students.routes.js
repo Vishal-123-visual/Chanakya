@@ -23,6 +23,7 @@ import sendRemainderFeesStudent, {
 } from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 import { BACKEND_URL } from "../config/config.js";
 import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Suggestion.js";
+import { userModel } from "../models/user.models.js";
 
 const router = Router();
 
@@ -31,7 +32,19 @@ router.post("/sendMailStudent", async (req, res, next) => {
   // console.log(studentData.gst_percentage);
   let companyLogoURL =
     BACKEND_URL + "/api/images/" + studentData.companyName.logo;
-  const studentGSTStatus = await StudentGST_GuggestionModel.find();
+  //const studentGSTStatus = await StudentGST_GuggestionModel.find();
+  let adminEmails = "";
+  const users = await userModel.find({});
+
+  users?.map((user) => {
+    //console.log(user.role, user.email);
+    if (user.role === "Admin" || user.role === "SuperAdmin") {
+      adminEmails += user.email + ",";
+    }
+  });
+
+  console.log(adminEmails);
+
   let gstAmount =
     studentData.companyName.isGstBased === "Yes"
       ? (Number(studentData.amountPaid) / (studentData?.gst_percentage + 100)) *
@@ -39,8 +52,8 @@ router.post("/sendMailStudent", async (req, res, next) => {
       : Number(studentData.amountPaid);
   let cutGSTAmount = studentData.amountPaid - gstAmount;
   sendEmail(
-    `${studentData.studentInfo.email}`,
-    ` Your Fees Submitted Successfully - ${studentData.companyName.companyName}`,
+    `${studentData.studentInfo.email},${studentData.companyName.email}, ${adminEmails}`,
+    `Your Fees Submitted Successfully - ${studentData.companyName.companyName}`,
     `Hello ${studentData.studentInfo.name} you have submitted fees `,
     `<!DOCTYPE html>
   <html>
