@@ -114,6 +114,11 @@ const SidebarMenuMain = () => {
                     hasBullet={true}
                   />
                   <SidebarMenuItem
+                    to={`/add-timing/${CompanyListData?._id}`}
+                    title='Add Timings'
+                    hasBullet={true}
+                  />
+                  <SidebarMenuItem
                     to={`/add-batch/${CompanyListData?._id}`}
                     title='Add Batches'
                     hasBullet={true}

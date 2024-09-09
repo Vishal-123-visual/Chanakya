@@ -215,6 +215,104 @@ export const AttendanceContextProvider = ({children}) => {
     },
   })
 
+  // Batch Timings Quiery's Start Here
+
+  const createBatchTiming = useMutation({
+    mutationFn: async (data) => {
+      // console.log(data)
+      const res = await axios.post(`${BASE_URL}/api/add-timing`, data, config)
+      // console.log(res)
+      return res.data
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.error(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getBatchTiming']})
+      }
+    },
+  })
+
+  const getAllBatchTimings = useQuery({
+    queryKey: ['getBatchTiming'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/add-timing`, config)
+        // console.log(response.data.trainers)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
+  const useGetSingleBatchTimeById = (id) => {
+    return useQuery({
+      queryKey: ['getBatchTiming', id],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/add-timing/${id}`, config)
+          return response.data
+          //console.log(response)
+        } catch (error) {
+          throw new Error('Error fetching lab data: ' + error.message)
+        }
+      },
+    })
+  }
+
+  const updateBatchTimeMutation = useMutation({
+    mutationFn: async (id) => {
+      // console.log(id)
+      // Perform the PUT request using the `id`
+      return axios.put(`${BASE_URL}/api/add-timing/${id.id}`, id, config).then((res) => res.data)
+      // console.log(res)
+    },
+
+    onSuccess: () => {
+      toast.success('Lab Updated Successfully !!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        toast.error('Error while updating Lab:', error)
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getBatchTiming'],
+        })
+      }
+    },
+  })
+
+  const deleteBatchTimeMutation = useMutation({
+    mutationFn: async (id) => {
+      return axios.delete(`${BASE_URL}/api/add-timing/${id}`, config).then((res) => res.data)
+    },
+    onSuccess: () => {
+      // toast.success('Form Deleted  Successfully!!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        // toast.error('Error While Deleting Form:', error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getBatchTiming']})
+      }
+    },
+  })
+
   return (
     <attendanceContext.Provider
       value={{
@@ -230,6 +328,12 @@ export const AttendanceContextProvider = ({children}) => {
         useGetSingleLabDataById,
         updateLabDataMutation,
         deleteLabDataMutation,
+        // Timings
+        createBatchTiming,
+        getAllBatchTimings,
+        useGetSingleBatchTimeById,
+        updateBatchTimeMutation,
+        deleteBatchTimeMutation,
       }}
     >
       {children}
