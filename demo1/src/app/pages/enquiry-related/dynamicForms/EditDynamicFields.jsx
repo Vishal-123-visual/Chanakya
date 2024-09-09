@@ -62,6 +62,7 @@ const EditDynamicFields = ({field, setOpenModal}) => {
 
   const handleMandatoryChange = (event) => {
     const isMandatory = event.target.checked
+    // console.log(isMandatory)
     setFields((prevFields) => ({
       ...prevFields,
       mandatory: isMandatory,
