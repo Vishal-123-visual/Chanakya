@@ -1,6 +1,6 @@
-import {useState} from 'react'
+import { useState } from 'react'
 
-export function Dropdown1({onSave}) {
+export function Dropdown1({ onSave }) {
   const [status, setStatus] = useState('pending')
   return (
     <div className='menu menu-sub menu-sub-dropdown w-250px w-md-300px' data-kt-menu='true'>
@@ -72,7 +72,7 @@ export function Dropdown1({onSave}) {
           </button>
 
           <button
-            onClick={() => onSave(status)}
+            // onClick={() => onSave(status)}
             type='submit'
             className='btn btn-sm btn-primary'
             data-kt-menu-dismiss='true'

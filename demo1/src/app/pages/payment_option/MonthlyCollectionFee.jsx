@@ -33,6 +33,8 @@ const MonthlyCollectionFee = () => {
       item.dropOutStudent === false && Number(item?.expiration_date?.split("-")[1]) <= toDate?.getMonth() + 1
   )
 
+  // console.log(filteredData)
+
   // console.log(Number(filteredData[0].expiration_date.split("-")[1]), toDate.getMonth() + 1)
 
   const companyCTX = useCompanyContext()

@@ -64,6 +64,7 @@ import TrainersList from '../pages/attendance-related/Trainers/TrainersList'
 import LabsList from '../pages/attendance-related/Labs/LabsList'
 import BatchForm from '../pages/attendance-related/Batches/BatchForm'
 import TimingList from '../pages/attendance-related/Timings/TimingLists'
+import MonthlyReportsDashBoard from '../pages/monthly_Reports/MonthlyReportsDashBoard'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -295,10 +296,19 @@ const PrivateRoutes = () => {
             <Route path='/student/:id' element={<StudentProfile />} />
             <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
             {/* *************************************** Attendance Related Routes Starts Here ***************************************  */}
-            <Route path='/add-trainer/:id' element={<TrainersList />} />
+            {/* <Route path='/add-trainer/:id' element={<TrainersList />} />
             <Route path='/add-lab/:id' element={<LabsList />} />
             <Route path='/add-batch/:id' element={<BatchForm />} />
-            <Route path='/add-timing/:id' element={<TimingList />} />
+            <Route path='/add-timing/:id' element={<TimingList />} /> */}
+            {/* *************************************** Monthly Reports Routes Starts Here ***************************************  */}
+            <Route
+              path='/monthly-reports/:id'
+              element={
+                <>
+                  <MonthlyReportsDashBoard />
+                </>
+              }
+            />
             {/* *************************************** Monthly Collection fees start here.************************** */}
             <Route
               path='/monthlyCollectionFees/:id'

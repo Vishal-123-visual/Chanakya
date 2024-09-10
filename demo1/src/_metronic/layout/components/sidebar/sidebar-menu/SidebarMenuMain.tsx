@@ -97,7 +97,7 @@ const SidebarMenuMain = () => {
                     hasBullet={true}
                   />
                 </SidebarMenuItemWithSub>
-                <SidebarMenuItemWithSub
+                {/*  <SidebarMenuItemWithSub
                   to='/apps/chat'
                   title={'Attendance'}
                   fontIcon='bi-chat-left'
@@ -121,6 +121,19 @@ const SidebarMenuMain = () => {
                   <SidebarMenuItem
                     to={`/add-batch/${CompanyListData?._id}`}
                     title='Add Batches'
+                    hasBullet={true}
+                  />
+                </SidebarMenuItemWithSub>*/}
+
+                <SidebarMenuItemWithSub
+                  to='/apps/chat'
+                  title={'Reports'}
+                  fontIcon='bi-chat-left'
+                  icon='message-text-2'
+                >
+                  <SidebarMenuItem
+                    to={`/monthly-reports/${CompanyListData?._id}`}
+                    title='Monthly Reports'
                     hasBullet={true}
                   />
                 </SidebarMenuItemWithSub>
