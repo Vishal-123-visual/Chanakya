@@ -5,12 +5,12 @@ import OldStudentMonthlyInstallmentCollection from "./OldStudentMonthlyInstallme
 const MonthlyReportsDashBoard = () => {
     return (
         <div className='row g-5 gx-xxl-8'>
-            <div className='col-xxl-4'>
+            <div className='col-xxl-6'>
                 <NewStudentAdmissionPaidCollection
                     className='card-xxl-stretch mb-xl-3'
                 />
             </div>
-            <div className='col-xxl-4'>
+            <div className='col-xxl-6'>
                 <OldStudentMonthlyInstallmentCollection
                     className='card-xxl-stretch mb-xl-3'
                 />

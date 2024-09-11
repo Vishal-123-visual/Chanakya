@@ -1,178 +1,141 @@
-import { useState } from "react";
-import { KTIcon, toAbsoluteUrl } from "../../../_metronic/helpers"
-import { Dropdown1 } from "../Alert_Pending_NewStudents/DropDown1"
+import { useCallback, useEffect, useState, useRef } from "react";
+import { toAbsoluteUrl } from "../../../_metronic/helpers";
 import { useParams } from "react-router-dom";
 import { useStudentCourseFeesContext } from "../courseFees/StudentCourseFeesContext";
 
 const NewStudentAdmissionPaidCollection = () => {
-
+    const [page, setPage] = useState(1);
+    const [totalCollection, setTotalCollection] = useState(0);
+    const [totalStudents, setTotalStudents] = useState(0);
+    const [allData, setAllData] = useState([]);
     const [toDate] = useState(new Date());
     const paramsData = useParams();
     const ctx = useStudentCourseFeesContext();
     const { data, isLoading } = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id);
 
-    // Filter data for students who paid in the current month
-    const filteredData = data?.filter((item) => {
-        const expirationDate = new Date(item?.expiration_date);
-        return (
-            item?.studentInfo?.no_of_installments === item?.installment_number &&
-            item.dropOutStudent === false &&
-            expirationDate.getMonth() === toDate.getMonth() && // Match the current month
-            expirationDate.getFullYear() === toDate.getFullYear() // Match the current year
-        );
-    });
+    // Reference for the scrollable container
+    const containerRef = useRef(null);
 
-    // console.log(filteredData)
+    // Filter data for new students created in the current month
+    useEffect(() => {
+        if (data) {
+            const filteredData = data.filter((item) => {
+                const studentCreationDate = new Date(item?.studentInfo?.createdAt);
+                const installmentPaidDate = new Date(item?.createdAt);
 
-    // Show only the top 10 results
-    const topTenData = filteredData?.slice(0, 10);
+                // Check if the student was created in the current month and year
+                const isNewStudent = studentCreationDate.getMonth() === toDate.getMonth() &&
+                    studentCreationDate.getFullYear() === toDate.getFullYear();
 
-    // Calculate the total monthly collection for all students in the current month
-    const totalMonthlyCollection = filteredData?.reduce((total, collection) => {
-        return total + collection?.installment_amount;
-    }, 0);
+                // Check if the installment was paid in the current month and year
+                const isCurrentMonthPayment = installmentPaidDate.getMonth() === toDate.getMonth() &&
+                    installmentPaidDate.getFullYear() === toDate.getFullYear();
 
+                return isNewStudent && isCurrentMonthPayment &&
+                    item?.studentInfo?.no_of_installments === item?.installment_number &&
+                    item.dropOutStudent === false;
+            });
+
+            const topData = filteredData.slice(0, page * 10);
+            setAllData(topData);
+            setTotalCollection(filteredData.reduce((total, collection) => total + collection?.installment_amount, 0));
+            setTotalStudents(filteredData.length);
+        }
+    }, [data, page, toDate]);
+
+    // Handle scroll event to load more data
+    const handleScroll = useCallback(() => {
+        const container = containerRef.current;
+        if (container) {
+            const bottom = container.scrollHeight === container.scrollTop + container.clientHeight;
+            if (bottom && !isLoading) {
+                setPage((prevPage) => prevPage + 1);
+            }
+        }
+    }, [isLoading]);
+
+    useEffect(() => {
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener("scroll", handleScroll);
+            return () => container.removeEventListener("scroll", handleScroll);
+        }
+    }, [handleScroll]);
+
+    const itemHeight = 60; // Adjust this value according to the actual item height
+    const maxItems = 7;
 
     return (
         <div className={`card`}>
-            {/* begin::Beader */}
+            {/* Header */}
             <div className='card-header border-0 py-5'>
                 <h3 className='card-title align-items-start flex-column'>
                     <span className='card-label fw-bold fs-3 mb-1'>New Students</span>
-
                     <span className='text-muted fw-semibold fs-7'>Paid Amount Collections</span>
+                    <span className='text-muted fw-semibold fs-7'>{`Total Students => ${totalStudents}`}</span>
                 </h3>
 
                 <div className='card-toolbar'>
-                    <span className='text-muted fw-semibold fs-7'>{`Monthly Collection =>`}</span>
-                    {/* begin::Menu */}
-                    {/* <button
-                        type='button'
-                        className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
-                        data-kt-menu-trigger='click'
-                        data-kt-menu-placement='bottom-end'
-                        data-kt-menu-flip='top-end'
-                    >
-                        <KTIcon iconName='category' className='fs-2' />
-                    </button> */}
-                    {/* <Dropdown1 /> */}
-                    {/* end::Menu */}
+                    <span className='text-muted fw-semibold fs-8'>{`Monthly Collection => ${totalCollection.toFixed(2) || 0}`}</span>
                 </div>
             </div>
-            {/* end::Header */}
+            {/* Body */}
+            <div className='card-body'>
+                <div
+                    ref={containerRef}
+                    className='scrollable-container mt-5'
+                    style={{
+                        height: `${itemHeight * maxItems}px`, // Fixed height based on 7 items
+                        overflowY: 'auto',
+                        paddingRight: '15px', // Adjust for scrollbar width
+                    }}
+                >
+                    <div>
+                        {allData?.map((newCollection, index) => (
+                            <div key={index} className='d-flex flex-stack mb-5'>
+                                <div className='d-flex align-items-center me-2'>
+                                    <div className='symbol symbol-50px me-3'>
+                                        <div className='symbol-label bg-light'>
+                                            <img
+                                                src={
+                                                    newCollection?.studentInfo?.image
+                                                        ? `${process.env.REACT_APP_BASE_URL}/api/images/${newCollection.studentInfo.image}`
+                                                        : toAbsoluteUrl('/media/avatars/300-1.jpg')
+                                                }
+                                                alt='Student'
+                                                className='h-50 w-50'
+                                                style={{ objectFit: 'cover' }}
+                                            />
+                                        </div>
+                                    </div>
 
-            {/* begin::Body */}
-            <div className='card-body d-flex flex-column'>
-                {/* begin::Chart */}
-                {/* <div ref={chartRef} className='mixed-widget-5-chart card-rounded-top'></div> */}
-                {/* end::Chart */}
+                                    <div>
+                                        <a onClick={() => window.open(`/profile/student/${newCollection?.studentInfo?._id}`, '_blank')}
+                                            style={{ cursor: 'pointer' }}
+                                            className='fs-6 text-gray-800 text-hover-primary fw-bold'>
+                                            {newCollection?.studentInfo?.name}
+                                        </a>
+                                        <div className='fs-7 text-muted fw-semibold mt-1'>
+                                            {newCollection?.courseName?.courseName}
+                                        </div>
+                                    </div>
+                                </div>
 
-                {/* begin::Items */}
-                <div className='mt-5'>
-                    {/* begin::Item */}
-                    <div className='d-flex flex-stack mb-5'>
-                        {/* begin::Section */}
-                        <div className='d-flex align-items-center me-2'>
-                            {/* begin::Symbol */}
-                            <div className='symbol symbol-50px me-3'>
-                                <div className='symbol-label bg-light'>
-                                    <img
-                                        src={toAbsoluteUrl('/media/svg/brand-logos/plurk.svg')}
-                                        alt=''
-                                        className='h-50'
-                                    />
+                                <div className='badge badge-light fw-semibold py-4 px-3'>
+                                    {newCollection?.installment_amount.toFixed(2)}
                                 </div>
                             </div>
-                            {/* end::Symbol */}
-
-                            {/* begin::Title */}
-                            <div>
-                                <a href='#' className='fs-6 text-gray-800 text-hover-primary fw-bold'>
-                                    Top Authors
-                                </a>
-                                <div className='fs-7 text-muted fw-semibold mt-1'>Ricky Hunt, Sandra Trepp</div>
+                        ))}
+                        {Array.from({ length: maxItems - allData.length }).map((_, index) => (
+                            <div className='d-flex flex-stack mb-5' key={`placeholder-${index}`}>
+                                {/* Empty placeholders */}
                             </div>
-                            {/* end::Title */}
-                        </div>
-                        {/* end::Section */}
-
-                        {/* begin::Label */}
-                        <div className='badge badge-light fw-semibold py-4 px-3'>+82$</div>
-                        {/* end::Label */}
+                        ))}
                     </div>
-                    {/* end::Item */}
-
-                    {/* begin::Item */}
-                    <div className='d-flex flex-stack mb-5'>
-                        {/* begin::Section */}
-                        <div className='d-flex align-items-center me-2'>
-                            {/* begin::Symbol */}
-                            <div className='symbol symbol-50px me-3'>
-                                <div className='symbol-label bg-light'>
-                                    <img
-                                        src={toAbsoluteUrl('/media/svg/brand-logos/figma-1.svg')}
-                                        alt=''
-                                        className='h-50'
-                                    />
-                                </div>
-                            </div>
-                            {/* end::Symbol */}
-
-                            {/* begin::Title */}
-                            <div>
-                                <a href='#' className='fs-6 text-gray-800 text-hover-primary fw-bold'>
-                                    Top Sales
-                                </a>
-                                <div className='fs-7 text-muted fw-semibold mt-1'>PitStop Emails</div>
-                            </div>
-                            {/* end::Title */}
-                        </div>
-                        {/* end::Section */}
-
-                        {/* begin::Label */}
-                        <div className='badge badge-light fw-semibold py-4 px-3'>+82$</div>
-                        {/* end::Label */}
-                    </div>
-                    {/* end::Item */}
-
-                    {/* begin::Item */}
-                    <div className='d-flex flex-stack'>
-                        {/* begin::Section */}
-                        <div className='d-flex align-items-center me-2'>
-                            {/* begin::Symbol */}
-                            <div className='symbol symbol-50px me-3'>
-                                <div className='symbol-label bg-light'>
-                                    <img
-                                        src={toAbsoluteUrl('/media/svg/brand-logos/vimeo.svg')}
-                                        alt=''
-                                        className='h-50'
-                                    />
-                                </div>
-                            </div>
-                            {/* end::Symbol */}
-
-                            {/* begin::Title */}
-                            <div className='py-1'>
-                                <a href='#' className='fs-6 text-gray-800 text-hover-primary fw-bold'>
-                                    Top Engagement
-                                </a>
-
-                                <div className='fs-7 text-muted fw-semibold mt-1'>KT.com</div>
-                            </div>
-                            {/* end::Title */}
-                        </div>
-                        {/* end::Section */}
-
-                        {/* begin::Label */}
-                        <div className='badge badge-light fw-semibold py-4 px-3'>+82$</div>
-                        {/* end::Label */}
-                    </div>
-                    {/* end::Item */}
                 </div>
-                {/* end::Items */}
             </div>
-            {/* end::Body */}
         </div>
-    )
-}
-export default NewStudentAdmissionPaidCollection
+    );
+};
+
+export default NewStudentAdmissionPaidCollection;

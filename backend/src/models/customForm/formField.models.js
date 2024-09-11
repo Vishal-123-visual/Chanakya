@@ -29,15 +29,24 @@ const FormFieldSchema = new mongoose.Schema({
   mandatory: { type: Boolean, default: false },
 });
 
-const FormFieldValuesStore = new mongoose.Schema({
-  formId: { type: mongoose.Schema.Types.ObjectId, ref: "Form", required: true },
-  companyId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Company",
-    required: true,
+const FormFieldValuesStore = new mongoose.Schema(
+  {
+    formId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Form",
+      required: true,
+    },
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
+    formFiledValue: [FormFieldSchema],
   },
-  formFiledValue: [FormFieldSchema],
-});
+  {
+    timestamps: true,
+  }
+);
 
 const FormFieldValueModel = mongoose.model(
   "FormFieldValue",
