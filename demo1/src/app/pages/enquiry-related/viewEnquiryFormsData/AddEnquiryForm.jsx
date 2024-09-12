@@ -1,16 +1,16 @@
-import {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useDynamicFieldContext} from '../DynamicFieldsContext'
-import {useCompanyContext} from '../../compay/CompanyContext'
-import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
-import {toast} from 'react-toastify'
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import { useCompanyContext } from '../../compay/CompanyContext'
+import { useCustomFormFieldContext } from '../dynamicForms/CustomFormFieldDataContext'
+import { toast } from 'react-toastify'
 
 const AddEnquiryForm = () => {
   const [isTouched, setIsTouched] = useState(false)
   // const [defaultFieldData, setDefaultFieldData] = useState({})
   // console.log(defaultFieldData)
   const params = useParams()
-  const {getAllCustomFormFieldDataQuery, getAllAddedFormsName, fields} = useDynamicFieldContext()
+  const { getAllCustomFormFieldDataQuery, getAllAddedFormsName, fields } = useDynamicFieldContext()
   const {
     handleSelectChange,
     handleCheckboxChange,
@@ -25,6 +25,7 @@ const AddEnquiryForm = () => {
   } = useCustomFormFieldContext()
 
   // console.log(formData)
+  // const fetchForm = get
 
   const [selectedFormId, setSelectedFormId] = useState('')
 
@@ -63,7 +64,7 @@ const AddEnquiryForm = () => {
     }
   }
 
-  const {getCompanyLists} = useCompanyContext()
+  const { getCompanyLists } = useCompanyContext()
 
   const formName = getAllAddedFormsName?.data
     ?.filter((company) => company.companyName === params.id)
@@ -78,11 +79,19 @@ const AddEnquiryForm = () => {
         id: companyData._id,
       })) || []
 
+  useEffect(() => {
+    // Set the default form ID when the formName data is available
+    if (formName?.length > 0 && !selectedFormId) {
+      const defaultFormId = formName[0]._id; // Select the first form by default
+      setSelectedFormId(defaultFormId);
+    }
+  }, [formName]);
+
   const companyId =
     companyDataNameAndId.length > 0
       ? getCompanyLists?.data
-          ?.filter((companyNameById) => companyNameById?._id === companyDataNameAndId[0]?.id)
-          .map((company) => company._id)
+        ?.filter((companyNameById) => companyNameById?._id === companyDataNameAndId[0]?.id)
+        .map((company) => company._id)
       : []
 
   const formNameById = getAllAddedFormsName?.data
@@ -91,9 +100,9 @@ const AddEnquiryForm = () => {
   // console.log(formNameById)
 
   const handleChange = (event) => {
-    const {name, value} = event.target
-    setInput((prevInput) => ({...prevInput, [name]: value}))
-    setFormData((prev) => ({...prev, [name]: value}))
+    const { name, value } = event.target
+    setInput((prevInput) => ({ ...prevInput, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleBlur = (fieldName, value) => {
@@ -207,7 +216,6 @@ const AddEnquiryForm = () => {
               onChange={handleFormSelectionChange}
               value={selectedFormId}
             >
-              <option value=''>Select a form</option>
               {formName?.map((form) => (
                 <option key={form._id} value={form._id}>
                   {form.formName}
@@ -234,13 +242,13 @@ const AddEnquiryForm = () => {
                             placeholder='Name'
                             name='Name'
                             value={input.Name || ''}
-                            onClick={() => setIsTouched((prev) => ({...prev, Name: true}))}
+                            onClick={() => setIsTouched((prev) => ({ ...prev, Name: true }))}
                             onChange={handleChange}
                             onBlur={() => handleBlur('Name')}
                           />
                           {isTouched.Name && !input.Name && (
                             <div className='fv-plugins-message-container mx-5'>
-                              <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                              <div className='fv-help-block' style={{ whiteSpace: 'nowrap' }}>
                                 Name is required!
                               </div>
                             </div>
@@ -260,13 +268,13 @@ const AddEnquiryForm = () => {
                             placeholder='Mobile Number'
                             name='Mobile Number'
                             value={input['Mobile Number'] || ''}
-                            onClick={() => setIsTouched((prev) => ({...prev, Name: true}))}
+                            onClick={() => setIsTouched((prev) => ({ ...prev, Name: true }))}
                             onChange={handleChange}
                             onBlur={() => handleBlur('Mobile Number')}
                           />
                           {isTouched['Mobile Number'] && !input['Mobile Number'] && (
                             <div className='fv-plugins-message-container mx-5'>
-                              <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                              <div className='fv-help-block' style={{ whiteSpace: 'nowrap' }}>
                                 Mobile Number is required!
                               </div>
                             </div>
@@ -304,13 +312,13 @@ const AddEnquiryForm = () => {
                             placeholder='Email'
                             name='Email'
                             value={input.Email || ''}
-                            onClick={() => setIsTouched((prev) => ({...prev, Name: true}))}
+                            onClick={() => setIsTouched((prev) => ({ ...prev, Name: true }))}
                             onChange={handleChange}
                             onBlur={() => handleBlur('Email')}
                           />
                           {isTouched.Email && !input.Email && (
                             <div className='fv-plugins-message-container mx-5'>
-                              <div className='fv-help-block' style={{whiteSpace: 'nowrap'}}>
+                              <div className='fv-help-block' style={{ whiteSpace: 'nowrap' }}>
                                 Email is required!
                               </div>
                             </div>
@@ -335,10 +343,9 @@ const AddEnquiryForm = () => {
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
                                     htmlFor={`${field.type}-${index}`}
-                                    className={`col-form-label fw-bold fs-6 ${
-                                      field.mandatory === true ? 'required' : ''
-                                    }`}
-                                    style={{whiteSpace: 'nowrap'}}
+                                    className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                      }`}
+                                    style={{ whiteSpace: 'nowrap' }}
                                   >
                                     {field.name}
                                   </label>
@@ -383,7 +390,7 @@ const AddEnquiryForm = () => {
                                         <div className='fv-plugins-message-container mx-5'>
                                           <div
                                             className='fv-help-block'
-                                            style={{whiteSpace: 'nowrap'}}
+                                            style={{ whiteSpace: 'nowrap' }}
                                           >
                                             {`${field.name} is Required!`}
                                           </div>
@@ -401,10 +408,9 @@ const AddEnquiryForm = () => {
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
                                     htmlFor={`${field.type}-${index}`}
-                                    className={`col-form-label fw-bold fs-6 ${
-                                      field.mandatory === true ? 'required' : ''
-                                    }`}
-                                    style={{whiteSpace: 'nowrap'}}
+                                    className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                      }`}
+                                    style={{ whiteSpace: 'nowrap' }}
                                   >
                                     {field.name}
                                   </label>
@@ -452,7 +458,7 @@ const AddEnquiryForm = () => {
                                         <div className='fv-plugins-message-container mx-5'>
                                           <div
                                             className='fv-help-block'
-                                            style={{whiteSpace: 'nowrap'}}
+                                            style={{ whiteSpace: 'nowrap' }}
                                           >
                                             {`${field.name} is Required!`}
                                           </div>
@@ -469,9 +475,8 @@ const AddEnquiryForm = () => {
                               <div className='row mb-6'>
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
-                                    className={`col-form-label fw-bold fs-6 ${
-                                      field.mandatory ? 'required' : ''
-                                    }`}
+                                    className={`col-form-label fw-bold fs-6 ${field.mandatory ? 'required' : ''
+                                      }`}
                                   >
                                     {field.name}
                                   </label>
@@ -503,7 +508,7 @@ const AddEnquiryForm = () => {
                                       <div className='fv-plugins-message-container mt-2'>
                                         <div
                                           className='fv-help-block'
-                                          style={{whiteSpace: 'nowrap'}}
+                                          style={{ whiteSpace: 'nowrap' }}
                                         >
                                           {`${field.name} is required!`}
                                         </div>

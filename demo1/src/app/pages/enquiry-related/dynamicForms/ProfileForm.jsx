@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from 'react'
-import {useNavigate, useParams} from 'react-router-dom'
-import {useDynamicFieldContext} from '../DynamicFieldsContext'
-import {KTIcon} from '../../../../_metronic/helpers'
-import {toast} from 'react-toastify'
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import { KTIcon } from '../../../../_metronic/helpers'
+import { toast } from 'react-toastify'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal.jsx'
 import DynamicFields from '../DynamicFields'
-import {useCompanyContext} from '../../compay/CompanyContext'
-import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
+import { useCompanyContext } from '../../compay/CompanyContext'
+import { useCustomFormFieldContext } from './CustomFormFieldDataContext'
 import EditDynamicFields from './EditDynamicFields'
 
 const ProfileForm = () => {
@@ -18,7 +18,7 @@ const ProfileForm = () => {
   const params = useParams()
   const navigate = useNavigate()
   const customFormCTX = useDynamicFieldContext()
-  const {deleteFieldMutation} = useDynamicFieldContext()
+  const { deleteFieldMutation } = useDynamicFieldContext()
   const {
     getAllCustomFormFieldDataQuery,
     openModal: contextOpenModal,
@@ -54,10 +54,10 @@ const ProfileForm = () => {
     handleSelectChange(index, event, fieldName, type)
   }
 
-  const {data} = customFormCTX.useGetSingleFormNameById(params.id)
+  const { data } = customFormCTX.useGetSingleFormNameById(params.id)
   // console.log(data?._id)
 
-  const {getCompanyLists} = useCompanyContext()
+  const { getCompanyLists } = useCompanyContext()
   // console.log(getCompanyLists?.data)
 
   const companyData = getCompanyLists?.data
@@ -95,14 +95,14 @@ const ProfileForm = () => {
   }
 
   const handleChange = (event) => {
-    const {name, value} = event.target
-    setInput((prevInput) => ({...prevInput, [name]: value}))
-    setFormData((prev) => ({...prev, [name]: value}))
+    const { name, value } = event.target
+    setInput((prevInput) => ({ ...prevInput, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = () => {
     if (inputData.trim() !== '') {
-      createaddFormFieldData.mutate({formName: inputData})
+      createaddFormFieldData.mutate({ formName: inputData })
 
       setIsCreatingNewForm(false)
       setInputData('')
@@ -124,8 +124,8 @@ const ProfileForm = () => {
 
   const formNameAdded =
     getAllAddedFormsName.data &&
-    getAllAddedFormsName.data.length > 0 &&
-    getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1]
+      getAllAddedFormsName.data.length > 0 &&
+      getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1]
       ? getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].formName
       : ''
 
@@ -166,7 +166,7 @@ const ProfileForm = () => {
                 </>
               ) : (
                 <>
-                  <h3 style={{fontWeight: 'bolder', margin: 0}}>{updateForm[0]?.formName}</h3>
+                  <h3 style={{ fontWeight: 'bolder', margin: 0 }}>{updateForm[0]?.formName}</h3>
                   <button
                     className='btn btn-sm btn-light-primary mx-4 mb-1'
                     onClick={() => navigate(`/update-form/${updateForm[0]?.id}`)}
@@ -177,7 +177,7 @@ const ProfileForm = () => {
               )}
             </div>
           </div>
-          {formNameAdded && !isCreatingNewForm && (
+          {/* {formNameAdded && !isCreatingNewForm && (
             <div
               className='card-toolbar'
               data-bs-toggle='tooltip'
@@ -190,7 +190,7 @@ const ProfileForm = () => {
                 Create New Form
               </button>
             </div>
-          )}
+          )} */}
         </div>
         <div id='kt_account_profile_details' className='collapse show'>
           <form>
@@ -277,9 +277,8 @@ const ProfileForm = () => {
       <div className='card mb-5 mb-xl-10'>
         <div className='card-header border-0 cursor-pointer'>
           <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0'>{` ${companyData} -> ${
-              formNameAdded ? `${updateForm[0]?.formName} ->` : ''
-            } Customized Fields `}</h3>
+            <h3 className='fw-bolder m-0'>{` ${companyData} -> ${formNameAdded ? `${updateForm[0]?.formName} ->` : ''
+              } Customized Fields `}</h3>
           </div>
         </div>
         <div id='kt_account_profile_details' className='collapse show'>
@@ -297,10 +296,9 @@ const ProfileForm = () => {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
-                                  }`}
-                                  style={{whiteSpace: 'nowrap'}}
+                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                    }`}
+                                  style={{ whiteSpace: 'nowrap' }}
                                 >
                                   {field.name}
                                 </label>
@@ -363,10 +361,9 @@ const ProfileForm = () => {
                               <div className='col-lg-4 d-flex align-items-center'>
                                 <label
                                   htmlFor={`${field.type}-${index}`}
-                                  className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
-                                  }`}
-                                  style={{whiteSpace: 'nowrap'}}
+                                  className={`col-form-label fw-bold fs-6 ${field.mandatory === true ? 'required' : ''
+                                    }`}
+                                  style={{ whiteSpace: 'nowrap' }}
                                 >
                                   {field.name}
                                 </label>
