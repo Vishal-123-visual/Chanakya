@@ -14,7 +14,6 @@ const NewStudentAdmissionPaidCollection = () => {
     const ctx = useStudentCourseFeesContext();
     const { data, isLoading } = ctx.getAllStudentsCourseFees;
 
-    // console.log(data)
     // Reference for the scrollable container
     const containerRef = useRef(null);
 
@@ -22,6 +21,9 @@ const NewStudentAdmissionPaidCollection = () => {
     useEffect(() => {
         if (data) {
             const filteredData = data.filter((item) => {
+
+                const companyId = item?.companyName
+
                 const studentCreationDate = new Date(item?.studentInfo?.createdAt);
                 const amountPaidDate = new Date(item?.amountDate);
 
@@ -33,22 +35,27 @@ const NewStudentAdmissionPaidCollection = () => {
                 const isCurrentMonthPayment = amountPaidDate.getMonth() === toDate.getMonth() &&
                     amountPaidDate.getFullYear() === toDate.getFullYear();
 
-                return isNewStudent && isCurrentMonthPayment &&
+                return isNewStudent && isCurrentMonthPayment && companyId === paramsData?.id &&
                     item?.amountPaid &&
                     item?.studentInfo?.dropOutStudent === false;
             });
 
-            const topData = filteredData.slice(0, page * 100);
-            setAllData(topData);
-            // console.log(topData)
-            // Calculate total collection based on amountPaid
-            const total = filteredData.reduce((total, collection) => total + (collection?.amountPaid || 0), 0);
-            setTotalCollection(total);
+            if (filteredData.length > 0) {
+                const topData = filteredData.slice(0, page * 100);
+                setAllData(topData);
 
-            setTotalStudents(filteredData.length);
+                // Calculate total collection based on amountPaid
+                const total = filteredData.reduce((total, collection) => total + (collection?.amountPaid || 0), 0);
+                setTotalCollection(total);
+                setTotalStudents(filteredData.length);
+            } else {
+                // If no data found, reset totals and clear data
+                setTotalCollection(0);
+                setTotalStudents(0);
+                setAllData([]);
+            }
         }
     }, [data, page, toDate]);
-
 
     // Handle scroll event to load more data
     const handleScroll = useCallback(() => {
@@ -143,7 +150,7 @@ const NewStudentAdmissionPaidCollection = () => {
                             </>
                         ) : (
                             <div className='d-flex flex-stack mb-5'>
-                                No Collection is Found!!
+                                No Collection Found!!
                             </div>
                         )}
                     </div>

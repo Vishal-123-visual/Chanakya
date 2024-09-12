@@ -21,11 +21,12 @@ const OldStudentMonthlyInstallmentCollection = () => {
         if (data) {
             // Filter data to get relevant monthly installment collections
             const filteredData = data.filter((item) => {
+                const companyId = item?.companyName
                 const amountDate = new Date(item?.amountDate); // Date when installment was created
                 const studentCreationDate = new Date(item?.studentInfo?.createdAt); // Date when student was created
 
                 return (
-                    item?.amountPaid &&
+                    item?.amountPaid && companyId === paramsData?.id &&
                     item?.studentInfo?.dropOutStudent === false &&
                     amountDate.getMonth() === toDate.getMonth() && amountDate.getFullYear() === toDate.getFullYear() &&
                     (studentCreationDate.getMonth() < toDate.getMonth() || studentCreationDate.getFullYear() < toDate.getFullYear())
