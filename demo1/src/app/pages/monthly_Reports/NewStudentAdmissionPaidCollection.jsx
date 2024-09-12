@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { toAbsoluteUrl } from "../../../_metronic/helpers";
 import { useParams } from "react-router-dom";
 import { useStudentCourseFeesContext } from "../courseFees/StudentCourseFeesContext";
+import Loader from "../../../_metronic/layout/components/loader/Loader";
 
 const NewStudentAdmissionPaidCollection = () => {
     const [page, setPage] = useState(1);
@@ -11,8 +12,9 @@ const NewStudentAdmissionPaidCollection = () => {
     const [toDate] = useState(new Date());
     const paramsData = useParams();
     const ctx = useStudentCourseFeesContext();
-    const { data, isLoading } = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id);
+    const { data, isLoading } = ctx.getAllStudentsCourseFees;
 
+    // console.log(data)
     // Reference for the scrollable container
     const containerRef = useRef(null);
 
@@ -21,27 +23,32 @@ const NewStudentAdmissionPaidCollection = () => {
         if (data) {
             const filteredData = data.filter((item) => {
                 const studentCreationDate = new Date(item?.studentInfo?.createdAt);
-                const installmentPaidDate = new Date(item?.createdAt);
+                const amountPaidDate = new Date(item?.amountDate);
 
                 // Check if the student was created in the current month and year
                 const isNewStudent = studentCreationDate.getMonth() === toDate.getMonth() &&
                     studentCreationDate.getFullYear() === toDate.getFullYear();
 
                 // Check if the installment was paid in the current month and year
-                const isCurrentMonthPayment = installmentPaidDate.getMonth() === toDate.getMonth() &&
-                    installmentPaidDate.getFullYear() === toDate.getFullYear();
+                const isCurrentMonthPayment = amountPaidDate.getMonth() === toDate.getMonth() &&
+                    amountPaidDate.getFullYear() === toDate.getFullYear();
 
                 return isNewStudent && isCurrentMonthPayment &&
-                    item?.studentInfo?.no_of_installments === item?.installment_number &&
-                    item.dropOutStudent === false;
+                    item?.amountPaid &&
+                    item?.studentInfo?.dropOutStudent === false;
             });
 
-            const topData = filteredData.slice(0, page * 10);
+            const topData = filteredData.slice(0, page * 100);
             setAllData(topData);
-            setTotalCollection(filteredData.reduce((total, collection) => total + collection?.installment_amount, 0));
+            // console.log(topData)
+            // Calculate total collection based on amountPaid
+            const total = filteredData.reduce((total, collection) => total + (collection?.amountPaid || 0), 0);
+            setTotalCollection(total);
+
             setTotalStudents(filteredData.length);
         }
     }, [data, page, toDate]);
+
 
     // Handle scroll event to load more data
     const handleScroll = useCallback(() => {
@@ -72,11 +79,10 @@ const NewStudentAdmissionPaidCollection = () => {
                 <h3 className='card-title align-items-start flex-column'>
                     <span className='card-label fw-bold fs-3 mb-1'>New Students</span>
                     <span className='text-muted fw-semibold fs-7'>Paid Amount Collections</span>
-
                 </h3>
 
                 <div className='card-toolbar flex-column align-items-start'>
-                    <span className='text-muted fw-semibold fs-7'>{`Monthly Collection => ${totalCollection.toFixed(2) || 0}`}</span>
+                    <span className='text-muted fw-semibold fs-7'>{`Monthly Collection => ${totalCollection?.toFixed(2) || 0}`}</span>
                     <span className='text-muted fw-semibold fs-8'>{`Total Students => ${totalStudents}`}</span>
                 </div>
             </div>
@@ -92,46 +98,54 @@ const NewStudentAdmissionPaidCollection = () => {
                     }}
                 >
                     <div>
-                        {allData?.map((newCollection, index) => (
-                            <div key={index} className='d-flex flex-stack mb-5'>
-                                <div className='d-flex align-items-center me-2'>
-                                    <div className='symbol symbol-50px me-3'>
-                                        <div className='symbol-label bg-light'>
-                                            <img
-                                                src={
-                                                    newCollection?.studentInfo?.image
-                                                        ? `${process.env.REACT_APP_BASE_URL}/api/images/${newCollection.studentInfo.image}`
-                                                        : toAbsoluteUrl('/media/avatars/300-1.jpg')
-                                                }
-                                                alt='Student'
-                                                className='h-50 w-50'
-                                                style={{ objectFit: 'cover' }}
-                                            />
+                        {isLoading ? <Loader /> : allData.length > 0 ? (
+                            <>
+                                {allData.map((newCollection, index) => (
+                                    <div key={index} className='d-flex flex-stack mb-5'>
+                                        <div className='d-flex align-items-center me-2'>
+                                            <div className='symbol symbol-50px me-3'>
+                                                <div className='symbol-label bg-light'>
+                                                    <img
+                                                        src={
+                                                            newCollection?.studentInfo?.image
+                                                                ? `${process.env.REACT_APP_BASE_URL}/api/images/${newCollection.studentInfo.image}`
+                                                                : toAbsoluteUrl('/media/avatars/300-1.jpg')
+                                                        }
+                                                        alt='Student'
+                                                        className='h-50 w-50'
+                                                        style={{ objectFit: 'cover' }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <a onClick={() => window.open(`/profile/student/${newCollection?.studentInfo?._id}`, '_blank')}
+                                                    style={{ cursor: 'pointer' }}
+                                                    className='fs-6 text-gray-800 text-hover-primary fw-bold'>
+                                                    {newCollection?.studentInfo?.name}
+                                                </a>
+                                                <div className='fs-7 text-muted fw-semibold mt-1'>
+                                                    {newCollection?.courseName?.courseName}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className='badge badge-light fw-semibold py-4 px-3'>
+                                            {newCollection?.amountPaid?.toFixed(2)}
                                         </div>
                                     </div>
-
-                                    <div>
-                                        <a onClick={() => window.open(`/profile/student/${newCollection?.studentInfo?._id}`, '_blank')}
-                                            style={{ cursor: 'pointer' }}
-                                            className='fs-6 text-gray-800 text-hover-primary fw-bold'>
-                                            {newCollection?.studentInfo?.name}
-                                        </a>
-                                        <div className='fs-7 text-muted fw-semibold mt-1'>
-                                            {newCollection?.courseName?.courseName}
-                                        </div>
+                                ))}
+                                {Array.from({ length: maxItems - allData.length }).map((_, index) => (
+                                    <div className='d-flex flex-stack mb-5' key={`placeholder-${index}`}>
+                                        {/* Empty placeholders */}
                                     </div>
-                                </div>
-
-                                <div className='badge badge-light fw-semibold py-4 px-3'>
-                                    {newCollection?.installment_amount.toFixed(2)}
-                                </div>
+                                ))}
+                            </>
+                        ) : (
+                            <div className='d-flex flex-stack mb-5'>
+                                No Collection is Found!!
                             </div>
-                        ))}
-                        {Array.from({ length: maxItems - allData.length }).map((_, index) => (
-                            <div className='d-flex flex-stack mb-5' key={`placeholder-${index}`}>
-                                {/* Empty placeholders */}
-                            </div>
-                        ))}
+                        )}
                     </div>
                 </div>
             </div>

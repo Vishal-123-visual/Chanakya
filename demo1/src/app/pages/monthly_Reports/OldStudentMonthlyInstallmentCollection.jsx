@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useStudentCourseFeesContext } from "../courseFees/StudentCourseFeesContext";
 import { useState, useEffect, useCallback, useRef } from "react";
 import { toAbsoluteUrl } from "../../../_metronic/helpers";
+import Loader from "../../../_metronic/layout/components/loader/Loader";
 
 const OldStudentMonthlyInstallmentCollection = () => {
     const [toDate] = useState(new Date());
@@ -11,30 +12,30 @@ const OldStudentMonthlyInstallmentCollection = () => {
     const [allData, setAllData] = useState([]);
     const paramsData = useParams();
     const ctx = useStudentCourseFeesContext();
-    const { data, isLoading } = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id);
+    const { data, isLoading } = ctx.getAllStudentsCourseFees;
 
     // Reference for the scrollable container
     const containerRef = useRef(null);
 
     useEffect(() => {
         if (data) {
+            // Filter data to get relevant monthly installment collections
             const filteredData = data.filter((item) => {
-                const installmentDate = new Date(item?.createdAt); // Date when installment was created
-                const expirationDate = new Date(item?.expiration_date); // Expiration date of the installment
+                const amountDate = new Date(item?.amountDate); // Date when installment was created
                 const studentCreationDate = new Date(item?.studentInfo?.createdAt); // Date when student was created
 
                 return (
-                    item?.studentInfo?.no_of_installments === item?.installment_number &&
-                    item.dropOutStudent === false &&
-                    (expirationDate.getMonth() === toDate.getMonth() && expirationDate.getFullYear() === toDate.getFullYear() ||
-                        installmentDate.getMonth() === toDate.getMonth() && installmentDate.getFullYear() === toDate.getFullYear()) &&
+                    item?.amountPaid &&
+                    item?.studentInfo?.dropOutStudent === false &&
+                    amountDate.getMonth() === toDate.getMonth() && amountDate.getFullYear() === toDate.getFullYear() &&
                     (studentCreationDate.getMonth() < toDate.getMonth() || studentCreationDate.getFullYear() < toDate.getFullYear())
                 );
             });
 
-            const topData = filteredData.slice(0, page * 10);
+            const topData = filteredData.slice(0, page * 100);
             setAllData(topData);
-            setTotalCollection(filteredData.reduce((total, collection) => total + collection?.installment_amount, 0));
+            console.log(topData)
+            setTotalCollection(filteredData.reduce((total, collection) => total + (collection?.amountPaid || 0), 0));
             setTotalStudents(filteredData.length);
         }
     }, [data, page, toDate]);
@@ -70,7 +71,7 @@ const OldStudentMonthlyInstallmentCollection = () => {
                 </h3>
 
                 <div className='card-toolbar flex-column align-items-start'>
-                    <span className='text-muted fw-semibold fs-7'>{`Monthly Collection => ${totalCollection.toFixed(2) || 0}`}</span>
+                    <span className='text-muted fw-semibold fs-7'>{`Monthly Collection => ${totalCollection?.toFixed(2) || 0}`}</span>
                     <span className='text-muted fw-semibold fs-8'>{`Total Students => ${totalStudents}`}</span>
                 </div>
             </div>
@@ -88,7 +89,7 @@ const OldStudentMonthlyInstallmentCollection = () => {
                     }}
                 >
                     {/* begin::Items */}
-                    {allData.length > 0 ? (
+                    {isLoading ? <Loader /> : allData.length > 0 ? (
                         <>
                             {allData.map((collection) => (
                                 <div className='d-flex flex-stack mb-5' key={collection._id}>
@@ -129,7 +130,7 @@ const OldStudentMonthlyInstallmentCollection = () => {
 
                                     {/* begin::Label */}
                                     <div className='badge badge-light fw-semibold py-4 px-3'>
-                                        {collection?.installment_amount.toFixed(2)}
+                                        {collection?.amountPaid?.toFixed(2)}
                                     </div>
                                     {/* end::Label */}
                                 </div>

@@ -136,13 +136,13 @@ const SidebarMenuMain = () => {
                     title='Monthly Reports'
                     hasBullet={true}
                   />
+                  <SidebarMenuItem
+                    to={`/monthlyCollectionFees/${CompanyListData?._id}`}
+                    title='Monthly Collections'
+                    hasBullet={true}
+                  />
                 </SidebarMenuItemWithSub>
 
-                <SidebarMenuItem
-                  to={`/monthlyCollectionFees/${CompanyListData?._id}`}
-                  title='Monthly Collections'
-                  hasBullet={true}
-                />
                 <SidebarMenuItem
                   to={`/student/commission/${CompanyListData?._id}`}
                   title='Commission'
