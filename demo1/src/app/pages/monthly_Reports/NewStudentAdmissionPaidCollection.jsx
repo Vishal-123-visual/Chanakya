@@ -72,11 +72,12 @@ const NewStudentAdmissionPaidCollection = () => {
                 <h3 className='card-title align-items-start flex-column'>
                     <span className='card-label fw-bold fs-3 mb-1'>New Students</span>
                     <span className='text-muted fw-semibold fs-7'>Paid Amount Collections</span>
-                    <span className='text-muted fw-semibold fs-7'>{`Total Students => ${totalStudents}`}</span>
+
                 </h3>
 
-                <div className='card-toolbar'>
-                    <span className='text-muted fw-semibold fs-8'>{`Monthly Collection => ${totalCollection.toFixed(2) || 0}`}</span>
+                <div className='card-toolbar flex-column align-items-start'>
+                    <span className='text-muted fw-semibold fs-7'>{`Monthly Collection => ${totalCollection.toFixed(2) || 0}`}</span>
+                    <span className='text-muted fw-semibold fs-8'>{`Total Students => ${totalStudents}`}</span>
                 </div>
             </div>
             {/* Body */}
