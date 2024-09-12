@@ -91,7 +91,7 @@ const OldStudentMonthlyInstallmentCollection = () => {
                     {/* begin::Items */}
                     {isLoading ? <Loader /> : allData.length > 0 ? (
                         <>
-                            {allData.map((collection) => (
+                            {allData?.filter((company) => company.companyName === paramsData.id)?.map((collection) => (
                                 <div className='d-flex flex-stack mb-5' key={collection._id}>
                                     {/* begin::Section */}
                                     <div className='d-flex align-items-center me-2'>

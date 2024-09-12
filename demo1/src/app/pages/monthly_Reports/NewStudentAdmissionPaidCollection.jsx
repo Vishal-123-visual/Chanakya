@@ -100,7 +100,7 @@ const NewStudentAdmissionPaidCollection = () => {
                     <div>
                         {isLoading ? <Loader /> : allData.length > 0 ? (
                             <>
-                                {allData.map((newCollection, index) => (
+                                {allData?.filter((company) => company.companyName === paramsData.id)?.map((newCollection, index) => (
                                     <div key={index} className='d-flex flex-stack mb-5'>
                                         <div className='d-flex align-items-center me-2'>
                                             <div className='symbol symbol-50px me-3'>
