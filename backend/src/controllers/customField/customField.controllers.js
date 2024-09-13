@@ -71,7 +71,7 @@ export const updateCustomFieldController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { type, name, value, mandatory, options } = req.body.fields;
-    console.log(req.body.fields);
+    // console.log(req.body.fields);
 
     // Find the existing custom field
     const customField = await customFieldModel.findById(id);
@@ -85,7 +85,7 @@ export const updateCustomFieldController = async (req, res, next) => {
     customField.type = type || customField.type;
     customField.name = name || customField.name;
     customField.value = value || customField.value;
-    console.log(mandatory);
+    // console.log(mandatory);
     // console.log(customField.mandatory);
     customField.mandatory = mandatory || customField.mandatory;
 

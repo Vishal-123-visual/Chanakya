@@ -53,6 +53,7 @@ export const updateSingleLabDataController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { labName } = req.body;
+    // console.log(labName);
     const lab = await labModel.findById(id);
     if (!lab) {
       return res.status(404).json({ message: "Lab not found" });

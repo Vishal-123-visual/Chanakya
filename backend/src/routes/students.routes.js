@@ -28,8 +28,10 @@ import { userModel } from "../models/user.models.js";
 const router = Router();
 
 router.post("/sendMailStudent", async (req, res, next) => {
+  // console.log(req.body);
   const studentData = req.body;
   // console.log(studentData.gst_percentage);
+  // console.log(studentData?.reciptNumber);
   let companyLogoURL =
     BACKEND_URL + "/api/images/" + studentData.companyName.logo;
   //const studentGSTStatus = await StudentGST_GuggestionModel.find();
@@ -38,12 +40,12 @@ router.post("/sendMailStudent", async (req, res, next) => {
 
   users?.map((user) => {
     //console.log(user.role, user.email);
-    if (user.role === "Admin" || user.role === "SuperAdmin") {
+    if (user.role === "SuperAdmin") {
       adminEmails += user.email + ",";
     }
   });
 
-  console.log(adminEmails);
+  // console.log(adminEmails);
 
   let gstAmount =
     studentData.companyName.isGstBased === "Yes"
@@ -352,7 +354,7 @@ router.post("/sendMailStudent", async (req, res, next) => {
                                   font-size: 14px;
                                   line-height: 24px;
                                 ">
-                      <strong>${studentData.companyName.reciptNumber}</strong>
+                      <strong>${studentData?.reciptNumber}</strong>
                     </td>
                   </tr> 
                   <tr>

@@ -17,15 +17,7 @@ const Schema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    quickCreate: {
-      type: Boolean,
-      default: false,
-    },
     headerView: {
-      type: Boolean,
-      default: false,
-    },
-    keyField: {
       type: Boolean,
       default: false,
     },

@@ -145,6 +145,14 @@ const AddEnquiryForm = () => {
       isValid = false
       errors.Email = 'Email is required!'
     }
+    // if (!input.Lead) {
+    //   isValid = false
+    //   errors.Lead = 'Lead is required!'
+    // }
+    // if (!input.leadStatus) {
+    //   isValid = false
+    //   errors.leadStatus = 'Email is required!'
+    // }
 
     // Define the types you want to validate
     const validTypes = [

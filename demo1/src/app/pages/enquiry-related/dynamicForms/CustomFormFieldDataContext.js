@@ -358,6 +358,18 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
   })
 
+  // Default Select fetching
+  const getAllDefaulSelect = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/select-field`, config)
+      // console.log(response)
+      return response.data
+    } catch (error) {
+      console.error('Error fetching default select data:', error) // Detailed error
+      throw new Error('Error fetching default select data: ' + error.message)
+    }
+  }
+
   return (
     <CustomFormFieldDataContext.Provider
       value={{
@@ -383,6 +395,8 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
         updateFormFieldMutation,
         deleteReorderedColumnsMutation,
         deleteSingleRowDataMutation,
+        // default Select
+        getAllDefaulSelect,
       }}
     >
       {children}

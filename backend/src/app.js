@@ -25,7 +25,7 @@ import labRoutes from "./routes/lab.routes.js";
 import startSchedulerStudentRemainderFeesToStudents from "../cron-jobs/SendRemainderFeesToStudent.cron_job.js";
 import batchRoutes from "./routes/batch.routes.js";
 import timingRoutes from "./routes/addTiming.routes.js";
-import sendRemainderFeesStudent from "../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
+import defaultSelectRoutes from "./routes/selectDefault.routes.js";
 
 const app = express();
 
@@ -52,6 +52,7 @@ app.use("/api/whatsAppMessageSuggestion", whatsAppMessageSuggestionRoutes);
 app.use("/api/student-gst-suggestions", studentGstSuggestionsRoutes);
 app.use("/api/dayBook", dayBookRoutes);
 app.use("/api/custom-field", customField);
+app.use("/api/select-field", defaultSelectRoutes);
 app.use("/api/add-form", addForms);
 app.use("/api/add-trainer", addTrainer);
 app.use("/api/add-lab", labRoutes);

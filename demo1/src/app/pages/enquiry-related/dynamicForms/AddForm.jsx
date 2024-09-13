@@ -70,8 +70,11 @@ export default function AddForm() {
     setFormData,
     formData,
     setFieldValues,
+    getAllDefaulSelect,
     createCustomFromFieldValuesMutation,
   } = useCustomFormFieldContext()
+
+  console.log(getAllDefaulSelect)
 
   const inputChangeHandler = (index, event, fieldName, type) => {
     handleInputChange(index, event, fieldName, type)
@@ -265,6 +268,7 @@ export default function AddForm() {
                   </div>
                 </div>
               </div>
+
               {/* ------------------------------- FOOTER STARTS HERE ------------------------------- */}
             </div>
           </form>
