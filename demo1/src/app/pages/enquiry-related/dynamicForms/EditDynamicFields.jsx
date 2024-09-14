@@ -1,10 +1,10 @@
-import {useEffect, useState} from 'react'
-import {useDynamicFieldContext} from '../DynamicFieldsContext'
-import {toast} from 'react-toastify'
+import { useEffect, useState } from 'react'
+import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import { toast } from 'react-toastify'
 
-const EditDynamicFields = ({field, setOpenModal}) => {
-  const {useGetSingleCustomFieldById, updateFieldMutation} = useDynamicFieldContext()
-  const fieldId = useGetSingleCustomFieldById(field._id)
+const EditDynamicFields = ({ field, setOpenModal }) => {
+  const { useGetSingleCustomFieldById, updateFieldMutation } = useDynamicFieldContext()
+  const fieldId = useGetSingleCustomFieldById(field?._id)
   const currentField = fieldId?.data?.customField
   const [fields, setFields] = useState(currentField)
   // console.log(fields)
@@ -48,7 +48,7 @@ const EditDynamicFields = ({field, setOpenModal}) => {
 
     setFields((prevFields) => ({
       ...prevFields,
-      options: [...(prevFields.options || []), {label: newOption, value: newOption}],
+      options: [...(prevFields.options || []), { label: newOption, value: newOption }],
     }))
     setNewOption('')
   }
@@ -205,7 +205,7 @@ const EditDynamicFields = ({field, setOpenModal}) => {
                 type='checkbox'
                 id={`checkbox-${optionIndex}`}
                 className='form-check-input'
-                // Handle checkbox change here
+              // Handle checkbox change here
               />
               <label htmlFor={`checkbox-${optionIndex}`}>{option.label}</label>
               <i
@@ -226,7 +226,7 @@ const EditDynamicFields = ({field, setOpenModal}) => {
                 className='form-check-input'
                 value={option.value}
                 checked={fields?.value === option.value}
-                // Handle radio change here
+              // Handle radio change here
               />
               <label htmlFor={`radio-${optionIndex}`}>{option.label}</label>
               <i

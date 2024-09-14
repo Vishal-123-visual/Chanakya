@@ -52,16 +52,13 @@ export const updateSingleDefaultSelectController = async (req, res, next) => {
   try {
     // console.log("Request Body:", req.body);
 
-    // Assuming req.body is an array and we are interested in the first item
-    const [bodyData] = req.body;
-
-    // Destructure the first item of the array
-    const { selectName, options, mandatory } = bodyData;
+    // No need to destructure as an array, just access the object
+    const { selectName, options, mandatory } = req.body.data;
 
     // Log destructured values
     // console.log("Destructured Values:", { selectName, options, mandatory });
 
-    // Use the ID from params (make sure this is correctly set in your route)
+    // Use the ID from params
     const { id } = req.params;
 
     // Find the document by ID
@@ -72,17 +69,15 @@ export const updateSingleDefaultSelectController = async (req, res, next) => {
         .json({ success: false, message: "Default Select not found" });
     }
 
-    // Log the document found
-    // console.log("Found Document:", updateDefaultSelect);
-
     // Update fields
     updateDefaultSelect.selectName =
       selectName || updateDefaultSelect.selectName;
     if (options !== undefined) {
       updateDefaultSelect.options = options;
     }
-    updateDefaultSelect.mandatory =
-      mandatory !== undefined ? mandatory : updateDefaultSelect.mandatory;
+    if (mandatory !== undefined) {
+      updateDefaultSelect.mandatory = mandatory;
+    }
 
     // Save the updated document
     await updateDefaultSelect.save();

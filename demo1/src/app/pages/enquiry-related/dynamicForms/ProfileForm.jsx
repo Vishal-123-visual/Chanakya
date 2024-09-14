@@ -8,6 +8,7 @@ import DynamicFields from '../DynamicFields'
 import { useCompanyContext } from '../../compay/CompanyContext'
 import { useCustomFormFieldContext } from './CustomFormFieldDataContext'
 import EditDynamicFields from './EditDynamicFields'
+import EditSelectDynamicFields from "./EditSelectDynamicFields"
 
 const ProfileForm = () => {
   const [inputData, setInputData] = useState('')
@@ -17,6 +18,7 @@ const ProfileForm = () => {
   const [isCreatingNewForm, setIsCreatingNewForm] = useState(false)
   const params = useParams()
   const navigate = useNavigate()
+  const [selectId, setSelectId] = useState(null)
   const customFormCTX = useDynamicFieldContext()
   const { deleteFieldMutation } = useDynamicFieldContext()
   const {
@@ -39,7 +41,11 @@ const ProfileForm = () => {
     formData,
     setFieldValues,
     createCustomFromFieldValuesMutation,
+    getAllDefaultSelectFields
   } = useCustomFormFieldContext()
+
+  const selectField = getAllDefaultSelectFields?.data?.defaultSelects
+  // console.log(selectField)
 
   const inputChangeHandler = (index, event, fieldName, type) => {
     handleInputChange(index, event, fieldName, type)
@@ -78,11 +84,6 @@ const ProfileForm = () => {
     setcontextOpenModal(true)
   }
 
-  const companyId = getCompanyLists?.data
-    ?.filter((companyNameById) => companyNameById?._id === data?.companyName)
-    .map((company) => company._id)
-  // console.log(companyId)
-
   const fieldDeleteHandler = (fieldId) => {
     deleteFieldMutation.mutate(fieldId, {
       onSuccess: () => {
@@ -109,10 +110,6 @@ const ProfileForm = () => {
     }
   }
 
-  const handleNewForm = () => {
-    setInputData('')
-    setIsCreatingNewForm(true)
-  }
 
   const updateForm = getAllAddedFormsName?.data
     ?.filter((formName) => formName?._id === data?._id)
@@ -129,19 +126,12 @@ const ProfileForm = () => {
       ? getAllAddedFormsName.data[getAllAddedFormsName.data.length - 1].formName
       : ''
 
-  const handleSave = (event) => {
-    event.preventDefault()
-    //console.log('from data from handle save', formData)
-    createCustomFromFieldValuesMutation.mutate({
-      ...formData,
-      formId: params.id,
-      companyId: companyId,
-    })
-    // setInput({})
-    // navigate(`/view-form-data/${companyId}`)
-    window.location.reload()
+  const openEditSelectFieldModal = (select) => {
+    // console.log(field)
+    setModalMode('select')
+    setSelectId(select)
+    setcontextOpenModal(true)
   }
-  // console.log(getAllCustomFormFieldDataQuery?.data)
 
   return (
     <>
@@ -265,6 +255,37 @@ const ProfileForm = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+
+              <div className='row'>
+                {selectField?.map((select) => (
+                  <div className='col-6' key={select._id}>
+                    <div className='row mb-6 align-items-center'>
+                      <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
+                        <span>{select?.selectName}</span>
+                      </label>
+                      <div className='col-lg-8 d-flex align-items-center'> {/* Use flexbox to align items */}
+                        <select
+                          className='form-select form-select-solid form-select-lg flex-grow-1'
+                          name={select?.selectName}
+                        >
+                          <option value="">--Select-a-Option--</option>
+                          {select?.options.map((option) => (
+                            <option key={option._id} value={option?.value}>
+                              {option?.label}
+                            </option>
+                          ))}
+                        </select>
+                        <a
+                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2'
+                          onClick={() => openEditSelectFieldModal(select)}
+                        >
+                          <KTIcon iconName='pencil' className='fs-3' />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
               {/* ------------------------------- FOOTER STARTS HERE ------------------------------- */}
             </div>
@@ -542,10 +563,14 @@ const ProfileForm = () => {
                 </button>
               )} */}
               <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
-                {modalMode === 'add' ? (
-                  <DynamicFields formId={data?._id} />
-                ) : (
+                {modalMode === 'add' && (
+                  <DynamicFields companyName={data?._id} />
+                )}
+                {modalMode === 'edit' && (
                   <EditDynamicFields setOpenModal={setcontextOpenModal} field={selectedField} />
+                )}
+                {modalMode === 'select' && (
+                  <EditSelectDynamicFields setOpenModal={setcontextOpenModal} selectId={selectId} />
                 )}
               </PopUpModal>
             </div>

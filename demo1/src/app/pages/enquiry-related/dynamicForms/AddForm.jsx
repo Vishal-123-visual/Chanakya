@@ -4,6 +4,7 @@ import { useDynamicFieldContext } from '../DynamicFieldsContext'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 // import PopUpModal from ""
 import DynamicFields from '../DynamicFields'
+import EditSelectDynamicFields from "./EditSelectDynamicFields"
 import { KTIcon } from '../../../../_metronic/helpers'
 import { useCompanyContext } from '../../compay/CompanyContext'
 import { toast } from 'react-toastify'
@@ -12,7 +13,7 @@ import EditDynamicFields from './EditDynamicFields'
 
 export default function AddForm() {
   const [inputData, setInputData] = useState('')
-  // const [open, setOpen] = useState(true)
+  const [selectId, setSelectId] = useState(null)
   const [modalMode, setModalMode] = useState('add')
   const [selectedField, setSelectedField] = useState(null)
   const [isCreatingNewForm, setIsCreatingNewForm] = useState(false)
@@ -50,6 +51,13 @@ export default function AddForm() {
     setcontextOpenModal(true)
   }
 
+  const openEditSelectFieldModal = (select) => {
+    // console.log(field)
+    setModalMode('select')
+    setSelectId(select)
+    setcontextOpenModal(true)
+  }
+
   const {
     setFields,
     getAllCustomFormFieldDataQuery,
@@ -70,11 +78,12 @@ export default function AddForm() {
     setFormData,
     formData,
     setFieldValues,
-    getAllDefaulSelect,
+    getAllDefaultSelectFields,
     createCustomFromFieldValuesMutation,
   } = useCustomFormFieldContext()
 
-  console.log(getAllDefaulSelect)
+  const selectField = getAllDefaultSelectFields?.data?.defaultSelects
+  // console.log(selectField)
 
   const inputChangeHandler = (index, event, fieldName, type) => {
     handleInputChange(index, event, fieldName, type)
@@ -268,6 +277,38 @@ export default function AddForm() {
                   </div>
                 </div>
               </div>
+
+              <div className='row'>
+                {selectField?.map((select) => (
+                  <div className='col-6' key={select?._id}>
+                    <div className='row mb-6 align-items-center'>
+                      <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
+                        <span>{select?.selectName}</span>
+                      </label>
+                      <div className='col-lg-8 d-flex align-items-center'> {/* Use flexbox to align items */}
+                        <select
+                          className='form-select form-select-solid form-select-lg flex-grow-1'
+                          name={select?.selectName}
+                        >
+                          <option value="">--Select-a-Option--</option>
+                          {select?.options.map((option) => (
+                            <option key={option._id} value={option?.value}>
+                              {option?.label}
+                            </option>
+                          ))}
+                        </select>
+                        <a
+                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2'
+                          onClick={() => openEditSelectFieldModal(select)}
+                        >
+                          <KTIcon iconName='pencil' className='fs-3' />
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
 
               {/* ------------------------------- FOOTER STARTS HERE ------------------------------- */}
             </div>
@@ -549,10 +590,14 @@ export default function AddForm() {
                 </button>
               )}
               <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
-                {modalMode === 'add' ? (
+                {modalMode === 'add' && (
                   <DynamicFields companyName={data?._id} formId={formId} />
-                ) : (
+                )}
+                {modalMode === 'edit' && (
                   <EditDynamicFields setOpenModal={setcontextOpenModal} field={selectedField} />
+                )}
+                {modalMode === 'select' && (
+                  <EditSelectDynamicFields setOpenModal={setcontextOpenModal} selectId={selectId} />
                 )}
               </PopUpModal>
             </div>

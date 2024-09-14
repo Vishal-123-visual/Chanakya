@@ -21,9 +21,11 @@ const AddEnquiryForm = () => {
     setInput,
     setFormData,
     formData,
+    getAllDefaultSelectFields,
     createCustomFromFieldValuesMutation,
   } = useCustomFormFieldContext()
 
+  const selectField = getAllDefaultSelectFields?.data?.defaultSelects
   // console.log(formData)
   // const fetchForm = get
 
@@ -34,6 +36,7 @@ const AddEnquiryForm = () => {
     handleInputChange(index, event, fieldName, type)
     // setDefaultFieldData(event)
   }
+
   const checkboxChangeHandler = (index, optionValue, event, fieldName, type) => {
     // console.log('Checkbox Value', optionValue)
     const checkedOption = optionValue
@@ -98,6 +101,17 @@ const AddEnquiryForm = () => {
     ?.filter((formId) => formId._id === selectedFormId)
     .map((form) => form.formName)
   // console.log(formNameById)
+
+  const handleDefaultSelectChange = (e, selectName) => {
+    const { value } = e.target;
+
+    // Update the formData state with the selected value, using selectName as the key
+    setFormData((prevData) => ({
+      ...prevData,
+      [selectName]: value, // Store the value by selectName
+    }));
+  };
+
 
   const handleChange = (event) => {
     const { name, value } = event.target
@@ -335,6 +349,46 @@ const AddEnquiryForm = () => {
                       </div>
                     </div>
                   </div>
+
+                  <div className='row'>
+                    {selectField?.map((select) => (
+                      <div className='col-6' key={select?._id}>
+                        <div className='row mb-6 align-items-center'>
+                          <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
+                            <span>{select?.selectName}</span>
+                          </label>
+                          <div className='col-lg-8 d-flex flex-column'> {/* Flex column to stack elements vertically */}
+                            <select
+                              className='form-select form-select-solid form-select-lg flex-grow-1'
+                              name={select?.selectName}
+                              // onClick={() => handleBlur(select?.selectName, select?.selectValue)}
+                              // onBlur={() => handleBlur(select?.selectName, select?.selectValue)}
+                              onChange={(e) => handleDefaultSelectChange(e, select?.selectName)}
+                            >
+                              <option value="">--Select-a-Option--</option>
+                              {select?.options.map((option) => (
+                                <option key={option._id} value={option?.value}>
+                                  {option?.label}
+                                </option>
+                              ))}
+                            </select>
+
+                            {/* Error message below the select input */}
+                            {isTouched[select?.selectName] &&
+                              !select?.selectValue &&
+                              select?.mandatory === true && (
+                                <div className='fv-plugins-message-container mt-2'>
+                                  <div className='fv-help-block' style={{ whiteSpace: 'nowrap' }}>
+                                    {`${select?.selectName} is required!`}
+                                  </div>
+                                </div>
+                              )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
                 </>
 
                 {/* Dynamically render form fields based on selected form ID */}

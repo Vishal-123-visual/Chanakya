@@ -287,6 +287,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
       }
     },
   })
+
   const useGetSingleFormValueById = (id) => {
     return useQuery({
       queryKey: ['getCustomFormFieldValuesData', id],
@@ -304,7 +305,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
 
   const updateFormFieldMutation = useMutation({
     mutationFn: async (id) => {
-      // console.log(id)
+      console.log(id)
       // Perform the PUT request using the `id`
       return axios
         .put(`${BASE_URL}/api/submit-form/${id.id}`, id, config)
@@ -359,16 +360,87 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
   })
 
   // Default Select fetching
-  const getAllDefaulSelect = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/select-field`, config)
-      // console.log(response)
-      return response.data
-    } catch (error) {
-      console.error('Error fetching default select data:', error) // Detailed error
-      throw new Error('Error fetching default select data: ' + error.message)
-    }
+  const createDefaultSelectFieldMutation = useMutation({
+    mutationFn: async (data) => {
+      // console.log(data)
+      return axios.post(`${BASE_URL}/api/select-field`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        //toast.error(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getAllDefaultSelectFields']})
+      }
+    },
+  })
+
+  const getAllDefaultSelectFields = useQuery({
+    // queryFn: () => {
+    //   return axios.get(`${BASE_URL}/api/custom-field`, config)
+    // },
+    // await queryClient.invalidateQueries({queryKey: ['getCustomFormFieldData']})
+
+    queryKey: ['getAllDefaultSelectFields'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/select-field`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
+  const useGetSingleDefaultSelectFieldById = (id) => {
+    return useQuery({
+      queryKey: ['getAllDefaultSelectFields', id],
+      queryFn: async () => {
+        try {
+          const response = await axios.get(`${BASE_URL}/api/select-field/${id}`, config)
+          // console.log(response)
+          return response.data
+        } catch (error) {
+          throw new Error('Error fetching student data: ' + error.message)
+        }
+      },
+    })
   }
+
+  const updateDefaultSelectFieldMutation = useMutation({
+    mutationFn: async (id) => {
+      // console.log(id)
+      // Perform the PUT request using the `id`
+      // console.log()
+      return axios.put(`${BASE_URL}/api/select-field/${id.id}`, id, config).then((res) => res.data)
+    },
+
+    onSuccess: () => {
+      toast.success('Select  Updated Successfully !!')
+    },
+    onSettled: async (_, error) => {
+      if (error) {
+        // toast.error('Error while updating Select:', error)
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getAllDefaultSelectFields'],
+        })
+      }
+    },
+  })
 
   return (
     <CustomFormFieldDataContext.Provider
@@ -396,7 +468,10 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
         deleteReorderedColumnsMutation,
         deleteSingleRowDataMutation,
         // default Select
-        getAllDefaulSelect,
+        createDefaultSelectFieldMutation,
+        getAllDefaultSelectFields,
+        useGetSingleDefaultSelectFieldById,
+        updateDefaultSelectFieldMutation,
       }}
     >
       {children}
