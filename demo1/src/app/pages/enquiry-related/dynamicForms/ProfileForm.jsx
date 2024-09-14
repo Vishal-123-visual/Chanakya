@@ -269,7 +269,7 @@ const ProfileForm = () => {
                           className='form-select form-select-solid form-select-lg flex-grow-1'
                           name={select?.selectName}
                         >
-                          <option value="">--Select-a-Option--</option>
+                          <option value="">--Select-an-Option--</option>
                           {select?.options.map((option) => (
                             <option key={option._id} value={option?.value}>
                               {option?.label}

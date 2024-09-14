@@ -365,7 +365,7 @@ const AddEnquiryForm = () => {
                               // onBlur={() => handleBlur(select?.selectName, select?.selectValue)}
                               onChange={(e) => handleDefaultSelectChange(e, select?.selectName)}
                             >
-                              <option value="">--Select-a-Option--</option>
+                              <option value="">--Select-an-Option--</option>
                               {select?.options.map((option) => (
                                 <option key={option._id} value={option?.value}>
                                   {option?.label}
