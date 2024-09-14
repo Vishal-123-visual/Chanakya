@@ -297,12 +297,12 @@ export default function AddForm() {
                             </option>
                           ))}
                         </select>
-                        <a
+                        {formNameAdded && <a
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm ms-2'
                           onClick={() => openEditSelectFieldModal(select)}
                         >
                           <KTIcon iconName='pencil' className='fs-3' />
-                        </a>
+                        </a>}
                       </div>
                     </div>
                   </div>
