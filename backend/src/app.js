@@ -26,6 +26,7 @@ import startSchedulerStudentRemainderFeesToStudents from "../cron-jobs/SendRemai
 import batchRoutes from "./routes/batch.routes.js";
 import timingRoutes from "./routes/addTiming.routes.js";
 import defaultSelectRoutes from "./routes/selectDefault.routes.js";
+import StudentNotesRoutes from "./routes/studentNotes.routes.js";
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use("/api", userRoutes);
 app.use("/api/addmission_form", addMissionFormRoutes);
 app.use("/api/students", studentsRoutes);
 app.use("/api/student-issues", studentIssuesRoutes);
+app.use("/api/student-notes", StudentNotesRoutes);
 app.use("/api/complete/course/students", completeCourseStudentsRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/subjects", subjectRoutes);

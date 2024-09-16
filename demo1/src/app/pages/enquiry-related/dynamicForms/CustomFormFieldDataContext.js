@@ -305,7 +305,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
 
   const updateFormFieldMutation = useMutation({
     mutationFn: async (id) => {
-      console.log(id)
+      // console.log(id)
       // Perform the PUT request using the `id`
       return axios
         .put(`${BASE_URL}/api/submit-form/${id.id}`, id, config)
@@ -442,6 +442,139 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
   })
 
+  //  ------------------------------------- Student Issues Start here -------------------------------------------
+  const createStudentNoteMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/student-notes`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentNotes'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentNotes'],
+        })
+      }
+    },
+  })
+
+  const getStudentNotesListsQuery = useQuery({
+    queryKey: ['getStudentNotes'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/student-notes`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
+  const useUpdateStudentNoteMutation = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.put(`${BASE_URL}/api/student-notes/${data.id}`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentNotes'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentNotes'],
+        })
+      }
+    },
+  })
+
+  const useDeleteStudentNoteMutation = useMutation({
+    mutationFn: async (id) => {
+      //console.log(data)
+      return axios.delete(`${BASE_URL}/api/student-notes/${id}`, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: async (res) => {
+      if (res.data.success) {
+        toast.success(res.data.message)
+      }
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentNotes'],
+      })
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        toast.warn(error.response.data.error, {
+          type: 'error',
+          bodyStyle: {
+            fontSize: '18px',
+          },
+        })
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentNotes'],
+        })
+      }
+    },
+  })
+
   return (
     <CustomFormFieldDataContext.Provider
       value={{
@@ -472,6 +605,11 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
         getAllDefaultSelectFields,
         useGetSingleDefaultSelectFieldById,
         updateDefaultSelectFieldMutation,
+        // Student Notes
+        createStudentNoteMutation,
+        getStudentNotesListsQuery,
+        useDeleteStudentNoteMutation,
+        useUpdateStudentNoteMutation,
       }}
     >
       {children}

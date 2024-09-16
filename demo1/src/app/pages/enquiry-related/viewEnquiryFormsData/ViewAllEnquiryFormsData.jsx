@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { toast } from 'react-toastify'
-import { KTIcon } from '../../../../_metronic/helpers'
-import { useCustomFormFieldContext } from '../dynamicForms/CustomFormFieldDataContext'
-import { useNavigate, useParams } from 'react-router-dom'
-import { useDynamicFieldContext } from '../DynamicFieldsContext'
-import { useCompanyContext } from '../../compay/CompanyContext'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import React, {useState, useEffect} from 'react'
+import {toast} from 'react-toastify'
+import {KTIcon} from '../../../../_metronic/helpers'
+import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useDynamicFieldContext} from '../DynamicFieldsContext'
+import {useCompanyContext} from '../../compay/CompanyContext'
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
+import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
+import UpdateFormData from '../dynamicForms/UpdateFormData'
+import OnlyViewFormData from '../dynamicForms/OnlyViewFormData'
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)
@@ -48,7 +51,11 @@ export default function ViewAllEnquiryFormsData() {
     deleteReorderedColumnsMutation,
     deleteSingleRowDataMutation,
   } = useCustomFormFieldContext()
-  const { getAllAddedFormsName } = useDynamicFieldContext()
+  const {
+    getAllAddedFormsName,
+    openModal: contextOpenModal,
+    setOpenModal: setcontextOpenModal,
+  } = useDynamicFieldContext()
   const companyCTX = useCompanyContext()
   const params = useParams()
   const companyId = params?.id
@@ -61,8 +68,11 @@ export default function ViewAllEnquiryFormsData() {
   // console.log(useReorderedRowData)
   // console.log(object)
 
-  const { data: companyInfo } = companyCTX?.useGetSingleCompanyData(companyId)
+  const {data: companyInfo} = companyCTX?.useGetSingleCompanyData(companyId)
   const [selectedFormId, setSelectedFormId] = useState('')
+  const [selectId, setSelectId] = useState(null)
+  const [viewSelectId, setViewSelectId] = useState(null)
+  const [modalMode, setModalMode] = useState('view')
   const [filteredData, setFilteredData] = useState([])
   const [formOptions, setFormOptions] = useState([])
   const [searchValue, setSearchValue] = useState('')
@@ -118,6 +128,19 @@ export default function ViewAllEnquiryFormsData() {
 
     fetchData()
   }, [selectedFormId, getAllFormsFieldValue, getAllAddedFormsName, companyId])
+
+  const viewFormDataModal = (rowId) => {
+    setModalMode('view')
+    setViewSelectId(rowId)
+    setcontextOpenModal(true)
+  }
+
+  const openEditFormData = (rowId) => {
+    // console.log(field)
+    setModalMode('edit')
+    setSelectId(rowId)
+    setcontextOpenModal(true)
+  }
 
   const fetchUpdatedData = async () => {
     if (selectedFormId && companyId) {
@@ -324,7 +347,7 @@ export default function ViewAllEnquiryFormsData() {
   }
 
   const onDragEnd = async (result) => {
-    const { source, destination, type } = result
+    const {source, destination, type} = result
 
     if (!destination) return
 
@@ -398,95 +421,112 @@ export default function ViewAllEnquiryFormsData() {
             <Droppable droppableId='droppable-columns' direction='horizontal' type='COLUMN'>
               {(provided) => (
                 <table
-                  className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'
+                  className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 '
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
                   <thead>
+                    {filteredGroupedData.length > 0 ? (
+                      <div className='d-flex justify-content-start flex-shrink-0'>
+                        <a
+                          className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm'
+                          onClick={() =>
+                            rowsDeleteHandler(
+                              allRowsId,
+                              firstColumnData
+                              // formRowDataBeforeDragging
+                            )
+                          }
+                        >
+                          <KTIcon iconName='trash' className='fs-2' />
+                        </a>
+                      </div>
+                    ) : (
+                      ''
+                    )}
                     <tr className='fw-bold text-muted'>
-                      <th className='w-25px'></th>
+                      <th>
+                        <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                          <input
+                            className='form-check-input widget-9-check'
+                            type='checkbox'
+                            value='1'
+                          />
+                        </div>
+                      </th>
+                      {uniqueFieldNames.length > 0 && (
+                        <th className='min-w-100px text-start'>Actions</th>
+                      )}
+                      {/* <th className='w-25px'></th> */}
                       {uniqueFieldNames.map((fieldName, index) => (
                         <Draggable key={fieldName} draggableId={fieldName} index={index}>
-                          {(provided, snapshot) => (
-                            <th
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              style={getItemStyle(
-                                snapshot.isDragging,
-                                provided.draggableProps.style
-                              )}
-                              className='min-w-150px'
-                            >
-                              {fieldName}
-                            </th>
-                          )}
+                          {(provided, snapshot) => {
+                            // Check if the fieldName is "Name" or "Mobile" and apply fixed styles
+                            const isFixedColumn =
+                              fieldName === 'Name' || fieldName === 'Mobile Number'
+
+                            // Define custom styles for fixed columns
+                            const fixedStyles =
+                              fieldName === 'Name'
+                                ? {left: 0, zIndex: 2, position: 'sticky', background: 'white'}
+                                : {
+                                    left: '150px',
+                                    zIndex: 2,
+                                    position: 'sticky',
+                                    background: 'white',
+                                  }
+
+                            // Merge custom styles for "Name" and "Mobile"
+                            const mergedStyles = isFixedColumn
+                              ? {
+                                  ...getItemStyle(
+                                    snapshot.isDragging,
+                                    provided.draggableProps.style
+                                  ),
+                                  ...fixedStyles,
+                                }
+                              : getItemStyle(snapshot.isDragging, provided.draggableProps.style)
+
+                            return (
+                              <th
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                style={mergedStyles}
+                                className={`min-w-150px ${isFixedColumn ? 'fixed-column' : ''}`}
+                              >
+                                {fieldName}
+                              </th>
+                            )
+                          }}
                         </Draggable>
                       ))}
-                      {uniqueFieldNames.length > 0 && <th className='min-w-140px'>Company</th>}
-                      {uniqueFieldNames.length > 0 && (
-                        <th className='min-w-100px text-end'>Actions</th>
-                      )}
-                      {filteredGroupedData.length > 0 ? (
-                        <div className='d-flex justify-content-end flex-shrink-0'>
-                          <a
-                            className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm'
-                            onClick={() =>
-                              rowsDeleteHandler(
-                                allRowsId,
-                                firstColumnData
-                                // formRowDataBeforeDragging
-                              )
-                            }
-                          >
-                            <KTIcon iconName='trash' className='fs-2' />
-                          </a>
-                        </div>
-                      ) : (
-                        ''
-                      )}
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id='droppableId'>
                     {filteredGroupedData.length > 0 ? (
                       filteredGroupedData?.map((rowData) => (
                         <tr key={rowData?.id}>
-                          <td></td>
-                          {uniqueFieldNames.map((fieldName) => {
-                            const fieldData = rowData.fields.find(
-                              (field) => field.name === fieldName
-                            )
-
-                            return (
-                              <>
-                                <td
-                                  onClick={() =>
-                                    fieldData && fieldData.name === 'Name'
-                                      ? navigate(`/update-form-data/${rowData.id}`)
-                                      : ''
-                                  }
-                                  key={fieldName}
-                                  className='cursor-pointer'
-                                >
-                                  {fieldData
-                                    ? typeof fieldData?.value === 'object'
-                                      ? Object.keys(fieldData.value).map((key) => (
-                                        <span key={key}>{fieldData?.value[key]} </span>
-                                      ))
-                                      : fieldData?.value
-                                    : ''}
-                                </td>
-                              </>
-                            )
-                          })}
-                          <td>{companyInfo?.companyName}</td>
                           <td>
+                            <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                              <input
+                                className='form-check-input widget-9-check'
+                                type='checkbox'
+                                value='1'
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            {' '}
                             <div className='d-flex justify-content-end flex-shrink-0'>
                               <a
-                                onClick={() => {
-                                  // console.log(rowData.id)
-                                  navigate(`/update-form-data/${rowData.id}`)
-                                }}
+                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                onClick={() => viewFormDataModal(rowData.id)}
+                              >
+                                <KTIcon iconName='eye' className='fs-3' />
+                              </a>
+                              <a
+                                onClick={() => openEditFormData(rowData.id)}
                                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                               >
                                 <KTIcon iconName='pencil' className='fs-3' />
@@ -502,6 +542,45 @@ export default function ViewAllEnquiryFormsData() {
                               </a>
                             </div>
                           </td>
+                          {uniqueFieldNames.map((fieldName) => {
+                            const fieldData = rowData.fields.find(
+                              (field) => field.name === fieldName
+                            )
+
+                            // Check if the field is "Name" or "Mobile"
+                            const isFixedField =
+                              fieldName === 'Name' || fieldName === 'Mobile Number'
+
+                            return (
+                              <td
+                                onClick={() =>
+                                  fieldData && fieldData.name === 'Name'
+                                    ? openEditFormData(rowData.id)
+                                    : ''
+                                }
+                                key={fieldName}
+                                className={`cursor-pointer ${isFixedField ? 'fixed-column' : ''}`}
+                                style={
+                                  isFixedField
+                                    ? {
+                                        position: 'sticky',
+                                        left: fieldName === 'Name' ? '0' : '150px',
+                                        zIndex: 1,
+                                        backgroundColor: 'white',
+                                      }
+                                    : {}
+                                }
+                              >
+                                {fieldData
+                                  ? typeof fieldData?.value === 'object'
+                                    ? Object.keys(fieldData.value).map((key) => (
+                                        <span key={key}>{fieldData?.value[key]} </span>
+                                      ))
+                                    : fieldData?.value
+                                  : ''}
+                              </td>
+                            )
+                          })}
                         </tr>
                       ))
                     ) : (
@@ -520,6 +599,18 @@ export default function ViewAllEnquiryFormsData() {
           </DragDropContext>
         </div>
       </div>
+      <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
+        {modalMode === 'view' && (
+          <OnlyViewFormData
+            setOpenModal={setcontextOpenModal}
+            openEditFormData={openEditFormData}
+            rowId={viewSelectId}
+          />
+        )}
+        {modalMode === 'edit' && (
+          <UpdateFormData setOpenModal={setcontextOpenModal} rowId={selectId} />
+        )}
+      </PopUpModal>
     </div>
   )
 }

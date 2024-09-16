@@ -7,9 +7,8 @@ import {useDynamicFieldContext} from '../DynamicFieldsContext'
 import {useCompanyContext} from '../../compay/CompanyContext'
 import {useNavigate, useParams} from 'react-router-dom'
 import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
-import StudentNotes from '../StudentNotes/StudentNotes'
 
-const UpdateFormData = ({rowId, setOpenModal}) => {
+const UpdateFormData = ({rowId, setOpenModal, openEditFormData}) => {
   const navigate = useNavigate()
   const [formFieldValues, setFormFieldValues] = useState({})
   const {
@@ -31,16 +30,13 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
   const formId = singleFormValueData?.formId
 
   // console.log(singleFormValueData)
-  // console.log(formId)
 
   const id = getAllAddedFormsName?.data
-    ?.filter((company) => company.companyName === companyId && company._id === formId)
+    ?.filter((company) => company.companyName === companyId)
     .map((company) => ({
       companyId: company.companyName,
       formName: company.formName,
     }))
-
-  // console.log(id)
 
   const companyName =
     id &&
@@ -61,65 +57,6 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
   }, [singleFormValueData])
 
   // console.log(singleFormValueData)
-
-  const handleInputChange = (fieldName, value) => {
-    // console.log(value)
-    setFormFieldValues((prevState) => ({
-      ...prevState,
-      [fieldName]: value,
-    }))
-  }
-
-  const handleCheckboxChange = (fieldName, optionValue, checked) => {
-    setFormFieldValues((prevState) => ({
-      ...prevState,
-      [fieldName]: {
-        ...prevState[fieldName],
-        [optionValue]: checked ? optionValue : '',
-        // [fieldName]: [optionValue],
-      },
-    }))
-  }
-
-  const handleRadioChange = (fieldName, value) => {
-    setFormFieldValues((prevState) => ({
-      ...prevState,
-      [fieldName]: value,
-    }))
-  }
-
-  const handleDefaultSelectChange = (selectName, value) => {
-    setFormFieldValues((prevState) => ({
-      ...prevState,
-      [selectName]: value,
-    }))
-  }
-
-  const handleSelectChange = (fieldName, value) => {
-    setFormFieldValues((prevState) => ({
-      ...prevState,
-      [fieldName]: value,
-    }))
-  }
-
-  const handleSave = async (event) => {
-    event.preventDefault()
-    try {
-      const formattedFields = Object.entries(formFieldValues).map(([name, value]) => ({
-        name,
-        value,
-      }))
-
-      await updateFormFieldMutation.mutate({
-        formId: formId,
-        formFieldValues: formattedFields,
-        id: rowId,
-      })
-      setOpenModal(false)
-    } catch (error) {
-      console.error('Error submitting form:', error)
-    }
-  }
 
   return (
     <>
@@ -158,10 +95,8 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                                 className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                                 placeholder={formFieldData?.name}
                                 name='Name'
+                                disabled
                                 value={formFieldValues[formFieldData.name] || ''}
-                                onChange={(e) =>
-                                  handleInputChange(formFieldData.name, e.target.value)
-                                }
                               />
                             </div>
                           </div>
@@ -179,14 +114,12 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                             </label>
                             <div className='col-lg-6 fv-row'>
                               <input
+                                disabled
                                 type={formFieldData.type === 'date' ? 'date' : 'datetime-local'}
                                 className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                                 placeholder={formFieldData.name}
                                 name='Name'
                                 value={formFieldValues[formFieldData.name] || ''}
-                                onChange={(e) =>
-                                  handleInputChange(formFieldData.name, e.target.value)
-                                }
                               />
                             </div>
                           </div>
@@ -201,14 +134,12 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                             </label>
                             <div className='col-lg-6 fv-row'>
                               <input
+                                disabled
                                 type='number'
                                 className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                                 placeholder={formFieldData.name}
                                 name='Name'
                                 value={formFieldValues[formFieldData.name] || ''}
-                                onChange={(e) =>
-                                  handleInputChange(formFieldData.name, e.target.value)
-                                }
                               />
                             </div>
                           </div>
@@ -224,13 +155,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                             <div className='col-lg-6 fv-row'>
                               <textarea
                                 type='textarea'
+                                disabled
                                 className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                                 placeholder={formFieldData.name}
                                 name='Name'
                                 value={formFieldValues[formFieldData.name] || ''}
-                                onChange={(e) =>
-                                  handleInputChange(formFieldData.name, e.target.value)
-                                }
                               />
                             </div>
                           </div>
@@ -248,10 +177,8 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                         <div className='col-lg-6 fv-row'>
                           <select
                             className='form-select form-select-solid'
+                            disabled
                             value={formFieldValues[select.selectName] || ''}
-                            onChange={(e) =>
-                              handleDefaultSelectChange(select.selectName, e.target.value)
-                            }
                           >
                             {select.options &&
                               select.options.map((option, optionIndex) => (
@@ -294,31 +221,15 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                                       <div className='form-check flex-grow-1'>
                                         <input
                                           type='checkbox'
+                                          disabled
                                           name={field.name}
                                           checked={
                                             formFieldValues[field.name]?.[option.value] || false
                                           }
-                                          onChange={(event) => {
-                                            // console.log(formFieldValues[field.name]?.[option.value])
-                                            handleCheckboxChange(
-                                              field.name,
-                                              option.value,
-                                              event.target.checked
-                                            )
-                                          }}
                                           className='form-check-input'
                                         />
                                         <label className='form-check-label'>{option.label}</label>
                                       </div>
-                                      {/* {optionIndex === field.options.length - 1 && (
-                                        <button
-                                          type='button'
-                                          className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
-                                          onClick={() => fieldDeleteHandler(field._id)}
-                                        >
-                                          <KTIcon iconName='trash' className='fs-3' />
-                                        </button>
-                                      )} */}
                                     </div>
                                   ))}
                                 </div>
@@ -352,13 +263,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                                         <input
                                           id={`${field.type}-${index}-${optionIndex}`}
                                           type='radio'
+                                          disabled
                                           name={field.name}
                                           value={option.value}
                                           checked={
                                             formFieldValues[field.name] === option.value || false
-                                          }
-                                          onChange={(e) =>
-                                            handleRadioChange(field.name, e.target.value)
                                           }
                                           className='form-check-input'
                                         />
@@ -396,7 +305,7 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                                 <select
                                   className='form-select form-select-solid'
                                   value={formFieldValues[field.name] || ''}
-                                  onChange={(e) => handleSelectChange(field.name, e.target.value)}
+                                  disabled
                                 >
                                   <option value=''>Select an option</option>
                                   {field.options.map((option, optionIndex) => (
@@ -451,32 +360,17 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
               </div>
             </div>
             <div className='card-footer d-flex justify-content-end py-6 px-9'>
-              {/* <button type='reset' className='btn btn-light btn-active-light-primary me-2'>
-                Discard
-              </button> */}
-              <button type='button' className='btn btn-primary' onClick={handleSave}>
-                Save Changes
+              <button
+                type='button'
+                className='btn btn-primary'
+                onClick={() => openEditFormData(rowId)}
+              >
+                Edit
               </button>
             </div>
           </form>
         </div>
       </form>
-      {/* <PopUpModal
-        size='lg'
-        title='Field Options'
-        open={contextOpenModal}
-        handleClose={() => setcontextOpenModal(false)}
-        body={
-          <DynamicFields
-            formFieldValues={formFieldValues}
-            handleInputChange={handleInputChange}
-            handleCheckboxChange={handleCheckboxChange}
-            handleRadioChange={handleRadioChange}
-            handleSelectChange={handleSelectChange}
-          />
-        }
-      /> */}
-      <StudentNotes userId={rowId} />
     </>
   )
 }

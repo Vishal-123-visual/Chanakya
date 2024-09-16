@@ -9,6 +9,7 @@ const AddEnquiryForm = () => {
   const [isTouched, setIsTouched] = useState(false)
   // const [defaultFieldData, setDefaultFieldData] = useState({})
   // console.log(defaultFieldData)
+  const [errors, setErrors] = useState({});
   const params = useParams()
   const { getAllCustomFormFieldDataQuery, getAllAddedFormsName, fields } = useDynamicFieldContext()
   const {
@@ -102,13 +103,13 @@ const AddEnquiryForm = () => {
     .map((form) => form.formName)
   // console.log(formNameById)
 
-  const handleDefaultSelectChange = (e, selectName) => {
+  const handleDefaultSelectChange = (e, selectName, type) => {
     const { value } = e.target;
 
     // Update the formData state with the selected value, using selectName as the key
     setFormData((prevData) => ({
       ...prevData,
-      [selectName]: value, // Store the value by selectName
+      [selectName]: { newValue: value, type },
     }));
   };
 
@@ -143,30 +144,28 @@ const AddEnquiryForm = () => {
   }, [selectedFormId])
 
   const validateForm = () => {
-    let isValid = true
-    const errors = {}
+    let isValid = true;
+    const errors = {};
+
+    // Email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Check static required fields
     if (!input.Name) {
-      isValid = false
-      errors.Name = 'Name is required!'
+      isValid = false;
+      errors.Name = 'Name is required!';
     }
     if (!input['Mobile Number']) {
-      isValid = false
-      errors['Mobile Number'] = 'Mobile Number is required!'
+      isValid = false;
+      errors['Mobile Number'] = 'Mobile Number is required!';
     }
     if (!input.Email) {
-      isValid = false
-      errors.Email = 'Email is required!'
+      isValid = false;
+      errors.Email = 'Email is required!';
+    } else if (!emailRegex.test(input.Email)) {
+      isValid = false;
+      errors.Email = 'Please enter a valid email address!';
     }
-    // if (!input.Lead) {
-    //   isValid = false
-    //   errors.Lead = 'Lead is required!'
-    // }
-    // if (!input.leadStatus) {
-    //   isValid = false
-    //   errors.leadStatus = 'Email is required!'
-    // }
 
     // Define the types you want to validate
     const validTypes = [
@@ -179,31 +178,29 @@ const AddEnquiryForm = () => {
       'textarea',
       'checkbox',
       'radio',
-    ]
+    ];
 
     // Validate dynamic fields
     const fieldsToValidate =
       getAllCustomFormFieldDataQuery?.data?.filter(
         (form) => form.formId[form.formId.length - 1] === selectedFormId
-      ) || []
+      ) || [];
 
-    fieldsToValidate.forEach((field, index) => {
-      // console.log(fieldValues)
+    fieldsToValidate.forEach((field) => {
       // Validate fields based on their type and if they are mandatory
       if (field.mandatory && validTypes.includes(field.type)) {
         if (!formData[field.name]) {
-          // Assuming fieldValues is an array or object storing dynamic field values
-          isValid = false
-          errors[field.name] = `${field.name} is required!`
+          isValid = false;
+          errors[field.name] = `${field.name} is required!`;
         }
       }
-    })
+    });
 
     // Update the state with errors (assuming you're using a state to store errors)
-    setIsTouched(errors)
+    setIsTouched(errors);
 
-    return isValid
-  }
+    return isValid;
+  };
 
   const handleSave = (event) => {
     event.preventDefault()
@@ -363,7 +360,7 @@ const AddEnquiryForm = () => {
                               name={select?.selectName}
                               // onClick={() => handleBlur(select?.selectName, select?.selectValue)}
                               // onBlur={() => handleBlur(select?.selectName, select?.selectValue)}
-                              onChange={(e) => handleDefaultSelectChange(e, select?.selectName)}
+                              onChange={(e) => handleDefaultSelectChange(e, select?.selectName, select?.type)}
                             >
                               <option value="">--Select-an-Option--</option>
                               {select?.options.map((option) => (
@@ -527,6 +524,46 @@ const AddEnquiryForm = () => {
                                         </div>
                                       )}
                                   </div>
+                                </div>
+                              </div>
+                            </div>
+                          )
+                        case 'textarea':
+                          return (
+                            <div className='col-6' key={index}>
+                              <div className='row mb-6'>
+                                <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
+                                  <span className={`${field.mandatory === true ? 'required' : ''}`}>
+                                    {field.name}
+                                  </span>
+                                </label>
+                                <div className='col-lg-8'>
+                                  <textarea
+                                    id={`${field.type}-${index}`}
+                                    // type={field.type}
+                                    className='form-control form-control-lg form-control-solid'
+                                    placeholder={field.name}
+                                    value={fieldValues[index] || ''}
+                                    onChange={(event) =>
+                                      inputChangeHandler(
+                                        index,
+                                        event.target.value,
+                                        field.name,
+                                        field.type
+                                      )
+                                    }
+                                    onBlur={() => handleBlur(field.name, fieldValues[index])}
+                                    onClick={() => handleBlur(field.name, fieldValues[index])}
+                                  />
+                                  {isTouched[field.name] &&
+                                    !fieldValues[index] &&
+                                    field.mandatory === true && (
+                                      <div className='fv-plugins-message-container mt-2'>
+                                        <div className='fv-help-block'>
+                                          {`${field.name} is Required!`}
+                                        </div>
+                                      </div>
+                                    )}
                                 </div>
                               </div>
                             </div>

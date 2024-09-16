@@ -1,10 +1,11 @@
 import {useState} from 'react'
-import {useCompanyContext} from '../compay/CompanyContext'
+import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
 
-const EditStudentIssue = ({studentInfoData, studentIssueData, setEditStudentIssueId}) => {
-  const [particulars, setParticulars] = useState(studentIssueData.particulars)
+const EditStudentNotes = ({studentNote, studentNoteData, setEditStudentNoteId}) => {
+  const [particulars, setParticulars] = useState(studentNoteData.particulars)
   //console.log(studentInfoData)
-  const studentIssueCTX = useCompanyContext()
+  const studentNoteCTX = useCustomFormFieldContext()
+  // const studentIssueCTX = useCompanyContext()
   //console.log(studentIssueCTX.useUpdateStudentIssueMutation.isLoading)
 
   const handleSubmit = (e) => {
@@ -13,13 +14,13 @@ const EditStudentIssue = ({studentInfoData, studentIssueData, setEditStudentIssu
       alert('Please enter a particulars')
       return
     }
-    studentIssueCTX.useUpdateStudentIssueMutation.mutate({
+    studentNoteCTX.useUpdateStudentNoteMutation.mutate({
       particulars,
-      studentId: studentInfoData,
-      id: studentIssueData._id,
+      studentId: studentNote,
+      id: studentNoteData._id,
     })
     setParticulars('')
-    setEditStudentIssueId(null)
+    setEditStudentNoteId(null)
   }
 
   return (
@@ -39,15 +40,15 @@ const EditStudentIssue = ({studentInfoData, studentIssueData, setEditStudentIssu
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>
           <button
-            disabled={studentIssueCTX.useUpdateStudentIssueMutation.isLoading}
+            disabled={studentNoteCTX.useUpdateStudentNoteMutation.isLoading}
             onClick={handleSubmit}
             type='submit'
             className='btn  btn-bg-dark btn-color-primary btn-active-color-info  me-1'
           >
-            {studentIssueCTX.useUpdateStudentIssueMutation.isLoading ? 'Editing...' : 'Edit'}
+            {studentNoteCTX.useUpdateStudentNoteMutation.isLoading ? 'Editing...' : 'Edit'}
           </button>
           <button
-            onClick={() => setEditStudentIssueId(null)}
+            onClick={() => setEditStudentNoteId(null)}
             className='btn btn-bg-dark btn-color-primary btn-active-color-info '
           >
             cancel
@@ -57,4 +58,4 @@ const EditStudentIssue = ({studentInfoData, studentIssueData, setEditStudentIssu
     </tr>
   )
 }
-export default EditStudentIssue
+export default EditStudentNotes

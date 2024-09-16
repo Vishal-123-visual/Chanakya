@@ -11,6 +11,7 @@ const StudentIssue = ({studentInfoData}) => {
   const {data: toggleShowStudentNotes} = studentIssueCTX.useGetSingleStudentIssueStatusQuery(
     studentInfoData?._id
   )
+  // console.log(studentIssueCTX)
   const [editStudentIssueId, setEditStudentIssueId] = useState(null)
   //console.log(editStudentIssueId)
   const handleEditStudentIssueIdhandler = (e, studentId) => {

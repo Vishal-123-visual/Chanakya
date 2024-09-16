@@ -5,7 +5,7 @@ import StudentIssueModel from "../models/student-issues/student.issues.models.js
 export const addStudentIssueController = async (req, res) => {
   try {
     const { particulars, studentId } = req.body;
-    //console.log(req.body);
+    // console.log(req);
     if (!particulars) {
       return res
         .status(404)

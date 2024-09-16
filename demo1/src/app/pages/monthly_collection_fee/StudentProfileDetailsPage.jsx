@@ -1,17 +1,17 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import { useAdmissionContext } from '../../modules/auth/core/Addmission'
-import { useAuth } from '../../modules/auth'
-import { useCompanyContext } from '../compay/CompanyContext'
+import {useNavigate, useParams} from 'react-router-dom'
+import {useAdmissionContext} from '../../modules/auth/core/Addmission'
+import {useAuth} from '../../modules/auth'
+import {useCompanyContext} from '../compay/CompanyContext'
 import AlertPendingFeesNewStudents from '../Alert_Pending_NewStudents/AlertPendingNewStudents'
 import StudentCommissionLists from '../student-commission/StudentCommissionLists'
-import { KTIcon } from '../../../_metronic/helpers'
-import { useCourseContext } from '../course/CourseContext'
+import {KTIcon} from '../../../_metronic/helpers'
+import {useCourseContext} from '../course/CourseContext'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import StudentCourseFee from '../student-profile/StudentCourseFee'
 import StudentIssue from '../student-issues/StudentIssue'
 import RenewStudentCourseFees from '../renewStudent-courseFees/RenewStudentCourseFees'
-import { useEffect, useMemo } from 'react'
+import {useEffect, useMemo} from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -22,11 +22,11 @@ const StudentProfileDetailsPage = () => {
   const studentCTX = useAdmissionContext()
   const navigate = useNavigate()
   // console.log(params)
-  const { currentUser } = useAuth()
+  const {currentUser} = useAuth()
   //console.log(params)
-  const { data: studentInfoData } = studentCTX.useGetSingleStudentUsingById(params.id)
+  const {data: studentInfoData} = studentCTX.useGetSingleStudentUsingById(params.id)
   //console.log(studentCTX.useGetSingleStudentUsingById())
-  const { data: singleComapnyData } = companyCTX?.useGetSingleCompanyData(
+  const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(
     studentInfoData?.companyName
   )
 
@@ -34,15 +34,15 @@ const StudentProfileDetailsPage = () => {
   let cutWithGSTAmount =
     singleComapnyData?.isGstBased === 'Yes'
       ? (Number(studentInfoData?.totalPaid) /
-        (companyCTX.getStudentGSTSuggestionStatus.data[0]?.gst_percentage + 100)) *
-      100
+          (companyCTX.getStudentGSTSuggestionStatus.data[0]?.gst_percentage + 100)) *
+        100
       : Number(studentInfoData?.totalPaid)
   const courseCtx = useCourseContext()
 
   const navigateCourseSubjectsHandler = () => {
     //console.log('data of subjects based on course', data)
     // console.log('navigating to the course subject page !!!', updateUserId)
-    navigate('/course-subjects-addMarks', { state: studentInfoData })
+    navigate('/course-subjects-addMarks', {state: studentInfoData})
   }
 
   const installmentHandler = () => {
@@ -63,7 +63,7 @@ const StudentProfileDetailsPage = () => {
           <div className='card-title m-0'>
             <h3 className='fw-bolder m-0'>
               {/* {updateUserId ? 'Edit Student Information' : 'Student Information'} */}
-              {singleComapnyData?.companyName} =: Student Profile
+              {` ${singleComapnyData?.companyName} => Student Profile`}
             </h3>
           </div>
         </div>
@@ -103,7 +103,7 @@ const StudentProfileDetailsPage = () => {
                           const studentNotesSection =
                             document.getElementById('student-notes-section')
                           if (studentNotesSection) {
-                            studentNotesSection.scrollIntoView({ behavior: 'smooth' })
+                            studentNotesSection.scrollIntoView({behavior: 'smooth'})
                           }
                         }}
                       >
@@ -258,7 +258,7 @@ const StudentProfileDetailsPage = () => {
                       <div
                         className='bg-success rounded h-5px'
                         role='progressbar'
-                        style={{ width: '50%' }}
+                        style={{width: '50%'}}
                       ></div>
                     </div>
                   </div>
@@ -300,7 +300,7 @@ const StudentProfileDetailsPage = () => {
                         className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                         placeholder='Enter Roll Number..'
                         value={studentInfoData?.rollNumber}
-                      // {...formik.getFieldProps('rollNumber')}
+                        // {...formik.getFieldProps('rollNumber')}
                       />
                     </div>
                   </div>
@@ -646,7 +646,7 @@ const StudentProfileDetailsPage = () => {
                           placeholder='Course Fees Discount'
                           readOnly
                           value={studentInfoData?.discount}
-                        // {...formik.getFieldProps('discount')}
+                          // {...formik.getFieldProps('discount')}
                         />
                       </div>
                     </div>
@@ -730,13 +730,13 @@ const StudentProfileDetailsPage = () => {
                           disabled
                           className='form-select form-select-solid form-select-lg'
                           value={studentInfoData?.no_of_installments}
-                        // onChange={(e) => {
-                        //   formik.getFieldProps('no_of_installments').onChange(e)
-                        //   //numberOfInstallmentAmountHandler(e)
-                        // }}
+                          // onChange={(e) => {
+                          //   formik.getFieldProps('no_of_installments').onChange(e)
+                          //   //numberOfInstallmentAmountHandler(e)
+                          // }}
                         >
                           <option value=''>-select-</option>
-                          {Array.from({ length: 60 }, (_, index) => (
+                          {Array.from({length: 60}, (_, index) => (
                             <option key={index} value={index}>
                               {index}
                             </option>
@@ -763,12 +763,12 @@ const StudentProfileDetailsPage = () => {
                         value={
                           studentInfoData?.remainingCourseFees === undefined
                             ? (
-                              studentInfoData?.netCourseFees / studentInfoData?.no_of_installments
-                            ).toFixed(2)
+                                studentInfoData?.netCourseFees / studentInfoData?.no_of_installments
+                              ).toFixed(2)
                             : (
-                              studentInfoData?.remainingCourseFees /
-                              studentInfoData?.no_of_installments
-                            ).toFixed(2)
+                                studentInfoData?.remainingCourseFees /
+                                studentInfoData?.no_of_installments
+                              ).toFixed(2)
                         }
                       />
                     </div>

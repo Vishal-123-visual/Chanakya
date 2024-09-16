@@ -56,6 +56,7 @@ import DropOutStudents from '../pages/drop-out-students/DropOutStudents'
 import AddForm from '../pages/enquiry-related/dynamicForms/AddForm'
 import EditFormName from '../pages/enquiry-related/dynamicForms/EditFormName'
 import UpdateFormData from '../pages/enquiry-related/dynamicForms/UpdateFormData'
+import OnlyViewFormData from '../pages/enquiry-related/dynamicForms/OnlyViewFormData'
 import ViewForms from '../pages/enquiry-related/dynamicForms/ViewForms'
 import ViewAllEnquiryFormsData from '../pages/enquiry-related/viewEnquiryFormsData/ViewAllEnquiryFormsData'
 import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
@@ -288,7 +289,8 @@ const PrivateRoutes = () => {
             {/* <Route path='/enquiry-form/:id' element={<DynamicEnquiryForm companyName='' />} /> */}
             <Route path='/add-form/:id' element={<AddForm />} />
             <Route path='/update-form/:id' element={<EditFormName />} />
-            <Route path='/update-form-data/:id' element={<UpdateFormData />} />
+            {/* <Route path='/update-form-data/:id' element={<UpdateFormData />} /> */}
+            {/* <Route path='/only-view-data/:id' element={<OnlyViewFormData />} /> */}
             <Route path='/view-form/:id' element={<ViewForms />} />
             <Route path='/view-form-data/:id' element={<ViewAllEnquiryFormsData />} />
             <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
