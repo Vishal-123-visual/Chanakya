@@ -3,7 +3,7 @@ import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataCont
 
 const EditStudentNotes = ({studentNote, studentNoteData, setEditStudentNoteId}) => {
   const [particulars, setParticulars] = useState(studentNoteData.particulars)
-  //console.log(studentInfoData)
+  const [dateTime, setDateTime] = useState(studentNoteData.dateTime)
   const studentNoteCTX = useCustomFormFieldContext()
   // const studentIssueCTX = useCompanyContext()
   //console.log(studentIssueCTX.useUpdateStudentIssueMutation.isLoading)
@@ -16,6 +16,7 @@ const EditStudentNotes = ({studentNote, studentNoteData, setEditStudentNoteId}) 
     }
     studentNoteCTX.useUpdateStudentNoteMutation.mutate({
       particulars,
+      dateTime,
       studentId: studentNote,
       id: studentNoteData._id,
     })
@@ -36,7 +37,15 @@ const EditStudentNotes = ({studentNote, studentNoteData, setEditStudentNoteId}) 
           onChange={(e) => setParticulars(e.target.value)}
         />
       </td>
-      <td></td>
+      <td>
+        <input
+          type='datetime-local'
+          value={dateTime}
+          placeholder='DD/MM/YYYY'
+          onChange={(e) => setDateTime(e.target.value)}
+          className='form-control'
+        />
+      </td>
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>
           <button

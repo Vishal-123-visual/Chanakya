@@ -518,9 +518,9 @@ export default function ViewAllEnquiryFormsData() {
                           </td>
                           <td>
                             {' '}
-                            <div className='d-flex justify-content-end flex-shrink-0'>
+                            <div className='d-flex justify-content-start flex-shrink-0'>
                               <a
-                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                className='btn btn-icon btn-bg-light btn-active-color-info btn-sm me-1'
                                 onClick={() => viewFormDataModal(rowData.id)}
                               >
                                 <KTIcon iconName='eye' className='fs-3' />

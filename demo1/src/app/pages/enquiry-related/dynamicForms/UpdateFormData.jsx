@@ -30,8 +30,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
   const companyId = singleFormValueData?.companyId
   const formId = singleFormValueData?.formId
 
-  // console.log(singleFormValueData)
-  // console.log(formId)
+  const enquiryName = singleFormValueData?.formFiledValue
+    ?.filter((name) => name.name === 'Name')
+    .map((name) => name.value)
+  // console.log(singleFormValueData?.formFiledValue?.Name)
+  // console.log(enquiryName)
 
   const id = getAllAddedFormsName?.data
     ?.filter((company) => company.companyName === companyId && company._id === formId)
@@ -149,7 +152,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label
+                              className={`col-lg-4 col-form-label ${
+                                formFieldData.mandatory === true ? 'required' : ''
+                              }fw-bold fs-6`}
+                            >
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -174,7 +181,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label
+                              className={`col-lg-4 col-form-label ${
+                                formFieldData.mandatory === true ? 'required' : ''
+                              }fw-bold fs-6`}
+                            >
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -196,7 +207,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label
+                              className={`col-lg-4 col-form-label ${
+                                formFieldData.mandatory === true ? 'required' : ''
+                              }fw-bold fs-6`}
+                            >
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -218,7 +233,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label
+                              className={`col-lg-4 col-form-label ${
+                                formFieldData.mandatory === true ? 'required' : ''
+                              }fw-bold fs-6`}
+                            >
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -389,7 +408,11 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                         return (
                           <div className='col-6' key={index}>
                             <div className='row mb-6'>
-                              <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                              <label
+                                className={`col-lg-4 col-form-label ${
+                                  field.mandatory === true ? 'required' : ''
+                                }fw-bold fs-6`}
+                              >
                                 {field.name}
                               </label>
                               <div className='col-lg-6 fv-row'>
@@ -476,7 +499,7 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
           />
         }
       /> */}
-      <StudentNotes userId={rowId} />
+      <StudentNotes userId={rowId} enquiryName={enquiryName} />
     </>
   )
 }

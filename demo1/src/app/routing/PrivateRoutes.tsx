@@ -66,6 +66,7 @@ import LabsList from '../pages/attendance-related/Labs/LabsList'
 import BatchForm from '../pages/attendance-related/Batches/BatchForm'
 import TimingList from '../pages/attendance-related/Timings/TimingLists'
 import MonthlyReportsDashBoard from '../pages/monthly_Reports/MonthlyReportsDashBoard'
+import TodoCalendarRemainder from '../pages/enquiry-related/viewEnquiryFormsData/TodoCalendarRemainder'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -287,22 +288,24 @@ const PrivateRoutes = () => {
               }
             />
             {/* <Route path='/enquiry-form/:id' element={<DynamicEnquiryForm companyName='' />} /> */}
+            {/* <---------------------- Dynamic Form Routes Starts Here --------------------->*/}
             <Route path='/add-form/:id' element={<AddForm />} />
             <Route path='/update-form/:id' element={<EditFormName />} />
-            {/* <Route path='/update-form-data/:id' element={<UpdateFormData />} /> */}
-            {/* <Route path='/only-view-data/:id' element={<OnlyViewFormData />} /> */}
-            <Route path='/view-form/:id' element={<ViewForms />} />
-            <Route path='/view-form-data/:id' element={<ViewAllEnquiryFormsData />} />
-            <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
             <Route path='/profile-form/:id' element={<ProfileForm />} />
+            <Route path='/view-form/:id' element={<ViewForms />} />
+            {/* <---------------- View All Dynamic Form Routes Starts Here ------------------>*/}
+            <Route path='/view-form-data/:id' element={<ViewAllEnquiryFormsData />} />
+            <Route path='/remainder-task/:id' element={<TodoCalendarRemainder />} />
+            <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
+            {/* <---------------- Student Profile Page Starts Here ------------------>*/}
             <Route path='/student/:id' element={<StudentProfile />} />
             <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
-            {/* *************************************** Attendance Related Routes Starts Here ***************************************  */}
+            {/* <----------------- Attendance Related Routes Starts Here ------------------> */}
             {/* <Route path='/add-trainer/:id' element={<TrainersList />} />
             <Route path='/add-lab/:id' element={<LabsList />} />
             <Route path='/add-batch/:id' element={<BatchForm />} />
             <Route path='/add-timing/:id' element={<TimingList />} /> */}
-            {/* *************************************** Monthly Reports Routes Starts Here ***************************************  */}
+            {/* <------------------- Monthly Reports Routes Starts Here -------------------> */}
             <Route
               path='/monthly-reports/:id'
               element={
@@ -311,7 +314,6 @@ const PrivateRoutes = () => {
                 </>
               }
             />
-            {/* *************************************** Monthly Collection fees start here.************************** */}
             <Route
               path='/monthlyCollectionFees/:id'
               element={

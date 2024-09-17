@@ -10,6 +10,10 @@ const studentNotesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    dateTime: {
+      type: Date,
+      default: null,
+    },
     addedBy: {
       type: String,
       required: true,
@@ -18,10 +22,10 @@ const studentNotesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    showOnDashboard: {
-      type: Boolean,
-      default: false,
-    },
+    // showOnDashboard: {
+    //   type: Boolean,
+    //   default: false,
+    // },
   },
   {
     timestamps: true,

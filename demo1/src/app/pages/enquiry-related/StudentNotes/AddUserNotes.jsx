@@ -3,7 +3,10 @@ import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataCont
 
 const AddUserNotes = ({userId}) => {
   const [particulars, setParticulars] = useState('')
+  const [dateTime, setDateTime] = useState('')
   const studentNotesCTX = useCustomFormFieldContext()
+  // console.log(remainder)
+  // console.log(particulars)
   //   console.log(studentNotesCTX.createStudentNoteMutation.isLoading)
 
   const handleSubmit = (e) => {
@@ -12,8 +15,9 @@ const AddUserNotes = ({userId}) => {
       alert('Please enter a particulars')
       return
     }
-    studentNotesCTX.createStudentNoteMutation.mutate({particulars, userId: userId})
+    studentNotesCTX.createStudentNoteMutation.mutate({particulars, dateTime, userId: userId})
     setParticulars('')
+    setDateTime('')
   }
 
   return (
@@ -26,7 +30,17 @@ const AddUserNotes = ({userId}) => {
           type='text'
           className='form-control'
           value={particulars}
+          placeholder='Add Particulars...'
           onChange={(e) => setParticulars(e.target.value)}
+        />
+      </td>
+      <td>
+        <input
+          type='datetime-local'
+          value={dateTime}
+          placeholder='DD/MM/YYYY HH:MM'
+          onChange={(e) => setDateTime(e.target.value)}
+          className='form-control'
         />
       </td>
       <td></td>

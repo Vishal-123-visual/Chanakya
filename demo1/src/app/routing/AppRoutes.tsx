@@ -11,6 +11,7 @@ import {PrivateRoutes} from './PrivateRoutes'
 import {ErrorsPage} from '../modules/errors/ErrorsPage'
 import {Logout, AuthPage, useAuth} from '../modules/auth'
 import {App} from '../App'
+import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
 
 /**
  * Base URL of the website.
@@ -48,6 +49,7 @@ const AppRoutes: FC = () => {
             </>
           ) : (
             <>
+              <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
               <Route path='auth/*' element={<AuthPage />} />
               <Route path='*' element={<Navigate to='/auth' />} />
             </>

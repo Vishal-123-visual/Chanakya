@@ -7,8 +7,9 @@ import {useDynamicFieldContext} from '../DynamicFieldsContext'
 import {useCompanyContext} from '../../compay/CompanyContext'
 import {useNavigate, useParams} from 'react-router-dom'
 import {useCustomFormFieldContext} from './CustomFormFieldDataContext'
+import OnlyViewStudentNotes from '../StudentNotes/OnlyViewStudentNotes'
 
-const UpdateFormData = ({rowId, setOpenModal, openEditFormData}) => {
+const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
   const navigate = useNavigate()
   const [formFieldValues, setFormFieldValues] = useState({})
   const {
@@ -24,6 +25,7 @@ const UpdateFormData = ({rowId, setOpenModal, openEditFormData}) => {
   const params = useParams()
 
   const allDefaultSelects = getAllDefaultSelectFields?.data?.defaultSelects
+
   // console.log(allDefaultSelects)
   const {data: singleFormValueData} = useGetSingleFormValueById(rowId)
   const companyId = singleFormValueData?.companyId
@@ -31,8 +33,12 @@ const UpdateFormData = ({rowId, setOpenModal, openEditFormData}) => {
 
   // console.log(singleFormValueData)
 
+  const enquiryName = singleFormValueData?.formFiledValue
+    ?.filter((name) => name.name === 'Name')
+    .map((name) => name.value)
+
   const id = getAllAddedFormsName?.data
-    ?.filter((company) => company.companyName === companyId)
+    ?.filter((company) => company.companyName === companyId && company._id === formId)
     .map((company) => ({
       companyId: company.companyName,
       formName: company.formName,
@@ -359,20 +365,17 @@ const UpdateFormData = ({rowId, setOpenModal, openEditFormData}) => {
                   })}
               </div>
             </div>
-            <div className='card-footer d-flex justify-content-end py-6 px-9'>
-              <button
-                type='button'
-                className='btn btn-primary'
-                onClick={() => openEditFormData(rowId)}
-              >
-                Edit
-              </button>
-            </div>
           </form>
         </div>
       </form>
+      <OnlyViewStudentNotes userId={rowId} enquiryName={enquiryName} />
+      <div className='card-footer d-flex justify-content-end py-6 px-9'>
+        <button type='button' className='btn btn-primary' onClick={() => openEditFormData(rowId)}>
+          Edit
+        </button>
+      </div>
     </>
   )
 }
 
-export default UpdateFormData
+export default OnlyViewFormData

@@ -5,7 +5,7 @@ import AddUserNotes from './AddUserNotes'
 import EditStudentNotes from './EditStudentNotes'
 import {useState} from 'react'
 
-const StudentNotes = ({userId}) => {
+const StudentNotes = ({userId, enquiryName}) => {
   const studentNotesCTX = useCustomFormFieldContext()
   const studentData = studentNotesCTX?.getStudentNotesListsQuery?.data?.allStudentNotes
   // console.log(studentData)
@@ -28,8 +28,8 @@ const StudentNotes = ({userId}) => {
     <div id='student-notes-section' className='card'>
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Student Notes</span>
-          <span className='text-muted mt-1 fw-semibold fs-7'>Student </span>
+          <span className='card-label fw-bold fs-3 mb-1'>Enquiry Notes</span>
+          <span className='text-muted mt-1 fw-semibold fs-7'>Enquiry {enquiryName}</span>
         </h3>
       </div>
       <div className='card-body py-3'>
@@ -42,7 +42,8 @@ const StudentNotes = ({userId}) => {
                 </th>
                 <th className='w-40px'>SR.No</th>
                 <th className='min-w-200px'>Date</th>
-                <th className='min-w-500px'>Particulars</th>
+                <th className='min-w-400px'>Particulars</th>
+                <th className='min-w-300px'>Remainder</th>
                 <th className='min-w-200px'>Added By</th>
                 <th className='w-100px text-end'>Actions</th>
               </tr>
@@ -78,6 +79,13 @@ const StudentNotes = ({userId}) => {
                           <td>
                             <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                               {studentNote?.particulars}
+                            </a>
+                          </td>
+                          <td>
+                            <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                              {studentNote?.dateTime && moment(studentNote?.dateTime).isValid()
+                                ? moment(studentNote?.dateTime).format('DD-MM-YYYY <=> h:mm A')
+                                : ''}
                             </a>
                           </td>
                           <td className=''>{studentNote?.addedBy}</td>

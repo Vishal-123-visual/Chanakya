@@ -3,7 +3,7 @@ import studentNotesModel from "../../models/studentsNotesAndRemainder/studentNot
 export const addStudentNotesController = async (req, res, next) => {
   try {
     console.log(req);
-    const { particulars, userId } = req.body;
+    const { particulars, dateTime, userId } = req.body;
     if (!particulars) {
       return res
         .status(400)
@@ -11,6 +11,7 @@ export const addStudentNotesController = async (req, res, next) => {
     }
     const studentNotes = new studentNotesModel({
       particulars,
+      dateTime,
       userId,
       addedBy: req.user.fName,
     });

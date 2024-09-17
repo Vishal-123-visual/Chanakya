@@ -96,6 +96,11 @@ const SidebarMenuMain = () => {
                     title='View All Enquiry Forms'
                     hasBullet={true}
                   />
+                  <SidebarMenuItem
+                    to={`/remainder-task/${CompanyListData?._id}`}
+                    title='Remainder Task'
+                    hasBullet={true}
+                  />
                 </SidebarMenuItemWithSub>
                 {/*  <SidebarMenuItemWithSub
                   to='/apps/chat'
