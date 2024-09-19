@@ -1,9 +1,13 @@
 import {useState} from 'react'
 import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
+import {useParams} from 'react-router-dom'
 
 const AddUserNotes = ({userId}) => {
+  const params = useParams()
+  // console.log(params.id)
   const [particulars, setParticulars] = useState('')
-  const [dateTime, setDateTime] = useState('')
+  const [startTime, setStartTime] = useState('')
+  // const [endTime, setEndTime] = useState('')
   const studentNotesCTX = useCustomFormFieldContext()
   // console.log(remainder)
   // console.log(particulars)
@@ -15,9 +19,16 @@ const AddUserNotes = ({userId}) => {
       alert('Please enter a particulars')
       return
     }
-    studentNotesCTX.createStudentNoteMutation.mutate({particulars, dateTime, userId: userId})
+    studentNotesCTX.createStudentNoteMutation.mutate({
+      particulars,
+      startTime,
+      // endTime,
+      companyId: params?.id,
+      userId: userId,
+    })
     setParticulars('')
-    setDateTime('')
+    setStartTime('')
+    // setEndTime('')
   }
 
   return (
@@ -35,13 +46,22 @@ const AddUserNotes = ({userId}) => {
         />
       </td>
       <td>
+        {/* <small className='text-muted fw-bold'>Start Date And Time</small> */}
         <input
           type='datetime-local'
-          value={dateTime}
+          value={startTime}
           placeholder='DD/MM/YYYY HH:MM'
-          onChange={(e) => setDateTime(e.target.value)}
+          onChange={(e) => setStartTime(e.target.value)}
           className='form-control'
         />
+        {/* <small className='text-muted fw-bold'>End Date And Time</small> */}
+        {/* <input
+          type='datetime-local'
+          value={endTime}
+          placeholder='DD/MM/YYYY HH:MM'
+          onChange={(e) => setEndTime(e.target.value)}
+          className='form-control'
+        /> */}
       </td>
       <td></td>
       <td>

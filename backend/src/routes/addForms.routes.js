@@ -6,14 +6,18 @@ import {
   getAllAddedFormNames,
   getSingleFormController,
 } from "../controllers/customField/addForms.controllers.js";
+import { requireSignIn } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/").post(addFormsController).get(getAllAddedFormNames);
+router
+  .route("/")
+  .post(requireSignIn, addFormsController)
+  .get(requireSignIn, getAllAddedFormNames);
 router
   .route("/:id")
-  .get(getSingleFormController)
-  .put(editFormName)
-  .delete(deleteSingleFormById);
+  .get(requireSignIn, getSingleFormController)
+  .put(requireSignIn, editFormName)
+  .delete(requireSignIn, deleteSingleFormById);
 
 export default router;

@@ -5,16 +5,17 @@ import {
   getSingleDefaultSelectByIdController,
   updateSingleDefaultSelectController,
 } from "../controllers/customField/defaultSelect.controllers.js";
+import { requireSignIn } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
 router
   .route("/")
   .post(addDefaultSelectController)
-  .get(getAllDefaultSelectController);
+  .get(requireSignIn, getAllDefaultSelectController);
 router
   .route("/:id")
-  .get(getSingleDefaultSelectByIdController)
-  .put(updateSingleDefaultSelectController);
+  .get(requireSignIn, getSingleDefaultSelectByIdController)
+  .put(requireSignIn, updateSingleDefaultSelectController);
 
 export default router;

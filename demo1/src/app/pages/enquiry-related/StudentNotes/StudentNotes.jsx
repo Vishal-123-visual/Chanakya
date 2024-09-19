@@ -83,8 +83,8 @@ const StudentNotes = ({userId, enquiryName}) => {
                           </td>
                           <td>
                             <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                              {studentNote?.dateTime && moment(studentNote?.dateTime).isValid()
-                                ? moment(studentNote?.dateTime).format('DD-MM-YYYY <=> h:mm A')
+                              {studentNote?.startTime && moment(studentNote?.startTime).isValid()
+                                ? `${moment(studentNote?.startTime).format('DD-MM-YYYY : h:mm A')}`
                                 : ''}
                             </a>
                           </td>

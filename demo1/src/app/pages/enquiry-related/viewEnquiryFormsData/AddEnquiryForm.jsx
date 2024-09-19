@@ -163,9 +163,11 @@ const AddEnquiryForm = () => {
     if (!input.Email) {
       isValid = false
       errors.Email = 'Email is required!'
+      toast.error('Email is required!') // Email required toast
     } else if (!emailRegex.test(input.Email)) {
       isValid = false
       errors.Email = 'Please enter a valid email address!'
+      toast.error('Please enter a valid email address!') // Invalid email toast
     }
 
     // Define the types you want to validate
@@ -206,7 +208,6 @@ const AddEnquiryForm = () => {
   const handleSave = (event) => {
     event.preventDefault()
 
-    // Validate form fields
     if (!validateForm()) {
       toast.error('Please fill all the required fields !!')
     } else {

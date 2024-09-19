@@ -134,7 +134,6 @@ export default function ViewAllEnquiryFormsData() {
     setViewSelectId(rowId)
     setcontextOpenModal(true)
   }
-
   const openEditFormData = (rowId) => {
     // console.log(field)
     setModalMode('edit')

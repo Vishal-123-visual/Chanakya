@@ -1,4 +1,10 @@
+import BigCalendarScheduler from './BigCalendarScheduler'
+
 const TodoCalendarRemainder = () => {
-  return <div>TodoCalendarRemainder</div>
+  return (
+    <div>
+      <BigCalendarScheduler />
+    </div>
+  )
 }
 export default TodoCalendarRemainder

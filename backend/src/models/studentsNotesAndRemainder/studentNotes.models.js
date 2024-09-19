@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const studentNotesSchema = new mongoose.Schema(
   {
@@ -10,10 +10,14 @@ const studentNotesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    dateTime: {
+    startTime: {
       type: Date,
       default: null,
     },
+    // endTime: {
+    //   type: Date,
+    //   default: null,
+    // },
     addedBy: {
       type: String,
       required: true,
@@ -22,10 +26,11 @@ const studentNotesSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // showOnDashboard: {
-    //   type: Boolean,
-    //   default: false,
-    // },
+    companyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Company",
+      required: true,
+    },
   },
   {
     timestamps: true,

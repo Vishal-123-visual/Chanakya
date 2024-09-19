@@ -1,8 +1,4 @@
 import {useState, useEffect} from 'react'
-import {toast} from 'react-toastify'
-import {KTIcon} from '../../../../_metronic/helpers'
-import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
-import DynamicFields from '../DynamicFields'
 import {useDynamicFieldContext} from '../DynamicFieldsContext'
 import {useCompanyContext} from '../../compay/CompanyContext'
 import {useNavigate, useParams} from 'react-router-dom'
@@ -12,15 +8,8 @@ import OnlyViewStudentNotes from '../StudentNotes/OnlyViewStudentNotes'
 const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
   const navigate = useNavigate()
   const [formFieldValues, setFormFieldValues] = useState({})
-  const {
-    getAllCustomFormFieldDataQuery,
-    openModal: contextOpenModal,
-    setOpenModal: setcontextOpenModal,
-    getAllAddedFormsName,
-    deleteFieldMutation,
-  } = useDynamicFieldContext()
-  const {useGetSingleFormValueById, updateFormFieldMutation, getAllDefaultSelectFields} =
-    useCustomFormFieldContext()
+  const {getAllCustomFormFieldDataQuery, getAllAddedFormsName} = useDynamicFieldContext()
+  const {useGetSingleFormValueById, getAllDefaultSelectFields} = useCustomFormFieldContext()
   const {getCompanyLists} = useCompanyContext()
   const params = useParams()
 
@@ -92,7 +81,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -115,7 +104,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -135,7 +124,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -155,7 +144,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                       return (
                         <div className='col-6' key={index}>
                           <div className='row mb-6'>
-                            <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                            <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                               {formFieldData.name}
                             </label>
                             <div className='col-lg-6 fv-row'>
@@ -210,7 +199,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                                 <label
                                   htmlFor={`${field.type}-${index}`}
                                   className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
+                                    field.mandatory === true ? '' : ''
                                   }`}
                                   style={{whiteSpace: 'nowrap'}}
                                 >
@@ -251,7 +240,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                                 <label
                                   htmlFor={`${field.type}-${index}`}
                                   className={`col-form-label fw-bold fs-6 ${
-                                    field.mandatory === true ? 'required' : ''
+                                    field.mandatory === true ? '' : ''
                                   }`}
                                   style={{whiteSpace: 'nowrap'}}
                                 >
@@ -304,7 +293,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                         return (
                           <div className='col-6' key={index}>
                             <div className='row mb-6'>
-                              <label className='col-lg-4 col-form-label required fw-bold fs-6'>
+                              <label className='col-lg-4 col-form-label  fw-bold fs-6'>
                                 {field.name}
                               </label>
                               <div className='col-lg-6 fv-row'>
@@ -326,41 +315,6 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                         )
                       default:
                         return null
-                      // return (
-                      //   <div className='col-6' key={index}>
-                      //     <div className='row mb-6'>
-                      //       <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
-                      //         <span className={`${field.mandatory === true ? 'required' : ''}`}>
-                      //           {field.name}
-                      //         </span>
-                      //       </label>
-                      //       <div className='col-lg-8 d-flex align-items-center'>
-                      //         <input
-                      //           id={`${field.type}-${index}`}
-                      //           type={field.type}
-                      //           className='form-control form-control-lg form-control-solid flex-grow-1'
-                      //           placeholder={field.name}
-                      //           value={formFieldValues[field.name] || ''}
-                      //           onChange={(event) =>
-                      //             handleInputChange(
-                      //               index,
-                      //               event.target.value,
-                      //               field.name,
-                      //               field.type
-                      //             )
-                      //           }
-                      //         />
-                      //         <button
-                      //           type='button'
-                      //           className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm ms-2'
-                      //           onClick={() => fieldDeleteHandler(field._id)}
-                      //         >
-                      //           <KTIcon iconName='trash' className='fs-3' />
-                      //         </button>
-                      //       </div>
-                      //     </div>
-                      //   </div>
-                      // )
                     }
                   })}
               </div>
