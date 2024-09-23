@@ -13,7 +13,7 @@ const router = Router();
 router
   .route("/")
   .post(requireSignIn, addFormsController)
-  .get(requireSignIn, getAllAddedFormNames);
+  .get(getAllAddedFormNames);
 router
   .route("/:id")
   .get(requireSignIn, getSingleFormController)

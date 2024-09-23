@@ -270,17 +270,6 @@ export default function ViewAllEnquiryFormsData() {
     })
   }
 
-  // const columnsDeleteHandler = (columnsId) => {
-  //   deleteReorderedColumnsMutation.mutate(columnsId, {
-  //     onSuccess: () => {
-  //       // toast.success('Field deleted successfully!')
-  //     },
-  //     onError: (error) => {
-  //       toast.error(`Error deleting form: ${error.message}`)
-  //     },
-  //   })
-  // }
-
   const filteredGroupedData = filteredData
     ?.map((entry) => ({
       id: entry.id,
@@ -416,11 +405,11 @@ export default function ViewAllEnquiryFormsData() {
       </div>
       <div className='card-body py-3'>
         <div className='table-responsive'>
-          <DragDropContext onDragEnd={onDragEnd}>
+          <DragDropContext onDragEnd={filteredGroupedData.length > 0 ? onDragEnd : () => {}}>
             <Droppable droppableId='droppable-columns' direction='horizontal' type='COLUMN'>
               {(provided) => (
                 <table
-                  className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4 '
+                  className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'
                   ref={provided.innerRef}
                   {...provided.droppableProps}
                 >
@@ -429,13 +418,7 @@ export default function ViewAllEnquiryFormsData() {
                       <div className='d-flex justify-content-start flex-shrink-0'>
                         <a
                           className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm'
-                          onClick={() =>
-                            rowsDeleteHandler(
-                              allRowsId,
-                              firstColumnData
-                              // formRowDataBeforeDragging
-                            )
-                          }
+                          onClick={() => rowsDeleteHandler(allRowsId, firstColumnData)}
                         >
                           <KTIcon iconName='trash' className='fs-2' />
                         </a>
@@ -450,21 +433,24 @@ export default function ViewAllEnquiryFormsData() {
                             className='form-check-input widget-9-check'
                             type='checkbox'
                             value='1'
+                            disabled={filteredGroupedData.length === 0} // Disable if no data
                           />
                         </div>
                       </th>
                       {uniqueFieldNames.length > 0 && (
                         <th className='min-w-100px text-start'>Actions</th>
                       )}
-                      {/* <th className='w-25px'></th> */}
                       {uniqueFieldNames.map((fieldName, index) => (
-                        <Draggable key={fieldName} draggableId={fieldName} index={index}>
+                        <Draggable
+                          key={fieldName}
+                          draggableId={fieldName}
+                          index={index}
+                          isDragDisabled={filteredGroupedData.length === 0}
+                        >
                           {(provided, snapshot) => {
-                            // Check if the fieldName is "Name" or "Mobile" and apply fixed styles
                             const isFixedColumn =
                               fieldName === 'Name' || fieldName === 'Mobile Number'
 
-                            // Define custom styles for fixed columns
                             const fixedStyles =
                               fieldName === 'Name'
                                 ? {left: 0, zIndex: 2, position: 'sticky', background: 'white'}
@@ -475,7 +461,6 @@ export default function ViewAllEnquiryFormsData() {
                                     background: 'white',
                                   }
 
-                            // Merge custom styles for "Name" and "Mobile"
                             const mergedStyles = isFixedColumn
                               ? {
                                   ...getItemStyle(
@@ -516,7 +501,6 @@ export default function ViewAllEnquiryFormsData() {
                             </div>
                           </td>
                           <td>
-                            {' '}
                             <div className='d-flex justify-content-start flex-shrink-0'>
                               <a
                                 className='btn btn-icon btn-bg-light btn-active-color-info btn-sm me-1'
@@ -525,17 +509,14 @@ export default function ViewAllEnquiryFormsData() {
                                 <KTIcon iconName='eye' className='fs-3' />
                               </a>
                               <a
-                                onClick={() => openEditFormData(rowData.id)}
                                 className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                                onClick={() => openEditFormData(rowData.id)}
                               >
                                 <KTIcon iconName='pencil' className='fs-3' />
                               </a>
                               <a
                                 className='btn btn-icon btn-bg-light btn-active-color-danger btn-sm'
-                                onClick={() => {
-                                  // console.log(rowData.id)
-                                  formDataDeleteHandler(rowData.id)
-                                }}
+                                onClick={() => formDataDeleteHandler(rowData.id)}
                               >
                                 <KTIcon iconName='trash' className='fs-3' />
                               </a>
@@ -546,7 +527,6 @@ export default function ViewAllEnquiryFormsData() {
                               (field) => field.name === fieldName
                             )
 
-                            // Check if the field is "Name" or "Mobile"
                             const isFixedField =
                               fieldName === 'Name' || fieldName === 'Mobile Number'
 
@@ -589,7 +569,6 @@ export default function ViewAllEnquiryFormsData() {
                         </td>
                       </tr>
                     )}
-                    {/* Placeholder added here */}
                     {provided.placeholder}
                   </tbody>
                 </table>
@@ -598,6 +577,7 @@ export default function ViewAllEnquiryFormsData() {
           </DragDropContext>
         </div>
       </div>
+
       <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
         {modalMode === 'view' && (
           <OnlyViewFormData
