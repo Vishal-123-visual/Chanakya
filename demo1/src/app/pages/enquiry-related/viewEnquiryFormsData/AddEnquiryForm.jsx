@@ -103,7 +103,7 @@ const AddEnquiryForm = () => {
   const formNameById = getAllAddedFormsName?.data
     ?.filter((formId) => formId._id === selectedFormId)
     .map((form) => form.formName)
-  console.log(formNameById)
+  // console.log(formNameById)
 
   const handleDefaultSelectChange = (e, selectName, type) => {
     const {value} = e.target
@@ -222,7 +222,7 @@ const AddEnquiryForm = () => {
   }
 
   // const select = fields?.map((value) => value)
-  console.log(companyDataNameAndId)
+  // console.log(companyDataNameAndId)
 
   return (
     <>
