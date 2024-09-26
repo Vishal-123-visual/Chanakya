@@ -4,11 +4,20 @@ import {useCompanyContext} from '../compay/CompanyContext'
 const EmailTemplate = () => {
   const companyCTX = useCompanyContext()
   const {data: emailRemainderData} = companyCTX.getEmailRemainderTextMessage
+  const {data: emailRemainderDays} = companyCTX.getEmailRemainderDays
   const [textEmailsData, setTextEmailsData] = useState({
     firstRemainder: emailRemainderData[0]?.firstRemainder,
     secondRemainder: emailRemainderData[0]?.secondRemainder,
     thirdRemainder: emailRemainderData[0]?.thirdRemainder,
   })
+
+  const [remainderDays, setRemainderDays] = useState({
+    firstRemainderDay: emailRemainderDays[0]?.firstRemainderDay,
+    secondRemainderDay: emailRemainderDays[0]?.secondRemainderDay,
+    thirdRemainderDay: emailRemainderDays[0]?.thirdRemainderDay,
+  })
+
+  // console.log(remainderDays)
 
   useEffect(() => {
     setTextEmailsData({
@@ -16,16 +25,26 @@ const EmailTemplate = () => {
       secondRemainder: emailRemainderData[0]?.secondRemainder,
       thirdRemainder: emailRemainderData[0]?.thirdRemainder,
     })
-  }, [emailRemainderData])
+    setRemainderDays({
+      firstRemainderDay: emailRemainderDays[0]?.firstRemainderDay,
+      secondRemainderDay: emailRemainderDays[0]?.secondRemainderDay,
+      thirdRemainderDay: emailRemainderDays[0]?.thirdRemainderDay,
+    })
+  }, [emailRemainderData, emailRemainderDays])
 
   const onChangeHandler = (e) => {
     setTextEmailsData({...textEmailsData, [e.target.name]: e.target.value})
+  }
+
+  const onChangeInputHandler = (e) => {
+    setRemainderDays({...remainderDays, [e.target.name]: e.target.value})
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
     try {
       companyCTX.postEmailRemainderText.mutate(textEmailsData)
+      companyCTX.postEmailRemainderDays.mutate(remainderDays)
     } catch (error) {
       console.log(error)
     } finally {
@@ -33,6 +52,11 @@ const EmailTemplate = () => {
         firstRemainder: '',
         secondRemainder: '',
         thirdRemainder: '',
+      })
+      setRemainderDays({
+        firstRemainderDay: '',
+        secondRemainderDay: '',
+        thirdRemainderDay: '',
       })
     }
   }
@@ -53,6 +77,20 @@ const EmailTemplate = () => {
             className='form-control'
             name='firstRemainder'
           />
+          {/* <div class='d-flex align-items-center'> */}
+          <label class='form-label'> First Remainder Date</label>
+          <input
+            type='number'
+            min={1}
+            max={31}
+            placeholder='First Remainder Date...'
+            name='firstRemainderDay'
+            value={remainderDays.firstRemainderDay}
+            onChange={onChangeInputHandler}
+            class='form-control me-2'
+            style={{width: '200px'}}
+          />
+          {/* </div> */}
         </div>
         <div className='mb-3'>
           <label htmlFor='secondRemainder' className='form-label'>
@@ -66,6 +104,18 @@ const EmailTemplate = () => {
             className='form-control'
             name='secondRemainder'
           />
+          <label class='form-label'> Second Remainder Date</label>
+          <input
+            type='number'
+            min={1}
+            max={31}
+            placeholder='Second Remainder Date...'
+            value={remainderDays.secondRemainderDay}
+            name='secondRemainderDay'
+            onChange={onChangeInputHandler}
+            class='form-control me-2'
+            style={{width: '200px'}}
+          />
         </div>
         <div className='mb-3'>
           <label htmlFor='thirdRemainder' className='form-label'>
@@ -78,6 +128,18 @@ const EmailTemplate = () => {
             type='text'
             className='form-control'
             name='thirdRemainder'
+          />
+          <label class='form-label'> Third Remainder Date</label>
+          <input
+            type='number'
+            min={1}
+            max={31}
+            value={remainderDays.thirdRemainderDay}
+            name='thirdRemainderDay'
+            placeholder='Third Remainder Date...'
+            class='form-control me-2'
+            onChange={onChangeInputHandler}
+            style={{width: '200px'}}
           />
         </div>
         <button

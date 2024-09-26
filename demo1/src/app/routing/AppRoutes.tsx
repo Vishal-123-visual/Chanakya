@@ -12,6 +12,7 @@ import {ErrorsPage} from '../modules/errors/ErrorsPage'
 import {Logout, AuthPage, useAuth} from '../modules/auth'
 import {App} from '../App'
 import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
+import EnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryForm'
 
 /**
  * Base URL of the website.
@@ -49,7 +50,7 @@ const AppRoutes: FC = () => {
             </>
           ) : (
             <>
-              <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
+              <Route path='/enquiry-form/:id' element={<EnquiryForm />} />
               <Route path='auth/*' element={<AuthPage />} />
               <Route path='*' element={<Navigate to='/auth' />} />
             </>

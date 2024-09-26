@@ -2,6 +2,7 @@ import asyncHandler from "../middlewares/asyncHandler.js";
 import EmailSuggestionModel from "../models/email-remainder/EmailSuggestions.models.js";
 import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Suggestion.js";
 import EmailRemainderModel from "../models/email-remainder/email.remainder.models.js";
+import emailRemainderDatesModel from "../models/email-remainder/email.remainderDates.js";
 
 export const addEmailRemainderController = asyncHandler(
   async (req, res, next) => {
@@ -48,11 +49,44 @@ export const getEmailRemainderTextController = asyncHandler(
   }
 );
 
+export const addEmailRemainderDatesController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const { firstRemainderDay, secondRemainderDay, thirdRemainderDay } =
+        req.body;
+
+      const emailRemainderDates = await emailRemainderDatesModel.find({});
+      emailRemainderDates.forEach(
+        async (emailRemainderDatesModel) =>
+          await emailRemainderDatesModel.deleteOne()
+      );
+      const emailRemainderDate = new emailRemainderDatesModel({
+        firstRemainderDay,
+        secondRemainderDay,
+        thirdRemainderDay,
+      });
+      await emailRemainderDate.save();
+      res.status(200).json({ message: "Email Remainder Date Added !!" });
+    } catch (error) {
+      res.status(500).json({ error: error });
+    }
+  }
+);
+
+export const getAllRemainderDatesController = asyncHandler(async (req, res) => {
+  try {
+    const data = await emailRemainderDatesModel.find({});
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ success: false, error: "Internal server error" });
+  }
+});
+
 export const addEmailSuggestionController = asyncHandler(
   async (req, res, next) => {
     try {
       const { emailSuggestionStatus } = req.body;
-      //console.log(emailSuggestionStatus);
+      // console.log(emailSuggestionStatus);
       const emailRemainder = await EmailSuggestionModel.find({});
       emailRemainder.forEach(
         async (emailRemainder) => await emailRemainder.deleteOne()

@@ -1,28 +1,44 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
 
 const EditStudentNotes = ({studentNote, studentNoteData, setEditStudentNoteId}) => {
   const [particulars, setParticulars] = useState(studentNoteData.particulars)
-  // const [dateTime, setDateTime] = useState(studentNoteData.dateTime)
   const [startTime, setStartTime] = useState(studentNoteData.startTime)
-  // const [endTime, setEndTime] = useState(studentNoteData.endTime)
   const studentNoteCTX = useCustomFormFieldContext()
-  // const studentIssueCTX = useCompanyContext()
-  //console.log(studentIssueCTX.useUpdateStudentIssueMutation.isLoading)
-  // console.log(studentNote)
-  // console.log(studentNoteData)
-  // console.log(setEditStudentNoteId)
+
+  function formatDateTime(dateTime) {
+    if (!dateTime) return '' // Return empty if no date
+
+    const date = new Date(dateTime)
+
+    // Get the YYYY-MM-DD format
+    const formattedDate = date.toISOString().slice(0, 10)
+
+    // Get the hours and minutes
+    const hours = date.getHours().toString().padStart(2, '0') // Ensures 2 digits for hours
+    const minutes = date.getMinutes().toString().padStart(2, '0') // Ensures 2 digits for minutes
+
+    // Combine the date and time to match the 'YYYY-MM-DDTHH:MM' format
+    return `${formattedDate}T${hours}:${minutes}`
+  }
+
+  // Convert the current startTime to a formatted value
+  const formattedDate = formatDateTime(startTime)
+
+  useEffect(() => {
+    setParticulars(studentNoteData.particulars)
+    setStartTime(studentNoteData.startTime)
+  }, [studentNoteData.particulars, studentNoteData.startTime])
 
   const handleSubmit = (e) => {
     e.preventDefault()
     if (!particulars) {
-      alert('Please enter a particulars')
+      alert('Please enter particulars')
       return
     }
     studentNoteCTX.useUpdateStudentNoteMutation.mutate({
       particulars,
       startTime,
-      // endTime,
       studentId: studentNote,
       id: studentNoteData._id,
     })
@@ -44,22 +60,13 @@ const EditStudentNotes = ({studentNote, studentNoteData, setEditStudentNoteId}) 
         />
       </td>
       <td>
-        {/* <small className='text-muted fw-bold'>Start Date And Time</small> */}
         <input
           type='datetime-local'
-          value={startTime}
-          placeholder='DD/MM/YYYY HH:MM'
-          onChange={(e) => setStartTime(e.target.value)}
+          value={formattedDate || ''}
+          id='dateTime'
+          onChange={(e) => setStartTime(e.target.value)} // Update startTime directly from input
           className='form-control'
         />
-        {/* <small className='text-muted fw-bold'>End Date And Time</small>
-        <input
-          type='datetime-local'
-          value={endTime}
-          placeholder='DD/MM/YYYY HH:MM'
-          onChange={(e) => setEndTime(e.target.value)}
-          className='form-control'
-        /> */}
       </td>
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>
@@ -67,19 +74,20 @@ const EditStudentNotes = ({studentNote, studentNoteData, setEditStudentNoteId}) 
             disabled={studentNoteCTX.useUpdateStudentNoteMutation.isLoading}
             onClick={handleSubmit}
             type='submit'
-            className='btn  btn-bg-dark btn-color-primary btn-active-color-info  me-1'
+            className='btn btn-bg-dark btn-color-primary btn-active-color-info me-1'
           >
             {studentNoteCTX.useUpdateStudentNoteMutation.isLoading ? 'Editing...' : 'Edit'}
           </button>
           <button
             onClick={() => setEditStudentNoteId(null)}
-            className='btn btn-bg-dark btn-color-primary btn-active-color-info '
+            className='btn btn-bg-dark btn-color-primary btn-active-color-info'
           >
-            cancel
+            Cancel
           </button>
         </div>
       </td>
     </tr>
   )
 }
+
 export default EditStudentNotes

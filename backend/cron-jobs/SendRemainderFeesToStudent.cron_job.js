@@ -3,6 +3,7 @@ import admissionFormModel from "../src/models/addmission_form.models.js";
 import { userModel } from "../src/models/user.models.js";
 import EmailRemainderModel from "../src/models/email-remainder/email.remainder.models.js";
 import { sendEmail } from "../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
+import emailRemainderDatesModel from "../src/models/email-remainder/email.remainderDates.js";
 
 const studentInfoToSendMailToStudent = async () => {
   try {
@@ -11,6 +12,9 @@ const studentInfoToSendMailToStudent = async () => {
       .find({})
       .populate(["courseName", "companyName"]);
 
+    let firstRemainderDay = "";
+    let secondRemainderDay = "";
+    let thirdRemainderDay = "";
     let toEmails = "";
     const currentDate = new Date().getDate(); // Get the current day of the month
 
@@ -22,27 +26,30 @@ const studentInfoToSendMailToStudent = async () => {
       }
     });
 
-    // console.log(currentDate);
+    const emailRemainderDates = await emailRemainderDatesModel.findOne({});
+    if (emailRemainderDates) {
+      firstRemainderDay = emailRemainderDates.firstRemainderDay;
+      secondRemainderDay = emailRemainderDates.secondRemainderDay;
+      thirdRemainderDay = emailRemainderDates.thirdRemainderDay;
+    }
 
     // Fetch the email remainder data
     const emailRemainderData = await EmailRemainderModel.findOne({});
 
     // Select the appropriate remainder message based on the current date
     let emailContent = "";
-    if (currentDate === 15) {
+    if (currentDate === firstRemainderDay) {
       emailContent = emailRemainderData.firstRemainder; // First remainder content
-    } else if (currentDate === 20) {
+    } else if (currentDate === secondRemainderDay) {
       emailContent = emailRemainderData.secondRemainder; // Second remainder content
-    } else if (currentDate === 28) {
+    } else if (currentDate === thirdRemainderDay) {
       emailContent = emailRemainderData.thirdRemainder; // Third remainder content
     } else {
-      //console.log("No remainder scheduled for today.");
       return; // Exit if today is not one of the scheduled days
     }
 
     // Append student emails who have remaining fees to the recipients list
     students.forEach((student) => {
-      console.log(student);
       if (
         student.remainingCourseFees &&
         student.remainingCourseFees !== 0 &&
@@ -52,12 +59,8 @@ const studentInfoToSendMailToStudent = async () => {
       }
     });
 
-    //console.log(toEmails);
-
     // Send the reminder email using the selected content
     if (toEmails) {
-      //console.log(`Sending reminder to: ${toEmails}`);
-      // Uncomment and adjust the function to send the actual email
       await sendEmail(toEmails, "Installment Payment Reminder", emailContent);
     }
   } catch (error) {
@@ -65,9 +68,28 @@ const studentInfoToSendMailToStudent = async () => {
   }
 };
 
-export default function startSchedulerStudentRemainderFeesToStudents() {
-  // Schedule the task to run at 9:00 AM on the 15th, 20th, and 28th of each month
-  cron.schedule("0 9 15,20,28 * *", studentInfoToSendMailToStudent);
-  // cron.schedule("* * * * * *", studentInfoToSendMailToStudent);
-  // console.log("Scheduler for sending remainder fees to students has started.");
+export default async function startSchedulerStudentRemainderFeesToStudents() {
+  try {
+    // Fetch the reminder dates from the database
+    const emailRemainderDates = await emailRemainderDatesModel.findOne({});
+
+    if (emailRemainderDates) {
+      const { firstRemainderDay, secondRemainderDay, thirdRemainderDay } =
+        emailRemainderDates;
+
+      // Construct the cron schedule string dynamically
+      const cronSchedule = `0 9 ${firstRemainderDay},${secondRemainderDay},${thirdRemainderDay} * *`;
+
+      // Schedule the task with the dynamic cron expression
+      cron.schedule(cronSchedule, studentInfoToSendMailToStudent);
+
+      console.log(
+        `Scheduler for sending remainder fees to students has started with the following days: ${firstRemainderDay}, ${secondRemainderDay}, ${thirdRemainderDay}`
+      );
+    } else {
+      console.log("No remainder dates found in the database.");
+    }
+  } catch (error) {
+    console.error("Error setting up scheduler:", error);
+  }
 }

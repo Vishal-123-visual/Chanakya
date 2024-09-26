@@ -23,6 +23,7 @@ const transformRequestBody = (requestBody) => {
 export const submitFormController = async (req, res) => {
   try {
     // Transform the incoming request body data
+    // console.log(req.user.fName);
     const formattedData = transformRequestBody(req.body);
 
     // Create and save the new form field values
@@ -30,6 +31,84 @@ export const submitFormController = async (req, res) => {
       formId: formattedData.formId,
       companyId: req.body.companyId,
       formFiledValue: formattedData.formFieldValues,
+      addedBy: req.user.fName,
+    });
+    await newFormFieldValuesData.save();
+
+    // Find the existing row data based on formId and companyId
+    let rowDataExists = await Row.findOne({
+      formId: req.body.formId,
+      companyId: req.body.companyId,
+    });
+
+    // If no row data exists, create a new one
+    if (!rowDataExists) {
+      rowDataExists = new Row({
+        formId: req.body.formId,
+        companyId: req.body.companyId,
+        rows: [],
+      });
+    }
+
+    // Iterate over the formatted data and update or add new fields to rows
+    formattedData.formFieldValues.forEach((fieldValue, index) => {
+      let existingRow = rowDataExists.rows.find(
+        (row) => row.id === fieldValue.id
+      );
+
+      // If the row does not exist, create a new row and add it
+      if (!existingRow) {
+        existingRow = {
+          id: fieldValue.id || new mongoose.Types.ObjectId(), // Generate an ID if not present
+          fields: [],
+        };
+        rowDataExists.rows.push(existingRow);
+      }
+
+      // Find the existing field in the row
+      const existingField = existingRow.fields.find(
+        (field) => field.name.toLowerCase() === fieldValue.name.toLowerCase()
+      );
+
+      // If the field exists, update it; otherwise, add the new field
+      if (existingField) {
+        existingField.type = fieldValue.type;
+        existingField.value = fieldValue.value;
+      } else {
+        existingRow.fields.push({
+          name: fieldValue.name,
+          type: fieldValue.type,
+          value: fieldValue.value,
+        });
+      }
+    });
+
+    // Save the updated row data to the database
+    await rowDataExists.save();
+
+    // Send a success response
+    res.status(200).json({
+      success: true,
+      message: "Form data and rows updated successfully",
+    });
+  } catch (error) {
+    // Handle any errors and send a failure response
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const submitUserFormController = async (req, res) => {
+  try {
+    // Transform the incoming request body data
+    // console.log(req.user.fName);
+    const formattedData = transformRequestBody(req.body);
+
+    // Create and save the new form field values
+    const newFormFieldValuesData = new FormFieldValueModel({
+      formId: formattedData.formId,
+      companyId: req.body.companyId,
+      formFiledValue: formattedData.formFieldValues,
+      addedBy: "Form",
     });
     await newFormFieldValuesData.save();
 

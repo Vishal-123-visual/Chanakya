@@ -148,6 +148,47 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  // add email remainder Days from input fields data
+  const postEmailRemainderDays = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/emailRemainder/remainder-dates`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getRemainderDates']})
+      }
+    },
+  })
+
+  const getEmailRemainderDays = useQuery({
+    queryKey: ['getRemainderDates'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/emailRemainder/remainder-dates`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
   // add email remainder suggestions
   const postEmailSuggestionStatus = useMutation({
     mutationFn: async (data) => {
@@ -562,6 +603,7 @@ export const CompanyContextProvider = ({children}) => {
         deleteCompanyMutation,
         updateCompanyMutation,
         postEmailRemainderText,
+        postEmailRemainderDays,
         postEmailSuggestionStatus,
         getEmailSuggestionStatus,
         useGetStudentsAccordingToCompanyQuery,
@@ -575,6 +617,7 @@ export const CompanyContextProvider = ({children}) => {
         postWhatsAppMessageSuggestionStatus,
         getWhatsAppMessageuggestionStatus,
         getEmailRemainderTextMessage,
+        getEmailRemainderDays,
         /***************************  whatsapp Message Suggestion end   *****************************/
 
         // student issues start here --------------------------------------

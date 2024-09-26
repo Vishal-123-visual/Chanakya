@@ -1,14 +1,13 @@
 import moment from 'moment'
 import React from 'react'
-import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
-import { useAuth } from '../../modules/auth/core/Auth'
-import { usePaymentOptionContextContext } from '../payment_option/PaymentOption.Context'
-import { Link } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
+import {useAuth} from '../../modules/auth/core/Auth'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {Link} from 'react-router-dom'
+import {toast} from 'react-toastify'
 import axios from 'axios'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
-
 
 const ReadOnlyCourseFee = ({
   studentInfoData,
@@ -18,12 +17,12 @@ const ReadOnlyCourseFee = ({
   delelteStudentCourseFeesHandler,
 }) => {
   // console.log(StudentFee)
-  const { auth, currentUser } = useAuth()
+  const {auth, currentUser} = useAuth()
 
   const paymentOptionCtx = usePaymentOptionContextContext()
   //console.log(paymentOptionCtx.getPaymentOptionsData.data)
 
-  //onsole.log(StudentFee.paymentOption)
+  // console.log(StudentFee)
 
   const studentEditCourseFeesHandler = (id) => {
     setStudentCourseFeesEditId(id)
@@ -49,9 +48,7 @@ Visual Media Academy`
     window.open(url)
   }
 
-  const sendMailToStudentAgainIfNotAccept = async (
-    studentData
-  ) => {
+  const sendMailToStudentAgainIfNotAccept = async (studentData) => {
     try {
       // console.log(studentData)
       const res = await axios.post(`${BASE_URL}/api/students/sendMailStudent`, studentData)
@@ -64,9 +61,7 @@ Visual Media Academy`
           },
         })
       }
-    } catch (error) {
-
-    }
+    } catch (error) {}
   }
 
   const formatDate = (date) => {

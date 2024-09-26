@@ -105,6 +105,7 @@ export default function ViewAllEnquiryFormsData() {
           .map((formData) => ({
             id: formData._id,
             fields: formData.formFiledValue,
+            addedBy: formData.addedBy,
           }))
 
         setFilteredData(filteredFormData || [])
@@ -274,6 +275,7 @@ export default function ViewAllEnquiryFormsData() {
     ?.map((entry) => ({
       id: entry.id,
       fields: entry.fields.filter((field) => field.name !== 'companyId'),
+      addedBy: entry.addedBy,
     }))
     ?.filter((rowData) =>
       rowData.fields.some((field) => {
@@ -284,6 +286,16 @@ export default function ViewAllEnquiryFormsData() {
         )
       })
     )
+
+  // console.log(filteredGroupedData)
+  // console.log(filteredData)
+
+  const data = getAllFormsFieldValue?.data?.formFieldValues
+  const addedBy = data
+    ?.filter((form) => form.formId === selectedFormId && form.companyId === companyId)
+    .map((user) => user.addedBy)
+  // console.log(data)
+
   // const formRowDataBeforeDragging = filteredGroupedData?.map((rowData) => rowData.id)
   // console.log(formRowDataBeforeDragging)
 
@@ -485,6 +497,7 @@ export default function ViewAllEnquiryFormsData() {
                           }}
                         </Draggable>
                       ))}
+                      {uniqueFieldNames.length > 0 && <th className='min-w-140px'>AddedBy</th>}
                     </tr>
                   </thead>
                   <tbody id='droppableId'>
@@ -560,6 +573,7 @@ export default function ViewAllEnquiryFormsData() {
                               </td>
                             )
                           })}
+                          <td>{rowData.addedBy}</td>
                         </tr>
                       ))
                     ) : (

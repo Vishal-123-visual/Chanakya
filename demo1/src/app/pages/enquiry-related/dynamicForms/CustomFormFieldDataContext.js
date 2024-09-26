@@ -172,6 +172,34 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     },
   })
 
+  const createCustomFromsFieldValuesMutation = useMutation({
+    mutationFn: async (data) => {
+      // console.log(data)
+      return axios.post(`${BASE_URL}/api/submit-form/enquiry-form`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        //toast.error(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getCustomFormFieldValuesData']})
+      }
+    },
+  })
+
   const useSaveReorderedColumns = () => {
     const queryClient = useQueryClient()
 
@@ -579,6 +607,7 @@ export const CustomFormFieldDataContextProvider = ({children}) => {
     <CustomFormFieldDataContext.Provider
       value={{
         createCustomFromFieldValuesMutation,
+        createCustomFromsFieldValuesMutation,
         handleSelectChange,
         handleCheckboxChange,
         handleOptionChange,

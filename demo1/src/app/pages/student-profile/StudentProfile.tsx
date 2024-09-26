@@ -102,7 +102,7 @@ const StudentProfile: React.FC = () => {
       formik.setFieldValue('no_of_installments_amount', numberOfInstallmentAmount?.toFixed(2))
     }
   }, [])
-  //console.log(updateUserId)
+  // console.log(updateUserId)
 
   // let updateStudentId = updateUserId?._id
 
@@ -147,8 +147,10 @@ const StudentProfile: React.FC = () => {
     },
   })
 
+  // console.log(formik)
+
   const navigateCourseSubjectsHandler = () => {
-    //console.log('data of subjects based on course', data)
+    // console.log('data of subjects based on course', data)
     // console.log('navigating to the course subject page !!!', updateUserId)
     navigate('/course-subjects-addMarks', {state: updateUserId})
   }

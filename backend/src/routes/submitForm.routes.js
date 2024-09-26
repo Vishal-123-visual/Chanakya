@@ -5,11 +5,17 @@ import {
   deleteSingleFormDataController,
   updateSingleFormDataValueController,
   getSingleFormDataValueByIdController,
+  submitUserFormController,
 } from "../controllers/submitForm.controllers.js";
+import { requireSignIn } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.route("/").post(submitFormController).get(getAllSubmitFormData);
+router
+  .route("/")
+  .post(requireSignIn, submitFormController)
+  .get(getAllSubmitFormData);
+router.post("/enquiry-form", submitUserFormController);
 router
   .route("/:id")
   .delete(deleteSingleFormDataController)

@@ -12,10 +12,10 @@ const router = Router();
 router
   .route("/")
   .post(addDefaultSelectController)
-  .get(requireSignIn, getAllDefaultSelectController);
+  .get(getAllDefaultSelectController);
 router
   .route("/:id")
-  .get(requireSignIn, getSingleDefaultSelectByIdController)
-  .put(requireSignIn, updateSingleDefaultSelectController);
+  .get(getSingleDefaultSelectByIdController)
+  .put(updateSingleDefaultSelectController);
 
 export default router;

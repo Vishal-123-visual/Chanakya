@@ -61,6 +61,7 @@ app.use("/api/add-lab", labRoutes);
 app.use("/api/add-timing", timingRoutes);
 app.use("/api/add-batch", batchRoutes);
 app.use("/api/submit-form", submitForm);
+// app.use("/api/enquiry-form", submitForm);
 app.use("/api", reOrderingColumnsAndRows);
 
 const __dirname = path.resolve();
