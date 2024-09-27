@@ -28,9 +28,8 @@ const studentInfoToSendMailToStudent = async () => {
 
     const emailRemainderDates = await emailRemainderDatesModel.findOne({});
     if (emailRemainderDates) {
-      firstRemainderDay = emailRemainderDates.firstRemainderDay;
-      secondRemainderDay = emailRemainderDates.secondRemainderDay;
-      thirdRemainderDay = emailRemainderDates.thirdRemainderDay;
+      ({ firstRemainderDay, secondRemainderDay, thirdRemainderDay } =
+        emailRemainderDates);
     }
 
     // Fetch the email remainder data
