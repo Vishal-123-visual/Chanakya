@@ -1,24 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
+import React, {useEffect, useState} from 'react'
+import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import moment from 'moment'
 import PayStudentFee from './PayStudentFee'
-import { useStudentCourseFeesContext } from '../courseFees/StudentCourseFeesContext'
-import { useQuery, useQueryClient } from 'react-query'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import {useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
-import { useAuth } from '../../modules/auth'
-import { useNavigate } from 'react-router-dom'
+import {useAuth} from '../../modules/auth'
+import {useNavigate} from 'react-router-dom'
 import ReadOnlyCourseFee from './ReadOnlyCourseFee'
 import EditOnlyCourseFee from './EditOnlyCourseFee'
-import { toast } from 'react-toastify'
-import { useCompanyContext } from '../compay/CompanyContext'
-const StudentCourseFee = ({ className, studentInfoData }) => {
+import {toast} from 'react-toastify'
+import {useCompanyContext} from '../compay/CompanyContext'
+import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
+const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentInfoData)
   const navigate = useNavigate()
-  const { currentUser } = useAuth()
+  const {currentUser} = useAuth()
   const companyCtx = useCompanyContext()
 
-  const { data: sendWhatsAppMessageSuggestion } = companyCtx.getWhatsAppMessageuggestionStatus
+  const {data: sendWhatsAppMessageSuggestion} = companyCtx.getWhatsAppMessageuggestionStatus
+  const {getAllUserAccessRoleData} = useUserRoleAccessContext()
 
+  const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
   // console.log(companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus)
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
@@ -43,7 +46,6 @@ const StudentCourseFee = ({ className, studentInfoData }) => {
   const addStudentFeeFormToggleHandler = () => {
     setAddStudentFeeFormToggle((prev) => !prev)
   }
-
 
   const [payStudentFeesAdd, setPayStudentFeesAdd] = useState()
   useEffect(() => {
@@ -75,13 +77,13 @@ const StudentCourseFee = ({ className, studentInfoData }) => {
     // paymentOption
 
     if (payStudentFeesAdd.amountPaid === '') {
-      toast.error('Please enter the amount paid', { bodyStyle: { fontSize: '18px' } })
+      toast.error('Please enter the amount paid', {bodyStyle: {fontSize: '18px'}})
       return
     } else if (payStudentFeesAdd.amountDate === '') {
-      toast.error('Please enter the Date', { bodyStyle: { fontSize: '18px' } })
+      toast.error('Please enter the Date', {bodyStyle: {fontSize: '18px'}})
       return
     } else if (payStudentFeesAdd.paymentOption === '') {
-      toast.error('Please select the payment option', { bodyStyle: { fontSize: '18px' } })
+      toast.error('Please select the payment option', {bodyStyle: {fontSize: '18px'}})
       return
     }
 
@@ -209,7 +211,12 @@ const StudentCourseFee = ({ className, studentInfoData }) => {
           data-bs-trigger='hover'
           title='Click to pay fees'
         >
-          {currentUser.role !== 'Student' ? (
+          {currentUser.role !== 'Student' &&
+          userRoleAccess?.some(
+            (userAccess) =>
+              userAccess.studentFeesAccess['Add Student Fees'] === true &&
+              userAccess.role === currentUser?.role
+          ) ? (
             <button
               disabled={studentInfoData?.remainingCourseFees === 0}
               onClick={addStudentFeeFormToggleHandler}
@@ -249,7 +256,12 @@ const StudentCourseFee = ({ className, studentInfoData }) => {
                   <th className='min-w-100px'>Recipt No</th>
                   <th className='min-w-100px'>Payment Options</th>
                   <th className='min-w-100px'>Late Fee</th>
-                  <th className='min-w-100px text-end'>Actions</th>
+                  {userRoleAccess?.some(
+                    (userAccess) =>
+                      userAccess.studentFeesAccess['Edit Student Fees'] === true ||
+                      (userAccess.studentFeesAccess['Delete Student Fees'] === true &&
+                        userAccess.role === currentUser?.role)
+                  ) && <th className='min-w-100px text-end'>Actions</th>}
                 </tr>
               </thead>
               {/* end::Table head */}

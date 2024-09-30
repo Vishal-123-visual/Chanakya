@@ -1,10 +1,10 @@
-import { ToastContainer, toast } from 'react-toastify'
+import {ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import './Dynamic.css'
-import { useDynamicFieldContext } from './DynamicFieldsContext'
-import { useParams } from 'react-router-dom'
+import {useDynamicFieldContext} from './DynamicFieldsContext'
+import {useParams} from 'react-router-dom'
 
-const Dynamic = ({ companyName, formId }) => {
+const Dynamic = ({companyName, formId}) => {
   const {
     handleChange,
     handlePropertyChange,
@@ -34,7 +34,7 @@ const Dynamic = ({ companyName, formId }) => {
 
   const submitHandler = (e) => {
     e.preventDefault()
-    createCustomFormFieldData.mutate({ ...fields[0], companyName: companyName, formId: formId })
+    createCustomFormFieldData.mutate({...fields[0], companyName: companyName, formId: formId})
     setFields([
       {
         type: 'text',

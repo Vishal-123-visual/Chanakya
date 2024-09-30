@@ -34,6 +34,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import {DynamicFieldContextProvider} from './app/pages/enquiry-related/DynamicFieldsContext'
 import {CustomFormFieldDataContextProvider} from './app/pages/enquiry-related/dynamicForms/CustomFormFieldDataContext'
 import {AttendanceContextProvider} from './app/pages/attendance-related/AttendanceContext'
+import {UserRoleAccessProvider} from './app/pages/userRoleAccessManagement/UserRoleAccessContext'
 
 setupAxios(axios)
 Chart.register(...registerables)
@@ -49,23 +50,25 @@ if (container) {
             <AttendanceContextProvider>
               <DynamicFieldContextProvider>
                 <CustomFormFieldDataContextProvider>
-                  <CourseCategoryContextProvider>
-                    <NumberOfYearsCourseTypesContextProvider>
-                      <CourseTypesContextProvider>
-                        <CourseSubjectContextProvider>
-                          <AdmissionContextProvider>
-                            <StudentCourseFeesContextProvider>
-                              <PaymentOptionContextProvider>
-                                <CompanyContextProvider>
-                                  <AppRoutes />
-                                </CompanyContextProvider>
-                              </PaymentOptionContextProvider>
-                            </StudentCourseFeesContextProvider>
-                          </AdmissionContextProvider>
-                        </CourseSubjectContextProvider>
-                      </CourseTypesContextProvider>
-                    </NumberOfYearsCourseTypesContextProvider>
-                  </CourseCategoryContextProvider>
+                  <UserRoleAccessProvider>
+                    <CourseCategoryContextProvider>
+                      <NumberOfYearsCourseTypesContextProvider>
+                        <CourseTypesContextProvider>
+                          <CourseSubjectContextProvider>
+                            <AdmissionContextProvider>
+                              <StudentCourseFeesContextProvider>
+                                <PaymentOptionContextProvider>
+                                  <CompanyContextProvider>
+                                    <AppRoutes />
+                                  </CompanyContextProvider>
+                                </PaymentOptionContextProvider>
+                              </StudentCourseFeesContextProvider>
+                            </AdmissionContextProvider>
+                          </CourseSubjectContextProvider>
+                        </CourseTypesContextProvider>
+                      </NumberOfYearsCourseTypesContextProvider>
+                    </CourseCategoryContextProvider>
+                  </UserRoleAccessProvider>
                 </CustomFormFieldDataContextProvider>
               </DynamicFieldContextProvider>
             </AttendanceContextProvider>

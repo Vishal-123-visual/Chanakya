@@ -67,6 +67,7 @@ import BatchForm from '../pages/attendance-related/Batches/BatchForm'
 import TimingList from '../pages/attendance-related/Timings/TimingLists'
 import MonthlyReportsDashBoard from '../pages/monthly_Reports/MonthlyReportsDashBoard'
 import TodoCalendarRemainder from '../pages/enquiry-related/viewEnquiryFormsData/TodoCalendarRemainder'
+import UserRoleAccessManagement from '../pages/userRoleAccessManagement/UserRoleAccessManagement'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -422,6 +423,14 @@ const PrivateRoutes = () => {
               element={
                 <>
                   <UsersPage />
+                </>
+              }
+            />
+            <Route
+              path='apps/user-role/*'
+              element={
+                <>
+                  <UserRoleAccessManagement />
                 </>
               }
             />

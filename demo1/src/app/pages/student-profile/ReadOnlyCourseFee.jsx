@@ -6,6 +6,7 @@ import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Co
 import {Link} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import axios from 'axios'
+import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
@@ -18,6 +19,9 @@ const ReadOnlyCourseFee = ({
 }) => {
   // console.log(StudentFee)
   const {auth, currentUser} = useAuth()
+  const {getAllUserAccessRoleData} = useUserRoleAccessContext()
+
+  const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
 
   const paymentOptionCtx = usePaymentOptionContextContext()
   //console.log(paymentOptionCtx.getPaymentOptionsData.data)
@@ -124,7 +128,11 @@ Visual Media Academy`
               </button>
             </>
           )}
-          {(auth.role === 'Admin' || auth.role === 'SuperAdmin') && (
+          {userRoleAccess?.some(
+            (userAccess) =>
+              userAccess.studentFeesAccess['Edit Student Fees'] === true &&
+              userAccess.role === currentUser?.role
+          ) && (
             <>
               <button
                 onClick={() => studentEditCourseFeesHandler(StudentFee?._id)}
@@ -133,13 +141,19 @@ Visual Media Academy`
               >
                 <KTIcon iconName='pencil' className='fs-3' />
               </button>
-              <button
-                onClick={() => delelteStudentCourseFeesHandler(StudentFee?._id)}
-                type='button'
-                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-              >
-                <KTIcon iconName='trash' className='fs-3' />
-              </button>
+              {userRoleAccess?.some(
+                (userAccess) =>
+                  userAccess.studentFeesAccess['Delete Student Fees'] === true &&
+                  userAccess.role === currentUser?.role
+              ) && (
+                <button
+                  onClick={() => delelteStudentCourseFeesHandler(StudentFee?._id)}
+                  type='button'
+                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                >
+                  <KTIcon iconName='trash' className='fs-3' />
+                </button>
+              )}
             </>
           )}
         </div>

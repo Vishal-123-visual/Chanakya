@@ -4,6 +4,8 @@ import {Link, useNavigate, useParams} from 'react-router-dom'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
 import moment from 'moment'
 import {useCompanyContext} from './compay/CompanyContext'
+import useUserRoleAccessContext from './userRoleAccessManagement/UserRoleAccessContext'
+import {useAuth} from '../modules/auth'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -13,6 +15,7 @@ type Props = {
 }
 
 const StudentsList: React.FC<Props> = ({className}) => {
+  const {currentUser} = useAuth()
   const [searchValue, setSearchValue] = useState('')
   const [sortOption, setSortOption] = useState('DOJ') // Default sort by Date of Joining (DOJ)
   const ctx = useAdmissionContext()
@@ -20,6 +23,11 @@ const StudentsList: React.FC<Props> = ({className}) => {
   const params = useParams()
   const navigate = useNavigate()
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(params?.id)
+  const {getAllUserAccessRoleData} = useUserRoleAccessContext()
+
+  const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
+  // console.log(userRoleAccess)
+  // console.log(currentUser)
 
   const dorpOutStudentHandler = (dropOutStudent, isDropOutStudent) => {
     if (!window.confirm('Are you sure do you want to drop out this student!')) {
@@ -106,13 +114,19 @@ const StudentsList: React.FC<Props> = ({className}) => {
           data-bs-trigger='hover'
           title='Click to add a user'
         >
-          <button
-            className='btn btn-sm btn-light-primary'
-            onClick={() => navigate(`/addmission-form/${singleComapnyData?._id}`)}
-          >
-            <KTIcon iconName='plus' className='fs-3' />
-            Add New Student
-          </button>
+          {userRoleAccess?.some(
+            (userAccess: any) =>
+              userAccess.studentControlAccess['Add Student'] === true &&
+              userAccess.role === currentUser?.role
+          ) && (
+            <button
+              className='btn btn-sm btn-light-primary'
+              onClick={() => navigate(`/addmission-form/${singleComapnyData?._id}`)}
+            >
+              <KTIcon iconName='plus' className='fs-3' />
+              Add New Student
+            </button>
+          )}
         </div>
       </div>
       <div className='card-body py-3'>
@@ -123,7 +137,12 @@ const StudentsList: React.FC<Props> = ({className}) => {
                 <th className='min-w-150px'>Name</th>
                 <th className='min-w-140px'>Mobile Number</th>
                 <th className='min-w-120px'>D.O.J</th>
-                <th className='min-w-100px text-end'>Actions</th>
+                {userRoleAccess?.some(
+                  (userAccess: any) =>
+                    (userAccess.studentControlAccess['Edit Student'] === true ||
+                      userAccess.studentControlAccess['Delete Student'] === true) &&
+                    userAccess.role === currentUser?.role
+                ) && <th className='min-w-100px text-end'>Actions</th>}
               </tr>
             </thead>
             <tbody>
@@ -171,22 +190,37 @@ const StudentsList: React.FC<Props> = ({className}) => {
                         </div>
                       </div>
                     </td>
-                    <td>
+                    <td className='text-end'>
                       <div className='d-flex justify-content-end flex-shrink-0'>
-                        <button
-                          onClick={() =>
-                            navigate(`/update-addmission-form/${student?._id}`, {state: student})
-                          }
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                        >
-                          <KTIcon iconName='pencil' className='fs-3' />
-                        </button>
-                        <button
-                          onClick={() => studentDeleteHandler(student?._id)}
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                        >
-                          <KTIcon iconName='trash' className='fs-3' />
-                        </button>
+                        {/* Only check for the user access roles once */}
+                        {userRoleAccess?.some(
+                          (userAccess: any) =>
+                            userAccess.studentControlAccess['Edit Student'] === true &&
+                            userAccess.role === currentUser?.role
+                        ) && (
+                          <button
+                            onClick={() =>
+                              navigate(`/update-addmission-form/${student?._id}`, {
+                                state: student,
+                              })
+                            }
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                          >
+                            <KTIcon iconName='pencil' className='fs-3' />
+                          </button>
+                        )}
+                        {userRoleAccess?.some(
+                          (userAccess: any) =>
+                            userAccess.studentControlAccess['Delete Student'] === true &&
+                            userAccess.role === currentUser?.role
+                        ) && (
+                          <button
+                            onClick={() => studentDeleteHandler(student?._id)}
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                          >
+                            <KTIcon iconName='trash' className='fs-3' />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -195,7 +229,13 @@ const StudentsList: React.FC<Props> = ({className}) => {
                 <tr>
                   <td colSpan={4} className='text-center'>
                     <h4>
-                      No Students Available? <b>Create Student</b>
+                      No Students Available?{' '}
+                      <button
+                        className='btn btn-sm btn-light-primary'
+                        onClick={() => navigate(`/addmission-form/${singleComapnyData?._id}`)}
+                      >
+                        Add New Student
+                      </button>
                     </h4>
                   </td>
                 </tr>

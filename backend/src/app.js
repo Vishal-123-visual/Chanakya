@@ -27,6 +27,7 @@ import batchRoutes from "./routes/batch.routes.js";
 import timingRoutes from "./routes/addTiming.routes.js";
 import defaultSelectRoutes from "./routes/selectDefault.routes.js";
 import StudentNotesRoutes from "./routes/studentNotes.routes.js";
+import userRoleAccessRoutes from "./routes/userRoleAccess.routes.js";
 
 const app = express();
 
@@ -61,6 +62,7 @@ app.use("/api/add-lab", labRoutes);
 app.use("/api/add-timing", timingRoutes);
 app.use("/api/add-batch", batchRoutes);
 app.use("/api/submit-form", submitForm);
+app.use("/api/user-role", userRoleAccessRoutes);
 // app.use("/api/enquiry-form", submitForm);
 app.use("/api", reOrderingColumnsAndRows);
 

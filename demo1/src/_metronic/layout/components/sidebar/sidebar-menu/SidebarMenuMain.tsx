@@ -1,17 +1,21 @@
 /* eslint-disable react/jsx-no-target-blank */
-import React from 'react'
+import React, {useEffect} from 'react'
 import {useIntl} from 'react-intl'
 import {KTIcon} from '../../../../helpers'
 import {SidebarMenuItemWithSub} from './SidebarMenuItemWithSub'
 import {SidebarMenuItem} from './SidebarMenuItem'
 import {useCompanyContext} from '../../../../../app/pages/compay/CompanyContext'
 import {useAuth} from '../../../../../app/modules/auth'
+import useUserRoleAccessContext from '../../../../../app/pages/userRoleAccessManagement/UserRoleAccessContext'
 
 const SidebarMenuMain = () => {
   const intl = useIntl()
-
+  const {getAllUserAccessRoleData} = useUserRoleAccessContext()
   const companyCTX = useCompanyContext()
   const {currentUser} = useAuth()
+  const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
+  const company = companyCTX.getCompanyLists
+  const companyNames = company?.data?.map((company: any) => company.companyName) || []
 
   return (
     <>
@@ -231,12 +235,19 @@ const SidebarMenuMain = () => {
           </SidebarMenuItemWithSub>
           {/* ------------------------------ Settings Page End ------------------------------------------- */}
 
-          <SidebarMenuItem
-            to='/apps/user-management/users'
-            icon='abstract-28'
+          <SidebarMenuItemWithSub
+            to='/apps/chat'
             title='User management'
             fontIcon='bi-layers'
-          />
+            icon='abstract-28'
+          >
+            <SidebarMenuItem
+              to='/apps/user-management/users'
+              title='User management'
+              hasBullet={true}
+            />
+            <SidebarMenuItem to='/apps/user-role/management' title='User Roles' hasBullet={true} />
+          </SidebarMenuItemWithSub>
         </>
       ) : (
         <>
