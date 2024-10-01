@@ -16,6 +16,48 @@ const SidebarMenuMain = () => {
   const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
   const company = companyCTX.getCompanyLists
   const companyNames = company?.data?.map((company: any) => company.companyName) || []
+  // console.log('Company Names:', companyNames)
+
+  const matchedCompanies: {[key: string]: boolean} = {}
+
+  // Check if userRoleAccess has data before using forEach
+  if (userRoleAccess && Array.isArray(userRoleAccess)) {
+    userRoleAccess.forEach((role: any) => {
+      // Check if the current role matches the user's current role
+      if (role.role === currentUser?.role) {
+        // console.log(`Current role matched: ${role.role}`)
+
+        // Get the company permissions for the current role
+        const companyPermissions = role.companyPermissions || {}
+
+        // Match companies between companyNames and companyPermissions
+        Object.keys(companyPermissions).forEach((company) => {
+          // Only consider companies that are in the provided companyNames list
+          if (companyNames.includes(company)) {
+            // Set matchedCompanies based on company permissions
+            matchedCompanies[company] = companyPermissions[company]
+          }
+        })
+
+        // Log matched companies for debugging
+        // console.log(`Matched Companies for role ${role.role}:`, matchedCompanies)
+      } else {
+        // console.log(
+        //   `Role ${role.role} does not match the current user role ${currentUser?.role}. Skipping...`
+        // )
+      }
+    })
+  } else {
+    // console.error('userRoleAccess is undefined or not an array.')
+  }
+
+  // Filter to get only companies that are true for the current user
+  const userVisibleCompanies = Object.keys(matchedCompanies).filter(
+    (company) => matchedCompanies[company] === true
+  )
+
+  // Log the companies that the current user can see
+  // console.log('Companies visible to current user:', userVisibleCompanies)
 
   return (
     <>
@@ -31,165 +73,145 @@ const SidebarMenuMain = () => {
           {/* ----------------------------- Company Menu Start Here ............................... */}
           {companyCTX.getCompanyLists?.data?.map((CompanyListData: any, index: number) => (
             <React.Fragment key={index}>
-              <SidebarMenuItemWithSub
-                key={CompanyListData?._id}
-                to='/apps/chat'
-                title={CompanyListData.companyName}
-                fontIcon='bi-chat-left'
-                icon='message-text-2'
-              >
+              {userRoleAccess?.some(
+                (userAccess: any) =>
+                  userAccess.role === currentUser?.role &&
+                  matchedCompanies[CompanyListData.companyName]
+              ) && (
                 <SidebarMenuItemWithSub
-                  to=''
-                  title={'Students'}
+                  key={CompanyListData?._id}
+                  to='/apps/chat'
+                  title={CompanyListData.companyName}
                   fontIcon='bi-chat-left'
                   icon='message-text-2'
                 >
+                  <SidebarMenuItemWithSub
+                    to=''
+                    title={'Students'}
+                    fontIcon='bi-chat-left'
+                    icon='message-text-2'
+                  >
+                    <SidebarMenuItem
+                      to={`/students/${CompanyListData?._id}`}
+                      title='All Students'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/drop-out-students/${CompanyListData?._id}`}
+                      title='Drop Out Students'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/students-remainingFee/${CompanyListData?._id}`}
+                      title='Pending Students'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/students-clearFee/${CompanyListData?._id}`}
+                      title='Clear Students'
+                      hasBullet={true}
+                    />
+                  </SidebarMenuItemWithSub>
+
+                  <SidebarMenuItemWithSub
+                    to='/apps/chat'
+                    title={'Forms'}
+                    fontIcon='bi-chat-left'
+                    icon='message-text-2'
+                  >
+                    <SidebarMenuItem
+                      to={`/add-form/${CompanyListData?._id}`}
+                      title='Add Forms'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/view-form/${CompanyListData?._id}`}
+                      title='View Forms'
+                      hasBullet={true}
+                    />
+                  </SidebarMenuItemWithSub>
+
+                  <SidebarMenuItemWithSub
+                    to='/apps/chat'
+                    title={'View All Enquirys'}
+                    fontIcon='bi-chat-left'
+                    icon='message-text-2'
+                  >
+                    <SidebarMenuItem
+                      to={`/add-enquiry/${CompanyListData?._id}`}
+                      title='Add Enquirys'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/view-form-data/${CompanyListData?._id}`}
+                      title='View All Enquiry Forms'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/remainder-task/${CompanyListData?._id}`}
+                      title='Remainder Task'
+                      hasBullet={true}
+                    />
+                  </SidebarMenuItemWithSub>
+
+                  <SidebarMenuItemWithSub
+                    to='/apps/chat'
+                    title={'Reports'}
+                    fontIcon='bi-chat-left'
+                    icon='message-text-2'
+                  >
+                    <SidebarMenuItem
+                      to={`/monthly-reports/${CompanyListData?._id}`}
+                      title='Monthly Reports'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/monthlyCollectionFees/${CompanyListData?._id}`}
+                      title='Monthly Collections'
+                      hasBullet={true}
+                    />
+                  </SidebarMenuItemWithSub>
+
                   <SidebarMenuItem
-                    to={`/students/${CompanyListData?._id}`}
-                    title='All Students'
+                    to={`/student/commission/${CompanyListData?._id}`}
+                    title='Commission'
                     hasBullet={true}
                   />
                   <SidebarMenuItem
-                    to={`/drop-out-students/${CompanyListData?._id}`}
-                    title='Drop Out Students'
+                    to={`/addmission-form/${CompanyListData?._id}`}
+                    title='Admission Form'
                     hasBullet={true}
                   />
 
-                  <SidebarMenuItem
-                    to={`/students-remainingFee/${CompanyListData?._id}`}
-                    title='Pending Students'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/students-clearFee/${CompanyListData?._id}`}
-                    title='Clear Students'
-                    hasBullet={true}
-                  />
+                  {/* Day Book */}
+                  <SidebarMenuItemWithSub
+                    to='/apps/chat'
+                    title='Day Book'
+                    fontIcon='bi-chat-left'
+                    icon='message-text-2'
+                  >
+                    <SidebarMenuItem
+                      to={`/daybook/viewDaybook/${CompanyListData._id}`}
+                      title='View DayBook'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/daybook/addAccount/${CompanyListData._id}`}
+                      title='Add Account'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/daybook/viewAccount/${CompanyListData._id}`}
+                      title='View Account'
+                      hasBullet={true}
+                    />
+                  </SidebarMenuItemWithSub>
+                  {/* End Day Book */}
                 </SidebarMenuItemWithSub>
-
-                <SidebarMenuItemWithSub
-                  to='/apps/chat'
-                  title={'Forms'}
-                  fontIcon='bi-chat-left'
-                  icon='message-text-2'
-                >
-                  <SidebarMenuItem
-                    to={`/add-form/${CompanyListData?._id}`}
-                    title='Add Forms'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/view-form/${CompanyListData?._id}`}
-                    title='View Forms'
-                    hasBullet={true}
-                  />
-                </SidebarMenuItemWithSub>
-                <SidebarMenuItemWithSub
-                  to='/apps/chat'
-                  title={'View All Enquirys'}
-                  fontIcon='bi-chat-left'
-                  icon='message-text-2'
-                >
-                  <SidebarMenuItem
-                    to={`/add-enquiry/${CompanyListData?._id}`}
-                    title='Add Enquirys'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/view-form-data/${CompanyListData?._id}`}
-                    title='View All Enquiry Forms'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/remainder-task/${CompanyListData?._id}`}
-                    title='Remainder Task'
-                    hasBullet={true}
-                  />
-                </SidebarMenuItemWithSub>
-                {/*  <SidebarMenuItemWithSub
-                  to='/apps/chat'
-                  title={'Attendance'}
-                  fontIcon='bi-chat-left'
-                  icon='message-text-2'
-                >
-                  <SidebarMenuItem
-                    to={`/add-trainer/${CompanyListData?._id}`}
-                    title='Add Trainers'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/add-lab/${CompanyListData?._id}`}
-                    title='Add Labs'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/add-timing/${CompanyListData?._id}`}
-                    title='Add Timings'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/add-batch/${CompanyListData?._id}`}
-                    title='Add Batches'
-                    hasBullet={true}
-                  />
-                </SidebarMenuItemWithSub>*/}
-
-                <SidebarMenuItemWithSub
-                  to='/apps/chat'
-                  title={'Reports'}
-                  fontIcon='bi-chat-left'
-                  icon='message-text-2'
-                >
-                  <SidebarMenuItem
-                    to={`/monthly-reports/${CompanyListData?._id}`}
-                    title='Monthly Reports'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/monthlyCollectionFees/${CompanyListData?._id}`}
-                    title='Monthly Collections'
-                    hasBullet={true}
-                  />
-                </SidebarMenuItemWithSub>
-
-                <SidebarMenuItem
-                  to={`/student/commission/${CompanyListData?._id}`}
-                  title='Commission'
-                  hasBullet={true}
-                />
-                <SidebarMenuItem
-                  to={`/addmission-form/${CompanyListData?._id}`}
-                  title='Admission Form'
-                  hasBullet={true}
-                />
-
-                {/* ------------------------------------ Start Day Book here ---------------------------------- */}
-                <SidebarMenuItemWithSub
-                  to='/apps/chat'
-                  title='Day Book'
-                  fontIcon='bi-chat-left'
-                  icon='message-text-2'
-                >
-                  <SidebarMenuItem
-                    to={`/daybook/viewDaybook/${CompanyListData._id}`}
-                    title='View DayBook'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/daybook/addAccount/${CompanyListData._id}`}
-                    title='Add Account'
-                    hasBullet={true}
-                  />
-                  <SidebarMenuItem
-                    to={`/daybook/viewAccount/${CompanyListData._id}`}
-                    title='View Account'
-                    hasBullet={true}
-                  />
-                </SidebarMenuItemWithSub>
-                {/* ------------------------------------ End Day Book here ---------------------------------- */}
-              </SidebarMenuItemWithSub>
+              )}
             </React.Fragment>
           ))}
+
           {/* ----------------------------- Company Menu END Here ............................... */}
 
           {/* ************* Manage Courses Start   ****************** */}
@@ -246,7 +268,13 @@ const SidebarMenuMain = () => {
               title='User management'
               hasBullet={true}
             />
-            <SidebarMenuItem to='/apps/user-role/management' title='User Roles' hasBullet={true} />
+            {currentUser?.role === 'SuperAdmin' && (
+              <SidebarMenuItem
+                to='/apps/user-role/management'
+                title='User Roles'
+                hasBullet={true}
+              />
+            )}
           </SidebarMenuItemWithSub>
         </>
       ) : (
