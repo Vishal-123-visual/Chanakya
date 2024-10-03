@@ -35,6 +35,8 @@ function UserList() {
     return <p>Error fetching users</p>
   }
 
+  // console.log(users)
+
   return (
     <KTCard>
       <div className='table-responsive'>
@@ -49,7 +51,7 @@ function UserList() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user: any) => (
               <tr key={user._id}>
                 <td>{user.fName}</td>
                 <td>{user.role}</td>

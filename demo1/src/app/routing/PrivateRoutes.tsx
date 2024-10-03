@@ -296,7 +296,7 @@ const PrivateRoutes = () => {
             <Route path='/view-form/:id' element={<ViewForms />} />
             {/* <---------------- View All Dynamic Form Routes Starts Here ------------------>*/}
             <Route path='/view-form-data/:id' element={<ViewAllEnquiryFormsData />} />
-            <Route path='/remainder-task/:id' element={<TodoCalendarRemainder />} />
+            <Route path='/reminder-task/:id' element={<TodoCalendarRemainder />} />
             <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
             {/* <---------------- Student Profile Page Starts Here ------------------>*/}
             <Route path='/student/:id' element={<StudentProfile />} />

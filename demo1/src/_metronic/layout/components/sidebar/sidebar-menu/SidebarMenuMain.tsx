@@ -122,7 +122,7 @@ const SidebarMenuMain = () => {
                   >
                     <SidebarMenuItem
                       to={`/add-form/${CompanyListData?._id}`}
-                      title='Add Forms'
+                      title='Add Form'
                       hasBullet={true}
                     />
                     <SidebarMenuItem
@@ -134,13 +134,13 @@ const SidebarMenuMain = () => {
 
                   <SidebarMenuItemWithSub
                     to='/apps/chat'
-                    title={'View All Enquirys'}
+                    title={'View All Enquiry'}
                     fontIcon='bi-chat-left'
                     icon='message-text-2'
                   >
                     <SidebarMenuItem
                       to={`/add-enquiry/${CompanyListData?._id}`}
-                      title='Add Enquirys'
+                      title='Add Enquiry'
                       hasBullet={true}
                     />
                     <SidebarMenuItem
@@ -149,8 +149,8 @@ const SidebarMenuMain = () => {
                       hasBullet={true}
                     />
                     <SidebarMenuItem
-                      to={`/remainder-task/${CompanyListData?._id}`}
-                      title='Remainder Task'
+                      to={`/reminder-task/${CompanyListData?._id}`}
+                      title='Reminder Task'
                       hasBullet={true}
                     />
                   </SidebarMenuItemWithSub>
