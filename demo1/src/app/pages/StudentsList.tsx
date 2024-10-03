@@ -139,9 +139,10 @@ const StudentsList: React.FC<Props> = ({className}) => {
                 <th className='min-w-120px'>D.O.J</th>
                 {userRoleAccess?.some(
                   (userAccess: any) =>
-                    (userAccess.studentControlAccess['Edit Student'] === true ||
+                    ((userAccess.studentControlAccess['Edit Student'] === true ||
                       userAccess.studentControlAccess['Delete Student'] === true) &&
-                    userAccess.role === currentUser?.role
+                      userAccess.role === currentUser?.role) ||
+                    currentUser?.role === 'SuperAdmin'
                 ) && <th className='min-w-100px text-end'>Actions</th>}
               </tr>
             </thead>
@@ -195,8 +196,9 @@ const StudentsList: React.FC<Props> = ({className}) => {
                         {/* Only check for the user access roles once */}
                         {userRoleAccess?.some(
                           (userAccess: any) =>
-                            userAccess.studentControlAccess['Edit Student'] === true &&
-                            userAccess.role === currentUser?.role
+                            (userAccess.studentControlAccess['Edit Student'] === true &&
+                              userAccess.role === currentUser?.role) ||
+                            currentUser?.role === 'SuperAdmin'
                         ) && (
                           <button
                             onClick={() =>
@@ -211,8 +213,9 @@ const StudentsList: React.FC<Props> = ({className}) => {
                         )}
                         {userRoleAccess?.some(
                           (userAccess: any) =>
-                            userAccess.studentControlAccess['Delete Student'] === true &&
-                            userAccess.role === currentUser?.role
+                            (userAccess.studentControlAccess['Delete Student'] === true &&
+                              userAccess.role === currentUser?.role) ||
+                            currentUser?.role === 'SuperAdmin'
                         ) && (
                           <button
                             onClick={() => studentDeleteHandler(student?._id)}

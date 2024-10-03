@@ -75,8 +75,9 @@ const SidebarMenuMain = () => {
             <React.Fragment key={index}>
               {userRoleAccess?.some(
                 (userAccess: any) =>
-                  userAccess.role === currentUser?.role &&
-                  matchedCompanies[CompanyListData.companyName]
+                  (userAccess.role === currentUser?.role &&
+                    matchedCompanies[CompanyListData.companyName]) ||
+                  currentUser?.role === 'SuperAdmin'
               ) && (
                 <SidebarMenuItemWithSub
                   key={CompanyListData?._id}

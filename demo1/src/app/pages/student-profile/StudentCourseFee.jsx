@@ -214,8 +214,9 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           {currentUser.role !== 'Student' &&
           userRoleAccess?.some(
             (userAccess) =>
-              userAccess.studentFeesAccess['Add Student Fees'] === true &&
-              userAccess.role === currentUser?.role
+              (userAccess.studentFeesAccess['Add Student Fees'] === true &&
+                userAccess.role === currentUser?.role) ||
+              currentUser?.role === 'SuperAdmin'
           ) ? (
             <button
               disabled={studentInfoData?.remainingCourseFees === 0}
@@ -260,7 +261,8 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                     (userAccess) =>
                       userAccess.studentFeesAccess['Edit Student Fees'] === true ||
                       (userAccess.studentFeesAccess['Delete Student Fees'] === true &&
-                        userAccess.role === currentUser?.role)
+                        userAccess.role === currentUser?.role) ||
+                      currentUser?.role === 'SuperAdmin'
                   ) && <th className='min-w-100px text-end'>Actions</th>}
                 </tr>
               </thead>
