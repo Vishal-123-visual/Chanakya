@@ -272,7 +272,7 @@ const SidebarMenuMain = () => {
             {currentUser?.role === 'SuperAdmin' && (
               <SidebarMenuItem
                 to='/apps/user-role/management'
-                title='User Roles'
+                title='User Access'
                 hasBullet={true}
               />
             )}
