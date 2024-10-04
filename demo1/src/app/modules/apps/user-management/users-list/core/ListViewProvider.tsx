@@ -22,7 +22,7 @@ const ListViewProvider: FC<WithChildren> = ({children}) => {
   // console.log(selected);
 
   let data = useQueryResponseData()
-  // console.log(data);
+  // console.log(data)
 
   const disabled = useMemo(() => calculatedGroupingIsDisabled(isLoading, data), [isLoading, data])
   const isAllSelected = useMemo(() => calculateIsAllDataSelected(data, selected), [data, selected])

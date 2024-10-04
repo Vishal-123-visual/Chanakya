@@ -6,9 +6,8 @@ import {toast} from 'react-toastify'
 import {useParams} from 'react-router-dom'
 
 const AddDayBookData = ({totalBalance, companyId}) => {
-  //console.log(totalBalance, companyId)
   const params = useParams()
-  // console.log(params.id)
+
   const [formData, setFormData] = useState({
     dayBookDatadate: new Date(),
     accountName: '',
@@ -20,8 +19,6 @@ const AddDayBookData = ({totalBalance, companyId}) => {
     companyId: params.id ? params.id : companyId,
   })
 
-  //console.log(formData)
-
   const dayBookAccountCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
@@ -32,6 +29,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
     const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists.data
       ?.filter((cp) => cp.companyId === params?.id)
       ?.find((item) => item.accountName === event.target.value)
+
     setFormData((prevState) => ({
       ...prevState,
       accountName: event.target.value,
@@ -62,6 +60,14 @@ const AddDayBookData = ({totalBalance, companyId}) => {
       return
     }
 
+    // Check if both debit and credit have values
+    if (debit > 0 && credit > 0) {
+      toast.error('You can only enter either credit or debit, not both', {
+        bodyStyle: {fontSize: '18px'},
+      })
+      return
+    }
+
     if (credit === 0 && debit === 0) {
       toast.error('Please enter either credit or debit', {bodyStyle: {fontSize: '18px'}})
       return
@@ -87,7 +93,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
     <tr>
       <td>
         <div className='form-check form-check-sm form-check-custom form-check-solid'>
-          {/* <input className="form-check-input widget-9-check" type="checkbox" value="1" /> */}
+          {/* Checkbox code (if needed) */}
         </div>
       </td>
       <td></td>
@@ -139,7 +145,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
           placeholder='Enter credit'
           value={formData.credit}
           onChange={handleInputChange}
-          readOnly={+formData.debit !== 0}
+          disabled={+formData.debit !== 0}
         />
       </td>
       <td>
@@ -150,7 +156,7 @@ const AddDayBookData = ({totalBalance, companyId}) => {
           placeholder='Enter debit'
           value={formData.debit}
           onChange={handleInputChange}
-          readOnly={+formData.credit !== 0}
+          disabled={+formData.credit !== 0}
         />
       </td>
       <td>

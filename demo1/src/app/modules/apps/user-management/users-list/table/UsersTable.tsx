@@ -44,7 +44,7 @@ const UsersTable = () => {
           <tbody className='text-gray-600 fw-bold' {...getTableBodyProps()}>
             {rows.length > 0 ? (
               rows
-                ?.filter((rows: Row<User>, i) => rows.values.role !== 'Student')
+                .filter((raw: Row<User>, i) => raw.original.role !== 'Student')
                 .map((row: Row<User>, i) => {
                   prepareRow(row)
                   return <CustomRow row={row} key={`row-${i}-${row.id}`} />
