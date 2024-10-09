@@ -1506,7 +1506,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       const oldStudentCourseFees = await CourseFeesModel.findById(
         req.params.id
       );
-      //console.log(oldStudentCourseFees);
+      console.log(oldStudentCourseFees);
 
       let getSingleStudentDayBookDataById = await DayBookDataModel.find({
         studentInfo: currentStudent._id,
@@ -1516,6 +1516,8 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       let singleStudentAllCourseFees = await CourseFeesModel.find({
         studentInfo: studentInfo,
       });
+
+      // console.log(singleStudentAllCourseFees[6].reciptNumber)
 
       for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
         getSingleStudentDayBookDataById[i].reciptNumber =

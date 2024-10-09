@@ -219,16 +219,21 @@ export const getAllUsersController = asyncHandler(async (req, res, next) => {
     const limit = parseInt(items_per_page);
 
     // Build the search query
-    const searchQuery = search
-      ? {
-          $or: [
-            { fName: new RegExp(search, "i") },
-            { lName: new RegExp(search, "i") },
-            { email: new RegExp(search, "i") },
-            // Add more fields as needed
-          ],
-        }
-      : {};
+    const searchQuery = {
+      ...(
+        search
+          ? {
+              $or: [
+                { fName: new RegExp(search, "i") },
+                { lName: new RegExp(search, "i") },
+                { email: new RegExp(search, "i") },
+                // Add more fields as needed
+              ],
+            }
+          : {}
+      ),
+      role: { $ne: "student" }, // Exclude users with the role "student"
+    };
 
     // Use the skip and limit values in your MongoDB query to implement pagination
     let users = await userModel.find(searchQuery).skip(skip).limit(limit);
@@ -293,6 +298,7 @@ export const getAllUsersController = asyncHandler(async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 export const editUserController = asyncHandler(async (req, res, next) => {
   const { fName, lName, email, role, password, phone } = req.body;
