@@ -25,6 +25,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
             `${BASE_URL}/api/courseFees/studentFees/${studentId}`,
             config
           )
+          console.log(response.data)
           return response.data
         } catch (error) {
           throw new Error('Error fetching student data: ' + error.message)
@@ -34,6 +35,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
 
     return result
   }
+
   function useGetStudentMonthlyCourseFeesCollection(companyId) {
     const result = useQuery({
       queryKey: ['getPaymentInstallmentCollectionFees'],

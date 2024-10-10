@@ -1522,6 +1522,8 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
         getSingleStudentDayBookDataById[i].reciptNumber =
           singleStudentAllCourseFees[i].reciptNumber;
+          console.log("recipt",reciptNumber)
+          console.log("reciptFees",singleStudentAllCourseFees[i].reciptNumber)
         await getSingleStudentDayBookDataById[i].save();
       }
 
@@ -1568,7 +1570,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
                 lateFees || singleStudentAllCourseFees[i].lateFees;
             }
           }
-
+            console.log("all Data",singleStudentAllCourseFees[i])
           await singleStudentAllCourseFees[i].save();
           await currentStudent.save();
         } else {
