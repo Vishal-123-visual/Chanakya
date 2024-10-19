@@ -117,7 +117,7 @@ const StudentsList: React.FC<Props> = ({className}) => {
           {userRoleAccess?.some(
             (userAccess: any) =>
               userAccess.studentControlAccess['Add Student'] === true &&
-              userAccess.role === currentUser?.role
+              userAccess.role === currentUser?.role || currentUser?.role === "SuperAdmin"
           ) && (
             <button
               className='btn btn-sm btn-light-primary'

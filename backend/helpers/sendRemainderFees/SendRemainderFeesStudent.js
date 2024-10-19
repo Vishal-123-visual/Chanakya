@@ -4,6 +4,7 @@ import admissionFormModel from "../../src/models/addmission_form.models.js";
 import EmailRemainderModel from "../../src/models/email-remainder/email.remainder.models.js";
 import { USER_EMAIL } from "../../src/config/config.js";
 import { mailTransporter } from "../../src/utils/mail_helpers.js";
+import EmailLogModel from "../../src/models/mail.models.js";
 
 export const sendRemainderFeesStudent = async (req, res, next) => {
   //console.log("req and res", req.url, req.body);
@@ -25,7 +26,7 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
       .find()
       .populate(["courseName", "companyName"]);
 
-    console.log("students info", studentInfo);
+    // console.log("students info", studentInfo);
     //console.log(studentInfo);
     for (const student of studentInfo) {
       const installmentExpireDate = moment(
@@ -73,7 +74,8 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
           await sendEmail(
             toEmails,
             "Installment Payment Reminder",
-            emailContent
+            emailContent,
+            // studentInfo
           );
 
           // Update student document to mark remainder as sent
@@ -92,23 +94,49 @@ export const sendRemainderFeesStudent = async (req, res, next) => {
   }
 };
 
+export const getAllMailsControllers = async(req,res,next) => {
+  const { recipientEmail } = req.params;
+
+  try {
+    const emailLogs = await EmailLogModel.find({ recipientEmails: new RegExp(recipientEmail, 'i') });
+    res.status(200).json(emailLogs);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to retrieve email logs", error });
+  }
+}
+
+// Function to send email
 // Function to send email
 export async function sendEmail(toEmails, subject, text, html) {
+  const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss'); // Format date and time
+
   const mailOptions = {
     from: USER_EMAIL,
     to: toEmails,
     subject: subject,
-    text: text,
-    html: html,
+    text: text, // Plain text fallback
+    html: html, // HTML content
   };
 
   try {
     const result = await mailTransporter.sendMail(mailOptions);
-    console.log("Email sent successfully", result);
+    const emailLog = new EmailLogModel({
+      recipientEmails: toEmails,    // List of recipients
+      subject: subject,             // Email subject
+      content: text || html,        // Email content (optional)
+      sentAt: currentDateTime       // Timestamp
+    });
+    await emailLog.save();           // Save the email log
+
+    // console.log("Email sent successfully and logged at", currentDateTime);
+    console.log("Email send result:", result);
+    
+    return result; // Return the result if you want to use it
   } catch (error) {
     console.log("Email send failed with error:", error);
     throw new Error("Failed to send email");
   }
 }
+
 
 export default sendRemainderFeesStudent;

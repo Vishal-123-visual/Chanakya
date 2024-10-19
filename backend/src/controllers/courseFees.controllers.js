@@ -1522,7 +1522,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
         getSingleStudentDayBookDataById[i].reciptNumber =
           singleStudentAllCourseFees[i].reciptNumber;
-          console.log("recipt",reciptNumber)
+          // console.log("recipt",reciptNumber)
           console.log("reciptFees",singleStudentAllCourseFees[i].reciptNumber)
         await getSingleStudentDayBookDataById[i].save();
       }
@@ -1550,6 +1550,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
             currentStudent.totalPaid = amountPaid;
             currentStudent.remainingCourseFees =
               currentStudent.netCourseFees - amountPaid;
+              // console.log("reciptFee",singleStudentAllCourseFees[i].reciptNumber)
           } else {
             if (singleStudentAllCourseFees[i - 1]) {
               singleStudentAllCourseFees[i].netCourseFees =
@@ -1568,9 +1569,10 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
                 paymentOption || singleStudentAllCourseFees[i].paymentOption;
               singleStudentAllCourseFees[i].lateFees =
                 lateFees || singleStudentAllCourseFees[i].lateFees;
+                console.log("Number",singleStudentAllCourseFees[i].reciptNumber)
             }
           }
-            console.log("all Data",singleStudentAllCourseFees[i])
+            // console.log("all Data",singleStudentAllCourseFees[i])
           await singleStudentAllCourseFees[i].save();
           await currentStudent.save();
         } else {

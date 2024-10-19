@@ -12,6 +12,7 @@ import StudentCourseFee from '../student-profile/StudentCourseFee'
 import StudentIssue from '../student-issues/StudentIssue'
 import RenewStudentCourseFees from '../renewStudent-courseFees/RenewStudentCourseFees'
 import {useEffect, useMemo} from 'react'
+import StudentEmailsTable from '../student-issues/StudentEmailsTable'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -805,6 +806,7 @@ const StudentProfileDetailsPage = () => {
           <AlertPendingFeesNewStudents studentInfoData={studentInfoData} />
           <StudentCommissionLists studentInfoData={studentInfoData} />
           <StudentIssue studentInfoData={studentInfoData} />
+          <StudentEmailsTable studentInfoData={studentInfoData}/>
         </div>
       )}
     </>

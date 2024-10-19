@@ -25,7 +25,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
             `${BASE_URL}/api/courseFees/studentFees/${studentId}`,
             config
           )
-          console.log(response.data)
+          // console.log(response.data)
           return response.data
         } catch (error) {
           throw new Error('Error fetching student data: ' + error.message)
@@ -195,6 +195,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
   // update Course type
   const updateStudentSingleCourseFeesMutation = useMutation({
     mutationFn: async (updateData) => {
+      // console.log(updateData)
       try {
         const res = await axios.put(
           `${BASE_URL}/api/courseFees/${updateData._id}`,
@@ -208,7 +209,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
       }
     },
     onSuccess: async (data) => {
-      //console.log(data.updatedData[0].studentInfo)
+      // console.log(data.updatedData[0].studentInfo)
       await queryClient.invalidateQueries({
         queryKey: ['getStudents', data?.updatedData[0]?.studentInfo],
       })

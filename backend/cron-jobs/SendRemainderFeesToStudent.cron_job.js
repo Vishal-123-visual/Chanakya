@@ -4,6 +4,7 @@ import { userModel } from "../src/models/user.models.js";
 import EmailRemainderModel from "../src/models/email-remainder/email.remainder.models.js";
 import { sendEmail } from "../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 import emailRemainderDatesModel from "../src/models/email-remainder/email.remainderDates.js";
+import EmailLogModel from "../src/models/mail.models.js";
 
 const studentInfoToSendMailToStudent = async () => {
   try {
@@ -60,12 +61,29 @@ const studentInfoToSendMailToStudent = async () => {
 
     // Send the reminder email using the selected content
     if (toEmails) {
-      await sendEmail(toEmails, "Installment Payment Reminder", emailContent);
+      // Construct the email subject and content
+      const subject = "Installment Payment Reminder";
+      const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      
+      // Send the email
+      await sendEmail(toEmails, subject, emailContent);
+
+      // Log the sent email to the database (EmailLogModel)
+      const emailLog = new EmailLogModel({
+        recipientEmails: toEmails,    // List of recipients
+        subject: subject,             // Email subject
+        content: emailContent,        // Email content
+        sentAt: currentDateTime       // Timestamp of when the email was sent
+      });
+
+      // Save the email log
+      await emailLog.save();
     }
   } catch (error) {
     console.error("Error fetching student or user data:", error);
   }
 };
+
 
 export default async function startSchedulerStudentRemainderFeesToStudents() {
   try {

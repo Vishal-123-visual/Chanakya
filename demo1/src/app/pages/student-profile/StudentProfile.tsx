@@ -23,6 +23,7 @@ import {useAuth} from '../../modules/auth'
 import AlertPendingFeesNewStudents from '../Alert_Pending_NewStudents/AlertPendingNewStudents'
 import StudentIssue from '../student-issues/StudentIssue'
 import RenewStudentCourseFees from '../renewStudent-courseFees/RenewStudentCourseFees'
+import StudentEmailsTable from '../student-issues/StudentEmailsTable'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -993,6 +994,7 @@ const StudentProfile: React.FC = () => {
           <AlertPendingFeesNewStudents studentInfoData={updateUserId} />
           <StudentCommissionLists studentInfoData={updateUserId} />
           <StudentIssue studentInfoData={updateUserId} />
+          {/* <StudentEmailsTable/> */}
         </div>
       )}
     </>

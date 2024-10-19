@@ -28,6 +28,7 @@ import timingRoutes from "./routes/addTiming.routes.js";
 import defaultSelectRoutes from "./routes/selectDefault.routes.js";
 import StudentNotesRoutes from "./routes/studentNotes.routes.js";
 import userRoleAccessRoutes from "./routes/userRoleAccess.routes.js";
+import allMails from "./routes/getAllEmailsData.routes.js";
 
 const app = express();
 
@@ -65,6 +66,7 @@ app.use("/api/submit-form", submitForm);
 app.use("/api/user-role", userRoleAccessRoutes);
 // app.use("/api/enquiry-form", submitForm);
 app.use("/api", reOrderingColumnsAndRows);
+app.use("/api/allMails", allMails);
 
 const __dirname = path.resolve();
 app.use("/api/images", express.static(path.join(__dirname + "/images")));
