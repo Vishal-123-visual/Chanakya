@@ -6,29 +6,29 @@ const EmailTemplate = () => {
   const {data: emailRemainderData} = companyCTX.getEmailRemainderTextMessage
   const {data: emailRemainderDays} = companyCTX.getEmailRemainderDays
   const [textEmailsData, setTextEmailsData] = useState({
-    firstRemainder: emailRemainderData[0]?.firstRemainder,
-    secondRemainder: emailRemainderData[0]?.secondRemainder,
-    thirdRemainder: emailRemainderData[0]?.thirdRemainder,
+    firstRemainder: emailRemainderData[0]?.firstRemainder || '',
+    secondRemainder: emailRemainderData[0]?.secondRemainder || '',
+    thirdRemainder: emailRemainderData[0]?.thirdRemainder || '',
   })
 
   const [remainderDays, setRemainderDays] = useState({
-    firstRemainderDay: emailRemainderDays[0]?.firstRemainderDay,
-    secondRemainderDay: emailRemainderDays[0]?.secondRemainderDay,
-    thirdRemainderDay: emailRemainderDays[0]?.thirdRemainderDay,
+    firstRemainderDay: emailRemainderDays[0]?.firstRemainderDay || '',
+    secondRemainderDay: emailRemainderDays[0]?.secondRemainderDay || '',
+    thirdRemainderDay: emailRemainderDays[0]?.thirdRemainderDay || '',
   })
 
   // console.log(remainderDays)
 
   useEffect(() => {
     setTextEmailsData({
-      firstRemainder: emailRemainderData[0]?.firstRemainder,
-      secondRemainder: emailRemainderData[0]?.secondRemainder,
-      thirdRemainder: emailRemainderData[0]?.thirdRemainder,
+      firstRemainder: emailRemainderData[0]?.firstRemainder || '',
+      secondRemainder: emailRemainderData[0]?.secondRemainder || '',
+      thirdRemainder: emailRemainderData[0]?.thirdRemainder || '',
     })
     setRemainderDays({
-      firstRemainderDay: emailRemainderDays[0]?.firstRemainderDay,
-      secondRemainderDay: emailRemainderDays[0]?.secondRemainderDay,
-      thirdRemainderDay: emailRemainderDays[0]?.thirdRemainderDay,
+      firstRemainderDay: emailRemainderDays[0]?.firstRemainderDay || '',
+      secondRemainderDay: emailRemainderDays[0]?.secondRemainderDay || '',
+      thirdRemainderDay: emailRemainderDays[0]?.thirdRemainderDay || '',
     })
   }, [emailRemainderData, emailRemainderDays])
 

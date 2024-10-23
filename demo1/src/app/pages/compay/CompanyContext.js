@@ -426,6 +426,7 @@ export const CompanyContextProvider = ({children}) => {
       }
     },
   })
+
   const useUpdateStudentIssueMutation = useMutation({
     mutationFn: async (data) => {
       //console.log(data)
@@ -594,6 +595,47 @@ export const CompanyContextProvider = ({children}) => {
 
   // -------------------------------- Show Student status Dashboard End here -----------------------------------
 
+  // -------------------------------- Email Template Starts Here -----------------------------------
+  const postEmailTemplate = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/email/template`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getEmailTemplate']})
+      }
+    },
+  })
+
+  const getEmailTemplate = useQuery({
+    queryKey: ['getEmailTemplate'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/email/allTemplates`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
   return (
     <CompanyContext.Provider
       value={{
@@ -613,6 +655,9 @@ export const CompanyContextProvider = ({children}) => {
         postStudentGSTSuggestionStatus,
         getStudentGSTSuggestionStatus,
         /* ***************************** Student GSt ----------------------  */
+        /***************** Email Template ************************/
+        postEmailTemplate,
+        getEmailTemplate,
         /***************************  whatsapp Message Suggestion start   *****************************/
         postWhatsAppMessageSuggestionStatus,
         getWhatsAppMessageuggestionStatus,

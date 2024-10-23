@@ -29,6 +29,7 @@ import defaultSelectRoutes from "./routes/selectDefault.routes.js";
 import StudentNotesRoutes from "./routes/studentNotes.routes.js";
 import userRoleAccessRoutes from "./routes/userRoleAccess.routes.js";
 import allMails from "./routes/getAllEmailsData.routes.js";
+import emailTemplate from "./routes/emailTemplate.routes.js";
 
 const app = express();
 
@@ -60,6 +61,7 @@ app.use("/api/select-field", defaultSelectRoutes);
 app.use("/api/add-form", addForms);
 app.use("/api/add-trainer", addTrainer);
 app.use("/api/add-lab", labRoutes);
+app.use("/api/email", emailTemplate);
 app.use("/api/add-timing", timingRoutes);
 app.use("/api/add-batch", batchRoutes);
 app.use("/api/submit-form", submitForm);

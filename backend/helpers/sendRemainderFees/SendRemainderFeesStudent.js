@@ -107,7 +107,7 @@ export const getAllMailsControllers = async(req,res,next) => {
 
 // Function to send email
 // Function to send email
-export async function sendEmail(toEmails, subject, text, html) {
+export async function sendEmail(toEmails, subject, text, html,req) {
   const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss'); // Format date and time
 
   const mailOptions = {
@@ -124,7 +124,8 @@ export async function sendEmail(toEmails, subject, text, html) {
       recipientEmails: toEmails,    // List of recipients
       subject: subject,             // Email subject
       content: text || html,        // Email content (optional)
-      sentAt: currentDateTime       // Timestamp
+      sentAt: currentDateTime,       // Timestamp
+      // addedBy: req.user.fName +  " " + req.user.lName,
     });
     await emailLog.save();           // Save the email log
 

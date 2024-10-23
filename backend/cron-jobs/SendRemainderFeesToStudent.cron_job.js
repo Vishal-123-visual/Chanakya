@@ -6,7 +6,7 @@ import { sendEmail } from "../helpers/sendRemainderFees/SendRemainderFeesStudent
 import emailRemainderDatesModel from "../src/models/email-remainder/email.remainderDates.js";
 import EmailLogModel from "../src/models/mail.models.js";
 
-const studentInfoToSendMailToStudent = async () => {
+const studentInfoToSendMailToStudent = async (req,res,next) => {
   try {
     // Fetch all students with their courses and companies populated
     const students = await admissionFormModel
@@ -64,6 +64,7 @@ const studentInfoToSendMailToStudent = async () => {
       // Construct the email subject and content
       const subject = "Installment Payment Reminder";
       const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      // const addedBy = req.user.fName +  " " + req.user.lName
       
       // Send the email
       await sendEmail(toEmails, subject, emailContent);
@@ -73,7 +74,8 @@ const studentInfoToSendMailToStudent = async () => {
         recipientEmails: toEmails,    // List of recipients
         subject: subject,             // Email subject
         content: emailContent,        // Email content
-        sentAt: currentDateTime       // Timestamp of when the email was sent
+        sentAt: currentDateTime,       // Timestamp of when the email was sent
+        // addedBy: addedBy
       });
 
       // Save the email log

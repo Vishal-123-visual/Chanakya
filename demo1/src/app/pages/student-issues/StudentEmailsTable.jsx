@@ -12,16 +12,15 @@ import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContex
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const StudentEmailsTable = ({studentInfoData}) => {
-  const [selectValue, setSelectValue] = useState('Warning') // Default value is 'Warning'
   const [emailLogs, setEmailLogs] = useState([])
+  const [isSendingEmail, setIsSendingEmail] = useState(false) // Track sending status
+  const [emailTemplates, setEmailTemplates] = useState([])
   const companyCTX = useCompanyContext()
   const studentPayFeeCtx = useStudentCourseFeesContext()
   const result = studentPayFeeCtx.useSingleStudentCourseFees(studentInfoData?._id)
-  const {data: emailRemainderData} = companyCTX.getEmailRemainderTextMessage
-  // console.log(emailRemainderData)
-  // Logging the API response for debugging
-  // console.log('API Response:', result)
-  // console.log(selectValue)
+  const {data: emailTemplate} = companyCTX.getEmailTemplate
+  const [selectValue, setSelectValue] = useState('')
+
   useEffect(() => {
     const fetchEmails = async () => {
       try {
@@ -31,18 +30,31 @@ const StudentEmailsTable = ({studentInfoData}) => {
         console.log('Failed to fetch email logs')
       }
     }
-    fetchEmails()
-  }, [emailLogs])
-  // console.log(emailLogs)
 
-  // Ensure student is always an array
+    const fetchEmailTemplates = async () => {
+      try {
+        const res = await companyCTX.getEmailTemplate
+        setEmailTemplates(res.data || [])
+        if (res.data.length > 0) {
+          setSelectValue(res.data[0].customTemplate) // Set the first template as selected
+        }
+      } catch (error) {
+        console.log('Failed to fetch email templates')
+      }
+    }
+
+    fetchEmails()
+    fetchEmailTemplates()
+  }, [emailLogs])
+
   const student = result?.data || []
-  // console.log('Student Data:', student)
 
   const {openModal: contextOpenModal, setOpenModal: setcontextOpenModal} = useDynamicFieldContext()
-  const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(
+  const {data: singleCompanyData} = companyCTX?.useGetSingleCompanyData(
     studentInfoData?.companyName
   )
+
+  console.log(singleCompanyData)
 
   const handleSelectionChange = (e) => {
     const selectedValue = e.target.value
@@ -50,8 +62,8 @@ const StudentEmailsTable = ({studentInfoData}) => {
   }
 
   const sendWarningEmail = async (studentData) => {
+    setIsSendingEmail(true) // Start sending email
     try {
-      // console.log(studentData)
       const res = await axios.post(`${BASE_URL}/api/students/sendWarningMail`, studentData)
       if (res.data.success) {
         toast.success(
@@ -69,32 +81,26 @@ const StudentEmailsTable = ({studentInfoData}) => {
     } catch (error) {
       console.error('Error sending email:', error)
       toast.error('Failed to send email')
+    } finally {
+      setIsSendingEmail(false) // Stop sending email
     }
   }
 
-  const sendReminderMailToStudent = async (studentData, selectValue) => {
-    try {
-      // console.log(studentData)
-      const res = await axios.post(
-        `${BASE_URL}/api/students/reminderMails`,
-        studentData,
-        selectValue
-      )
-      if (res.data.success) {
-        toast.success(
-          res.data.message,
-          {
-            style: {
-              fontSize: '18px',
-              color: 'white',
-              background: 'black',
-            },
-          },
-          setcontextOpenModal(false)
-        )
-      }
-    } catch (error) {}
+  const formatLetter = (template, studentInfoData, courseName, remainingFees) => {
+    if (!studentInfoData || !singleCompanyData) return '' // Guard clause
+    return template
+      .replace(/\${studentInfo.name}/g, studentInfoData.name || '')
+      .replace(/\${studentInfo.mobile_number}/g, studentInfoData.mobile_number || '')
+      .replace(/\${studentInfo.present_address}/g, studentInfoData.present_address || '')
+      .replace(/\${studentInfo.city}/g, studentInfoData.city || '')
+      .replace(/\${studentInfo.father_name}/g, studentInfoData.father_name || '')
+      .replace(/\${courseName.courseName}/g, studentInfoData.select_course || '')
+      .replace(/\${companyName.companyName}/g, singleCompanyData.companyName || '')
+      .replace(/\${remainingFees}/g, studentInfoData.remainingCourseFees || '')
   }
+
+  // console.log(emailTemplate[0]?.customTemplate)
+  // console.log(studentInfoData)
 
   return (
     <>
@@ -125,9 +131,6 @@ const StudentEmailsTable = ({studentInfoData}) => {
                 </tr>
               </thead>
               <tbody>
-                {/* {console.log('studentInfoData:', studentInfoData)}
-                {console.log('emailLogs:', emailLogs)} */}
-
                 {emailLogs.length === 0 ? (
                   <tr>
                     <td colSpan={3} className='text-center'>
@@ -137,7 +140,6 @@ const StudentEmailsTable = ({studentInfoData}) => {
                 ) : (
                   emailLogs
                     ?.filter((check) => {
-                      // console.log('Check object:', check)
                       if (!studentInfoData || !studentInfoData.email) {
                         console.error('Student info data or email is undefined')
                         return false
@@ -174,110 +176,47 @@ const StudentEmailsTable = ({studentInfoData}) => {
             onChange={handleSelectionChange}
             value={selectValue}
           >
-            <option value='Warning'>Warning Letter</option>
-            {/* {emailRemainderData?.map((data, index) => (
-              <React.Fragment key={index}>
-                <option value={data.firstRemainder}>First Fee Remainder</option>
-                <option value={data.secondRemainder}>Second Fee Remainder</option>
-                <option value={data.thirdRemainder}>Third Fee Remainder</option>
-              </React.Fragment>
-            ))} */}
+            {emailTemplate?.length > 0 ? (
+              emailTemplate.map((email) => (
+                <option key={email._id} value={email.customTemplate}>
+                  Warning Letter {/* Assuming there is a name or title for the template */}
+                </option>
+              ))
+            ) : (
+              <option disabled>No templates available</option>
+            )}
           </select>
         </div>
-        {selectValue === 'Warning' && (
+
+        {/* Render HTML content for the selected email template */}
+        {emailTemplate?.length > 0 && selectValue === emailTemplate[0]?.customTemplate && (
           <div className='mt-5'>
-            <h5 className='fw-bold'>Final Notice Regarding Pending Fees</h5>
-            {/* <p>[Your Name]</p> */}
-            <p>Centre Manager</p>
-            <p>{singleComapnyData?.companyName}</p>
-            <p>{singleComapnyData?.companyAddress}</p>
-            <p>
-              Website:{' '}
-              <a href='https://visualmedia.co.in/' target='_blank'>
-                {singleComapnyData?.companyWebsite}
-              </a>
-            </p>
-            <p>
-              Email: <a href='mailto:info@visualmedia.co.in'>{singleComapnyData?.email}</a>
-            </p>
-
-            <hr />
-            {/* <p>{moment}</p> */}
-
-            <p>{studentInfoData?.name}</p>
-            <p>
-              <a href={`tel:+91${studentInfoData?.phone_number}`}>
-                +91 {studentInfoData?.phone_number}
-              </a>
-            </p>
-            <p>{studentInfoData?.present_address}</p>
-            <p>{studentInfoData?.city}</p>
-            <hr />
-            <p>
-              <strong>Subject:</strong> Final Notice Regarding Pending Fees for Web Designing Course
-            </p>
-            <hr />
-            <p>Dear {studentInfoData?.name},</p>
-            <p>
-              I hope this letter finds you well. We have previously communicated with you regarding
-              the outstanding fees for the {studentInfoData?.select_course} Course at{' '}
-              {singleComapnyData?.companyName}. Despite our previous notices, it has come to our
-              attention that your outstanding fees have not been settled.
-            </p>
-            <p>
-              This letter serves as a final warning and an opportunity for you to rectify this
-              matter before further action is taken. As a reminder, the outstanding balance for your{' '}
-              {studentInfoData?.select_course} Course is Rs{' '}
-              {studentInfoData?.no_of_installments_amount}/-.
-            </p>
-            <p>
-              We understand that various circumstances may have arisen, leading to this delay in
-              payment. However, it is essential to resolve this matter promptly, as failure to do so
-              will have serious consequences:
-            </p>
-            <ul>
-              <li>
-                <strong>Certificate Issuance:</strong> If your outstanding fees are not cleared by
-                15 of this month and this year, we will be unable to issue your{' '}
-                {studentInfoData?.select_course} Course completion certificate.
-              </li>
-              <li>
-                <strong>Admission Status:</strong> If your fees remain unpaid after the
-                aforementioned deadline, your admission will be considered canceled.
-              </li>
-            </ul>
-            <p>We encourage you to act swiftly. You can settle your outstanding fees through:</p>
-            <ul>
-              <li>
-                <strong>Online Payment:</strong> Visit our Google Pay, Phone Pay, Paytm, UPI, Cash,
-                Cheque, Credit Card, Bharat Pay and follow the instructions to make a secure online
-                payment.
-              </li>
-              <li>
-                <strong>In-Person Payment:</strong> You can also visit our institution's finance
-                department during business hours to make the payment in person. Please bring this
-                letter with you as reference.
-              </li>
-            </ul>
-            <p>We hope this matter will be resolved promptly.</p>
-            <p>Sincerely,</p>
-            <p>Centre Manager</p>
-            <p>Visual Media Technology</p>
-            <p>
-              <a href='tel:+917696300600'>+91 7696300600</a>
-            </p>
+            <pre
+              style={{
+                fontFamily: 'Gill Sans, sans-serif',
+                fontSize: '12px',
+                color: '#333',
+                padding: '4px',
+              }}
+            >
+              {formatLetter(
+                selectValue,
+                studentInfoData,
+                studentInfoData?.select_course,
+                studentInfoData?.remainingCourseFees
+              )}
+            </pre>
           </div>
         )}
-        {/* {selectValue === emailRemainderData[0]?.firstRemainder &&
-          emailRemainderData[0]?.firstRemainder}
-        {selectValue === emailRemainderData[0]?.secondRemainder &&
-          emailRemainderData[0]?.secondRemainder}
-        {selectValue === emailRemainderData[0]?.thirdRemainder &&
-          emailRemainderData[0]?.thirdRemainder} */}
+
         <div className='footer d-flex justify-content-end'>
-          <button className='btn btn-primary' onClick={() => sendWarningEmail(student[0] || null)}>
+          <button
+            className='btn btn-primary'
+            onClick={() => sendWarningEmail(student.length > 0 ? student[0] : null)}
+            disabled={studentInfoData?.remainingCourseFees === 0 ? 'disabled' : isSendingEmail}
+          >
             <KTIcon iconName='send' className='fs-3' />
-            Send
+            {isSendingEmail ? 'Sending...' : 'Send Email'}
           </button>
         </div>
       </PopUpModal>

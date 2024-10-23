@@ -22,148 +22,62 @@ import sendRemainderFeesStudent, {
   sendEmail,
 } from "../../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 import { BACKEND_URL } from "../config/config.js";
-import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Suggestion.js";
 import { userModel } from "../models/user.models.js";
 import EmailRemainderModel from "../models/email-remainder/email.remainder.models.js";
+import EmailTemplateModel from "../models/email-remainder/emailTemplate.models.js";
 
 const router = Router();
 
-router.post("/sendWarningMail",async(req,res,next) => {
+router.post("/sendWarningMail", async (req, res, next) => {
   try {
-    const studentData = req.body
-    // console.log(studentData)
-    let adminEmails = "";
-    const users = await userModel.find({});
+    const studentData = req.body;
+
+    // Fetch the email template stored in MongoDB
+    const templates = await EmailTemplateModel.find({});
+    if (templates.length === 0) {
+      return res.status(404).json({ success: false, message: "No email templates found" });
+    }
     
-    users?.map((user) => {
-      //console.log(user.role, user.email);
+    // Assuming you want the first template; adjust as needed.
+    let emailContent = templates[0].customTemplate;
+
+    // Function to replace placeholders in the template with actual values from studentData
+    const generateEmailFromTemplate = (template, data) => {
+      return template.replace(/\$\{(.*?)\}/g, (_, key) => {
+        return key.split('.').reduce((obj, keyPart) => obj && obj[keyPart], data) || '';
+      });
+    };
+
+    // Replace placeholders in the letter template with actual data
+    const finalEmailContent = generateEmailFromTemplate(emailContent, studentData);
+
+    // Convert line breaks to <br> tags for HTML formatting
+    const formattedEmailContent = finalEmailContent.replace(/\n/g, '<br>');
+
+    // Gather admin emails
+    let adminEmails = '';
+    const users = await userModel.find({});
+    users?.forEach((user) => {
       if (user.role === "SuperAdmin") {
         adminEmails += user.email + ",";
       }
     });
 
-    sendEmail(
-      `${studentData.studentInfo.email},${studentData.companyName.email}, ${adminEmails}`,
-      `Your Fees is not Submitted - ${studentData.companyName.companyName}`,
-      `Hello ${studentData.studentInfo.name} you have not submitted fees `,
-      `<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Final Notice Regarding Pending Fees</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-  </head>
-  <body>
-    <div style="margin: 50px;">
-      <p>Centre Manager</p>
-      <p>${studentData.companyName.companyName}</p>
-      <p>${studentData.companyName.companyAddress}</p>
-      <p> <a href=${studentData.companyName.companyWebsite}>Website: ${studentData.companyName.companyWebsite}</a></p>
-       <p> <a href=mailto:${studentData.companyName.email}>Email: ${studentData.companyName.email}</a></p>
-      <p>Chandigarh</p>
+    // Send the formatted letter via email
+    await sendEmail(
+      `${studentData.studentInfo.email},${studentData.companyName.email},${adminEmails}`,
+      `Final Notice Regarding Pending Fees for ${studentData.courseName.courseName} Course - ${studentData.companyName.companyName}`,
+      `Dear ${studentData.studentInfo.name}, this is a notice regarding unpaid fees.`,
+      formattedEmailContent // Use formatted content with HTML line breaks
+    );
 
-      <br />
-
-      <p>${studentData.studentInfo.name}</p>
-      <p>${studentData.studentInfo.mobile_number}</p>
-      <p>${studentData.studentInfo.present_address}</p>
-      <p>${studentData.studentInfo.city}</p>
-
-      <br />
-
-      <p><strong>Subject:</strong> Final Notice Regarding Pending Fees for ${studentData.courseName.courseName} Course</p>
-
-      <br />
-
-      <p>Dear ${studentData.studentInfo.name},</p>
-
-      <p>
-        I hope this letter finds you well. We have previously communicated with you regarding
-        the outstanding fees for the ${studentData.courseName.courseName} Course at 
-        ${studentData.companyName.companyName}. Despite our previous notices, it has come to our 
-        attention that your outstanding fees have not been settled.
-      </p>
-
-      <p>
-        This letter serves as a final warning and an opportunity for you to rectify this matter 
-        before further action is taken. As a reminder, the outstanding balance for your 
-        ${studentData.courseName.courseName} Course is Rs ${studentData.studentInfo.no_of_installments_amount}/-. 
-      </p>
-
-      <p>
-        We understand that various circumstances may have arisen, leading to this delay in payment. 
-        However, it is essential to resolve this matter promptly, as failure to do so will have 
-        serious consequences:
-      </p>
-
-      <ul>
-        <li>
-          <strong>Certificate Issuance:</strong> If your outstanding fees are not cleared by 
-          15 of this month and this year, we will be unable to issue your ${studentData.courseName.courseName} 
-          Course completion certificate. This certificate is not only a testament to your hard work 
-          and dedication but also a valuable asset for your professional portfolio.
-        </li>
-        <li>
-          <strong>Admission Status:</strong> Furthermore, if your fees remain unpaid after the 
-          aforementioned deadline, your admission to the ${studentData.courseName.courseName} 
-          Course will be considered canceled. This means that you will no longer have access to 
-          course materials, resources, and support from our institution.
-        </li>
-      </ul>
-
-      <p>
-        We genuinely value your commitment to your education and want to see you succeed. To avoid 
-        these adverse outcomes, we urge you to take immediate action. You can settle your outstanding 
-        fees through the following methods:
-      </p>
-
-      <ul>
-        <li><strong>Online Payment:</strong> Visit our Google Pay, Phone Pay, Paytm, UPI, Cash, Cheque, Credit Card, Bharat Pay and follow the instructions to make a secure online payment.</li>
-        <li><strong>In-Person Payment:</strong> You can also visit our institution's finance department during business hours to make the payment in person. Please bring this letter with you as reference.</li>
-      </ul>
-
-      <p>
-        We strongly encourage you to act swiftly and resolve this matter to ensure that you receive 
-        your certificate and maintain your admission status in the ${studentData.courseName.courseName} 
-        Course. If you have any questions or require further assistance, please do not hesitate to 
-        contact our finance department at the above-mentioned contact information.
-      </p>
-
-      <p>
-        We sincerely hope that this letter serves as a wake-up call, and we look forward to your 
-        prompt response. We are here to support you in achieving your educational goals, and we 
-        believe that settling this outstanding balance is a crucial step towards your success.
-      </p>
-
-      <br />
-
-      <p>Thank you for your immediate attention to this matter.</p>
-
-      <br />
-
-      <p>Sincerely,</p>
-      <p>Centre Manager</p>
-      <p>${studentData.companyName.companyName}</p>
-      <p>+91 7696300600</p>
-
-      <br /><br />
-
-      <p>Thanking you,</p>
-      <p>Regards,</p>
-      <p>Vishal Pawar</p>
-      <p>Mo.: +91-9356233337</p>
-    </div>
-  </body>
-</html>
-`
-    )
-    res
-    .status(200)
-    .json({ success: true, message: "send mail to student successfully!" });
+    res.status(200).json({ success: true, message: "Letter email sent to student successfully!" });
   } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Failed to send the email" });
   }
-})
+});
+
 
 router.post("/sendMailStudent", async (req, res, next) => {
   // console.log(req.body);
@@ -765,15 +679,15 @@ router.post("/sendMailStudent", async (req, res, next) => {
     .json({ success: true, message: "send mail to student successfully!" });
 });
 
-router.post("/reminderMails",async(req,res,next) => {
+router.post("/reminderMails", async (req, res, next) => {
   try {
-    const studentData = req.body
-    console.log(studentData)
+    const studentData = req.body;
+    console.log(studentData);
     const emailRemainderData = await EmailRemainderModel.findOne({});
     // console.log(emailRemainderData)
     let adminEmails = "";
     const users = await userModel.find({});
-    
+
     users?.map((user) => {
       //console.log(user.role, user.email);
       if (user.role === "SuperAdmin") {
@@ -783,12 +697,10 @@ router.post("/reminderMails",async(req,res,next) => {
     sendEmail(
       `${studentData.studentInfo.email},${studentData.companyName.email}, ${adminEmails}`,
       `Remainder For Fees - ${studentData.companyName.companyName}`,
-      `Hello ${studentData.studentInfo.name} this is the fees Remainder to you `,
-    )
-  } catch (error) {
-    
-  }
-})
+      `Hello ${studentData.studentInfo.name} this is the fees Remainder to you `
+    );
+  } catch (error) {}
+});
 
 router.put(
   "/renewStudentCourseFees/:id",
