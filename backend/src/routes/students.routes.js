@@ -28,18 +28,17 @@ import EmailTemplateModel from "../models/email-remainder/emailTemplate.models.j
 
 const router = Router();
 
-router.post("/sendWarningMail", async (req, res, next) => {
+router.post("/sendWarningMail",requireSignIn, async (req, res, next) => {
   try {
     const studentData = req.body;
-
-    // Fetch the email template stored in MongoDB
+    console.log(req.user.fName +  " " + req.user.lName)
     const templates = await EmailTemplateModel.find({});
     if (templates.length === 0) {
       return res.status(404).json({ success: false, message: "No email templates found" });
     }
     
     // Assuming you want the first template; adjust as needed.
-    let emailContent = templates[0].customTemplate;
+    let emailContent = templates[0]?.customTemplate;
 
     // Function to replace placeholders in the template with actual values from studentData
     const generateEmailFromTemplate = (template, data) => {
@@ -68,7 +67,8 @@ router.post("/sendWarningMail", async (req, res, next) => {
       `${studentData.studentInfo.email},${studentData.companyName.email},${adminEmails}`,
       `Final Notice Regarding Pending Fees for ${studentData.courseName.courseName} Course - ${studentData.companyName.companyName}`,
       `Dear ${studentData.studentInfo.name}, this is a notice regarding unpaid fees.`,
-      formattedEmailContent // Use formatted content with HTML line breaks
+      formattedEmailContent, // Use formatted content with HTML line breaks
+      req
     );
 
     res.status(200).json({ success: true, message: "Letter email sent to student successfully!" });
@@ -79,7 +79,7 @@ router.post("/sendWarningMail", async (req, res, next) => {
 });
 
 
-router.post("/sendMailStudent", async (req, res, next) => {
+router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
   // console.log(req.body);
   const studentData = req.body;
   // console.log(studentData.gst_percentage);
@@ -672,7 +672,8 @@ router.post("/sendMailStudent", async (req, res, next) => {
           <!-- end body -->
   </body>
 
-  </html>`
+  </html>`,
+  req
   );
   res
     .status(200)
@@ -682,7 +683,7 @@ router.post("/sendMailStudent", async (req, res, next) => {
 router.post("/reminderMails", async (req, res, next) => {
   try {
     const studentData = req.body;
-    console.log(studentData);
+    // console.log(studentData);
     const emailRemainderData = await EmailRemainderModel.findOne({});
     // console.log(emailRemainderData)
     let adminEmails = "";

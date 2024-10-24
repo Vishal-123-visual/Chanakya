@@ -123,9 +123,9 @@ export async function sendEmail(toEmails, subject, text, html,req) {
     const emailLog = new EmailLogModel({
       recipientEmails: toEmails,    // List of recipients
       subject: subject,             // Email subject
-      content: text || html,        // Email content (optional)
+      content:  html,        // Email content (optional)
       sentAt: currentDateTime,       // Timestamp
-      // addedBy: req.user.fName +  " " + req.user.lName,
+      sendedBy: req.user.fName +  " " + req.user.lName,
     });
     await emailLog.save();           // Save the email log
 

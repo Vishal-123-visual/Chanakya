@@ -67,7 +67,7 @@ const studentInfoToSendMailToStudent = async (req,res,next) => {
       // const addedBy = req.user.fName +  " " + req.user.lName
       
       // Send the email
-      await sendEmail(toEmails, subject, emailContent);
+      await sendEmail(toEmails, subject, emailContent,req);
 
       // Log the sent email to the database (EmailLogModel)
       const emailLog = new EmailLogModel({
@@ -75,7 +75,7 @@ const studentInfoToSendMailToStudent = async (req,res,next) => {
         subject: subject,             // Email subject
         content: emailContent,        // Email content
         sentAt: currentDateTime,       // Timestamp of when the email was sent
-        // addedBy: addedBy
+        sendedBy:  req.user.fName +  " " + req.user.lName,
       });
 
       // Save the email log
