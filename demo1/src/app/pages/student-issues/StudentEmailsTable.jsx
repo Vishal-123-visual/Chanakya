@@ -84,6 +84,8 @@ const StudentEmailsTable = ({studentInfoData}) => {
     }
   }
 
+  // console.log(studentInfoData)
+
   const formatLetter = (template, studentInfoData, courseName, remainingFees) => {
     if (!studentInfoData || !singleCompanyData) return '' // Guard clause
     return template
@@ -95,6 +97,13 @@ const StudentEmailsTable = ({studentInfoData}) => {
       .replace(/\${courseName.courseName}/g, studentInfoData.select_course || '')
       .replace(/\${companyName.companyName}/g, singleCompanyData.companyName || '')
       .replace(/\${studentInfo.remainingCourseFees}/g, studentInfoData.remainingCourseFees || '')
+      .replace(/\$${studentInfo.rollNumber}/g, studentInfoData.rollNumber || '')
+      .replace(/\${studentInfo.email}/g, studentInfoData.email || '')
+      .replace(/\${courseName.courseFees}/g, studentInfoData.course_fees || '')
+      .replace(/\${companyName.companyPhone}/g, singleCompanyData.companyPhone || '')
+      .replace(/\${companyName.email}/g, singleCompanyData.email || '')
+      .replace(/\${companyName.companyAddress}/g, singleCompanyData.companyAddress || '')
+      .replace(/\${companyName.companyWebsite}/g, singleCompanyData.companyWebsite || '')
   }
 
   // Handle opening the content modal
@@ -233,16 +242,6 @@ const StudentEmailsTable = ({studentInfoData}) => {
         >
           <div className='mt-10'>
             <h5>{selectedEmail.subject}</h5>
-            {/* <pre
-              style={{
-                fontFamily: 'Gill Sans, sans-serif',
-                fontSize: '14px',
-                color: '#333',
-                padding: '4px',
-              }}
-            >
-              {selectedEmail.content}
-            </pre> */}
             <div dangerouslySetInnerHTML={{__html: selectedEmail.content}} />
           </div>
         </PopUpModal>

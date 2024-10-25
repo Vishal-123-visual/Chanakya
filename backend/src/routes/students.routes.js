@@ -31,7 +31,7 @@ const router = Router();
 router.post("/sendWarningMail",requireSignIn, async (req, res, next) => {
   try {
     const studentData = req.body;
-    console.log(req.user.fName +  " " + req.user.lName)
+    console.log(studentData)
     const templates = await EmailTemplateModel.find({});
     if (templates.length === 0) {
       return res.status(404).json({ success: false, message: "No email templates found" });

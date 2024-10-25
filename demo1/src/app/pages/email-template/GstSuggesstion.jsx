@@ -1,31 +1,42 @@
-import {useCompanyContext} from '../compay/CompanyContext'
 import {useNavigate} from 'react-router-dom'
 import * as Yup from 'yup'
 import {useFormik} from 'formik'
 import {toast} from 'react-toastify'
+import {useEffect, useState} from 'react'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const addGSTSchema = Yup.object().shape({
-  gstNumber: Yup.number().required('Gst number  is required'),
+  gstNumber: Yup.number().required('GST number is required'),
 })
 
 const GstSuggesstion = () => {
   const navigate = useNavigate()
   const studentGSTCTX = useCompanyContext()
-  let initialValues = {
-    gstNumber: studentGSTCTX?.getStudentGSTSuggestionStatus?.data[0]?.gst_percentage,
-  }
+  const [initialValues, setInitialValues] = useState({
+    gstNumber: '',
+  })
 
-  // console.log(typeof studentGSTCTX.getStudentGSTSuggestionStatus.data[0].gst_percentage)
+  useEffect(() => {
+    if (!studentGSTCTX?.getStudentGSTSuggestionStatus?.data) {
+      // Fetch the data if not available
+      studentGSTCTX.fetchStudentGSTSuggestionStatus?.()
+    } else {
+      // Set initialValues once data is available
+      setInitialValues({
+        gstNumber: studentGSTCTX.getStudentGSTSuggestionStatus.data[0]?.gst_percentage || '',
+      })
+    }
+  }, [studentGSTCTX?.getStudentGSTSuggestionStatus?.data])
 
   const formik = useFormik({
+    enableReinitialize: true, // allow formik to update with new initialValues
     initialValues,
     validationSchema: addGSTSchema,
     onSubmit: async (values) => {
-      //console.log(values)
       studentGSTCTX?.postStudentGSTSuggestionStatus?.mutate(values)
-      // formik.setFieldValue('gstNumber', '')
     },
   })
+
   return (
     <>
       <div className='card mb-5 mb-xl-10'>
@@ -46,10 +57,8 @@ const GstSuggesstion = () => {
           <form onSubmit={formik.handleSubmit} noValidate className='form'>
             <div className='card-body border-top p-9'>
               <div className='row mb-6'>
-                {/* -------------------------- Account Name Start here ----------------------------- */}
-
                 <label className='col-6 col-form-label fw-bold fs-6'>
-                  GST % (Do not enter sign just provide number to it){' '}
+                  GST % (Do not enter sign, just provide number)
                   <div className='fv-row mt-5 '>
                     <input
                       type='number'
@@ -64,8 +73,6 @@ const GstSuggesstion = () => {
                     )}
                   </div>
                 </label>
-
-                {/* -------------------------- Account Name End here ----------------------------- */}
               </div>
             </div>
 
@@ -84,4 +91,5 @@ const GstSuggesstion = () => {
     </>
   )
 }
+
 export default GstSuggesstion

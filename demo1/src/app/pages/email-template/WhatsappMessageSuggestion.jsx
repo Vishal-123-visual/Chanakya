@@ -25,7 +25,10 @@ const WhatsappMessageSuggestion = () => {
           type='checkbox'
           id='sendEmailCheckbox'
           onChange={handleCheckboxChange}
-          checked={companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus}
+          checked={
+            companyCtx?.getWhatsAppMessageuggestionStatus?.data?.[0]?.whatsappSuggestionStatus ||
+            false
+          }
         />
         <label className='form-check-label' htmlFor='sendEmailCheckbox'>
           Yes, send Whatsapp message
