@@ -184,7 +184,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     studentPayFeeCtx.updateStudentSingleCourseFeesMutation.mutate(editStudentCourseFees)
     setStudentCourseFeesEditId(null)
     // navigate(`/profile/student/${studentInfoData?._id}`)
-    //window.location.reload()
+    // window.location.reload()
     return
   }
 

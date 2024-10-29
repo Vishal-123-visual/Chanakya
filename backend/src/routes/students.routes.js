@@ -65,7 +65,7 @@ router.post("/sendWarningMail",requireSignIn, async (req, res, next) => {
 
     // Send the formatted letter via email
     await sendEmail(
-      `${studentData.studentInfo.email},${studentData.companyName.email},${adminEmails}`,
+      `${studentData.studentInfo.email},${studentData.companyName.email}`,
       `Final Notice Regarding Pending Fees for ${studentData.courseName.courseName} Course - ${studentData.companyName.companyName}`,
       `Dear ${studentData.studentInfo.name}, this is a notice regarding unpaid fees.`,
       formattedEmailContent, // Use formatted content with HTML line breaks
@@ -99,7 +99,7 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
   });
   const formattedDate = moment(studentData.amountDate).format('DD-MM-YYYY')
   // console.log(adminEmails);
-  console.log(formattedDate)
+  // console.log(formattedDate)
 
   let gstAmount =
     studentData.companyName.isGstBased === "Yes"
@@ -702,7 +702,7 @@ router.post("/reminderMails", async (req, res, next) => {
       }
     });
     sendEmail(
-      `${studentData.studentInfo.email},${studentData.companyName.email}, ${adminEmails}`,
+      `${studentData.studentInfo.email},${studentData.companyName.email}`,
       `Remainder For Fees - ${studentData.companyName.companyName}`,
       `Hello ${studentData.studentInfo.name} this is the fees Remainder to you `
     );

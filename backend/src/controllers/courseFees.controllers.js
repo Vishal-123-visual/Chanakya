@@ -1506,7 +1506,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       const oldStudentCourseFees = await CourseFeesModel.findById(
         req.params.id
       );
-      console.log(oldStudentCourseFees);
+      //console.log(oldStudentCourseFees);
 
       let getSingleStudentDayBookDataById = await DayBookDataModel.find({
         studentInfo: currentStudent._id,
@@ -1517,13 +1517,9 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         studentInfo: studentInfo,
       });
 
-      // console.log(singleStudentAllCourseFees[6].reciptNumber)
-
       for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
         getSingleStudentDayBookDataById[i].reciptNumber =
           singleStudentAllCourseFees[i].reciptNumber;
-          // console.log("recipt",reciptNumber)
-          console.log("reciptFees",singleStudentAllCourseFees[i].reciptNumber)
         await getSingleStudentDayBookDataById[i].save();
       }
 
@@ -1550,7 +1546,6 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
             currentStudent.totalPaid = amountPaid;
             currentStudent.remainingCourseFees =
               currentStudent.netCourseFees - amountPaid;
-              // console.log("reciptFee",singleStudentAllCourseFees[i].reciptNumber)
           } else {
             if (singleStudentAllCourseFees[i - 1]) {
               singleStudentAllCourseFees[i].netCourseFees =
@@ -1569,10 +1564,9 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
                 paymentOption || singleStudentAllCourseFees[i].paymentOption;
               singleStudentAllCourseFees[i].lateFees =
                 lateFees || singleStudentAllCourseFees[i].lateFees;
-                console.log("Number",singleStudentAllCourseFees[i].reciptNumber)
             }
           }
-            // console.log("all Data",singleStudentAllCourseFees[i])
+
           await singleStudentAllCourseFees[i].save();
           await currentStudent.save();
         } else {
@@ -1634,12 +1628,18 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
           studentInfo: currentStudent._id,
         });
       //console.log(lastPaymentInstallment);
-      lastPaymentInstallment.installment_amount =
-        currentStudent["remainingCourseFees"] === undefined
-          ? currentStudent.netCourseFees / currentStudent.no_of_installments
-          : currentStudent.remainingCourseFees /
-            currentStudent.no_of_installments;
-      await lastPaymentInstallment.save();
+      // Check if `lastPaymentInstallment` exists before accessing its properties
+      if (lastPaymentInstallment && currentStudent.no_of_installments > 0) {
+        lastPaymentInstallment.installment_amount =
+          (currentStudent.remainingCourseFees !== undefined
+            ? currentStudent.remainingCourseFees
+            : currentStudent.netCourseFees) / currentStudent.no_of_installments;
+
+        // Save if the `installment_amount` calculation was successful
+        await lastPaymentInstallment.save();
+      } else {
+        console.warn("No valid installment document or installments are zero.");
+      }
 
       // if (currentStudent.remainingCourseFees === 0) {
       //   currentStudent.no_of_installments_expireTimeandAmount = null;
