@@ -25,6 +25,7 @@ import { BACKEND_URL } from "../config/config.js";
 import { userModel } from "../models/user.models.js";
 import EmailRemainderModel from "../models/email-remainder/email.remainder.models.js";
 import EmailTemplateModel from "../models/email-remainder/emailTemplate.models.js";
+import moment from "moment";
 
 const router = Router();
 
@@ -83,7 +84,7 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
   // console.log(req.body);
   const studentData = req.body;
   // console.log(studentData.gst_percentage);
-  // console.log(studentData?.reciptNumber);
+  // console.log(studentData);
   let companyLogoURL =
     BACKEND_URL + "/api/images/" + studentData.companyName.logo;
   //const studentGSTStatus = await StudentGST_GuggestionModel.find();
@@ -96,8 +97,9 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
       adminEmails += user.email + ",";
     }
   });
-
+  const formattedDate = moment(studentData.amountDate).format('DD-MM-YYYY')
   // console.log(adminEmails);
+  console.log(formattedDate)
 
   let gstAmount =
     studentData.companyName.isGstBased === "Yes"
@@ -106,7 +108,7 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
       : Number(studentData.amountPaid);
   let cutGSTAmount = studentData.amountPaid - gstAmount;
   sendEmail(
-    `${studentData.studentInfo.email},${studentData.companyName.email}, ${adminEmails}`,
+    `${studentData.studentInfo.email},${studentData.companyName.email}`,
     `Your Fees Submitted Successfully - ${studentData.companyName.companyName}`,
     `Hello ${studentData.studentInfo.name} you have submitted fees `,
     `<!DOCTYPE html>
@@ -324,6 +326,7 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
                 <span style="display:block; width:max-content;"><strong>Roll Number</strong></span>
                 <span style="display:block; width:max-content;"><strong>Course Name</strong></span>
                 <span style="display:block; width:max-content;"><strong>Payment Method</strong></span>
+                <span style="display:block; width:max-content;"><strong>Payment Date</strong></span>
               </td>
             </tr>
           </table>
@@ -352,6 +355,9 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
                 </span>
                 <span style="display:block;width:max-content;">
                 ${studentData.paymentOption.name}
+                </span>
+                <span style="display:block;width:max-content;">
+                ${formattedDate}
                 </span>
                 
               </td>
