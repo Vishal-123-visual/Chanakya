@@ -1638,7 +1638,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         // Save if the `installment_amount` calculation was successful
         await lastPaymentInstallment.save();
       } else {
-        console.warn("No valid installment document or installments are zero.");
+        // console.warn("No valid installment document or installments are zero.");
       }
 
       // if (currentStudent.remainingCourseFees === 0) {

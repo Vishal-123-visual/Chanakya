@@ -116,8 +116,9 @@ const StudentsList: React.FC<Props> = ({className}) => {
         >
           {userRoleAccess?.some(
             (userAccess: any) =>
-              userAccess.studentControlAccess['Add Student'] === true &&
-              userAccess.role === currentUser?.role || currentUser?.role === "SuperAdmin"
+              (userAccess.studentControlAccess['Add Student'] === true &&
+                userAccess.role === currentUser?.role) ||
+              currentUser?.role === 'SuperAdmin'
           ) && (
             <button
               className='btn btn-sm btn-light-primary'
@@ -193,7 +194,28 @@ const StudentsList: React.FC<Props> = ({className}) => {
                     </td>
                     <td className='text-end'>
                       <div className='d-flex justify-content-end flex-shrink-0'>
-                        {/* Only check for the user access roles once */}
+                        {userRoleAccess?.some(
+                          (userAccess: any) =>
+                            (userAccess.studentControlAccess['Dropout Student'] === true &&
+                              userAccess.role === currentUser?.role) ||
+                            currentUser?.role === 'SuperAdmin'
+                        ) && (
+                          <label
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            style={{cursor: 'pointer'}}
+                          >
+                            <input
+                              className='form-check-input me-3'
+                              type='checkbox'
+                              value=''
+                              id='drop-out-student'
+                              hidden
+                              onChange={(e) => dorpOutStudentHandler(student, e.target.checked)}
+                              checked={student?.dropOutStudent}
+                            />
+                            <KTIcon iconName='dislike' className='fs-3' />
+                          </label>
+                        )}
                         {userRoleAccess?.some(
                           (userAccess: any) =>
                             (userAccess.studentControlAccess['Edit Student'] === true &&

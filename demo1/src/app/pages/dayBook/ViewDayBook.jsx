@@ -15,7 +15,7 @@ const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(moment().subtract(30, 'days').toDate())
   const [showAddAccountBtn, setShowAddAccountBtn] = useState(false)
   const [toDate, setToDate] = useState(new Date())
-  const [toPreviousDate] = useState(new Date())
+  // const [toPreviousDate] = useState(new Date())
   const [editBayBookDataId, setEditBayBookDataId] = useState(null)
   const params = useParams()
 
@@ -26,16 +26,23 @@ const ViewDayBook = () => {
 
   const dayBookDataCtx = usePaymentOptionContextContext()
 
-  const previousTotalOfDayBookData = dayBookDataCtx?.getDayBookDataQuery?.data
-    ?.filter(
-      (item) =>
-        item.companyId === params?.id &&
-        new Date(item.dayBookDatadate) >= new Date(toDate.getFullYear(), 0) && // From January 1st of this year
-        new Date(item.dayBookDatadate) < new Date(toDate.getFullYear(), toDate.getMonth(), 1)
-    )
+  let previousTotalOfDayBookData = dayBookDataCtx?.getDayBookDataQuery?.data
+    ?.filter((item) => {
+      const itemDate = new Date(item.dayBookDatadate)
+      const currentYear = toDate.getFullYear()
+      const currentMonth = toDate.getMonth()
+      // Only include data up to the end of the previous month relative to the selected toDate
+      return item.companyId === params?.id && itemDate.getMonth() < currentMonth
+    })
     .reduce((acc, cur) => {
+      // Summing up credit, subtracting debit, and adding late fees
       return acc + cur.credit - cur.debit + cur.studentLateFees
-    }, 0)
+    }, 0) // Initial value is 0
+
+  // console.log(previousTotalOfDayBookData)
+
+  // const data = dayBookDataCtx?.getDayBookDataQuery?.data?.map((data) => data)
+  // console.log(data)
 
   const grossTotalOfDayBookData = dayBookDataCtx?.getDayBookDataQuery?.data
     ?.filter((item) => item?.companyId === params?.id)
@@ -98,7 +105,6 @@ const ViewDayBook = () => {
     themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
 
-  let previousTotalOfDayBookAmount = previousTotalOfDayBookData
   // console.log(themeMode)
 
   return (
@@ -224,8 +230,8 @@ const ViewDayBook = () => {
                   dayBookEntry.debit +
                   dayBookEntry.studentLateFees
 
-                previousTotalOfDayBookAmount =
-                  previousTotalOfDayBookAmount +
+                previousTotalOfDayBookData =
+                  previousTotalOfDayBookData +
                   dayBookEntry.credit -
                   dayBookEntry.debit +
                   dayBookEntry.studentLateFees
@@ -306,7 +312,7 @@ const ViewDayBook = () => {
                           {balanceOfDayBookData.toFixed(2)}
                         </td>
                         <td className='text-dark fw-bold text-hover-primary fs-6'>
-                          {previousTotalOfDayBookAmount.toFixed(2)}
+                          {previousTotalOfDayBookData.toFixed(2)}
                         </td>
                         {dayBookEntry.naretion && (
                           <td>
