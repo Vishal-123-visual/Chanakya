@@ -12,9 +12,10 @@ import AddDayBookAccountFromDayBook from './AddDayBookAccountFromDayBook'
 import EditDayBookData from './EditDayBookData'
 
 const ViewDayBook = () => {
-  const [fromDate, setFromDate] = useState(moment().subtract(30, 'days').toDate())
+  const [fromDate, setFromDate] = useState(moment().startOf('month').toDate())
+  const [toDate, setToDate] = useState(moment().startOf('month').add(29, 'days').toDate()) // Sets to 30th of the month
   const [showAddAccountBtn, setShowAddAccountBtn] = useState(false)
-  const [toDate, setToDate] = useState(new Date())
+  // const [toDate, setToDate] = useState(new Date())
   // const [toPreviousDate] = useState(new Date())
   const [editBayBookDataId, setEditBayBookDataId] = useState(null)
   const params = useParams()
