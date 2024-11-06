@@ -13,10 +13,8 @@ import EditDayBookData from './EditDayBookData'
 
 const ViewDayBook = () => {
   const [fromDate, setFromDate] = useState(moment().startOf('month').toDate())
-  const [toDate, setToDate] = useState(moment().startOf('month').add(29, 'days').toDate()) // Sets to 30th of the month
+  const [toDate, setToDate] = useState(moment().endOf('month').toDate())
   const [showAddAccountBtn, setShowAddAccountBtn] = useState(false)
-  // const [toDate, setToDate] = useState(new Date())
-  // const [toPreviousDate] = useState(new Date())
   const [editBayBookDataId, setEditBayBookDataId] = useState(null)
   const params = useParams()
 
@@ -65,26 +63,6 @@ const ViewDayBook = () => {
         const endDate = moment(toDate).endOf('day')
         return createdAt.isBetween(startDate, endDate, null, '[]')
       }) || []
-
-  // console.log(filteredData)
-
-  // const previous = filteredData?.map(
-  //   (dayBookEntry, index) =>
-  //     previousTotalOfDayBookData +
-  //     dayBookEntry.credit -
-  //     dayBookEntry.debit +
-  //     dayBookEntry.studentLateFees
-  // )
-
-  // console.log(previous)
-
-  // console.log(filteredData[0]?.balance)
-
-  // const navigateHandler = (accountId, accountName) => {
-  //   if (accountName) {
-  //     navigate(`/daybook/singleAccount/${accountId}`)
-  //   }
-  // }
 
   const deleteDayBookSingleDataHandler = (dayBookDataId) => {
     if (window.confirm('Are you sure you want to delete')) {
