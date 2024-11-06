@@ -17,10 +17,10 @@ const ViewDayBook = () => {
   const [showAddAccountBtn, setShowAddAccountBtn] = useState(false)
   const [editBayBookDataId, setEditBayBookDataId] = useState(null)
   const params = useParams()
-
   const companyCTX = useCompanyContext()
   const result = companyCTX.useGetSingleCompanyData(params?.id)
   //console.log(result)
+
   let balanceOfDayBookData = 0
 
   const dayBookDataCtx = usePaymentOptionContextContext()

@@ -6,8 +6,8 @@ const TotalAmountOfOldAndNewStudent = () => {
   const [page, setPage] = useState(1)
   const [newTotalCollection, setNewTotalCollection] = useState(0)
   const [totalCollection, setTotalCollection] = useState(0)
-  const [totalStudents, setTotalStudents] = useState(0)
-  const [allData, setAllData] = useState([])
+  // const [totalStudents, setTotalStudents] = useState(0)
+  // const [allData, setAllData] = useState([])
   const [monthlyTotal, setMonthlyTotal] = useState(0)
   const [toDate] = useState(new Date())
   const paramsData = useParams()
@@ -34,12 +34,12 @@ const TotalAmountOfOldAndNewStudent = () => {
       })
 
       const topData = filteredData.slice(0, page * 100)
-      setAllData(topData)
+      // setAllData(topData)
       //   console.log(topData)
       setTotalCollection(
         filteredData.reduce((total, collection) => total + (collection?.amountPaid || 0), 0)
       )
-      setTotalStudents(filteredData.length)
+      // setTotalStudents(filteredData.length)
     }
   }, [data, page, toDate])
 
@@ -72,7 +72,7 @@ const TotalAmountOfOldAndNewStudent = () => {
 
       if (filteredData.length > 0) {
         const topData = filteredData.slice(0, page * 100)
-        setAllData(topData)
+        // setAllData(topData)
 
         // Calculate total collection based on amountPaid
         const total = filteredData.reduce(
@@ -80,12 +80,12 @@ const TotalAmountOfOldAndNewStudent = () => {
           0
         )
         setNewTotalCollection(total)
-        setTotalStudents(filteredData.length)
+        // setTotalStudents(filteredData.length)
       } else {
         // If no data found, reset totals and clear data
         setNewTotalCollection(0)
-        setTotalStudents(0)
-        setAllData([])
+        // setTotalStudents(0)
+        // setAllData([])
       }
     }
   }, [data, page, toDate])
