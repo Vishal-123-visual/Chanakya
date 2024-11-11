@@ -13,6 +13,16 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       remainingFees: (Number(prev.netCourseFees) - Number(e.target.value)).toFixed(2),
     }))
   }
+  // console.log(remainingFeesHandler)
+
+  // const narrationHandler = (e) => {
+  //   setPayStudentFeesAdd((prev) => ({
+  //     ...prev,
+  //     narration: e.target.value,
+  //   }))
+  // }
+
+  // console.log(narrationHandler)
 
   const paymentOptionCtx = usePaymentOptionContextContext()
 
@@ -42,9 +52,17 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       <td>
         <input
           type='number'
+          placeholder='Enter Amount...'
           className='form-control min-w-150px '
           onChange={remainingFeesHandler}
           value={payStudentFeesAdd.amountPaid}
+        />
+        <input
+          type='text'
+          placeholder='Enter Narration...'
+          onChange={(e) => setPayStudentFeesAdd({...payStudentFeesAdd, narration: e.target.value})}
+          value={payStudentFeesAdd.narration}
+          className='form-control min-w-150px '
         />
       </td>
       <td>

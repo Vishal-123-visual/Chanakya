@@ -48,6 +48,9 @@ const courseFeesSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "PaymentOptions",
     },
+    narration: {
+      type: String,
+    },
     lateFees: {
       type: Number,
     },

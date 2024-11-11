@@ -20,7 +20,9 @@ const dayBookDataSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-
+    narration: {
+      type: String,
+    },
     dayBookDatadate: {
       type: Date,
       default: Date.now(),

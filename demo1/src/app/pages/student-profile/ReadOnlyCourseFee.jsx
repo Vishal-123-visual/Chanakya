@@ -82,7 +82,12 @@ Visual Media Academy`
       </td>
       <td>{index + 1}</td>
       <td>{StudentFee?.netCourseFees}</td>
-      <td>{StudentFee?.amountPaid}</td>
+      <td>
+        {StudentFee?.amountPaid} <br />
+        <span className='text-muted fw-semibold text-muted d-block fs-7'>
+          {StudentFee.narration}
+        </span>
+      </td>
       <td>{StudentFee?.remainingFees}</td>
       <td>{moment(StudentFee?.amountDate).format('DD-MM-YYYY')}</td>
       <td>{StudentFee?.reciptNumber}</td>

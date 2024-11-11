@@ -32,6 +32,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     netCourseFees: 0,
     remainingFees: 0,
     amountPaid: '',
+    narration: '',
     amountDate: '',
     paymentOption: '',
     lateFees: '',
@@ -58,6 +59,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       netCourseFees: initialAmountPaid,
       remainingFees: Number(studentInfoData?.remainingCourseFees).toFixed(2),
       amountPaid: '',
+      narration: '',
       amountDate: '',
       paymentOption: '',
       lateFees: 0,
@@ -66,7 +68,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
 
   // console.log(result?.data[result?.data?.length - 1])
 
-  //console.log(payStudentFeesAdd)
+  // console.log(payStudentFeesAdd)
   //console.log(studentPayFeeCtx.createStudentCourseFeesMutation)
 
   const payStudentFeesAddHandler = (e) => {
@@ -118,6 +120,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
               netCourseFees: 0,
               remainingFees: 0,
               amountPaid: 0,
+              narration: '',
               amountDate: Date.now(),
               paymentOption: '',
               lateFees: 0,
@@ -155,6 +158,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           netCourseFees: 0,
           remainingFees: 0,
           amountPaid: 0,
+          narration: '',
           amountDate: Date.now(),
           paymentOption: '',
           lateFees: 0,

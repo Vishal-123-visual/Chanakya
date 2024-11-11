@@ -59,6 +59,15 @@ const EditOnlyCourseFee = ({
           onChange={remainingFeesHandler}
           value={editStudentCourseFees.amountPaid}
         />
+        <input
+          type='text'
+          placeholder='Enter Narration...'
+          className='form-control min-w-150px '
+          value={editStudentCourseFees.narration}
+          onChange={(e) =>
+            setEditStudentCourseFees({...editStudentCourseFees, narration: e.target.value})
+          }
+        />
       </td>
       <td>
         <input

@@ -276,6 +276,9 @@ const ViewDayBook = () => {
                           style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}
                         >
                           {dayBookEntry.credit}
+                          <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                            {dayBookEntry.narration}
+                          </span>
                         </td>
                         <td className='text-dark fw-bold text-hover-primary fs-6'>
                           {dayBookEntry.debit}

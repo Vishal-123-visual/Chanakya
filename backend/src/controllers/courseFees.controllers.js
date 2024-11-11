@@ -24,6 +24,7 @@ export const createCourseFeesController = asyncHandler(
         studentInfo,
         remainingFees,
         amountPaid,
+        narration,
         amountDate,
         lateFees,
         paymentOption,
@@ -109,6 +110,7 @@ export const createCourseFeesController = asyncHandler(
         dayBookDatadate: amountDate,
         reciptNumber,
         credit: +amountPaid,
+        narration,
       });
 
       await newDayBookData.save();
@@ -1480,6 +1482,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
       netCourseFees,
       studentInfo,
       remainingFees,
+      narration,
       amountPaid,
       amountDate,
       paymentOption,
@@ -1554,6 +1557,8 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
                 singleStudentAllCourseFees[i - 1].remainingFees - amountPaid ||
                 singleStudentAllCourseFees[i - 1].remainingFees -
                   singleStudentAllCourseFees[i].amountPaid;
+              singleStudentAllCourseFees[i].narration =
+                narration || singleStudentAllCourseFees[i].narration;
               singleStudentAllCourseFees[i].amountPaid =
                 amountPaid || singleStudentAllCourseFees[i].amountPaid;
               singleStudentAllCourseFees[i].amountDate =
@@ -1611,6 +1616,8 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         getSingleStudentDayBookDataWithReciptNumber?.reciptNumber;
       getSingleStudentDayBookDataWithReciptNumber.studentInfo =
         studentInfo || getSingleStudentDayBookDataWithReciptNumber.studentInfo;
+      getSingleStudentDayBookDataWithReciptNumber.narration =
+        narration || getSingleStudentDayBookDataWithReciptNumber.narration;
       getSingleStudentDayBookDataWithReciptNumber.studentLateFees =
         lateFees || getSingleStudentDayBookDataWithReciptNumber.studentLateFees;
       getSingleStudentDayBookDataWithReciptNumber.credit =
