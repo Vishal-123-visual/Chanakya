@@ -69,6 +69,7 @@ import MonthlyReportsDashBoard from '../pages/monthly_Reports/MonthlyReportsDash
 import TodoCalendarRemainder from '../pages/enquiry-related/viewEnquiryFormsData/TodoCalendarRemainder'
 import UserRoleAccessManagement from '../pages/userRoleAccessManagement/UserRoleAccessManagement'
 import DynamicEmailTemplate from '../pages/email-template/DynamicEmailTemplate'
+import PaymentApproval from '../pages/Payment_Approval/PaymentApproval'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -81,7 +82,7 @@ const PrivateRoutes = () => {
 
   // Fetch current student data based on currentUser's email
   const currentStudent = studentCTX?.useGetSingleStudentUsingWithEmail(currentUser?.email)
-  //console.log(currentStudent.data)
+  // console.log(currentStudent.data)
 
   return (
     <Routes>
@@ -289,6 +290,14 @@ const PrivateRoutes = () => {
                 </>
               }
             />
+            <Route
+              path='/reciepts-approval/:id'
+              element={
+                <>
+                  <PaymentApproval />
+                </>
+              }
+            />
             {/* <Route path='/enquiry-form/:id' element={<DynamicEnquiryForm companyName='' />} /> */}
             {/* <---------------------- Dynamic Form Routes Starts Here --------------------->*/}
             <Route path='/add-form/:id' element={<AddForm />} />
@@ -362,7 +371,7 @@ const PrivateRoutes = () => {
                     <GstSuggesstion />
                     <AddPaymentOption />
                     <EmailTemplate />
-                    <DynamicEmailTemplate/>
+                    <DynamicEmailTemplate />
                   </div>
                 </>
               }

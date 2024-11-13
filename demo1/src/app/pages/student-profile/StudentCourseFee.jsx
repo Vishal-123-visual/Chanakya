@@ -6,7 +6,7 @@ import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContex
 import {useQuery, useQueryClient} from 'react-query'
 import axios from 'axios'
 import {useAuth} from '../../modules/auth'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import ReadOnlyCourseFee from './ReadOnlyCourseFee'
 import EditOnlyCourseFee from './EditOnlyCourseFee'
 import {toast} from 'react-toastify'
@@ -14,6 +14,7 @@ import {useCompanyContext} from '../compay/CompanyContext'
 import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
 const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentInfoData)
+  const params = useParams()
   const navigate = useNavigate()
   const {currentUser} = useAuth()
   const companyCtx = useCompanyContext()
@@ -27,7 +28,18 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
   const [studentCourseFeeEditId, setStudentCourseFeesEditId] = useState(null)
   //console.log(studentCourseFeeEditId)
+  const {getAllRecieptStatusData} = useStudentCourseFeesContext()
+  const approvalData = getAllRecieptStatusData?.data?.approvalData?.filter(
+    (data) => data.studentId === params.id
+  )
+  // console.log(approvalData)
+  const getReceiptStatus = (recieptId) => {
+    const approval = approvalData?.find((data) => data.reciept.toString() === recieptId.toString())
+    // console.log(approval)
+    return approval ? approval.status : 'Pending'
+  }
 
+  // console.log(getReceiptStatus)
   const [editStudentCourseFees, setEditStudentCourseFees] = useState({
     netCourseFees: 0,
     remainingFees: 0,
@@ -40,10 +52,11 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   })
 
   const studentPayFeeCtx = useStudentCourseFeesContext()
+
   const result = studentPayFeeCtx.useSingleStudentCourseFees(studentInfoData?._id)
   // console.log(result)
   //console.log(studentPayFeeCtx.createStudentCourseFeesMutation.data)
-
+  // console.log(result)
   const addStudentFeeFormToggleHandler = () => {
     setAddStudentFeeFormToggle((prev) => !prev)
   }
@@ -254,13 +267,14 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                     <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                   </th>
                   <th className='min-w-50px'>Sr No</th>
-                  <th className='min-w-100px'>Net Course Fees</th>
-                  <th className='min-w-100px'>Amount Paid</th>
-                  <th className='min-w-100px'>Remaining</th>
-                  <th className='min-w-100px'>Date</th>
+                  <th className='min-w-40px'>Net Course Fees</th>
+                  <th className='min-w-40px'>Amount Paid</th>
+                  <th className='min-w-40px'>Remaining</th>
+                  <th className='min-w-40px'>Date</th>
                   <th className='min-w-100px'>Recipt No</th>
                   <th className='min-w-100px'>Payment Options</th>
                   <th className='min-w-100px'>Late Fee</th>
+                  <th className='min-w-30px'>Status</th>
                   {userRoleAccess?.some(
                     (userAccess) =>
                       userAccess.studentFeesAccess['Edit Student Fees'] === true ||
@@ -283,26 +297,30 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                   />
                 )}
                 {result.data?.length > 0 ? (
-                  result.data?.map((StudentFee, index) => (
-                    <React.Fragment key={index}>
-                      {StudentFee._id === studentCourseFeeEditId ? (
-                        <EditOnlyCourseFee
-                          StudentFee={StudentFee}
-                          setEditStudentCourseFees={setEditStudentCourseFees}
-                          setStudentCourseFeesEditId={setStudentCourseFeesEditId}
-                          editStudentCourseFees={editStudentCourseFees}
-                        />
-                      ) : (
-                        <ReadOnlyCourseFee
-                          studentInfoData={studentInfoData}
-                          StudentFee={StudentFee}
-                          index={index}
-                          delelteStudentCourseFeesHandler={delelteStudentCourseFeesHandler}
-                          setStudentCourseFeesEditId={setStudentCourseFeesEditId}
-                        />
-                      )}
-                    </React.Fragment>
-                  ))
+                  result.data?.map((StudentFee, index) => {
+                    const status = getReceiptStatus(StudentFee._id)
+                    return (
+                      <React.Fragment key={index}>
+                        {StudentFee._id === studentCourseFeeEditId ? (
+                          <EditOnlyCourseFee
+                            StudentFee={StudentFee}
+                            setEditStudentCourseFees={setEditStudentCourseFees}
+                            setStudentCourseFeesEditId={setStudentCourseFeesEditId}
+                            editStudentCourseFees={editStudentCourseFees}
+                          />
+                        ) : (
+                          <ReadOnlyCourseFee
+                            studentInfoData={studentInfoData}
+                            StudentFee={StudentFee}
+                            index={index}
+                            status={status}
+                            delelteStudentCourseFeesHandler={delelteStudentCourseFeesHandler}
+                            setStudentCourseFeesEditId={setStudentCourseFeesEditId}
+                          />
+                        )}
+                      </React.Fragment>
+                    )
+                  })
                 ) : (
                   <></>
                 )}

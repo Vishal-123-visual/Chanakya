@@ -245,6 +245,47 @@ export const StudentCourseFeesContextProvider = ({children}) => {
     },
   })
 
+  //Approval Query's
+  const createStudentStatusMutation = useMutation({
+    mutationFn: async (data) => {
+      // console.log(data)
+      return axios.post(`${BASE_URL}/api/receipt-approval`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      toast.success('Receipt Approved  Successfully!!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        // console.log(error)
+        // alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getRecieptStatusData']})
+      }
+    },
+  })
+
+  const getAllRecieptStatusData = useQuery({
+    queryKey: ['getRecieptStatusData'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/receipt-approval`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data:' + error.message)
+      }
+    },
+  })
+
   return (
     <StudentCourseFeeContext.Provider
       value={{
@@ -256,6 +297,8 @@ export const StudentCourseFeesContextProvider = ({children}) => {
         useGetStudentMonthlyCourseFeesCollection,
         useGetStudentMonthlyCourseFeesCollectionExpireationInstallment,
         getAllStudentsCourseFees,
+        createStudentStatusMutation,
+        getAllRecieptStatusData,
       }}
     >
       {children}

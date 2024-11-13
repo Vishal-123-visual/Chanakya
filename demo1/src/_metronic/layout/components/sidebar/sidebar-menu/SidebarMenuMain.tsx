@@ -112,6 +112,13 @@ const SidebarMenuMain = () => {
                       title='Clear Students'
                       hasBullet={true}
                     />
+                    {currentUser?.role === 'SuperAdmin' && (
+                      <SidebarMenuItem
+                        to={`/reciepts-approval/${CompanyListData?._id}`}
+                        title='Approval Reciepts'
+                        hasBullet={true}
+                      />
+                    )}
                   </SidebarMenuItemWithSub>
 
                   <SidebarMenuItemWithSub

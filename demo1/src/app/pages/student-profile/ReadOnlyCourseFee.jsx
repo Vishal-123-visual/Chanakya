@@ -3,10 +3,12 @@ import React from 'react'
 import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
 import {useAuth} from '../../modules/auth/core/Auth'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import {toast} from 'react-toastify'
 import axios from 'axios'
 import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
+import PaymentApproval from '../Payment_Approval/PaymentApproval'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
@@ -14,19 +16,20 @@ const ReadOnlyCourseFee = ({
   studentInfoData,
   StudentFee,
   index,
+  status,
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
+  const params = useParams()
+  // console.log(params.id)
   // console.log(StudentFee)
   const {auth, currentUser} = useAuth()
   const {getAllUserAccessRoleData} = useUserRoleAccessContext()
-
   const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
 
-  const paymentOptionCtx = usePaymentOptionContextContext()
   //console.log(paymentOptionCtx.getPaymentOptionsData.data)
-
-  // console.log(StudentFee)
+  const paymentOptionCtx = usePaymentOptionContextContext()
+  // console.log(approvalData)
 
   const studentEditCourseFeesHandler = (id) => {
     setStudentCourseFeesEditId(id)
@@ -76,96 +79,106 @@ Visual Media Academy`
   }
 
   return (
-    <tr key={StudentFee._id}>
-      <td>
-        <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
-      </td>
-      <td>{index + 1}</td>
-      <td>{StudentFee?.netCourseFees}</td>
-      <td>
-        {StudentFee?.amountPaid} <br />
-        <span className='text-muted fw-semibold text-muted d-block fs-7'>
-          {StudentFee.narration}
-        </span>
-      </td>
-      <td>{StudentFee?.remainingFees}</td>
-      <td>{moment(StudentFee?.amountDate).format('DD-MM-YYYY')}</td>
-      <td>{StudentFee?.reciptNumber}</td>
+    <>
+      <tr key={StudentFee._id}>
+        <td>
+          <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+        </td>
+        <td>{index + 1}</td>
+        <td>{StudentFee?.netCourseFees}</td>
+        <td>
+          {StudentFee?.amountPaid} <br />
+          <span className='text-muted fw-semibold text-muted d-block fs-7'>
+            {StudentFee.narration}
+          </span>
+        </td>
+        <td>{StudentFee?.remainingFees}</td>
+        <td>{moment(StudentFee?.amountDate).format('DD-MM-YYYY')}</td>
+        <td>{StudentFee?.reciptNumber}</td>
 
-      <td>
-        {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
-          <React.Fragment key={paymentOpt._id}>
-            {StudentFee.paymentOption._id === paymentOpt._id && paymentOpt.name}
-          </React.Fragment>
-        ))}
-      </td>
+        <td>
+          {paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
+            <React.Fragment key={paymentOpt._id}>
+              {StudentFee.paymentOption._id === paymentOpt._id && paymentOpt.name}
+            </React.Fragment>
+          ))}
+        </td>
 
-      <td>{StudentFee?.lateFees}</td>
-
-      <td>
-        <div className='d-flex justify-content-end flex-shrink-0 gap-4 '>
-          {currentUser.role !== 'Student' && (
-            <>
-              <Link
-                to={'/print-student-fees-recipt'}
-                target='_blank'
-                type='button'
-                onClick={() =>
-                  localStorage.setItem('print-student-fees-recipt', JSON.stringify(StudentFee))
-                }
-                className='btn btn-bg-light btn-active-color-primary btn-sm me-1'
-              >
-                Print Recipt
-              </Link>
-              <button
-                onClick={() => sendMailToStudentAgainIfNotAccept(StudentFee)}
-                type='button'
-                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-              >
-                <img src='/gmail.png' className='img-thumbnail' alt='gmail' />
-              </button>
-              <button
-                onClick={() => sendDataWhatsappAsMessage()}
-                type='button'
-                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-              >
-                <img src='/whatsapp.png' className='img-thumbnail' alt='whatsapp' />
-              </button>
-            </>
-          )}
-          {userRoleAccess?.some(
-            (userAccess) =>
-              (userAccess.studentFeesAccess['Edit Student Fees'] === true &&
-                userAccess.role === currentUser?.role) ||
-              currentUser?.role === 'SuperAdmin'
-          ) && (
-            <>
-              <button
-                onClick={() => studentEditCourseFeesHandler(StudentFee?._id)}
-                type='button'
-                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-              >
-                <KTIcon iconName='pencil' className='fs-3' />
-              </button>
-              {userRoleAccess?.some(
-                (userAccess) =>
-                  (userAccess.studentFeesAccess['Delete Student Fees'] === true &&
-                    userAccess.role === currentUser?.role) ||
-                  currentUser?.role === 'SuperAdmin'
-              ) && (
-                <button
-                  onClick={() => delelteStudentCourseFeesHandler(StudentFee?._id)}
+        <td>{StudentFee?.lateFees}</td>
+        <td className='text-end'>
+          <span
+            className={`badge ${
+              status === 'Approved' ? 'badge-light-success' : 'badge-light-danger'
+            }`}
+          >
+            {status || 'Pending'}
+          </span>
+        </td>
+        <td>
+          <div className='d-flex justify-content-end flex-shrink-0 gap-4 '>
+            {currentUser.role !== 'Student' && (
+              <>
+                <Link
+                  to={'/print-student-fees-recipt'}
+                  target='_blank'
                   type='button'
-                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                  onClick={() =>
+                    localStorage.setItem('print-student-fees-recipt', JSON.stringify(StudentFee))
+                  }
+                  className='btn btn-bg-light btn-active-color-primary btn-sm me-1'
                 >
-                  <KTIcon iconName='trash' className='fs-3' />
+                  Print Recipt
+                </Link>
+                <button
+                  onClick={() => sendMailToStudentAgainIfNotAccept(StudentFee)}
+                  type='button'
+                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                >
+                  <img src='/gmail.png' className='img-thumbnail' alt='gmail' />
                 </button>
-              )}
-            </>
-          )}
-        </div>
-      </td>
-    </tr>
+                <button
+                  onClick={() => sendDataWhatsappAsMessage()}
+                  type='button'
+                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                >
+                  <img src='/whatsapp.png' className='img-thumbnail' alt='whatsapp' />
+                </button>
+              </>
+            )}
+            {userRoleAccess?.some(
+              (userAccess) =>
+                (userAccess.studentFeesAccess['Edit Student Fees'] === true &&
+                  userAccess.role === currentUser?.role) ||
+                currentUser?.role === 'SuperAdmin'
+            ) && (
+              <>
+                <button
+                  onClick={() => studentEditCourseFeesHandler(StudentFee?._id)}
+                  type='button'
+                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                >
+                  <KTIcon iconName='pencil' className='fs-3' />
+                </button>
+                {userRoleAccess?.some(
+                  (userAccess) =>
+                    (userAccess.studentFeesAccess['Delete Student Fees'] === true &&
+                      userAccess.role === currentUser?.role) ||
+                    currentUser?.role === 'SuperAdmin'
+                ) && (
+                  <button
+                    onClick={() => delelteStudentCourseFeesHandler(StudentFee?._id)}
+                    type='button'
+                    className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                  >
+                    <KTIcon iconName='trash' className='fs-3' />
+                  </button>
+                )}
+              </>
+            )}
+          </div>
+        </td>
+      </tr>
+    </>
   )
 }
 export default ReadOnlyCourseFee

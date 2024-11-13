@@ -30,6 +30,7 @@ import StudentNotesRoutes from "./routes/studentNotes.routes.js";
 import userRoleAccessRoutes from "./routes/userRoleAccess.routes.js";
 import allMails from "./routes/getAllEmailsData.routes.js";
 import emailTemplate from "./routes/emailTemplate.routes.js";
+import approvalRoutes from "./routes/approval.routes.js";
 
 const app = express();
 
@@ -66,6 +67,7 @@ app.use("/api/add-timing", timingRoutes);
 app.use("/api/add-batch", batchRoutes);
 app.use("/api/submit-form", submitForm);
 app.use("/api/user-role", userRoleAccessRoutes);
+app.use("/api/receipt-approval", approvalRoutes);
 // app.use("/api/enquiry-form", submitForm);
 app.use("/api", reOrderingColumnsAndRows);
 app.use("/api/allMails", allMails);
