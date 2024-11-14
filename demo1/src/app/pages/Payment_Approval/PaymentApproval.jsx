@@ -48,17 +48,10 @@ const PaymentApproval = () => {
   }
 
   // Sort the receipts to ensure Pending comes first
-  const sortedDataReciepts = dataReciepts?.sort((a, b) => {
-    const statusA = getReceiptStatus(a._id)
-    const statusB = getReceiptStatus(b._id)
-    if (statusA === 'Pending' && statusB !== 'Pending') {
-      return -1 // Move Pending items to the top
-    }
-    if (statusB === 'Pending' && statusA !== 'Pending') {
-      return 1 // Move Pending items to the top
-    }
-    return 0 // Keep the order for other statuses
-  })
+  // Sort receipts by date in descending order to have the latest (newest) receipt at the top
+  const sortedDataReciepts = dataReciepts
+    ?.filter((data) => data.studentInfo.companyName === params.id)
+    ?.sort((a, b) => new Date(b.amountDate) - new Date(a.amountDate))
 
   // Filter the receipts based on search query
   const filteredDataReciepts = sortedDataReciepts?.filter((reciept) => {
