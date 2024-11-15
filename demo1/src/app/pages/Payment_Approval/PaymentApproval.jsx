@@ -15,15 +15,13 @@ const PaymentApproval = () => {
     getAllRecieptStatusData,
   } = useStudentCourseFeesContext()
 
-  // State for search query
+  const [checkboxStates, setCheckboxStates] = useState({})
   const [searchQuery, setSearchQuery] = useState('')
 
-  // Filter approvalData based on the company ID
   const approvalData = getAllRecieptStatusData?.data?.approvalData?.filter(
     (data) => data.companyId === params.id
   )
 
-  // Filter the course fees data based on the company name
   const dataReciepts = getAllStudentsCourseFees?.data?.filter(
     (data) => data.studentInfo.companyName === params.id
   )
@@ -32,28 +30,42 @@ const PaymentApproval = () => {
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(params?.id)
   const recieptCount = dataReciepts?.length
 
+  // Handle checkbox change
+  const handleCheckboxChange = (recieptId) => {
+    setCheckboxStates((prev) => ({
+      ...prev,
+      [recieptId]: !prev[recieptId], // Toggle the state
+    }))
+  }
+
   const handleStatusChange = (recieptId, studentId, status) => {
     createStudentStatusMutation.mutate({
       studentId: studentId,
       companyId: params.id,
       reciept: recieptId,
       status,
+      check: checkboxStates[recieptId] || false, // Pass current checkbox state
     })
   }
 
-  // Function to get the status for each receipt based on approvalData
   const getReceiptStatus = (recieptId) => {
-    const approval = approvalData?.find((data) => data.reciept.toString() === recieptId.toString())
+    const approval = approvalData?.find(
+      (data) => data.reciept?._id.toString() === recieptId.toString()
+    )
     return approval ? approval.status : 'Pending'
   }
 
-  // Sort the receipts to ensure Pending comes first
-  // Sort receipts by date in descending order to have the latest (newest) receipt at the top
+  const check = (recieptId) => {
+    const approval = approvalData?.find(
+      (data) => data.reciept?._id.toString() === recieptId.toString()
+    )
+    return approval ? approval?.check : false
+  }
+
   const sortedDataReciepts = dataReciepts
     ?.filter((data) => data.studentInfo.companyName === params.id)
     ?.sort((a, b) => new Date(b.amountDate) - new Date(a.amountDate))
 
-  // Filter the receipts based on search query
   const filteredDataReciepts = sortedDataReciepts?.filter((reciept) => {
     const studentName = reciept?.studentInfo?.name?.toLowerCase() || ''
     const courseName = reciept?.courseName?.courseName?.toLowerCase() || ''
@@ -64,18 +76,14 @@ const PaymentApproval = () => {
     )
   })
 
-  // Function to check if a receipt is from the current month
   const isReceiptFromCurrentMonth = (receiptDate) => {
-    const currentMonth = moment().month() + 1 // 0-based index, so add 1
+    const currentMonth = moment().month() + 1
     const receiptMonth = moment(receiptDate).month() + 1
     return currentMonth === receiptMonth && moment(receiptDate).year() === moment().year()
   }
 
-  // Function to get the label for each student's particular (New Admission or Installment)
   const getParticularsLabel = (studentId) => {
     const studentReceipts = dataReciepts.filter((reciept) => reciept.studentInfo._id === studentId)
-
-    // Check if there's only one receipt and it's from the current month
     if (studentReceipts.length === 1 && isReceiptFromCurrentMonth(studentReceipts[0].amountDate)) {
       return 'New Admission'
     }
@@ -104,82 +112,38 @@ const PaymentApproval = () => {
           <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
             <thead>
               <tr className='fw-bold text-muted'>
-                <th className='min-w-120px'>No.</th>
-                <th className='min-w-120px'>Receipt No.</th>
-                <th className='min-w-150px'>Name</th>
-                <th className='min-w-140px'>Particulars</th>
-                <th className='min-w-130px'>Date</th>
-                <th className='min-w-120px'>Amount</th>
-                <th className='min-w-120px text-end'>Status</th>
-                <th className='min-w-100px text-end'>Actions</th>
+                <th>No.</th>
+                <th>Receipt No.</th>
+                <th>Name</th>
+                <th>Particulars</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th className='text-center'>Status</th>
+                <th className='text-end'>To Partner</th>
+                <th className='text-end'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredDataReciepts?.length > 0 ? (
                 filteredDataReciepts?.map((reciept, index) => {
-                  const status = getReceiptStatus(reciept._id)
+                  const status = getReceiptStatus(reciept?._id)
+                  const checkStatus = checkboxStates[reciept?._id] ?? check(reciept._id)
                   return (
                     <tr key={reciept._id}>
-                      <td>
-                        <div
-                          style={{cursor: 'pointer'}}
-                          className='text-dark fw-bold text-hover-primary d-block fs-6'
-                        >
-                          {index + 1}
-                        </div>
+                      <td>{index + 1}</td>
+                      <td
+                        className='text-dark fw-bold text-hover-primary'
+                        onClick={() => navigate(`/profile/student/${reciept?.studentInfo?._id}`)}
+                      >
+                        {reciept?.reciptNumber}
                       </td>
-                      <td>
-                        <div
-                          style={{cursor: 'pointer'}}
-                          className='text-dark fw-bold text-hover-primary d-block fs-6'
-                          onClick={() => navigate(`/profile/student/${reciept?.studentInfo?._id}`)}
-                        >
-                          {reciept?.reciptNumber}
-                        </div>
+                      <td className='text-dark fw-bold text-hover-primary'>
+                        {reciept?.studentInfo?.name}
                       </td>
-                      <td>
-                        <div className='d-flex align-items-center'>
-                          <div className='d-flex justify-content-start flex-column'>
-                            <div
-                              style={{cursor: 'pointer'}}
-                              className='text-dark fw-bold text-hover-primary fs-6'
-                              onClick={() =>
-                                navigate(`/profile/student/${reciept?.studentInfo?._id}`)
-                              }
-                            >
-                              {reciept?.studentInfo?.name}
-                            </div>
-                            <span className='text-muted fw-semibold text-muted d-block fs-7'>
-                              {reciept?.courseName?.courseName}
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className='text-end'>
-                        <div className='d-flex flex-column w-100 me-2'>
-                          <div style={{cursor: 'pointer'}} className='d-flex flex-stack mb-2'>
-                            <span className=' me-2 fs-6 fw-semibold'>
-                              {getParticularsLabel(reciept?.studentInfo?._id)}
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div
-                          style={{cursor: 'pointer'}}
-                          className='text-dark fw-bold text-hover-primary d-block fs-6'
-                        >
-                          {moment(reciept?.amountDate).format('DD-MM-YYYY')}
-                        </div>
-                      </td>
-                      <td className='text-end'>
-                        <div className='d-flex flex-column w-100 me-2'>
-                          <div style={{cursor: 'pointer'}} className='d-flex flex-stack mb-2'>
-                            <span className=' me-2 fs-6 fw-semibold'>{reciept?.amountPaid}</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td className='text-end'>
+                      <td>{getParticularsLabel(reciept?.studentInfo?._id)}</td>
+                      <td>{moment(reciept?.amountDate).format('DD-MM-YYYY')}</td>
+                      <td className='text-end'>{reciept?.amountPaid}</td>
+                      <td className='text-center'>
                         <span
                           className={`badge ${
                             status === 'Approved' ? 'badge-light-success' : 'badge-light-danger'
@@ -189,23 +153,29 @@ const PaymentApproval = () => {
                         </span>
                       </td>
                       <td className='text-end'>
-                        <div className='d-flex justify-content-end flex-shrink-0'>
-                          <button
-                            className='btn btn-icon btn-bg-light btn-active-color-success btn-sm me-1'
-                            onClick={() =>
-                              handleStatusChange(reciept._id, reciept.studentInfo._id, 'Approved')
-                            }
-                          >
-                            <KTIcon iconName='check' className='fs-2' />
-                          </button>
-                        </div>
+                        <input
+                          className='form-check-input'
+                          type='checkbox'
+                          checked={checkStatus}
+                          onChange={() => handleCheckboxChange(reciept._id)}
+                        />
+                      </td>
+                      <td className='text-end'>
+                        <button
+                          className='btn btn-icon btn-bg-light btn-active-color-success btn-sm'
+                          onClick={() =>
+                            handleStatusChange(reciept._id, reciept.studentInfo._id, 'Approved')
+                          }
+                        >
+                          <KTIcon iconName='check' />
+                        </button>
                       </td>
                     </tr>
                   )
                 })
               ) : (
                 <tr>
-                  <td colSpan='8'>No data available</td>
+                  <td colSpan='9'>No data available</td>
                 </tr>
               )}
             </tbody>

@@ -259,8 +259,18 @@ export const StudentCourseFeesContextProvider = ({children}) => {
       //console.log('error')
     },
 
-    onSuccess: () => {
-      toast.success('Receipt Approved  Successfully!!')
+    onSuccess: async (data) => {
+      // console.log('Mutation succeeded:', data)
+      // await queryClient.invalidateQueries({
+      //   queryKey: ['getStudents', data?.id],
+      // })
+      // await queryClient.invalidateQueries({
+      //   queryKey: ['getStudentCourseFeesLists'],
+      // })
+      // await queryClient.invalidateQueries({
+      //   queryKey: ['getDayBookDataLists'],
+      // })
+      toast.success('Added Student Course fee Successfully!')
     },
 
     onSettled: async (_, error) => {

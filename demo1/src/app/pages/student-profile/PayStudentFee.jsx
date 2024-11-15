@@ -1,11 +1,19 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {Fragment} from 'react'
 
 const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFeeFormToggle}) => {
-  //console.log(payStudentFeesAdd)
+  const paymentOptionCtx = usePaymentOptionContextContext()
+
+  // Set initial date to current date if not already set
+  useEffect(() => {
+    if (!payStudentFeesAdd.amountDate) {
+      setPayStudentFeesAdd((prev) => ({...prev, amountDate: new Date()}))
+    }
+  }, [payStudentFeesAdd.amountDate, setPayStudentFeesAdd])
+
   const remainingFeesHandler = (e) => {
     setPayStudentFeesAdd((prev) => ({
       ...prev,
@@ -13,21 +21,8 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       remainingFees: (Number(prev.netCourseFees) - Number(e.target.value)).toFixed(2),
     }))
   }
-  // console.log(remainingFeesHandler)
-
-  // const narrationHandler = (e) => {
-  //   setPayStudentFeesAdd((prev) => ({
-  //     ...prev,
-  //     narration: e.target.value,
-  //   }))
-  // }
-
-  // console.log(narrationHandler)
-
-  const paymentOptionCtx = usePaymentOptionContextContext()
 
   const handleDateChange = (date) => {
-    //console.log(date)
     setPayStudentFeesAdd((prevState) => ({
       ...prevState,
       amountDate: date,
@@ -53,7 +48,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
         <input
           type='number'
           placeholder='Enter Amount...'
-          className='form-control min-w-150px '
+          className='form-control min-w-150px'
           onChange={remainingFeesHandler}
           value={payStudentFeesAdd.amountPaid}
         />
@@ -62,12 +57,12 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
           placeholder='Enter Narration...'
           onChange={(e) => setPayStudentFeesAdd({...payStudentFeesAdd, narration: e.target.value})}
           value={payStudentFeesAdd.narration}
-          className='form-control min-w-150px '
+          className='form-control min-w-150px'
         />
       </td>
       <td>
         <input
-          className='form-control min-w-150px '
+          className='form-control min-w-150px'
           type='text'
           value={payStudentFeesAdd.remainingFees}
           readOnly
@@ -77,7 +72,7 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
         <DatePicker
           selected={payStudentFeesAdd.amountDate}
           onChange={handleDateChange}
-          dateFormat='dd/MM/yyyy' // Desired date format
+          dateFormat='dd/MM/yyyy'
           className='form-control form-control-lg form-control-solid min-w-150px'
           placeholderText='DD/MM/YYYY'
         />
@@ -115,17 +110,16 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
         <div className='d-flex justify-content-end flex-shrink-0'>
           <button
             type='submit'
-            className='btn btn-success btn btn-success btn-active-color-primary btn-sm me-1 px-5'
+            className='btn btn-success btn-active-color-primary btn-sm me-1 px-5'
           >
             Pay
           </button>
-
           <button
             type='button'
             onClick={() => setAddStudentFeeFormToggle(false)}
-            className='btn btn-danger btn btn-success btn-active-color-primary btn-sm me-1 px-5'
+            className='btn btn-danger btn-active-color-primary btn-sm me-1 px-5'
           >
-            cancel
+            Cancel
           </button>
         </div>
       </td>

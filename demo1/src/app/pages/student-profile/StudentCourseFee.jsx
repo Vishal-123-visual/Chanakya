@@ -30,12 +30,14 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentCourseFeeEditId)
   const {getAllRecieptStatusData} = useStudentCourseFeesContext()
   const approvalData = getAllRecieptStatusData?.data?.approvalData?.filter(
-    (data) => data.studentId === params.id
+    (data) => data.studentId?._id === params.id
   )
   // console.log(approvalData)
   const getReceiptStatus = (recieptId) => {
-    const approval = approvalData?.find((data) => data.reciept.toString() === recieptId.toString())
-    // console.log(approval)
+    const approval = approvalData?.find(
+      (data) => data.reciept?._id.toString() === recieptId.toString()
+    )
+    console.log(approvalData)
     return approval ? approval.status : 'Pending'
   }
 
@@ -271,10 +273,10 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                   <th className='min-w-40px'>Amount Paid</th>
                   <th className='min-w-40px'>Remaining</th>
                   <th className='min-w-40px'>Date</th>
-                  <th className='min-w-100px'>Recipt No</th>
-                  <th className='min-w-100px'>Payment Options</th>
+                  <th className='min-w-40px'>Recipt No</th>
+                  <th className='min-w-40px'>Payment Options</th>
                   <th className='min-w-100px'>Late Fee</th>
-                  <th className='min-w-30px'>Status</th>
+                  <th className='min-w-40px'>Status</th>
                   {userRoleAccess?.some(
                     (userAccess) =>
                       userAccess.studentFeesAccess['Edit Student Fees'] === true ||
@@ -298,7 +300,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                 )}
                 {result.data?.length > 0 ? (
                   result.data?.map((StudentFee, index) => {
-                    const status = getReceiptStatus(StudentFee._id)
+                    const status = getReceiptStatus(StudentFee?._id)
                     return (
                       <React.Fragment key={index}>
                         {StudentFee._id === studentCourseFeeEditId ? (

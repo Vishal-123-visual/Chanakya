@@ -16,6 +16,10 @@ const approvalSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Students",
   },
+  check: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const approvalModel = mongoose.model("ApprovalReciepts", approvalSchema);
