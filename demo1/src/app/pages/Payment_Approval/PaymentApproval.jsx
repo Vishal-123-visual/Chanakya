@@ -39,12 +39,21 @@ const PaymentApproval = () => {
   }
 
   const handleStatusChange = (recieptId, studentId, status) => {
+    // Update checkbox state when status changes to 'Pending'
+    if (status === 'Pending') {
+      setCheckboxStates((prev) => ({
+        ...prev,
+        [recieptId]: false, // Set the checkbox to false
+      }))
+    }
+
+    // Call the mutation with updated values
     createStudentStatusMutation.mutate({
       studentId: studentId,
       companyId: params.id,
       reciept: recieptId,
       status,
-      check: checkboxStates[recieptId] || false, // Pass current checkbox state
+      check: status === 'Approved' ? checkboxStates[recieptId] || false : false, // Ensure check is false for 'Pending'
     })
   }
 
@@ -118,9 +127,9 @@ const PaymentApproval = () => {
                 <th>Particulars</th>
                 <th>Date</th>
                 <th>Amount</th>
-                <th className='text-center'>Status</th>
                 <th className='text-end'>To Partner</th>
-                <th className='text-end'>Actions</th>
+                <th className='text-end'>Status</th>
+                {/* <th className='text-end'>Actions</th> */}
               </tr>
             </thead>
             <tbody>
@@ -133,25 +142,21 @@ const PaymentApproval = () => {
                       <td>{index + 1}</td>
                       <td
                         className='text-dark fw-bold text-hover-primary'
+                        style={{cursor: 'pointer'}}
                         onClick={() => navigate(`/profile/student/${reciept?.studentInfo?._id}`)}
                       >
                         {reciept?.reciptNumber}
                       </td>
-                      <td className='text-dark fw-bold text-hover-primary'>
+                      <td
+                        className='text-dark fw-bold text-hover-primary'
+                        style={{cursor: 'pointer'}}
+                        onClick={() => navigate(`/profile/student/${reciept?.studentInfo?._id}`)}
+                      >
                         {reciept?.studentInfo?.name}
                       </td>
                       <td>{getParticularsLabel(reciept?.studentInfo?._id)}</td>
                       <td>{moment(reciept?.amountDate).format('DD-MM-YYYY')}</td>
                       <td className='text-end'>{reciept?.amountPaid}</td>
-                      <td className='text-center'>
-                        <span
-                          className={`badge ${
-                            status === 'Approved' ? 'badge-light-success' : 'badge-light-danger'
-                          }`}
-                        >
-                          {status}
-                        </span>
-                      </td>
                       <td className='text-end'>
                         <input
                           className='form-check-input'
@@ -160,7 +165,7 @@ const PaymentApproval = () => {
                           onChange={() => handleCheckboxChange(reciept._id)}
                         />
                       </td>
-                      <td className='text-end'>
+                      {/* <td className='text-end'>
                         <button
                           className='btn btn-icon btn-bg-light btn-active-color-success btn-sm'
                           onClick={() =>
@@ -169,6 +174,32 @@ const PaymentApproval = () => {
                         >
                           <KTIcon iconName='check' />
                         </button>
+                      </td> */}
+                      <td className='text-end'>
+                        <div className='d-inline-block'>
+                          <select
+                            className={`form-select form-select-sm ${
+                              status === 'Approved' ? 'badge-light-success' : 'badge-light-danger'
+                            }`}
+                            value={status}
+                            onChange={(e) =>
+                              handleStatusChange(
+                                reciept._id,
+                                reciept.studentInfo._id,
+                                e.target.value
+                              )
+                            }
+                            style={{
+                              width: 'auto',
+                              textAlign: 'center',
+                              color: status === 'Approved' ? '#50cd89' : '#f64e60', // Match badge text color
+                              backgroundColor: status === 'Approved' ? '#e8fff3' : '#ffe2e5', // Match badge background
+                            }}
+                          >
+                            <option value='Pending'>Pending</option>
+                            <option value='Approved'>Approved</option>
+                          </select>
+                        </div>
                       </td>
                     </tr>
                   )

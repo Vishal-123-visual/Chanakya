@@ -70,6 +70,7 @@ import TodoCalendarRemainder from '../pages/enquiry-related/viewEnquiryFormsData
 import UserRoleAccessManagement from '../pages/userRoleAccessManagement/UserRoleAccessManagement'
 import DynamicEmailTemplate from '../pages/email-template/DynamicEmailTemplate'
 import PaymentApproval from '../pages/Payment_Approval/PaymentApproval'
+import DayBookAccountTable from '../pages/dayBook/DayBookAccountTable'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -302,6 +303,7 @@ const PrivateRoutes = () => {
             {/* <---------------------- Dynamic Form Routes Starts Here --------------------->*/}
             <Route path='/add-form/:id' element={<AddForm />} />
             <Route path='/update-form/:id' element={<EditFormName />} />
+            <Route path='/reciept/:id' element={<DayBookAccountTable />} />
             <Route path='/profile-form/:id' element={<ProfileForm />} />
             <Route path='/view-form/:id' element={<ViewForms />} />
             {/* <---------------- View All Dynamic Form Routes Starts Here ------------------>*/}

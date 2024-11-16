@@ -38,9 +38,6 @@ const ViewDayBookAccount = () => {
     themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
 
-  let credit = 0
-  let debit = 0
-
   return (
     <>
       <div className={`card`}>
@@ -173,6 +170,39 @@ const ViewDayBookAccount = () => {
           {/* end::Table container */}
         </div>
         {/* begin::Body */}
+      </div>
+      <div className='card'>
+        <div className='card-body py-3'>
+          <div className='table-responsive'>
+            {/* begin::Table */}
+            <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
+              <thead>
+                <tr className='fw-bold'>
+                  <th className='min-w-150px'>S.NO</th>
+                  <th className='min-w-120px'>Account Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                      1
+                    </a>
+                  </td>
+                  <td>
+                    {' '}
+                    <button
+                      onClick={() => navigate(`/reciept/${params.id}`)}
+                      className='btn  btn-active-color-primary btn-sm text-dark text-center fw-bold text-hover-primary d-block fs-6'
+                    >
+                      Himanshu Walia
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </>
   )
