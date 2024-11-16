@@ -68,8 +68,8 @@ const DayBookAccountTable = () => {
                     <th className='min-w-50px'>Reciept No.</th>
                     <th className='min-w-50px'>Student Name</th>
                     <th className='min-w-50px'>Amount Date</th>
-                    <th className='min-w-80px'>Account Name</th>
-                    <th className='min-w-200px'>Naretion</th>
+                    {/* <th className='min-w-80px'>Account Name</th> */}
+                    <th className='min-w-200px'>Narration</th>
                     <th className='min-w-50px'>Credit</th>
                     {/* <th className='min-w-50px'>Debit</th> */}
                   </tr>
@@ -108,17 +108,17 @@ const DayBookAccountTable = () => {
                                   {moment(reciept.reciept.amountDate).format('DD-MM-YYYY')}
                                 </a>
                               </td>
-                              <td>
+                              {/* <td>
                                 <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                                   {accountName?.[0]?.accountName}
                                 </a>
-                              </td>
-                              <td style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}>
+                              </td> */}
+                              <td>
                                 <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                                   {reciept.reciept.narration}
                                 </a>
                               </td>
-                              <td>
+                              <td style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}>
                                 <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                                   {reciept.reciept.amountPaid || 0}
                                 </a>
@@ -139,7 +139,6 @@ const DayBookAccountTable = () => {
                             Total Balance
                           </a>
                         </td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
