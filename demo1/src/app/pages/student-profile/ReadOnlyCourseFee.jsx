@@ -116,7 +116,7 @@ Visual Media Academy`
         </td>
         <td>
           <div className='d-flex justify-content-end flex-shrink-0 gap-4 '>
-            {currentUser.role !== 'Student' && (
+            {currentUser.role !== 'Student' && status === 'Approved' && (
               <>
                 <Link
                   to={'/print-student-fees-recipt'}

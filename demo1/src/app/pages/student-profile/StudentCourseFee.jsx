@@ -35,9 +35,9 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   // console.log(approvalData)
   const getReceiptStatus = (recieptId) => {
     const approval = approvalData?.find(
-      (data) => data.reciept?._id.toString() === recieptId.toString()
+      (data) => data.reciept?._id?.toString() === recieptId?.toString()
     )
-    console.log(approvalData)
+    // console.log(approvalData)
     return approval ? approval.status : 'Pending'
   }
 
@@ -216,6 +216,9 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     return
   }
 
+  // let id
+  // const statusForSingleData = getReceiptStatus(id)
+  // console.log(statusForSingleData)
   // console.log(payStudentFeesAdd)
 
   // console.log(listOfFeesData)
@@ -301,6 +304,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                 {result.data?.length > 0 ? (
                   result.data?.map((StudentFee, index) => {
                     const status = getReceiptStatus(StudentFee?._id)
+                    // id = StudentFee?._id
                     return (
                       <React.Fragment key={index}>
                         {StudentFee._id === studentCourseFeeEditId ? (

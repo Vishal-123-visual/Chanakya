@@ -30,6 +30,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
   )
 
   const student = result?.data || []
+  // console.log(studentInfoData)
 
   useEffect(() => {
     const fetchEmails = async () => {

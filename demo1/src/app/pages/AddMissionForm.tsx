@@ -50,6 +50,7 @@ const addmissionFormSchema = Yup.object().shape({
   //remainingCourseFees: Yup.string().required('Remaining CourseFees is required!'),
 
   date_of_joining: Yup.string().required('Date of joining is required!'),
+  installment_duration: Yup.string().required('Installment Duration is required!'),
   no_of_installments: Yup.string().required('Number of installments  is required!'),
   no_of_installments_amount: Yup.string(),
   courseRemainderDuration: Yup.string(),
@@ -811,7 +812,32 @@ const AddMissionForm: React.FC = () => {
                   </div>
                 </div>
               </div>
+              <div className='col-6'>
+                <div className='row mb-6'>
+                  <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                    <span className='required'>Installmet Duration</span>
+                  </label>
 
+                  <div className='col-lg-8 fv-row'>
+                    <DatePicker
+                      selected={formik.values.installment_duration}
+                      onChange={(date) => formik.setFieldValue('installment_duration', date)}
+                      dateFormat='dd/MM/yyyy'
+                      className='form-control form-control-lg form-control-solid'
+                      placeholderText='DD/MM/YYYY'
+                    />
+                    {/* <Calendar
+                          onChange={(date) => formik.setFieldValue('date_of_joining', date)}
+                          value={formik.values.date_of_joining}
+                        /> */}
+                    {formik.touched.installment_duration && formik.errors.installment_duration && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors.installment_duration}</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
               {/* ---------------------------FOR OFFICE USE ONLY END HERE ----------------------- */}
             </div>
 

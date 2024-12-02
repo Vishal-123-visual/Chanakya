@@ -5,10 +5,12 @@ import EmailRemainderModel from "../src/models/email-remainder/email.remainder.m
 import { sendEmail } from "../helpers/sendRemainderFees/SendRemainderFeesStudent.js";
 import emailRemainderDatesModel from "../src/models/email-remainder/email.remainderDates.js";
 import EmailLogModel from "../src/models/mail.models.js";
+import moment from "moment";
 
-const studentInfoToSendMailToStudent = async (req,res,next) => {
+const studentInfoToSendMailToStudent = async (req, res, next) => {
   try {
     // Fetch all students with their courses and companies populated
+    // console.log("working");
     const students = await admissionFormModel
       .find({})
       .populate(["courseName", "companyName"]);
@@ -63,19 +65,19 @@ const studentInfoToSendMailToStudent = async (req,res,next) => {
     if (toEmails) {
       // Construct the email subject and content
       const subject = "Installment Payment Reminder";
-      const currentDateTime = moment().format('YYYY-MM-DD HH:mm:ss');
+      const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
       // const addedBy = req.user.fName +  " " + req.user.lName
-      
+
       // Send the email
-      await sendEmail(toEmails, subject, emailContent,req);
+      await sendEmail(toEmails, subject, emailContent, req);
 
       // Log the sent email to the database (EmailLogModel)
       const emailLog = new EmailLogModel({
-        recipientEmails: toEmails,    // List of recipients
-        subject: subject,             // Email subject
-        content: emailContent,        // Email content
-        sentAt: currentDateTime,       // Timestamp of when the email was sent
-        sendedBy:  req.user.fName +  " " + req.user.lName,
+        recipientEmails: toEmails, // List of recipients
+        subject: subject, // Email subject
+        content: emailContent, // Email content
+        sentAt: currentDateTime, // Timestamp of when the email was sent
+        sendedBy: req.user.fName + " " + req.user.lName,
       });
 
       // Save the email log
@@ -85,7 +87,6 @@ const studentInfoToSendMailToStudent = async (req,res,next) => {
     console.error("Error fetching student or user data:", error);
   }
 };
-
 
 export default async function startSchedulerStudentRemainderFeesToStudents() {
   try {
@@ -97,7 +98,7 @@ export default async function startSchedulerStudentRemainderFeesToStudents() {
         emailRemainderDates;
 
       // Construct the cron schedule string dynamically
-      const cronSchedule = `0 9 ${firstRemainderDay},${secondRemainderDay},${thirdRemainderDay} * *`;
+      const cronSchedule = `01 2 ${firstRemainderDay},${secondRemainderDay},${thirdRemainderDay} * *`;
 
       // Schedule the task with the dynamic cron expression
       cron.schedule(cronSchedule, studentInfoToSendMailToStudent);

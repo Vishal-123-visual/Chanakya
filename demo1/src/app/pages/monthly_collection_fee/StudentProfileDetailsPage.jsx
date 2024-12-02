@@ -775,6 +775,24 @@ const StudentProfileDetailsPage = () => {
                     </div>
                   </div>
                 </div>
+                <div className='col-6'>
+                  <div className='row mb-6'>
+                    <label className='col-lg-4 col-form-label fw-bold fs-6'>
+                      <span className=''>Installment Duration</span>
+                    </label>
+
+                    <div className='col-lg-8 fv-row'>
+                      <DatePicker
+                        readOnly
+                        selected={studentInfoData?.installment_duration}
+                        //onChange={(date) => formik.setFieldValue('date_of_joining', date)}
+                        dateFormat='dd/MM/yyyy'
+                        className='form-control form-control-lg form-control-solid'
+                        placeholderText='DD/MM/YYYY'
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
 
               {/* ---------------------------FOR OFFICE USE ONLY END HERE ----------------------- */}
@@ -806,7 +824,7 @@ const StudentProfileDetailsPage = () => {
           <AlertPendingFeesNewStudents studentInfoData={studentInfoData} />
           <StudentCommissionLists studentInfoData={studentInfoData} />
           <StudentIssue studentInfoData={studentInfoData} />
-          <StudentEmailsTable studentInfoData={studentInfoData}/>
+          <StudentEmailsTable studentInfoData={studentInfoData} />
         </div>
       )}
     </>

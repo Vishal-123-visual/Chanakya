@@ -29,33 +29,41 @@ import moment from "moment";
 
 const router = Router();
 
-router.post("/sendWarningMail",requireSignIn, async (req, res, next) => {
+router.post("/sendWarningMail", requireSignIn, async (req, res, next) => {
   try {
     const studentData = req.body;
-    console.log(studentData)
+    // console.log(req.body);
     const templates = await EmailTemplateModel.find({});
     if (templates.length === 0) {
-      return res.status(404).json({ success: false, message: "No email templates found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "No email templates found" });
     }
-    
+
     // Assuming you want the first template; adjust as needed.
     let emailContent = templates[0]?.customTemplate;
 
     // Function to replace placeholders in the template with actual values from studentData
     const generateEmailFromTemplate = (template, data) => {
       return template.replace(/\$\{(.*?)\}/g, (_, key) => {
-        return key.split('.').reduce((obj, keyPart) => obj && obj[keyPart], data) || '';
+        return (
+          key.split(".").reduce((obj, keyPart) => obj && obj[keyPart], data) ||
+          ""
+        );
       });
     };
 
     // Replace placeholders in the letter template with actual data
-    const finalEmailContent = generateEmailFromTemplate(emailContent, studentData);
+    const finalEmailContent = generateEmailFromTemplate(
+      emailContent,
+      studentData
+    );
 
     // Convert line breaks to <br> tags for HTML formatting
-    const formattedEmailContent = finalEmailContent.replace(/\n/g, '<br>');
+    const formattedEmailContent = finalEmailContent.replace(/\n/g, "<br>");
 
     // Gather admin emails
-    let adminEmails = '';
+    let adminEmails = "";
     const users = await userModel.find({});
     users?.forEach((user) => {
       if (user.role === "SuperAdmin") {
@@ -65,22 +73,26 @@ router.post("/sendWarningMail",requireSignIn, async (req, res, next) => {
 
     // Send the formatted letter via email
     await sendEmail(
-      `${studentData.studentInfo.email},${studentData.companyName.email}`,
-      `Final Notice Regarding Pending Fees for ${studentData.courseName.courseName} Course - ${studentData.companyName.companyName}`,
-      `Dear ${studentData.studentInfo.name}, this is a notice regarding unpaid fees.`,
+      `${studentData?.studentInfo?.email},${studentData?.companyName?.email}`,
+      `Final Notice Regarding Pending Fees for ${studentData?.courseName?.courseName} Course - ${studentData?.companyName?.companyName}`,
+      `Dear ${studentData?.studentInfo?.name}, this is a notice regarding unpaid fees.`,
       formattedEmailContent, // Use formatted content with HTML line breaks
       req
     );
 
-    res.status(200).json({ success: true, message: "Letter email sent to student successfully!" });
+    res.status(200).json({
+      success: true,
+      message: "Letter email sent to student successfully!",
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ success: false, message: "Failed to send the email" });
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to send the email" });
   }
 });
 
-
-router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
+router.post("/sendMailStudent", requireSignIn, async (req, res, next) => {
   // console.log(req.body);
   const studentData = req.body;
   // console.log(studentData.gst_percentage);
@@ -97,7 +109,7 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
       adminEmails += user.email + ",";
     }
   });
-  const formattedDate = moment(studentData.amountDate).format('DD-MM-YYYY')
+  const formattedDate = moment(studentData.amountDate).format("DD-MM-YYYY");
   // console.log(adminEmails);
   // console.log(formattedDate)
 
@@ -679,7 +691,7 @@ router.post("/sendMailStudent",requireSignIn, async (req, res, next) => {
   </body>
 
   </html>`,
-  req
+    req
   );
   res
     .status(200)

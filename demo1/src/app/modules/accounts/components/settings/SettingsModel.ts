@@ -52,6 +52,7 @@ export interface AddMissionFormInterface {
   discount: string | number
   down_payment?: string | number
   date_of_joining: string | Date
+  installment_duration: string | Date
   no_of_installments: string | number
   no_of_installments_amount: string | number
   createdAt?: string | Date
@@ -126,6 +127,7 @@ export const addMissionFormInitialValues: AddMissionFormInterface = {
   //remainingCourseFees: '',
   //down_payment: '',
   date_of_joining: '',
+  installment_duration: new Date(),
   no_of_installments: '',
   no_of_installments_amount: '',
   createdAt: '',

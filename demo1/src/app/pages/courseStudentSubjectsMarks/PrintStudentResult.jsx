@@ -1,7 +1,7 @@
-import { useLocation } from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import moment from 'moment'
 import './PrintStudentMarksResult.css' // Assuming you have a CSS file for styling
-import { useState } from 'react'
+import {useState} from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
@@ -9,7 +9,7 @@ const PrintStudentResult = () => {
   const [studentMarksResultData, setStudentMarksResultData] = useState(
     JSON.parse(localStorage.getItem('print-student-result')) || {}
   )
-  console.table(studentMarksResultData.state.data[0].Subjects.subjectCode.split("-")[1])
+  console.table(studentMarksResultData.state.data[0].Subjects.subjectCode.split('-')[1])
   const handlePrint = () => {
     var actContents = document.body.innerHTML
     document.body.innerHTML = actContents
@@ -45,7 +45,7 @@ const PrintStudentResult = () => {
                   cellSpacing='0'
                   className='marks'
                   border='1'
-                  style={{ marginTop: '5%' }}
+                  style={{marginTop: '5%'}}
                 >
                   <thead>
                     <tr>
@@ -57,13 +57,13 @@ const PrintStudentResult = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td style={{ borderRight: '1px solid black' }}>
+                      <td style={{borderRight: '1px solid black'}}>
                         RN-{studentMarksResultData.state.data[0].studentInfo.rollNumber}
                       </td>
-                      <td style={{ borderRight: '1px solid black' }}>
+                      <td style={{borderRight: '1px solid black'}}>
                         {studentMarksResultData.state.courseType}
                       </td>
-                      <td style={{ borderRight: '1px solid black' }}>
+                      <td style={{borderRight: '1px solid black'}}>
                         {studentMarksResultData.state.courseType.split(' ')[0]}
                       </td>
                       <td>
@@ -76,7 +76,7 @@ const PrintStudentResult = () => {
               </td>
             </tr>
             <tr>
-              <td style={{ display: 'flex', alignItems: 'center' }}>
+              <td style={{display: 'flex', alignItems: 'center'}}>
                 <table width='100%' cellPadding='0' cellSpacing='0' className='stu-details'>
                   <tbody>
                     <tr>
@@ -110,7 +110,7 @@ const PrintStudentResult = () => {
                   </tbody>
                 </table>
                 <img
-                  style={{ marginRight: '30px', borderRadius: '10px' }}
+                  style={{marginRight: '30px', borderRadius: '10px'}}
                   width={100}
                   src={`${BASE_URL}/api/images/${studentMarksResultData.state.data[0].studentInfo.image}`}
                   alt='student image'
@@ -159,31 +159,40 @@ const PrintStudentResult = () => {
                   </thead>
                   <tbody>
                     {studentMarksResultData.state.data &&
-                      studentMarksResultData.state.data?.sort((a, b) => a?.Subjects?.subjectCode?.split("-")[1] - b?.Subjects?.subjectCode?.split("-")[1]).map((marksStudentData) => {
-                        return (
-                          <tr key={marksStudentData._id} style={{ borderBottom: '1px solid black' }}>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
-                              {marksStudentData.Subjects.subjectCode}
-                            </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
-                              {marksStudentData.Subjects.subjectName}
-                            </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
-                              {marksStudentData.Subjects.fullMarks}
-                            </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
-                              {marksStudentData.practical}
-                            </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
-                              {marksStudentData.theory}
-                            </td>
-
-                            <td align='center'>{marksStudentData.totalMarks}</td>
-
-                            {/* <td align='center'>A</td> */}
-                          </tr>
+                      studentMarksResultData.state.data
+                        ?.sort(
+                          (a, b) =>
+                            a?.Subjects?.subjectCode?.split('-')[1] -
+                            b?.Subjects?.subjectCode?.split('-')[1]
                         )
-                      })}
+                        .map((marksStudentData) => {
+                          return (
+                            <tr
+                              key={marksStudentData._id}
+                              style={{borderBottom: '1px solid black'}}
+                            >
+                              <td style={{borderRight: '1px solid black'}} align='center'>
+                                {marksStudentData.Subjects.subjectCode}
+                              </td>
+                              <td style={{borderRight: '1px solid black'}} align='center'>
+                                {marksStudentData.Subjects.subjectName}
+                              </td>
+                              <td style={{borderRight: '1px solid black'}} align='center'>
+                                {marksStudentData.Subjects.fullMarks}
+                              </td>
+                              <td style={{borderRight: '1px solid black'}} align='center'>
+                                {marksStudentData.practical}
+                              </td>
+                              <td style={{borderRight: '1px solid black'}} align='center'>
+                                {marksStudentData.theory}
+                              </td>
+
+                              <td align='center'>{marksStudentData.totalMarks}</td>
+
+                              {/* <td align='center'>A</td> */}
+                            </tr>
+                          )
+                        })}
                     <tr>
                       <td align='center' colSpan='2'>
                         <strong>Total Marks</strong>

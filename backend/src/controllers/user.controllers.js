@@ -193,11 +193,14 @@ export const requsetUserPasswordController = asyncHandler(
   async (req, res, next) => {
     try {
       const { email } = req.body;
+      // console.log(email);
       if (!email) {
         res.status(404);
         throw new Error("User not found..");
       }
       let user = await userModel.findOne({ email });
+      console.log(user);
+      // const sendPassword = await bcr;
       if (user) {
         return res.status(200).send(true);
       }
@@ -220,18 +223,16 @@ export const getAllUsersController = asyncHandler(async (req, res, next) => {
 
     // Build the search query
     const searchQuery = {
-      ...(
-        search
-          ? {
-              $or: [
-                { fName: new RegExp(search, "i") },
-                { lName: new RegExp(search, "i") },
-                { email: new RegExp(search, "i") },
-                // Add more fields as needed
-              ],
-            }
-          : {}
-      ),
+      ...(search
+        ? {
+            $or: [
+              { fName: new RegExp(search, "i") },
+              { lName: new RegExp(search, "i") },
+              { email: new RegExp(search, "i") },
+              // Add more fields as needed
+            ],
+          }
+        : {}),
       role: { $ne: "student" }, // Exclude users with the role "student"
     };
 
@@ -298,7 +299,6 @@ export const getAllUsersController = asyncHandler(async (req, res, next) => {
     res.status(500).json({ message: error.message });
   }
 });
-
 
 export const editUserController = asyncHandler(async (req, res, next) => {
   const { fName, lName, email, role, password, phone } = req.body;
