@@ -99,9 +99,7 @@ export default function ViewAllEnquiryFormsData() {
         }
 
         const filteredFormData = getAllFormsFieldValue?.data?.formFieldValues
-          ?.filter(
-            (formData) => formData.companyId === companyId && formData.formId === selectedFormId
-          )
+          ?.filter((formData) => formData.companyId === companyId)
           .map((formData) => ({
             id: formData._id,
             fields: formData.formFiledValue,
@@ -381,6 +379,15 @@ export default function ViewAllEnquiryFormsData() {
     }
   }
   // console.log(filteredGroupedData)
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
 
   return (
     <div className='card'>
@@ -399,7 +406,7 @@ export default function ViewAllEnquiryFormsData() {
                 placeholder='Search'
               />
             </div>
-            <div className='d-flex justify-content-center'>
+            {/* <div className='d-flex justify-content-center'>
               <select
                 className='form-select form-select-solid form-select-lg'
                 onChange={(e) => setSelectedFormId(e.target.value)}
@@ -411,7 +418,7 @@ export default function ViewAllEnquiryFormsData() {
                   </option>
                 ))}
               </select>
-            </div>
+            </div> */}
           </>
         )}
       </div>
@@ -463,25 +470,20 @@ export default function ViewAllEnquiryFormsData() {
                             const isFixedColumn =
                               fieldName === 'Name' || fieldName === 'Mobile Number'
 
-                            const fixedStyles =
-                              fieldName === 'Name'
-                                ? {left: 0, zIndex: 2, position: 'sticky', background: 'white'}
-                                : {
-                                    left: '150px',
-                                    zIndex: 2,
-                                    position: 'sticky',
-                                    background: 'white',
-                                  }
-
-                            const mergedStyles = isFixedColumn
+                            const fixedStyles = isFixedColumn
                               ? {
-                                  ...getItemStyle(
-                                    snapshot.isDragging,
-                                    provided.draggableProps.style
-                                  ),
-                                  ...fixedStyles,
+                                  left: fieldName === 'Name' ? 0 : '150px',
+                                  zIndex: 2,
+                                  position: 'sticky',
+                                  background: themeMode === 'dark' ? '#1b1a1d' : 'white',
                                 }
-                              : getItemStyle(snapshot.isDragging, provided.draggableProps.style)
+                              : {}
+
+                            const mergedStyles = {
+                              ...getItemStyle(snapshot.isDragging, provided.draggableProps.style),
+                              ...fixedStyles,
+                              background: themeMode === 'dark' ? '#1b1a1d' : 'white', // Set background color for all
+                            }
 
                             return (
                               <th
@@ -497,7 +499,8 @@ export default function ViewAllEnquiryFormsData() {
                           }}
                         </Draggable>
                       ))}
-                      {uniqueFieldNames.length > 0 && <th className='min-w-140px'>AddedBy</th>}
+
+                      {uniqueFieldNames.length > 0 && <th className='min-w-100px'>Added By</th>}
                     </tr>
                   </thead>
                   <tbody id='droppableId'>
@@ -559,8 +562,9 @@ export default function ViewAllEnquiryFormsData() {
                                         left: fieldName === 'Name' ? '0' : '150px',
                                         zIndex: 1,
                                         backgroundColor: 'white',
+                                        background: themeMode === 'dark' ? '#1b1a1d' : 'white',
                                       }
-                                    : {}
+                                    : {background: themeMode === 'dark' ? '#1b1a1d' : 'white'}
                                 }
                               >
                                 {fieldData

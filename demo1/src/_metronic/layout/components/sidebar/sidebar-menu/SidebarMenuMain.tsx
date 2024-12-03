@@ -122,46 +122,52 @@ const SidebarMenuMain = () => {
                   </SidebarMenuItemWithSub>
 
                   <SidebarMenuItemWithSub
-                    to='/apps/chat'
-                    title={'Forms'}
+                    to=''
+                    title={'Enquiry'}
                     fontIcon='bi-chat-left'
                     icon='message-text-2'
                   >
-                    <SidebarMenuItem
-                      to={`/add-form/${CompanyListData?._id}`}
-                      title='Add Form'
-                      hasBullet={true}
-                    />
-                    <SidebarMenuItem
-                      to={`/view-form/${CompanyListData?._id}`}
-                      title='View Forms'
-                      hasBullet={true}
-                    />
-                  </SidebarMenuItemWithSub>
+                    <SidebarMenuItemWithSub
+                      to='/apps/chat'
+                      title={'Forms'}
+                      fontIcon='bi-chat-left'
+                      icon='message-text-2'
+                    >
+                      <SidebarMenuItem
+                        to={`/add-form/${CompanyListData?._id}`}
+                        title='Add Form'
+                        hasBullet={true}
+                      />
+                      <SidebarMenuItem
+                        to={`/view-form/${CompanyListData?._id}`}
+                        title='View Forms'
+                        hasBullet={true}
+                      />
+                    </SidebarMenuItemWithSub>
 
-                  <SidebarMenuItemWithSub
-                    to='/apps/chat'
-                    title={'View All Enquiry'}
-                    fontIcon='bi-chat-left'
-                    icon='message-text-2'
-                  >
-                    <SidebarMenuItem
-                      to={`/add-enquiry/${CompanyListData?._id}`}
-                      title='Add Enquiry'
-                      hasBullet={true}
-                    />
-                    <SidebarMenuItem
-                      to={`/view-form-data/${CompanyListData?._id}`}
-                      title='View All Enquiry Forms'
-                      hasBullet={true}
-                    />
-                    <SidebarMenuItem
-                      to={`/reminder-task/${CompanyListData?._id}`}
-                      title='Reminder Task'
-                      hasBullet={true}
-                    />
+                    <SidebarMenuItemWithSub
+                      to='/apps/chat'
+                      title={'Manage Enquiry'}
+                      fontIcon='bi-chat-left'
+                      icon='message-text-2'
+                    >
+                      <SidebarMenuItem
+                        to={`/add-enquiry/${CompanyListData?._id}`}
+                        title='Add Enquiry'
+                        hasBullet={true}
+                      />
+                      <SidebarMenuItem
+                        to={`/view-form-data/${CompanyListData?._id}`}
+                        title='View All Enquiry '
+                        hasBullet={true}
+                      />
+                      <SidebarMenuItem
+                        to={`/reminder-task/${CompanyListData?._id}`}
+                        title='Reminder Task'
+                        hasBullet={true}
+                      />
+                    </SidebarMenuItemWithSub>
                   </SidebarMenuItemWithSub>
-
                   <SidebarMenuItemWithSub
                     to='/apps/chat'
                     title={'Reports'}

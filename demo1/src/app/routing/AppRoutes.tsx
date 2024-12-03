@@ -13,6 +13,7 @@ import {Logout, AuthPage, useAuth} from '../modules/auth'
 import {App} from '../App'
 import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
 import EnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryForm'
+import EnquiryFormCssChange from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryFormCssChange'
 
 /**
  * Base URL of the website.
@@ -50,7 +51,14 @@ const AppRoutes: FC = () => {
             </>
           ) : (
             <>
-              <Route path='/enquiry-form/:id' element={<EnquiryForm />} />
+              <Route
+                path='/enquiry-form/:id'
+                element={
+                  <div className='p-10 '>
+                    <EnquiryFormCssChange />
+                  </div>
+                }
+              />
               <Route path='auth/*' element={<AuthPage />} />
               <Route path='*' element={<Navigate to='/auth' />} />
             </>
