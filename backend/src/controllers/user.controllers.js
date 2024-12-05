@@ -203,9 +203,9 @@ export const requsetUserPasswordController = asyncHandler(
       if (!user) {
         return res.status(404).send({ message: "User not found.." });
       }
-      console.log("running");
+      // console.log("running");
       let token = jwt.sign({ id: user?._id }, JWT_SECRET, {
-        expiresIn: "1d",
+        expiresIn: "30d",
       });
       sendEmail(
         user.email,
@@ -241,12 +241,10 @@ export const resetPasswordController = asyncHandler(async (req, res, next) => {
     if (!user) {
       return res.status(404).send({ message: "User not found.." });
     }
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Your Password Has been Updated SuccessFully!!",
-      });
+    res.status(200).json({
+      success: true,
+      message: "Your Password Has been Updated SuccessFully!!",
+    });
   } catch (error) {
     res
       .status(500)
@@ -266,14 +264,6 @@ async function sendEmail(toEmails, subject, text, html, req) {
 
   try {
     const result = await mailTransporter.sendMail(mailOptions);
-    // const emailLog = new EmailLogModel({
-    //   recipientEmails: toEmails, // List of recipients
-    //   subject: subject, // Email subject
-    //   content: html, // Email content (optional)
-    //   sentAt: currentDateTime, // Timestamp
-    //   sendedBy: req.user.fName + " " + req.user.lName,
-    // });
-    // await emailLog.save();
     console.log("Email sent successfully", result);
   } catch (error) {
     console.log("Email send failed with error:", error);
