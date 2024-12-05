@@ -1,9 +1,10 @@
 import {useState} from 'react'
 import * as Yup from 'yup'
 import clsx from 'clsx'
-import {Link} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {useFormik} from 'formik'
 import {requestPassword} from '../core/_requests'
+import {toast} from 'react-toastify'
 
 const initialValues = {
   email: 'admin@demo.com',
@@ -20,6 +21,7 @@ const forgotPasswordSchema = Yup.object().shape({
 export function ForgotPassword() {
   const [loading, setLoading] = useState(false)
   const [hasErrors, setHasErrors] = useState<boolean | undefined>(undefined)
+  const navigate = useNavigate()
   const formik = useFormik({
     initialValues,
     validationSchema: forgotPasswordSchema,
@@ -31,6 +33,8 @@ export function ForgotPassword() {
           .then(({data: {result}}) => {
             setHasErrors(false)
             setLoading(false)
+            navigate('/auth/login')
+            toast.success('Email Sent SuccessFully !!')
           })
           .catch(() => {
             setHasErrors(true)

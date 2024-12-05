@@ -3,6 +3,7 @@ import {Registration} from './components/Registration'
 import {ForgotPassword} from './components/ForgotPassword'
 import {Login} from './components/Login'
 import {AuthLayout} from './AuthLayout'
+import ResetPassword from './components/ResetPassword'
 
 const AuthPage = () => (
   <Routes>

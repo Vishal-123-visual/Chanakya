@@ -15,7 +15,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
 
   const allDefaultSelects = getAllDefaultSelectFields?.data?.defaultSelects
 
-  // console.log(allDefaultSelects)
+  console.log(formFieldValues)
   const {data: singleFormValueData} = useGetSingleFormValueById(rowId)
   const companyId = singleFormValueData?.companyId
   const formId = singleFormValueData?.formId
@@ -219,7 +219,10 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                                           disabled
                                           name={field.name}
                                           checked={
-                                            formFieldValues[field.name]?.[option.value] || false
+                                            formFieldValues[field.name] &&
+                                            formFieldValues[field.name][option.label]
+                                              ? true
+                                              : false
                                           }
                                           className='form-check-input'
                                         />

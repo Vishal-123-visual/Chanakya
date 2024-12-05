@@ -14,6 +14,7 @@ import {App} from '../App'
 import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnquiryForm'
 import EnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryForm'
 import EnquiryFormCssChange from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryFormCssChange'
+import ResetPassword from '../modules/auth/components/ResetPassword'
 
 /**
  * Base URL of the website.
@@ -54,12 +55,13 @@ const AppRoutes: FC = () => {
               <Route
                 path='/enquiry-form/:id'
                 element={
-                  <div className='p-10 '>
+                  <div className='p-10'>
                     <EnquiryFormCssChange />
                   </div>
                 }
               />
               <Route path='auth/*' element={<AuthPage />} />
+              <Route path='reset-password/:id/:token' element={<ResetPassword />} />
               <Route path='*' element={<Navigate to='/auth' />} />
             </>
           )}

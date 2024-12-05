@@ -5,7 +5,7 @@ import {useCompanyContext} from '../../compay/CompanyContext'
 import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
 import {toast} from 'react-toastify'
 
-const EnquiryFormCssChange = () => {
+const EnquiryForm = () => {
   const [isTouched, setIsTouched] = useState(false)
   // const [defaultFieldData, setDefaultFieldData] = useState({})
   // console.log(defaultFieldData)
@@ -228,17 +228,17 @@ const EnquiryFormCssChange = () => {
   return (
     <>
       <div className='card mb-5 mb-xl-10'>
-        <div className='card-header border-0 cursor-pointer'>
-          <div className='card-title m-0'>
-            <h3 className='fw-bolder m-0 w-5'>
+        <div className='card-header border-0 cursor-pointer d-flex flex-column flex-md-row align-items-center justify-content-between'>
+          <div className='card-title mb-3 mb-md-0 text-center text-md-start'>
+            <h3 className='fw-bolder m-0'>
               {companyDataNameAndId[0]?.name
                 ? `${companyDataNameAndId[0]?.name} -> ${formNameById}`
                 : `${formNameById}`}
             </h3>
           </div>
-          <div className='d-flex justify-content-end'>
+          <div className='text-center text-md-end'>
             <select
-              className='form-select form-select-solid form-select-lg'
+              className='form-select form-select-solid form-select-lg w-100 w-md-auto'
               onChange={handleFormSelectionChange}
               value={selectedFormId}
             >
@@ -250,18 +250,19 @@ const EnquiryFormCssChange = () => {
             </select>
           </div>
         </div>
+
         {selectedFormId && (
           <div id='kt_account_profile_details' className='collapse show'>
             <form>
               <div className='card-body border-top p-9'>
                 <>
-                  <div className=''>
-                    <div className='col-6'>
-                      <div className=' mb-6'>
+                  <div className='row'>
+                    <div className='col-'>
+                      <div className='row mb-6'>
                         <label className='col-lg-4 col-form-label required fw-bold fs-6'>
                           Name
                         </label>
-                        <div className='col-lg-6 fv-'>
+                        <div className='col-lg-6 fv-row'>
                           <input
                             type='text'
                             className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
@@ -282,12 +283,12 @@ const EnquiryFormCssChange = () => {
                         </div>
                       </div>
                     </div>
-                    <div className='col-6'>
-                      <div className=' mb-6'>
+                    <div className='col-'>
+                      <div className='row mb-6'>
                         <label className='col-lg-4 col-form-label required fw-bold fs-6'>
                           Mobile Number
                         </label>
-                        <div className='col-lg-8 fv-'>
+                        <div className='col-lg-8 fv-row'>
                           <input
                             type='text'
                             className='form-control form-control-lg form-control-solid'
@@ -310,11 +311,11 @@ const EnquiryFormCssChange = () => {
                     </div>
                   </div>
 
-                  <div className=''>
-                    <div className='col-6'>
-                      <div className=' mb-6'>
+                  <div className='row'>
+                    <div className='col-'>
+                      <div className='row mb-6'>
                         <label className='col-lg-4 col-form-label fw-bold fs-6'>City</label>
-                        <div className='col-lg-8 fv-'>
+                        <div className='col-lg-8 fv-row'>
                           <input
                             type='text'
                             className='form-control form-control-lg form-control-solid'
@@ -326,12 +327,12 @@ const EnquiryFormCssChange = () => {
                         </div>
                       </div>
                     </div>
-                    <div className='col-6'>
-                      <div className=' mb-6'>
+                    <div className='col-'>
+                      <div className='row mb-6'>
                         <label className='col-lg-4 col-form-label fw-bold fs-6 required'>
                           Email
                         </label>
-                        <div className='col-lg-8 fv-'>
+                        <div className='col-lg-8 fv-row'>
                           <input
                             type='email'
                             className='form-control form-control-lg form-control-solid'
@@ -354,10 +355,10 @@ const EnquiryFormCssChange = () => {
                     </div>
                   </div>
 
-                  <div className=''>
+                  <div className='row'>
                     {selectField?.map((select) => (
-                      <div className='col-6' key={select?._id}>
-                        <div className=' mb-6 align-items-center'>
+                      <div className='col-' key={select?._id}>
+                        <div className='row mb-6 align-items-center'>
                           <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
                             <span>{select?.selectName}</span>
                           </label>
@@ -365,7 +366,7 @@ const EnquiryFormCssChange = () => {
                             {' '}
                             {/* Flex column to stack elements vertically */}
                             <select
-                              className='form-select form-select-solid form-select-lg flex-g-1'
+                              className='form-select form-select-solid form-select-lg flex-grow-1'
                               name={select?.selectName}
                               // onClick={() => handleBlur(select?.selectName, select?.selectValue)}
                               // onBlur={() => handleBlur(select?.selectName, select?.selectValue)}
@@ -398,7 +399,7 @@ const EnquiryFormCssChange = () => {
                 </>
 
                 {/* Dynamically render form fields based on selected form ID */}
-                <div className=''>
+                <div className='row'>
                   {getAllCustomFormFieldDataQuery.data
                     ?.filter((form) => form.formId[form.formId.length - 1] === selectedFormId)
                     .map((field, index) => {
@@ -406,8 +407,8 @@ const EnquiryFormCssChange = () => {
                       switch (field.type) {
                         case 'checkbox':
                           return (
-                            <div className='col-6' key={index}>
-                              <div className=' mb-6'>
+                            <div className='col-' key={index}>
+                              <div className='row mb-6'>
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
                                     htmlFor={`${field.type}-${index}`}
@@ -420,17 +421,16 @@ const EnquiryFormCssChange = () => {
                                   </label>
                                 </div>
                                 <div className='col-lg-8'>
-                                  <div className=''>
+                                  <div className='row'>
                                     {field.options.map((option, optionIndex) => (
                                       <div
                                         key={optionIndex}
                                         className='col-md-6 mb-2 d-flex align-items-center'
                                       >
-                                        <div className='form-check flex-g-1'>
+                                        <div className='form-check flex-grow-1'>
                                           <input
                                             type='checkbox'
                                             name={field.name}
-                                            //value={field.value || false}
                                             checked={field?.value && field?.value[optionIndex]}
                                             onChange={(event) =>
                                               checkboxChangeHandler(
@@ -441,16 +441,14 @@ const EnquiryFormCssChange = () => {
                                                 field.type
                                               )
                                             }
-                                            // onClick={() =>
-                                            //   setIsTouched((prev) => ({...prev, Name: true}))
-                                            // }
                                             onClick={() => handleBlur(field.name, option.value)}
                                             onBlur={() => handleBlur(field.name, option.value)}
                                             className='form-check-input'
                                           />
-                                          <label className='form-check-label'>{option.label}</label>
+                                          <label className='form-check-label  text-dark'>
+                                            {option.label}
+                                          </label>
                                         </div>
-                                        {/* Display the delete button only for the last option */}
                                       </div>
                                     ))}
                                     {isTouched[field.name] &&
@@ -470,10 +468,11 @@ const EnquiryFormCssChange = () => {
                               </div>
                             </div>
                           )
+
                         case 'radio':
                           return (
-                            <div className='col-6' key={index}>
-                              <div className=' mb-6'>
+                            <div className='col-' key={index}>
+                              <div className='row mb-6'>
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
                                     htmlFor={`${field.type}-${index}`}
@@ -486,13 +485,13 @@ const EnquiryFormCssChange = () => {
                                   </label>
                                 </div>
                                 <div className='col-lg-8'>
-                                  <div className=''>
+                                  <div className='row'>
                                     {field.options.map((option, optionIndex) => (
                                       <div
                                         key={optionIndex}
                                         className='col-md-6 mb-2 d-flex align-items-center'
                                       >
-                                        <div className='form-check flex-g-1'>
+                                        <div className='form-check flex-grow-1'>
                                           <input
                                             id={`${field.type}-${index}-${optionIndex}`}
                                             type='radio'
@@ -514,7 +513,7 @@ const EnquiryFormCssChange = () => {
                                           />
                                           <label
                                             htmlFor={`${field.type}-${index}-${optionIndex}`}
-                                            className='form-check-label'
+                                            className='form-check-label text-dark'
                                           >
                                             {option.label}
                                           </label>
@@ -541,8 +540,8 @@ const EnquiryFormCssChange = () => {
                           )
                         case 'textarea':
                           return (
-                            <div className='col-6' key={index}>
-                              <div className=' mb-6'>
+                            <div className='col-' key={index}>
+                              <div className='row mb-6'>
                                 <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
                                   <span className={`${field.mandatory === true ? 'required' : ''}`}>
                                     {field.name}
@@ -581,8 +580,8 @@ const EnquiryFormCssChange = () => {
                           )
                         case 'select':
                           return (
-                            <div className='col-6' key={index}>
-                              <div className=' mb-6'>
+                            <div className='col-' key={index}>
+                              <div className='row mb-6'>
                                 <div className='col-lg-4 d-flex align-items-center'>
                                   <label
                                     className={`col-form-label fw-bold fs-6 ${
@@ -596,7 +595,7 @@ const EnquiryFormCssChange = () => {
                                   <select
                                     id={`${field.type}-${index}`}
                                     name={field.name}
-                                    className='form-select form-select-solid form-select-lg flex-g-1'
+                                    className='form-select form-select-solid form-select-lg flex-grow-1'
                                     value={field.selectValue}
                                     onClick={() => handleBlur(field.name, field.seletValue)}
                                     onBlur={() => handleBlur(field.name, field.seletValue)}
@@ -632,8 +631,8 @@ const EnquiryFormCssChange = () => {
 
                         default:
                           return (
-                            <div className='col-6' key={index}>
-                              <div className=' mb-6'>
+                            <div className='col-' key={index}>
+                              <div className='row mb-6'>
                                 <label className={`col-lg-4 col-form-label fw-bold fs-6`}>
                                   <span className={`${field.mandatory === true ? 'required' : ''}`}>
                                     {field.name}
@@ -687,4 +686,4 @@ const EnquiryFormCssChange = () => {
   )
 }
 
-export default EnquiryFormCssChange
+export default EnquiryForm

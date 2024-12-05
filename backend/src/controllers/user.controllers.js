@@ -3,7 +3,8 @@ import { userModel } from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 import { generateToken } from "../utils/createToken.js";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config/config.js";
+import { FRONTEND_URL, JWT_SECRET, USER_EMAIL } from "../config/config.js";
+import { mailTransporter } from "../utils/mail_helpers.js";
 
 // add user controller
 export const addUsersControllers = asyncHandler(async (req, res, next) => {
@@ -199,18 +200,85 @@ export const requsetUserPasswordController = asyncHandler(
         throw new Error("User not found..");
       }
       let user = await userModel.findOne({ email });
-      console.log(user);
-      // const sendPassword = await bcr;
-      if (user) {
-        return res.status(200).send(true);
+      if (!user) {
+        return res.status(404).send({ message: "User not found.." });
       }
-      res.status(404).send(false);
+      console.log("running");
+      let token = jwt.sign({ id: user?._id }, JWT_SECRET, {
+        expiresIn: "1d",
+      });
+      sendEmail(
+        user.email,
+        "Reset Password",
+        `${FRONTEND_URL}/reset-password/${user?._id}/${token}`
+      );
+      res.status(200).json({ success: true });
+      // console.log(user);
+      // const sendPassword = await bcr;
+      // if (user) {
+      //   return res.status(200).send(true);
+      // }
+      // res.status(404).send(false);
     } catch (error) {
       res.status(404);
-      throw new Error(error);
+      console.log(error);
     }
   }
 );
+
+export const resetPasswordController = asyncHandler(async (req, res, next) => {
+  try {
+    const { id, token } = req.params;
+    const { password } = req.body;
+    const verifiedPassword = jwt.verify(token, JWT_SECRET);
+    if (!verifiedPassword) {
+      return res.status(404).send({ message: "Invalid token" });
+    }
+    const hashedPassword = await bcryptjs.hash(password, 10);
+    const user = await userModel.findByIdAndUpdate(id, {
+      password: hashedPassword,
+    });
+    if (!user) {
+      return res.status(404).send({ message: "User not found.." });
+    }
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Your Password Has been Updated SuccessFully!!",
+      });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Internal Server errror !!" });
+  }
+});
+
+async function sendEmail(toEmails, subject, text, html, req) {
+  const mailOptions = {
+    from: USER_EMAIL,
+    to: toEmails,
+    subject: subject,
+    text: text,
+    html,
+  };
+  // const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss");
+
+  try {
+    const result = await mailTransporter.sendMail(mailOptions);
+    // const emailLog = new EmailLogModel({
+    //   recipientEmails: toEmails, // List of recipients
+    //   subject: subject, // Email subject
+    //   content: html, // Email content (optional)
+    //   sentAt: currentDateTime, // Timestamp
+    //   sendedBy: req.user.fName + " " + req.user.lName,
+    // });
+    // await emailLog.save();
+    console.log("Email sent successfully", result);
+  } catch (error) {
+    console.log("Email send failed with error:", error);
+  }
+}
 
 export const getAllUsersController = asyncHandler(async (req, res, next) => {
   try {

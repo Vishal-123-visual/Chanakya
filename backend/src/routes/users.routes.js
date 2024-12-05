@@ -10,6 +10,7 @@ import {
   deleteUserController,
   getUserByIdController,
   registerUserController,
+  resetPasswordController,
 } from "../controllers/user.controllers.js";
 import { isAdmin, requireSignIn } from "../middlewares/auth.middleware.js";
 
@@ -22,6 +23,7 @@ router
   .post(requireSignIn, isAdmin, addUsersControllers);
 router.post("/users/verifyToken", getUserByTokn);
 router.post("/users/requestPassword", requsetUserPasswordController);
+router.post("/reset-password/:id/:token", resetPasswordController);
 router
   .route("/users/:id")
   .get(requireSignIn, isAdmin, getUserByIdController)
