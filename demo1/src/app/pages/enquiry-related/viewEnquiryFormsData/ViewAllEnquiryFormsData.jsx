@@ -9,6 +9,7 @@ import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 import UpdateFormData from '../dynamicForms/UpdateFormData'
 import OnlyViewFormData from '../dynamicForms/OnlyViewFormData'
+import {useAuth} from '../../../modules/auth'
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)
@@ -41,6 +42,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 
 export default function ViewAllEnquiryFormsData() {
   const navigate = useNavigate()
+  const {currentUser} = useAuth()
   const {
     getAllFormsFieldValue,
     deleteFormDataMutation,
@@ -145,52 +147,45 @@ export default function ViewAllEnquiryFormsData() {
       try {
         // Fetch all the rowData
         const allRowData = getReorderedRowData?.data?.rowData || []
-        // console.log(allRowData);
         // Ensure that allRowData is an array
         if (!Array.isArray(allRowData)) {
-          // console.error('Expected rowData to be an array, but got:', typeof allRowData)
           return
         }
 
-        // console.log('All Row Data:', allRowData)
-
-        // Filter the rowData based on the selected formId and companyId
+        // Filter the rowData based on the selected formId, companyId, and role
         const filteredRowData = allRowData.filter(
-          (form) => form.formId === selectedFormId && form.companyId === companyId
+          (form) =>
+            form.formId === selectedFormId &&
+            form.companyId === companyId &&
+            form.role === currentUser.role // Filter by role
         )
 
         // If no data is found, log a warning and return early
         if (filteredRowData.length === 0) {
-          // console.warn('No data found for the given formId and companyId.')
           return
         }
 
         // Map the filteredRowData to extract relevant fields
         const updatedFilteredFormData = filteredRowData.map((row) => ({
           id: row?._id,
-          fields: row.rows ? row?.rows?.flatMap((r) => r?.fields || []) : [],
+          fields: row.rows
+            ? row?.rows?.flatMap((r) => r?.fields || []).sort((a, b) => a.order - b.order) // Sort fields by order (if applicable)
+            : [],
         }))
-        // console.log(updatedFilteredFormData)
-        // Log the updated filtered form data for debugging
-        // console.log('Updated Filtered Form Data:', updatedFilteredFormData)
 
         // Extract all fields, filtering out the 'companyId' field
         const allFields = updatedFilteredFormData
           .flatMap((entry) => entry?.fields)
-          .filter((field) => field?.name !== 'companyId')
-        // console.log(allFields)
+          .filter((field) => field?.name !== 'companyId') // Exclude 'companyId'
+
         // Create a set of unique field names
         const uniqueNames = Array.from(new Set(allFields.map((field) => field?.name)))
 
-        // Log unique field names for debugging
-        // console.log('Unique Field Names:', uniqueNames)
-        // setFilteredData(updatedFilteredFormData)
+        // Update state with filtered and sorted data
         setUniqueFieldNames(uniqueNames)
-        // console.log(uniqueNames)
-        // No further actions, just reading and logging data
       } catch (error) {
         // Show an error toast if something goes wrong
-        // toast.error(`Error fetching updated data: ${error.message}`)
+        toast.error(`Error fetching updated data: ${error.message}`)
       }
     }
   }

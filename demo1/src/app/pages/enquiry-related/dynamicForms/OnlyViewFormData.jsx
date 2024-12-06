@@ -219,10 +219,14 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
                                           disabled
                                           name={field.name}
                                           checked={
-                                            formFieldValues[field.name] &&
-                                            formFieldValues[field.name][option.label]
-                                              ? true
-                                              : false
+                                            Array.isArray(
+                                              formFieldValues[
+                                                field.type === 'checkbox' ? field.name : 'checkbox'
+                                              ]
+                                            ) &&
+                                            formFieldValues[
+                                              field.type === 'checkbox' ? field.name : 'checkbox'
+                                            ].includes(option.value)
                                           }
                                           className='form-check-input'
                                         />

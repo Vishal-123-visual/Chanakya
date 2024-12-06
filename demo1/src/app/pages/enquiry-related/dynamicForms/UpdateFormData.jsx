@@ -12,6 +12,7 @@ import StudentNotes from '../StudentNotes/StudentNotes'
 const UpdateFormData = ({rowId, setOpenModal}) => {
   const navigate = useNavigate()
   const [formFieldValues, setFormFieldValues] = useState({})
+  // console.log(formFieldValues)
   const {
     getAllCustomFormFieldDataQuery,
     openModal: contextOpenModal,
@@ -74,14 +75,24 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
   }
 
   const handleCheckboxChange = (fieldName, optionValue, checked) => {
-    setFormFieldValues((prevState) => ({
-      ...prevState,
-      [fieldName]: {
-        ...prevState[fieldName],
-        [optionValue]: checked ? optionValue : '',
-        // [fieldName]: [optionValue],
-      },
-    }))
+    setFormFieldValues((prevState) => {
+      // Ensure that prevState[fieldName] is always an array
+      const updatedValues = prevState[fieldName] || []
+
+      if (checked) {
+        // Add the optionValue if checked
+        return {
+          ...prevState,
+          [fieldName]: [...updatedValues, optionValue],
+        }
+      } else {
+        // Remove the optionValue if unchecked
+        return {
+          ...prevState,
+          [fieldName]: updatedValues.filter((value) => value !== optionValue),
+        }
+      }
+    })
   }
 
   const handleRadioChange = (fieldName, value) => {
@@ -287,6 +298,10 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                 {getAllCustomFormFieldDataQuery.data
                   ?.filter((form) => form.formId[form.formId.length - 1] === formId)
                   .map((field, index) => {
+                    // console.log(
+                    //   formFieldValues[field.type === 'checkbox' ? field.name : 'checkbox']
+                    // )
+                    // console.log(field.name)
                     switch (field.type) {
                       case 'checkbox':
                         return (
@@ -315,10 +330,17 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                                           type='checkbox'
                                           name={field.name}
                                           checked={
-                                            formFieldValues[field.name]?.[option.value] || false
+                                            Array.isArray(
+                                              formFieldValues[
+                                                field.type === 'checkbox' ? field.name : 'checkbox'
+                                              ]
+                                            ) &&
+                                            formFieldValues[
+                                              field.type === 'checkbox' ? field.name : 'checkbox'
+                                            ].includes(option.value)
                                           }
                                           onChange={(event) => {
-                                            // console.log(formFieldValues[field.name]?.[option.value])
+                                            // console.log(event.target.checked)
                                             handleCheckboxChange(
                                               field.name,
                                               option.value,

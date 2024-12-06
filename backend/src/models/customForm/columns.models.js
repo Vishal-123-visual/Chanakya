@@ -22,6 +22,10 @@ const columnSchema = new mongoose.Schema(
       type: [mongoose.Schema.Types.Mixed],
       ref: "FormFieldValue",
     },
+    role: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

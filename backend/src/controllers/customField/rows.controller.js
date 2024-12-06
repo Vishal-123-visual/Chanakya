@@ -2,7 +2,6 @@ import Row from "../../models/customForm/rows.models.js";
 
 export const saveReorderedRows = async (req, res, next) => {
   const { companyId, formId, reorderedRows } = req.body;
-  // console.log("Request Body:", req.body);
 
   try {
     if (!companyId || !formId || !reorderedRows) {
@@ -12,41 +11,58 @@ export const saveReorderedRows = async (req, res, next) => {
         .json({ success: false, message: "Missing required parameters" });
     }
 
-    let rowData = await Row.findOne({ companyId, formId });
+    // Determine the user's role
+    const userRole = req.user.role;
 
-    // console.log("Existing Row Data:", rowData);
+    // Find the existing row data for the specific company, form, and role
+    let rowData = await Row.findOne({ companyId, formId, role: userRole });
 
     if (rowData) {
-      // Update existing rows
-      reorderedRows.forEach((newRow) => {
-        const existingRowIndex = rowData.rows.findIndex(
-          (row) => row.id === newRow.id
-        );
-        if (existingRowIndex !== -1) {
-          // Update existing row
-          rowData.rows[existingRowIndex] = newRow;
-        } else {
-          // Add new row if it does not exist
-          rowData.rows.push(newRow);
-        }
+      // Check if the new reordered rows are different from the existing ones
+      const existingRowIds = rowData.rows.map((row) => row.id);
+      const newRowIds = reorderedRows.map((row) => row.id);
+
+      const hasChanges =
+        JSON.stringify(existingRowIds) !== JSON.stringify(newRowIds) ||
+        JSON.stringify(rowData.rows) !== JSON.stringify(reorderedRows);
+
+      if (!hasChanges) {
+        return res.status(200).json({
+          success: true,
+          message: "No changes made; rows for this role remain the same.",
+          data: rowData,
+        });
+      }
+
+      // Update the rows if there are changes
+      rowData.rows = reorderedRows;
+
+      // Save updated row data
+      await rowData.save();
+
+      return res.status(200).json({
+        success: true,
+        message: "Rows updated successfully!",
+        data: rowData,
       });
-
-      // Remove rows that are not in reorderedRows
-      rowData.rows = rowData.rows.filter((row) =>
-        reorderedRows.some((newRow) => newRow.id === row.id)
-      );
-
-      // Save updated document
-      await rowData.save();
-      // console.log("Updated Row Data:", rowData);
-    } else {
-      rowData = new Row({ companyId, formId, rows: reorderedRows });
-
-      await rowData.save();
-      // console.log("New Row Data:", rowData);
     }
 
-    res.status(200).json({ success: true, data: rowData });
+    // If the role is new, create a new row entry
+    const newRowData = new Row({
+      companyId,
+      formId,
+      rows: reorderedRows,
+      role: userRole,
+    });
+
+    // Save the new row data
+    await newRowData.save();
+
+    res.status(201).json({
+      success: true,
+      message: "New rows saved successfully!",
+      data: newRowData,
+    });
   } catch (error) {
     console.error("Error saving rows:", error);
     res.status(500).json({ success: false, message: "Internal Server Error!" });
