@@ -3,7 +3,12 @@ import { userModel } from "../models/user.models.js";
 import bcryptjs from "bcryptjs";
 import { generateToken } from "../utils/createToken.js";
 import jwt from "jsonwebtoken";
-import { FRONTEND_URL, JWT_SECRET, USER_EMAIL } from "../config/config.js";
+import {
+  BACKEND_URL,
+  FRONTEND_URL,
+  JWT_SECRET,
+  USER_EMAIL,
+} from "../config/config.js";
 import { mailTransporter } from "../utils/mail_helpers.js";
 
 // add user controller
@@ -210,7 +215,7 @@ export const requsetUserPasswordController = asyncHandler(
       sendEmail(
         user.email,
         "Reset Password",
-        `${FRONTEND_URL}/reset-password/${user?._id}/${token}`
+        `${BACKEND_URL}/reset-password/${user?._id}/${token}`
       );
       res.status(200).json({ success: true });
       // console.log(user);
