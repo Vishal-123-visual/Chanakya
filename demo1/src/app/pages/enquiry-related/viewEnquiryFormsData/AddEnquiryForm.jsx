@@ -27,7 +27,7 @@ const AddEnquiryForm = () => {
   } = useCustomFormFieldContext()
 
   const selectField = getAllDefaultSelectFields?.data?.defaultSelects
-  // console.log(formData)
+  // console.log(selectField)
   // const fetchForm = get
 
   const [selectedFormId, setSelectedFormId] = useState('')
@@ -107,11 +107,11 @@ const AddEnquiryForm = () => {
 
   const handleDefaultSelectChange = (e, selectName, type) => {
     const {value} = e.target
-
-    // Update the formData state with the selected value, using selectName as the key
+    // console.log(value)
+    // Update form state based on the selectName
     setFormData((prevData) => ({
       ...prevData,
-      [selectName]: {newValue: value, type},
+      [selectName]: value, // Ensure the state is updated with the selected value
     }))
   }
 
@@ -361,23 +361,77 @@ const AddEnquiryForm = () => {
                             <span>{select?.selectName}</span>
                           </label>
                           <div className='col-lg-8 d-flex flex-column'>
-                            {' '}
                             {/* Flex column to stack elements vertically */}
                             <select
                               className='form-select form-select-solid form-select-lg flex-grow-1'
                               name={select?.selectName}
-                              // onClick={() => handleBlur(select?.selectName, select?.selectValue)}
-                              // onBlur={() => handleBlur(select?.selectName, select?.selectValue)}
                               onChange={(e) =>
                                 handleDefaultSelectChange(e, select?.selectName, select?.type)
                               }
                             >
-                              <option value=''>--Select-an-Option--</option>
-                              {select?.options.map((option) => (
-                                <option key={option._id} value={option?.value}>
-                                  {option?.label}
-                                </option>
-                              ))}
+                              <option value='' style={{backgroundColor: 'white', color: 'black'}}>
+                                --Select-an-Option--
+                              </option>
+                              {select?.options.map((option) => {
+                                // Define background colors for each option
+                                let backgroundColor = 'white' // Default background color
+                                let textColor = 'black' // Default text color
+
+                                switch (option?.value) {
+                                  case 'Hot':
+                                    backgroundColor = 'red'
+                                    textColor = 'white'
+                                    break
+                                  case 'Junk Lead':
+                                    backgroundColor = '#800000' // Maroon
+                                    textColor = 'white'
+                                    break
+                                  case 'Positive':
+                                    backgroundColor = 'green'
+                                    textColor = 'white'
+                                    break
+                                  case 'Negative':
+                                    backgroundColor = '#ff6347' // Tomato
+                                    textColor = 'white'
+                                    break
+                                  case 'Progress':
+                                    backgroundColor = '#ffcc00' // Gold
+                                    textColor = 'black'
+                                    break
+                                  case 'Converted':
+                                    backgroundColor = 'blue'
+                                    textColor = 'white'
+                                    break
+                                  case 'Attempted To Contact':
+                                    backgroundColor = '#8a2be2' // BlueViolet
+                                    textColor = 'white'
+                                    break
+                                  case 'Not Contacted':
+                                    backgroundColor = '#ff69b4' // HotPink
+                                    textColor = 'white'
+                                    break
+                                  case 'not-picked':
+                                    backgroundColor = '#d3d3d3' // LightGray
+                                    textColor = 'black'
+                                    break
+                                  default:
+                                    backgroundColor = 'white'
+                                    textColor = 'black'
+                                }
+
+                                return (
+                                  <option
+                                    key={option._id}
+                                    value={option?.value}
+                                    style={{
+                                      backgroundColor,
+                                      color: textColor,
+                                    }}
+                                  >
+                                    {option?.label}
+                                  </option>
+                                )
+                              })}
                             </select>
                             {/* Error message below the select input */}
                             {isTouched[select?.selectName] &&

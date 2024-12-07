@@ -10,6 +10,8 @@ import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpMod
 import UpdateFormData from '../dynamicForms/UpdateFormData'
 import OnlyViewFormData from '../dynamicForms/OnlyViewFormData'
 import {useAuth} from '../../../modules/auth'
+import {Modal} from 'react-bootstrap'
+import {DatePicker} from 'antd'
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)
@@ -52,6 +54,7 @@ export default function ViewAllEnquiryFormsData() {
     getReorderedRowData,
     deleteReorderedColumnsMutation,
     deleteSingleRowDataMutation,
+    getAllDefaultSelectFields,
   } = useCustomFormFieldContext()
   const {
     getAllAddedFormsName,
@@ -61,7 +64,7 @@ export default function ViewAllEnquiryFormsData() {
   const companyCTX = useCompanyContext()
   const params = useParams()
   const companyId = params?.id
-
+  const selectField = getAllDefaultSelectFields?.data?.defaultSelects
   // const {data} = getAllFormsFieldValue
 
   // const singleFormFieldId = data?.formFieldValues
@@ -79,7 +82,30 @@ export default function ViewAllEnquiryFormsData() {
   const [formOptions, setFormOptions] = useState([])
   const [searchValue, setSearchValue] = useState('')
   const [uniqueFieldNames, setUniqueFieldNames] = useState([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedFieldName, setSelectedFieldName] = useState(null)
+  const [selectedLeadSource, setSelectedLeadSource] = useState('')
+  const [selectedLeadStatus, setSelectedLeadStatus] = useState('')
+  const [citySearch, setCitySearch] = useState('')
+  const [selectedCity, setSelectedCity] = useState('')
+  const [uniqueCities, setUniqueCities] = useState([])
+  // const [searchValue, setSearchValue] = useState('')
+  const [selectedDateType, setSelectedDateType] = useState('createdAt') // Default to CreatedAt
+  const [fromDate, setFromDate] = useState(null)
+  const [toDate, setToDate] = useState(null)
+  const [sortOrder, setSortOrder] = useState('asc') // Default to ascending
+  // console.log(toDate)
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value)
+  }
+  const handleArrowClick = (fieldName) => {
+    setSelectedFieldName(fieldName) // Set the field name when the arrow button is clicked
+    setIsModalOpen(true) // Open the modal
+  }
 
+  const closeModal = () => {
+    setIsModalOpen(false) // Close the modal
+  }
   // Hooks for saving reordered columns and rows
   const saveReorderedColumns = useSaveReorderedColumns()
   const saveReorderedRows = useSaveReorderedRows()
@@ -105,6 +131,8 @@ export default function ViewAllEnquiryFormsData() {
           .map((formData) => ({
             id: formData._id,
             fields: formData.formFiledValue,
+            createdAt: formData.createdAt,
+            updatedAt: formData.updatedAt,
             addedBy: formData.addedBy,
           }))
 
@@ -264,22 +292,96 @@ export default function ViewAllEnquiryFormsData() {
     })
   }
 
+  // const [searchValue, setSearchValue] = useState('');
+  // const [filteredData, setFilteredData] = useState([]); // Populate this with actual filtered data
+
+  // Function to handle Lead Source change
+  const handleLeadSourceChange = (e) => {
+    setSelectedLeadSource(e.target.value)
+  }
+
+  // Function to handle Lead Status change
+  const handleLeadStatusChange = (e) => {
+    setSelectedLeadStatus(e.target.value)
+  }
+  // console.log(sortOrder)
+  // Updated filteredGroupedData logic to include Lead Source and Lead Status filtering
   const filteredGroupedData = filteredData
     ?.map((entry) => ({
       id: entry.id,
       fields: entry.fields.filter((field) => field.name !== 'companyId'),
       addedBy: entry.addedBy,
+      leadSource: entry.fields.find((field) => field.name === 'Lead Source')?.value,
+      leadStatus: entry.fields.find((field) => field.name === 'Lead Status')?.value,
+      city: entry.fields.find((field) => field.name === 'City')?.value, // Add city field
+      name: entry.fields.find((field) => field.name === 'Name')?.value || '',
+      email: entry.fields.find((field) => field.name === 'Email')?.value || '',
     }))
-    ?.filter((rowData) =>
-      rowData.fields.some((field) => {
-        return (
+    ?.filter((rowData) => {
+      // Check if all filters are empty
+      const noFiltersApplied =
+        !selectedLeadSource && !selectedLeadStatus && !searchValue.trim() && !selectedCity
+
+      if (noFiltersApplied) {
+        // If no filters are applied, show all data
+        return true
+      }
+
+      // Filter by Lead Source if selected
+      const matchesLeadSource = !selectedLeadSource || rowData.leadSource === selectedLeadSource
+
+      // Filter by Lead Status if selected
+      const matchesLeadStatus = !selectedLeadStatus || rowData.leadStatus === selectedLeadStatus
+
+      // Filter by search value if provided
+      const matchesSearch = rowData.fields.some(
+        (field) =>
           searchValue.trim() === '' ||
           (typeof field.value === 'string' &&
             field.value.toLowerCase().includes(searchValue.toLowerCase()))
-        )
-      })
-    )
+      )
 
+      // Filter by City if selected
+      const matchesCity = !selectedCity || rowData.city === selectedCity
+
+      // Return rows that match all applied filters
+      return matchesLeadSource && matchesLeadStatus && matchesSearch && matchesCity
+    })
+    ?.sort((a, b) => {
+      if (!selectedFieldName || selectedFieldName.trim() === '') {
+        // No sorting applied, keep the default order (or apply default sorting logic)
+        return 0 // Retain the current order of the array
+      }
+
+      if (selectedFieldName === 'Name') {
+        // Sort by Name based on sortOrder
+        return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
+      } else if (selectedFieldName === 'Email') {
+        // Sort by Email based on sortOrder
+        return sortOrder === 'asc' ? a.email.localeCompare(b.email) : b.email.localeCompare(a.email)
+      }
+
+      return 0 // No sorting if other fields are selected
+    })
+
+  useEffect(() => {
+    // Extract unique cities from your filtered data, regardless of the selected city
+    const cities = [
+      ...new Set(
+        filteredGroupedData.map(
+          (entry) => entry.fields.find((field) => field.name === 'City')?.value
+        )
+      ),
+    ]
+
+    // Update the unique cities state
+    setUniqueCities(cities)
+  }, [filteredGroupedData])
+
+  const handleCityChange = (e) => {
+    setSelectedCity(e.target.value)
+    // Additional filtering logic if needed
+  }
   // console.log(filteredGroupedData)
   // console.log(filteredData)
 
@@ -384,38 +486,72 @@ export default function ViewAllEnquiryFormsData() {
     themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
 
+  // console.log(selectField)
+  // console.log(selectField?.filter((field) => field.selectName === 'Lead Source'))
+
   return (
     <div className='card'>
       <div className='card-header border-0 pt-5'>
-        <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>All Enquiry Forms</span>
-        </h3>
-        {formOptions?.length > 0 && (
-          <>
-            <div className='search-bar'>
+        <div className='d-flex justify-content-between align-items-center w-100'>
+          {/* Title */}
+          <h3 className='card-title align-items-start flex-column mb-0'>
+            <span className='card-label fw-bold fs-3'>All Enquiry Forms</span>
+          </h3>
+
+          {/* Search Bar */}
+          <div className='d-flex justify-content-center mt-3'>
+            <div className='search-bar' style={{maxWidth: '500px', width: '100%'}}>
               <input
                 type='text'
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
-                className='form-control'
+                className='form-control form-control-sm mx-auto'
                 placeholder='Search'
+                style={{height: '30px'}}
               />
             </div>
-            {/* <div className='d-flex justify-content-center'>
-              <select
-                className='form-select form-select-solid form-select-lg'
-                onChange={(e) => setSelectedFormId(e.target.value)}
-                value={selectedFormId}
-              >
-                {formOptions?.map((form) => (
-                  <option key={form?.id} value={form?.id}>
-                    {form?.name}
-                  </option>
-                ))}
-              </select>
-            </div> */}
-          </>
-        )}
+          </div>
+
+          {/* Date Pickers */}
+          {formOptions?.length > 0 && (
+            <div className='d-flex gap-3'>
+              <div className='d-flex gap-3'>
+                <label className='d-flex align-items-center'>
+                  From
+                  <DatePicker
+                    selected={fromDate}
+                    onChange={(date) => setFromDate(date)}
+                    dateFormat='dd/MM/yyyy'
+                    className='form-control form-control-sm ms-2'
+                    placeholderText='DD/MM/YYYY'
+                  />
+                </label>
+                <label className='d-flex align-items-center'>
+                  To
+                  <DatePicker
+                    selected={toDate}
+                    onChange={(date) => setToDate(date)}
+                    dateFormat='dd/MM/yyyy'
+                    className='form-control form-control-sm ms-2'
+                    placeholderText='DD/MM/YYYY'
+                  />
+                </label>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Select Dropdown for Created/Updated */}
+        <div className='d-flex justify-content-end w-100'>
+          <select
+            className='form-select form-select-sm w-auto'
+            value={selectedDateType}
+            onChange={(e) => setSelectedDateType(e.target.value)}
+          >
+            <option value='createdAt'>Created At</option>
+            <option value='updatedAt'>Updated At</option>
+          </select>
+        </div>
       </div>
       <div className='card-body py-3'>
         <div className='table-responsive'>
@@ -477,23 +613,147 @@ export default function ViewAllEnquiryFormsData() {
                             const mergedStyles = {
                               ...getItemStyle(snapshot.isDragging, provided.draggableProps.style),
                               ...fixedStyles,
-                              background: themeMode === 'dark' ? '#1b1a1d' : 'white', // Set background color for all
+                              background: themeMode === 'dark' ? '#1b1a1d' : 'white',
+                            }
+
+                            const handleClick = (fieldName) => {
+                              // Only show the popup for specific fields
+                              const popupFields = [
+                                'Lead Source',
+                                'Lead Status',
+                                'City',
+                                'Name',
+                                'Email',
+                              ]
+                              if (popupFields.includes(fieldName)) {
+                                // Trigger the popup for these fields
+                                handleArrowClick(fieldName)
+                              }
                             }
 
                             return (
-                              <th
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                style={mergedStyles}
-                                className={`min-w-150px ${isFixedColumn ? 'fixed-column' : ''}`}
-                              >
-                                {fieldName}
-                              </th>
+                              <>
+                                <th
+                                  ref={provided.innerRef}
+                                  {...provided.draggableProps}
+                                  {...provided.dragHandleProps}
+                                  style={mergedStyles}
+                                  className={`min-w-140px ${isFixedColumn ? 'fixed-column' : ''}`}
+                                >
+                                  <div className='d-flex align-items-center'>
+                                    <span>{fieldName}</span>
+                                    <button
+                                      className='btn btn-icon ms-1'
+                                      onClick={() => handleClick(fieldName)} // Use the updated handleClick function
+                                      style={{
+                                        background: 'none',
+                                        border: 'none',
+                                        cursor: 'pointer',
+                                      }}
+                                    >
+                                      <KTIcon iconName='arrow-up' className='fs-3' />
+                                    </button>
+                                  </div>
+                                </th>
+                              </>
                             )
                           }}
                         </Draggable>
                       ))}
+
+                      {/* Modal Component */}
+                      {/* Modal Component */}
+                      <Modal show={isModalOpen} onHide={closeModal}>
+                        <Modal.Header closeButton>
+                          <Modal.Title>{selectedFieldName}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                          {selectedFieldName?.trim() === 'Lead Source' && (
+                            <div>
+                              {selectField
+                                ?.filter((field) => field.selectName === 'Lead Source')
+                                .map((select) => (
+                                  <div key={select._id}>
+                                    <label htmlFor='leadSource'>{select.selectName}</label>
+                                    <select
+                                      value={selectedLeadSource}
+                                      onChange={handleLeadSourceChange}
+                                      className='form-select'
+                                    >
+                                      <option value=''>--Select Lead Source--</option>
+                                      {select.options?.map((option) => (
+                                        <option key={option._id} value={option.value}>
+                                          {option.label}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                ))}
+                            </div>
+                          )}
+
+                          {selectedFieldName === 'Lead Status' && (
+                            <div>
+                              {selectField
+                                ?.filter((field) => field.selectName === 'Lead Status')
+                                .map((select) => (
+                                  <div key={select._id}>
+                                    <label htmlFor='leadStatus'>{select.selectName}</label>
+                                    <select
+                                      value={selectedLeadStatus}
+                                      onChange={handleLeadStatusChange}
+                                      className='form-select'
+                                    >
+                                      <option value=''>--Select Lead Status--</option>
+                                      {select.options?.map((option) => (
+                                        <option key={option._id} value={option.value}>
+                                          {option.label}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                ))}
+                            </div>
+                          )}
+
+                          {/* Handle City filter */}
+                          {selectedFieldName === 'City' && (
+                            <div>
+                              <label htmlFor='citySelect'>Filter by City</label>
+                              <select
+                                id='citySelect'
+                                className='form-select'
+                                value={selectedCity}
+                                onChange={handleCityChange}
+                              >
+                                <option value=''>--Select City--</option>
+                                {uniqueCities?.map((city, index) => (
+                                  <option key={index} value={city}>
+                                    {city}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
+                          )}
+
+                          {/* Handle Name and Email sorting */}
+                          {(selectedFieldName === 'Name' || selectedFieldName === 'Email') && (
+                            <div>
+                              <label htmlFor='sortSelect'>Sort {selectedFieldName}</label>
+                              <select
+                                id='sortSelect'
+                                className='form-select'
+                                value={sortOrder}
+                                onChange={handleSortChange} // handleSortChange should update the sorting order
+                              >
+                                {/* <option value=''>--Select-an-Option</option> */}
+                                <option value='asc'>Alphabetically (A-Z)</option>
+                                <option value='desc'>Reverse Alphabetically (Z-A)</option>
+                              </select>
+                            </div>
+                          )}
+                        </Modal.Body>
+                      </Modal>
 
                       {uniqueFieldNames.length > 0 && <th className='min-w-100px'>Added By</th>}
                     </tr>
@@ -541,6 +801,31 @@ export default function ViewAllEnquiryFormsData() {
                             const isFixedField =
                               fieldName === 'Name' || fieldName === 'Mobile Number'
 
+                            const getBadgeStyles = (value) => {
+                              switch (value) {
+                                case 'Hot':
+                                  return {backgroundColor: 'red', color: 'white'}
+                                case 'Junk Lead':
+                                  return {backgroundColor: '#800000', color: 'white'}
+                                case 'Positive':
+                                  return {backgroundColor: 'green', color: 'white'}
+                                case 'Negative':
+                                  return {backgroundColor: '#ff6347', color: 'white'}
+                                case 'Progress':
+                                  return {backgroundColor: '#ffcc00', color: 'black'}
+                                case 'Converted':
+                                  return {backgroundColor: 'blue', color: 'white'}
+                                case 'Attempted To Contact':
+                                  return {backgroundColor: '#8a2be2', color: 'white'}
+                                case 'Not Contacted':
+                                  return {backgroundColor: '#ff69b4', color: 'white'}
+                                case 'not-picked':
+                                  return {backgroundColor: '#d3d3d3', color: 'black'}
+                                default:
+                                  return {backgroundColor: 'white', color: 'black'}
+                              }
+                            }
+
                             return (
                               <td
                                 onClick={() =>
@@ -562,13 +847,30 @@ export default function ViewAllEnquiryFormsData() {
                                     : {background: themeMode === 'dark' ? '#1b1a1d' : 'white'}
                                 }
                               >
-                                {fieldData
-                                  ? typeof fieldData?.value === 'object'
-                                    ? Object.keys(fieldData.value).map((key) => (
-                                        <span key={key}>{fieldData?.value[key]} </span>
-                                      ))
-                                    : fieldData?.value
-                                  : ''}
+                                {fieldData ? (
+                                  typeof fieldData?.value === 'object' ? (
+                                    Object.keys(fieldData.value).map((key) => (
+                                      <span key={key}>{fieldData?.value[key]} </span>
+                                    ))
+                                  ) : fieldName === 'Lead Status' ? (
+                                    // Display as a badge with dynamic styles
+                                    <span
+                                      className='badge'
+                                      style={{
+                                        ...getBadgeStyles(fieldData?.value),
+                                        padding: '0.5em 1em',
+                                        borderRadius: '12px',
+                                        fontWeight: 'bold',
+                                      }}
+                                    >
+                                      {fieldData?.value}
+                                    </span>
+                                  ) : (
+                                    fieldData?.value
+                                  )
+                                ) : (
+                                  ''
+                                )}
                               </td>
                             )
                           })}
@@ -582,6 +884,7 @@ export default function ViewAllEnquiryFormsData() {
                         </td>
                       </tr>
                     )}
+
                     {provided.placeholder}
                   </tbody>
                 </table>

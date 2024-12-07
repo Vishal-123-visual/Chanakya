@@ -272,7 +272,7 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                   return (
                     <div className='col-6' key={select.id}>
                       <div className='row mb-6'>
-                        <label className='col-lg-4 col-form-label  fw-bold fs-6'>
+                        <label className='col-lg-4 col-form-label fw-bold fs-6'>
                           {select.selectName}
                         </label>
                         <div className='col-lg-6 fv-row'>
@@ -284,17 +284,50 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                             }
                           >
                             {select.options &&
-                              select.options.map((option, optionIndex) => (
-                                <option key={optionIndex} value={option.value}>
-                                  {option.label}
-                                </option>
-                              ))}
+                              select.options.map((option, optionIndex) => {
+                                // Define colors dynamically for each option
+                                const getOptionStyle = (value) => {
+                                  switch (value) {
+                                    case 'Hot':
+                                      return {backgroundColor: 'red', color: 'white'}
+                                    case 'Junk Lead':
+                                      return {backgroundColor: '#800000', color: 'white'}
+                                    case 'Positive':
+                                      return {backgroundColor: 'green', color: 'white'}
+                                    case 'Negative':
+                                      return {backgroundColor: '#ff6347', color: 'white'}
+                                    case 'Progress':
+                                      return {backgroundColor: '#ffcc00', color: 'black'}
+                                    case 'Converted':
+                                      return {backgroundColor: 'blue', color: 'white'}
+                                    case 'Attempted To Contact':
+                                      return {backgroundColor: '#8a2be2', color: 'white'}
+                                    case 'Not Contacted':
+                                      return {backgroundColor: '#ff69b4', color: 'white'}
+                                    case 'not-picked':
+                                      return {backgroundColor: '#d3d3d3', color: 'black'}
+                                    default:
+                                      return {backgroundColor: 'white', color: 'black'}
+                                  }
+                                }
+
+                                return (
+                                  <option
+                                    key={optionIndex}
+                                    value={option.value}
+                                    style={getOptionStyle(option.value)} // Apply styles here
+                                  >
+                                    {option.label}
+                                  </option>
+                                )
+                              })}
                           </select>
                         </div>
                       </div>
                     </div>
                   )
                 })}
+
                 {getAllCustomFormFieldDataQuery.data
                   ?.filter((form) => form.formId[form.formId.length - 1] === formId)
                   .map((field, index) => {
