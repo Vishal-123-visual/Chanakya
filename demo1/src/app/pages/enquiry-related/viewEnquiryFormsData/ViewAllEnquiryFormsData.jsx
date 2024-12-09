@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react'
-import { toast } from 'react-toastify'
-import { KTIcon } from '../../../../_metronic/helpers'
-import { useCustomFormFieldContext } from '../dynamicForms/CustomFormFieldDataContext'
-import { useParams } from 'react-router-dom'
-import { useDynamicFieldContext } from '../DynamicFieldsContext'
+import React, {useState, useEffect, useCallback, useMemo} from 'react'
+import {toast} from 'react-toastify'
+import {KTIcon} from '../../../../_metronic/helpers'
+import {useCustomFormFieldContext} from '../dynamicForms/CustomFormFieldDataContext'
+import {useParams} from 'react-router-dom'
+import {useDynamicFieldContext} from '../DynamicFieldsContext'
 // import { useCompanyContext } from '../../compay/CompanyContext'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import {DragDropContext, Draggable, Droppable} from 'react-beautiful-dnd'
 import PopUpModal from '../../../modules/accounts/components/popUpModal/PopUpModal'
 import UpdateFormData from '../dynamicForms/UpdateFormData'
 import OnlyViewFormData from '../dynamicForms/OnlyViewFormData'
-import { useAuth } from '../../../modules/auth'
-import { Modal } from 'react-bootstrap'
-import { DatePicker } from 'antd'
+import {useAuth} from '../../../modules/auth'
+import {Modal} from 'react-bootstrap'
+import {DatePicker} from 'antd'
+import moment from 'moment'
 
 const reorder = (list, startIndex, endIndex) => {
   const result = Array.from(list)
@@ -44,7 +45,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
 
 export default function ViewAllEnquiryFormsData() {
   // const navigate = useNavigate()
-  const { currentUser } = useAuth()
+  const {currentUser} = useAuth()
   const {
     getAllFormsFieldValue,
     deleteFormDataMutation,
@@ -131,7 +132,11 @@ export default function ViewAllEnquiryFormsData() {
           ?.filter((formData) => formData.companyId === companyId)
           .map((formData) => ({
             id: formData._id,
-            fields: formData.formFiledValue,
+            fields: [
+              ...formData.formFiledValue, // Existing dynamic fields
+              {name: 'createdAt', value: moment(formData.createdAt).format('DD-MM-YYYY h:m')}, // Add createdAt as a field
+              {name: 'updatedAt', value: moment(formData.updatedAt).format('DD-MM-YYYY h:m')}, // Add updatedAt as a field
+            ],
             createdAt: formData.createdAt,
             updatedAt: formData.updatedAt,
             addedBy: formData.addedBy,
@@ -145,6 +150,11 @@ export default function ViewAllEnquiryFormsData() {
             .flat()
 
           const uniqueNames = Array.from(new Set(allFields?.map((field) => field.name)))
+
+          // Include `createdAt` and `updatedAt` in unique field names if not already present
+          if (!uniqueNames.includes('createdAt')) uniqueNames.push('createdAt')
+          if (!uniqueNames.includes('updatedAt')) uniqueNames.push('updatedAt')
+
           setUniqueFieldNames(uniqueNames)
         } else {
           setUniqueFieldNames([])
@@ -171,15 +181,15 @@ export default function ViewAllEnquiryFormsData() {
     setcontextOpenModal(true)
   }
 
-
   const fetchUpdatedData = useCallback(async () => {
     if (selectedFormId && companyId) {
       try {
         // Fetch all the rowData
-        const allRowData = getReorderedRowData?.data?.rowData || [];
+        const allRowData = getReorderedRowData?.data?.rowData || []
+
         // Ensure that allRowData is an array
         if (!Array.isArray(allRowData)) {
-          return;
+          return
         }
 
         // Filter the rowData based on the selected formId, companyId, and role
@@ -188,43 +198,49 @@ export default function ViewAllEnquiryFormsData() {
             form.formId === selectedFormId &&
             form.companyId === companyId &&
             form.role === currentUser.role // Filter by role
-        );
+        )
 
         // If no data is found, log a warning and return early
         if (filteredRowData.length === 0) {
-          return;
+          return
         }
 
         // Map the filteredRowData to extract relevant fields
         const updatedFilteredFormData = filteredRowData.map((row) => ({
           id: row?._id,
-          fields: row.rows
-            ? row?.rows?.flatMap((r) => r?.fields || []).sort((a, b) => a.order - b.order) // Sort fields by order (if applicable)
-            : [],
-        }));
+          fields: [
+            ...(row.rows
+              ? row?.rows.flatMap((r) => r?.fields || []).sort((a, b) => a.order - b.order) // Sort fields by order (if applicable)
+              : []),
+            {name: 'createdAt', value: row?.createdAt || null}, // Add createdAt as a field
+            {name: 'updatedAt', value: row?.updatedAt || null}, // Add updatedAt as a field
+          ],
+        }))
 
         // Extract all fields, filtering out the 'companyId' field
         const allFields = updatedFilteredFormData
           .flatMap((entry) => entry?.fields)
-          .filter((field) => field?.name !== 'companyId'); // Exclude 'companyId'
+          .filter((field) => field?.name !== 'companyId') // Exclude 'companyId'
 
         // Create a set of unique field names
-        const uniqueNames = Array.from(new Set(allFields.map((field) => field?.name)));
+        const uniqueNames = Array.from(new Set(allFields.map((field) => field?.name)))
 
         // Update state with filtered and sorted data
-        setUniqueFieldNames(uniqueNames);
+        setUniqueFieldNames(uniqueNames)
+
+        // Optionally, log the updated data for debugging
+        // console.log('Updated Form Data:', updatedFilteredFormData)
       } catch (error) {
         // Show an error toast if something goes wrong
-        toast.error(`Error fetching updated data: ${error.message}`);
+        toast.error(`Error fetching updated data: ${error.message}`)
       }
     }
-  }, [selectedFormId, companyId, currentUser.role, getReorderedRowData]);
+  }, [selectedFormId, companyId, currentUser.role, getReorderedRowData])
 
   // Call fetchUpdatedData in useEffect
   useEffect(() => {
-    fetchUpdatedData();
-  }, [fetchUpdatedData]);
-
+    fetchUpdatedData()
+  }, [fetchUpdatedData])
 
   const allRowData = getReorderedRowData?.data?.rowData
     ?.filter((form) => form.formId === selectedFormId)
@@ -257,9 +273,8 @@ export default function ViewAllEnquiryFormsData() {
   // console.log(firstColumnData)
 
   useEffect(() => {
-    fetchUpdatedData();
-  }, [fetchUpdatedData]);
-
+    fetchUpdatedData()
+  }, [fetchUpdatedData])
 
   const formDataDeleteHandler = (formDataId) => {
     // if (!window.confirm('Are you sure you want to delete this Form Data?')) {
@@ -330,15 +345,13 @@ export default function ViewAllEnquiryFormsData() {
           !searchValue.trim() &&
           !selectedCity &&
           !fromDate &&
-          !toDate;
+          !toDate
 
         // Lead Source Filtering
-        const matchesLeadSource =
-          !selectedLeadSource || rowData.leadSource === selectedLeadSource;
+        const matchesLeadSource = !selectedLeadSource || rowData.leadSource === selectedLeadSource
 
         // Lead Status Filtering
-        const matchesLeadStatus =
-          !selectedLeadStatus || rowData.leadStatus === selectedLeadStatus;
+        const matchesLeadStatus = !selectedLeadStatus || rowData.leadStatus === selectedLeadStatus
 
         // Search Filtering
         const matchesSearch = rowData.fields.some(
@@ -346,66 +359,56 @@ export default function ViewAllEnquiryFormsData() {
             searchValue.trim() === '' ||
             (typeof field.value === 'string' &&
               field.value.toLowerCase().includes(searchValue.toLowerCase()))
-        );
+        )
 
         // City Filtering
-        const matchesCity = !selectedCity || rowData.city === selectedCity;
+        const matchesCity = !selectedCity || rowData.city === selectedCity
 
         // Date Filtering Logic
         const matchesDateRange = (() => {
-          if (!fromDate && !toDate) return true; // No date filter applied
+          if (!fromDate && !toDate) return true // No date filter applied
 
-          // Select the date to check based on selectedDateType (createdAt or updatedAt)
           const dateToCheck =
-            selectedDateType === 'createdAt' ? rowData.createdAt : rowData.updatedAt;
+            selectedDateType === 'createdAt' ? rowData.createdAt : rowData.updatedAt
 
-          if (!dateToCheck) return false;
+          if (!dateToCheck) return false
 
-          // Convert the date to a JavaScript Date object
-          const entryDate = new Date(dateToCheck);
+          const entryDate = new Date(dateToCheck)
+          const fromTimestamp = fromDate ? new Date(fromDate).setHours(0, 0, 0, 0) : null
+          const toTimestamp = toDate ? new Date(toDate).setHours(23, 59, 59, 999) : null
 
-          // Set start and end of the day for fromDate and toDate
-          const fromTimestamp = fromDate
-            ? new Date(fromDate).setHours(0, 0, 0, 0)
-            : null;
-          const toTimestamp = toDate
-            ? new Date(toDate).setHours(23, 59, 59, 999)
-            : null;
-
-          // Compare entryDate with fromTimestamp and toTimestamp
           if (fromTimestamp && toTimestamp) {
-            return entryDate >= fromTimestamp && entryDate <= toTimestamp;
+            return entryDate >= fromTimestamp && entryDate <= toTimestamp
           } else if (fromTimestamp) {
-            return entryDate >= fromTimestamp;
+            return entryDate >= fromTimestamp
           } else if (toTimestamp) {
-            return entryDate <= toTimestamp;
+            return entryDate <= toTimestamp
           }
 
-          return true;
-        })();
+          return true
+        })()
 
         return (
-          matchesLeadSource &&
-          matchesLeadStatus &&
-          matchesSearch &&
-          matchesCity &&
-          matchesDateRange
-        );
+          matchesLeadSource && matchesLeadStatus && matchesSearch && matchesCity && matchesDateRange
+        )
       })
       ?.sort((a, b) => {
-        if (!selectedFieldName || selectedFieldName.trim() === '') return 0;
+        if (!selectedFieldName || selectedFieldName.trim() === '') {
+          // Default sort by updatedAt in descending order when no filters are applied
+          const dateA = new Date(a.updatedAt || a.createdAt)
+          const dateB = new Date(b.updatedAt || b.createdAt)
+          return dateB - dateA
+        }
 
         if (selectedFieldName === 'Name') {
-          return sortOrder === 'asc'
-            ? a.name.localeCompare(b.name)
-            : b.name.localeCompare(a.name);
+          return sortOrder === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name)
         } else if (selectedFieldName === 'Email') {
           return sortOrder === 'asc'
             ? a.email.localeCompare(b.email)
-            : b.email.localeCompare(a.email);
+            : b.email.localeCompare(a.email)
         }
-        return 0;
-      });
+        return 0
+      })
   }, [
     filteredData,
     selectedLeadSource,
@@ -417,7 +420,7 @@ export default function ViewAllEnquiryFormsData() {
     fromDate,
     toDate,
     selectedDateType, // Added to ensure re-evaluation when this state changes
-  ]);
+  ])
 
   useEffect(() => {
     // Extract unique cities from your filtered data, regardless of the selected city
@@ -497,7 +500,7 @@ export default function ViewAllEnquiryFormsData() {
   }
 
   const onDragEnd = async (result) => {
-    const { source, destination, type } = result
+    const {source, destination, type} = result
 
     if (!destination) return
 
@@ -555,14 +558,14 @@ export default function ViewAllEnquiryFormsData() {
 
           {/* Search Bar */}
           <div className='d-flex justify-content-center mt-3'>
-            <div className='search-bar' style={{ maxWidth: '500px', width: '100%' }}>
+            <div className='search-bar' style={{maxWidth: '500px', width: '100%'}}>
               <input
                 type='text'
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 className='form-control form-control-sm mx-auto'
                 placeholder='Search'
-                style={{ height: '30px' }}
+                style={{height: '30px'}}
               />
             </div>
           </div>
@@ -610,7 +613,7 @@ export default function ViewAllEnquiryFormsData() {
       </div>
       <div className='card-body py-3'>
         <div className='table-responsive'>
-          <DragDropContext onDragEnd={filteredGroupedData.length > 0 ? onDragEnd : () => { }}>
+          <DragDropContext onDragEnd={filteredGroupedData.length > 0 ? onDragEnd : () => {}}>
             <Droppable droppableId='droppable-columns' direction='horizontal' type='COLUMN'>
               {(provided) => (
                 <table
@@ -659,11 +662,11 @@ export default function ViewAllEnquiryFormsData() {
 
                             const fixedStyles = isFixedColumn
                               ? {
-                                left: fieldName === 'Name' ? 0 : '150px',
-                                zIndex: 2,
-                                position: 'sticky',
-                                background: themeMode === 'dark' ? '#1b1a1d' : 'white',
-                              }
+                                  left: fieldName === 'Name' ? 0 : '150px',
+                                  zIndex: 2,
+                                  position: 'sticky',
+                                  background: themeMode === 'dark' ? '#1b1a1d' : 'white',
+                                }
                               : {}
 
                             const mergedStyles = {
@@ -863,25 +866,25 @@ export default function ViewAllEnquiryFormsData() {
                             const getBadgeStyles = (value) => {
                               switch (value) {
                                 case 'Hot':
-                                  return { backgroundColor: 'red', color: 'white' }
+                                  return {backgroundColor: 'red', color: 'white'}
                                 case 'Junk Lead':
-                                  return { backgroundColor: '#800000', color: 'white' }
+                                  return {backgroundColor: '#800000', color: 'white'}
                                 case 'Positive':
-                                  return { backgroundColor: 'green', color: 'white' }
+                                  return {backgroundColor: 'green', color: 'white'}
                                 case 'Negative':
-                                  return { backgroundColor: '#ff6347', color: 'white' }
+                                  return {backgroundColor: '#ff6347', color: 'white'}
                                 case 'Progress':
-                                  return { backgroundColor: '#ffcc00', color: 'black' }
+                                  return {backgroundColor: '#ffcc00', color: 'black'}
                                 case 'Converted':
-                                  return { backgroundColor: 'blue', color: 'white' }
+                                  return {backgroundColor: 'blue', color: 'white'}
                                 case 'Attempted To Contact':
-                                  return { backgroundColor: '#8a2be2', color: 'white' }
+                                  return {backgroundColor: '#8a2be2', color: 'white'}
                                 case 'Not Contacted':
-                                  return { backgroundColor: '#ff69b4', color: 'white' }
+                                  return {backgroundColor: '#ff69b4', color: 'white'}
                                 case 'not-picked':
-                                  return { backgroundColor: '#d3d3d3', color: 'black' }
+                                  return {backgroundColor: '#d3d3d3', color: 'black'}
                                 default:
-                                  return { backgroundColor: 'white', color: 'black' }
+                                  return {backgroundColor: 'white', color: 'black'}
                               }
                             }
 
@@ -897,13 +900,13 @@ export default function ViewAllEnquiryFormsData() {
                                 style={
                                   isFixedField
                                     ? {
-                                      position: 'sticky',
-                                      left: fieldName === 'Name' ? '0' : '150px',
-                                      zIndex: 1,
-                                      backgroundColor: 'white',
-                                      background: themeMode === 'dark' ? '#1b1a1d' : 'white',
-                                    }
-                                    : { background: themeMode === 'dark' ? '#1b1a1d' : 'white' }
+                                        position: 'sticky',
+                                        left: fieldName === 'Name' ? '0' : '150px',
+                                        zIndex: 1,
+                                        backgroundColor: 'white',
+                                        background: themeMode === 'dark' ? '#1b1a1d' : 'white',
+                                      }
+                                    : {background: themeMode === 'dark' ? '#1b1a1d' : 'white'}
                                 }
                               >
                                 {fieldData ? (
