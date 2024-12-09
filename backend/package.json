@@ -26,6 +26,7 @@
     "nodemon": "^3.0.3"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "url-loader": "^4.1.1"
   }
 }
