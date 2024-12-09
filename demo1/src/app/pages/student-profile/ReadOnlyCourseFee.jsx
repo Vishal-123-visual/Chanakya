@@ -114,35 +114,58 @@ Visual Media Academy`
             {status || 'Pending'}
           </span>
         </td>
+        <td>{StudentFee?.addedBy}</td>
         <td>
           <div className='d-flex justify-content-end flex-shrink-0 gap-4 '>
             {currentUser.role !== 'Student' && status === 'Approved' && (
               <>
-                <Link
-                  to={'/print-student-fees-recipt'}
-                  target='_blank'
-                  type='button'
-                  onClick={() =>
-                    localStorage.setItem('print-student-fees-recipt', JSON.stringify(StudentFee))
-                  }
-                  className='btn btn-bg-light btn-active-color-primary btn-sm me-1'
-                >
-                  Print Recipt
-                </Link>
-                <button
-                  onClick={() => sendMailToStudentAgainIfNotAccept(StudentFee)}
-                  type='button'
-                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                >
-                  <img src='/gmail.png' className='img-thumbnail' alt='gmail' />
-                </button>
-                <button
-                  onClick={() => sendDataWhatsappAsMessage()}
-                  type='button'
-                  className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                >
-                  <img src='/whatsapp.png' className='img-thumbnail' alt='whatsapp' />
-                </button>
+                {userRoleAccess?.some(
+                  (userAccess) =>
+                    (userAccess.studentFeesAccess['Print Recipt'] === true &&
+                      userAccess.role === currentUser?.role) ||
+                    currentUser?.role === 'SuperAdmin'
+                ) && (
+                  <Link
+                    to={'/print-student-fees-recipt'}
+                    target='_blank'
+                    type='button'
+                    onClick={() =>
+                      localStorage.setItem('print-student-fees-recipt', JSON.stringify(StudentFee))
+                    }
+                    className='btn btn-bg-light btn-active-color-primary btn-sm me-1'
+                    style={{whiteSpace: 'nowrap'}} // Ensures the text stays in one line
+                  >
+                    Print Recipt
+                  </Link>
+                )}
+                {userRoleAccess?.some(
+                  (userAccess) =>
+                    (userAccess.studentFeesAccess['Mail Button'] === true &&
+                      userAccess.role === currentUser?.role) ||
+                    currentUser?.role === 'SuperAdmin'
+                ) && (
+                  <button
+                    onClick={() => sendMailToStudentAgainIfNotAccept(StudentFee)}
+                    type='button'
+                    className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                  >
+                    <img src='/gmail.png' className='img-thumbnail' alt='gmail' />
+                  </button>
+                )}
+                {userRoleAccess?.some(
+                  (userAccess) =>
+                    (userAccess.studentFeesAccess['Whatsapp Button'] === true &&
+                      userAccess.role === currentUser?.role) ||
+                    currentUser?.role === 'SuperAdmin'
+                ) && (
+                  <button
+                    onClick={() => sendDataWhatsappAsMessage()}
+                    type='button'
+                    className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                  >
+                    <img src='/whatsapp.png' className='img-thumbnail' alt='whatsapp' />
+                  </button>
+                )}
               </>
             )}
             {userRoleAccess?.some(

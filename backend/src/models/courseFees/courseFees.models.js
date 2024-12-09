@@ -28,6 +28,10 @@ const courseFeesSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    addedBy: {
+      type: String,
+      required: true,
+    },
     amountDate: {
       type: String,
       //required: true,

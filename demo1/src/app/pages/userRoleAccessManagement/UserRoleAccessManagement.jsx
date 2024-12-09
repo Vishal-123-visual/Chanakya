@@ -198,7 +198,14 @@ const UserRoleAccessManagement = () => {
         >
           <legend style={fieldsetLegendStyle}>Student Fees Access</legend>
           <div className='d-flex justify-content-between' style={{marginTop: '15px'}}>
-            {['Add Student Fees', 'Edit Student Fees', 'Delete Student Fees'].map((action) => (
+            {[
+              'Add Student Fees',
+              'Edit Student Fees',
+              'Delete Student Fees',
+              'Print Recipt',
+              'Mail Button',
+              'Whatsapp Button',
+            ].map((action) => (
               <div
                 key={action}
                 className='form-check form-check-sm form-check-custom form-check-solid d-flex align-items-center'

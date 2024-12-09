@@ -84,7 +84,7 @@ const EditOnlyCourseFee = ({
             setEditStudentCourseFees({...editStudentCourseFees, amountDate: date})
           }
           dateFormat='dd/MM/yyyy'
-          className='form-control form-control-lg form-control-solid w-min-100px'
+          className='form-control form-control-lg form-control-solid w-min-140px'
           placeholderText='DD/MM/YYYY'
         />
       </td>

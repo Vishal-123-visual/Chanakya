@@ -271,22 +271,23 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                   <th className=''>
                     <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                   </th>
-                  <th className='min-w-50px'>Sr No</th>
-                  <th className='min-w-40px'>Net Course Fees</th>
-                  <th className='min-w-40px'>Amount Paid</th>
-                  <th className='min-w-40px'>Remaining</th>
-                  <th className='min-w-40px'>Date</th>
-                  <th className='min-w-40px'>Recipt No</th>
-                  <th className='min-w-40px'>Payment Options</th>
-                  <th className='min-w-100px'>Late Fee</th>
+                  <th className='min-w-80px'>Sr No</th>
+                  <th className='min-w-150px'>Net Course Fees</th>
+                  <th className='min-w-150px'>Amount Paid</th>
+                  <th className='min-w-100px'>Remaining</th>
+                  <th className='min-w-100px'>Date</th>
+                  <th className='min-w-100px'>Recipt No</th>
+                  <th className='min-w-150px'>Payment Options</th>
+                  <th className='min-w-80px'>Late Fee</th>
                   <th className='min-w-40px'>Status</th>
+                  <th className='min-w-150px'>Added By</th>
                   {userRoleAccess?.some(
                     (userAccess) =>
                       userAccess.studentFeesAccess['Edit Student Fees'] === true ||
                       (userAccess.studentFeesAccess['Delete Student Fees'] === true &&
                         userAccess.role === currentUser?.role) ||
                       currentUser?.role === 'SuperAdmin'
-                  ) && <th className='min-w-100px text-end'>Actions</th>}
+                  ) && <th className='min-w-200px text-end'>Actions</th>}
                 </tr>
               </thead>
               {/* end::Table head */}
