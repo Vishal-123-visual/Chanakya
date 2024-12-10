@@ -662,7 +662,7 @@ export default function ViewAllEnquiryFormsData() {
 
                             const fixedStyles = isFixedColumn
                               ? {
-                                  left: fieldName === 'Name' ? 0 : '150px',
+                                  left: fieldName === 'Name' ? 0 : '100px',
                                   zIndex: 2,
                                   position: 'sticky',
                                   background: themeMode === 'dark' ? '#1b1a1d' : 'white',
@@ -901,7 +901,7 @@ export default function ViewAllEnquiryFormsData() {
                                   isFixedField
                                     ? {
                                         position: 'sticky',
-                                        left: fieldName === 'Name' ? '0' : '150px',
+                                        left: fieldName === 'Name' ? '0' : '100px',
                                         zIndex: 1,
                                         backgroundColor: 'white',
                                         background: themeMode === 'dark' ? '#1b1a1d' : 'white',
