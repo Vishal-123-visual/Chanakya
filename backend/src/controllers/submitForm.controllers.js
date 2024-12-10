@@ -212,7 +212,7 @@ export const deleteSingleFormDataController = async (req, res, next) => {
 };
 
 export const getSingleFormDataValueByIdController = async (req, res, next) => {
-  console.log(req.body);
+  // console.log(req.body);
   // console.log(req.params);
   try {
     const { id } = req.params;
@@ -234,7 +234,7 @@ export const updateSingleFormDataValueController = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { formFieldValues } = req.body;
-
+    // console.log(req.body);
     // Validate the ID
     if (!mongoose.Types.ObjectId.isValid(id)) {
       return res
@@ -268,6 +268,25 @@ export const updateSingleFormDataValueController = async (req, res, next) => {
         }
         return field;
       });
+    let leadSource = formFieldValues.find((f) => f.name === "Lead Source");
+    let leadStatus = formFieldValues.find((f) => f.name === "Lead Status");
+    // console.log(leadSource);
+    // console.log(existingFormFieldValuesData);
+    // console.log(leadStatus);
+    if (leadSource) {
+      existingFormFieldValuesData.formFiledValue.push({
+        name: leadSource.name,
+        type: "select",
+        value: leadSource.value,
+      });
+    }
+    if (leadStatus) {
+      existingFormFieldValuesData.formFiledValue.push({
+        name: leadStatus.name,
+        type: "select",
+        value: leadStatus.value,
+      });
+    }
 
     // Save the updated document
     await existingFormFieldValuesData.save();

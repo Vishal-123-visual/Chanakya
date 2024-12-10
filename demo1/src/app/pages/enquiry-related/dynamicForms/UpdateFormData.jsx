@@ -28,6 +28,7 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
   const allDefaultSelects = getAllDefaultSelectFields?.data?.defaultSelects
   // console.log(allDefaultSelects)
   const {data: singleFormValueData} = useGetSingleFormValueById(rowId)
+  // console.log(singleFormValueData?.formFiledValue)
   const companyId = singleFormValueData?.companyId
   const formId = singleFormValueData?.formId
 
@@ -152,7 +153,12 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
             <div className='card-body border-top p-9'>
               <div className='row'>
                 {singleFormValueData?.formFiledValue
-                  ?.filter((formFieldData) => formFieldData.name !== 'companyId')
+                  ?.filter(
+                    (formFieldData) =>
+                      formFieldData.name !== 'companyId' &&
+                      formFieldData.name !== 'Lead Source' &&
+                      formFieldData.name !== 'Lead Status'
+                  )
                   .map((formFieldData, index) => {
                     // console.log(formFieldData)
                     if (
@@ -283,6 +289,9 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                               handleDefaultSelectChange(select.selectName, e.target.value)
                             }
                           >
+                            <option value='' disabled>
+                              --Select-an-Option--
+                            </option>
                             {select.options &&
                               select.options.map((option, optionIndex) => {
                                 // Define colors dynamically for each option
@@ -312,13 +321,15 @@ const UpdateFormData = ({rowId, setOpenModal}) => {
                                 }
 
                                 return (
-                                  <option
-                                    key={optionIndex}
-                                    value={option.value}
-                                    style={getOptionStyle(option.value)} // Apply styles here
-                                  >
-                                    {option.label}
-                                  </option>
+                                  <>
+                                    <option
+                                      key={optionIndex}
+                                      value={option.value}
+                                      style={getOptionStyle(option.value)} // Apply styles here
+                                    >
+                                      {option.label}
+                                    </option>
+                                  </>
                                 )
                               })}
                           </select>
