@@ -1486,7 +1486,6 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
     } = req.body;
 
     try {
-      // Check if a receipt with the same number already exists
       const alreadyReceiptExists = await CourseFeesModel.findOne({
         reciptNumber,
       });
@@ -1500,26 +1499,16 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
         });
       }
 
+      const addedBy = `${req.user.fName} ${req.user.lName}`;
+
       let currentStudent = await admissionFormModel.findById(studentInfo);
       const oldStudentCourseFees = await CourseFeesModel.findById(
         req.params.id
       );
-      //console.log(oldStudentCourseFees);
 
-      let getSingleStudentDayBookDataById = await DayBookDataModel.find({
-        studentInfo: currentStudent._id,
-      });
-
-      // first get all course fees
       let singleStudentAllCourseFees = await CourseFeesModel.find({
         studentInfo: studentInfo,
       });
-
-      for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
-        getSingleStudentDayBookDataById[i].reciptNumber =
-          singleStudentAllCourseFees[i].reciptNumber;
-        await getSingleStudentDayBookDataById[i].save();
-      }
 
       for (let i = 0; i < singleStudentAllCourseFees.length; i++) {
         if (singleStudentAllCourseFees[i]._id.toString() === req.params.id) {
@@ -1540,6 +1529,7 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
               paymentOption || singleStudentAllCourseFees[i].paymentOption;
             singleStudentAllCourseFees[i].lateFees =
               lateFees || singleStudentAllCourseFees[i].lateFees;
+            singleStudentAllCourseFees[i].addedBy = addedBy;
 
             currentStudent.totalPaid = amountPaid;
             currentStudent.remainingCourseFees =
@@ -1564,41 +1554,13 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
                 paymentOption || singleStudentAllCourseFees[i].paymentOption;
               singleStudentAllCourseFees[i].lateFees =
                 lateFees || singleStudentAllCourseFees[i].lateFees;
+              singleStudentAllCourseFees[i].addedBy = addedBy;
             }
           }
 
           await singleStudentAllCourseFees[i].save();
-          await currentStudent.save();
-        } else {
-          if (i === 0) {
-            singleStudentAllCourseFees[i].remainingFees =
-              currentStudent.netCourseFees -
-              singleStudentAllCourseFees[i].amountPaid;
-          } else {
-            singleStudentAllCourseFees[i].netCourseFees =
-              singleStudentAllCourseFees[i - 1].remainingFees;
-            singleStudentAllCourseFees[i].remainingFees =
-              singleStudentAllCourseFees[i - 1].remainingFees -
-              singleStudentAllCourseFees[i].amountPaid;
-          }
-
-          await singleStudentAllCourseFees[i].save();
-          await currentStudent.save();
         }
       }
-
-      singleStudentAllCourseFees = await CourseFeesModel.find({
-        studentInfo: studentInfo,
-      });
-
-      const totalPaid = singleStudentAllCourseFees.reduce(
-        (acc, cur) => acc + cur.amountPaid,
-        0
-      );
-      currentStudent.remainingCourseFees =
-        currentStudent.netCourseFees - totalPaid;
-      currentStudent.totalPaid = totalPaid;
-      await currentStudent.save();
 
       let getSingleStudentDayBookDataWithReciptNumber =
         await DayBookDataModel.findOne({
@@ -1606,58 +1568,27 @@ export const updateSingleStudentCourseFeesController = asyncHandler(
           reciptNumber: oldStudentCourseFees.reciptNumber,
         });
 
-      getSingleStudentDayBookDataWithReciptNumber.reciptNumber =
-        reciptNumber ||
-        getSingleStudentDayBookDataWithReciptNumber?.reciptNumber;
-      getSingleStudentDayBookDataWithReciptNumber.studentInfo =
-        studentInfo || getSingleStudentDayBookDataWithReciptNumber.studentInfo;
-      getSingleStudentDayBookDataWithReciptNumber.narration =
-        narration || getSingleStudentDayBookDataWithReciptNumber.narration;
-      getSingleStudentDayBookDataWithReciptNumber.studentLateFees =
-        lateFees || getSingleStudentDayBookDataWithReciptNumber.studentLateFees;
-      getSingleStudentDayBookDataWithReciptNumber.credit =
-        amountPaid || getSingleStudentDayBookDataWithReciptNumber.credit;
-      getSingleStudentDayBookDataWithReciptNumber.dayBookDatadate =
-        amountDate ||
-        getSingleStudentDayBookDataWithReciptNumber.dayBookDatadate;
+      if (getSingleStudentDayBookDataWithReciptNumber) {
+        getSingleStudentDayBookDataWithReciptNumber.reciptNumber =
+          reciptNumber ||
+          getSingleStudentDayBookDataWithReciptNumber?.reciptNumber;
+        getSingleStudentDayBookDataWithReciptNumber.studentInfo =
+          studentInfo ||
+          getSingleStudentDayBookDataWithReciptNumber.studentInfo;
+        getSingleStudentDayBookDataWithReciptNumber.narration =
+          narration || getSingleStudentDayBookDataWithReciptNumber.narration;
+        getSingleStudentDayBookDataWithReciptNumber.studentLateFees =
+          lateFees ||
+          getSingleStudentDayBookDataWithReciptNumber.studentLateFees;
+        getSingleStudentDayBookDataWithReciptNumber.credit =
+          amountPaid || getSingleStudentDayBookDataWithReciptNumber.credit;
+        getSingleStudentDayBookDataWithReciptNumber.dayBookDatadate =
+          amountDate ||
+          getSingleStudentDayBookDataWithReciptNumber.dayBookDatadate;
+        getSingleStudentDayBookDataWithReciptNumber.addedBy = addedBy;
 
-      await getSingleStudentDayBookDataWithReciptNumber.save();
-
-      currentStudent = await admissionFormModel.findById(studentInfo);
-      const lastPaymentInstallment =
-        await PaymentInstallmentTimeExpireModel.findOne({
-          installment_number: currentStudent.no_of_installments,
-          studentInfo: currentStudent._id,
-        });
-      //console.log(lastPaymentInstallment);
-      // Check if `lastPaymentInstallment` exists before accessing its properties
-      if (lastPaymentInstallment && currentStudent.no_of_installments > 0) {
-        lastPaymentInstallment.installment_amount =
-          (currentStudent.remainingCourseFees !== undefined
-            ? currentStudent.remainingCourseFees
-            : currentStudent.netCourseFees) / currentStudent.no_of_installments;
-
-        // Save if the `installment_amount` calculation was successful
-        await lastPaymentInstallment.save();
-      } else {
-        // console.warn("No valid installment document or installments are zero.");
+        await getSingleStudentDayBookDataWithReciptNumber.save();
       }
-
-      // if (currentStudent.remainingCourseFees === 0) {
-      //   currentStudent.no_of_installments_expireTimeandAmount = null;
-      //   currentStudent.no_of_installments = 0;
-      //   const allPaymentInstallments =
-      //     await PaymentInstallmentTimeExpireModel.find({
-      //       studentInfo: currentStudent._id,
-      //     });
-      //   allPaymentInstallments.map(async (paymentInstallment) => {
-      //     if (paymentInstallment) {
-      //       await paymentInstallment.deleteOne();
-      //     }
-      //   });
-      //   await currentStudent.save();
-      // }
-      await currentStudent.save();
 
       res.status(200).json({
         success: true,
