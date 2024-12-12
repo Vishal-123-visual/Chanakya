@@ -84,10 +84,10 @@ const admissionFormSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
-    installment_duration: {
-      type: Date,
-      required: true,
-    },
+    // installment_duration: {
+    //   type: Date,
+    //   required: true,
+    // },
     no_of_installments: {
       type: Number,
       required: true,

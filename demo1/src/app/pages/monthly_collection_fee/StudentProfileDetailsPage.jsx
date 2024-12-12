@@ -88,14 +88,14 @@ const StudentProfileDetailsPage = () => {
                       <a href='#'>
                         <KTIcon iconName='verify' className='fs-1 text-primary' />
                       </a>
-                      <a
+                      {/* <a
                         href='#'
                         className='btn btn-sm btn-light-success fw-bolder ms-2 fs-8 py-1 px-3'
                         data-bs-toggle='modal'
                         data-bs-target='#kt_modal_upgrade_plan'
                       >
                         Upgrade to Pro
-                      </a>
+                      </a> */}
 
                       <button
                         id='#student-notes'
@@ -230,7 +230,7 @@ const StudentProfileDetailsPage = () => {
                             </div>
                           </div>
 
-                          <div className='fw-bold fs-6 text-gray-400'>total Paid</div>
+                          <div className='fw-bold fs-6 text-gray-400'>Total Paid</div>
                         </div>
                       )}
 
@@ -245,12 +245,12 @@ const StudentProfileDetailsPage = () => {
                           </div>
                         </div>
 
-                        <div className='fw-bold fs-6 text-gray-400'>Remainig Fee</div>
+                        <div className='fw-bold fs-6 text-gray-400'>Remaining Fee</div>
                       </div>
                     </div>
                   </div>
 
-                  <div className='d-flex align-items-center w-200px w-sm-300px flex-column mt-3'>
+                  {/* <div className='d-flex align-items-center w-200px w-sm-300px flex-column mt-3'>
                     <div className='d-flex justify-content-between w-100 mt-auto mb-2'>
                       <span className='fw-bold fs-6 text-gray-400'>Profile Compleation</span>
                       <span className='fw-bolder fs-6'>50%</span>
@@ -262,7 +262,7 @@ const StudentProfileDetailsPage = () => {
                         style={{width: '50%'}}
                       ></div>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
@@ -775,7 +775,7 @@ const StudentProfileDetailsPage = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6'>
+                {/* <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
                       <span className=''>Installment Duration</span>
@@ -792,7 +792,7 @@ const StudentProfileDetailsPage = () => {
                       />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* ---------------------------FOR OFFICE USE ONLY END HERE ----------------------- */}

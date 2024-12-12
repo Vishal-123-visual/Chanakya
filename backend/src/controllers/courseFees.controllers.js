@@ -30,6 +30,7 @@ export const createCourseFeesController = asyncHandler(
         lateFees,
         paymentOption,
       } = req.body;
+      // console.log(req.body)
 
       // Validate required fields
       if (!amountPaid || !amountDate || !studentInfo) {
@@ -112,7 +113,7 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber,
         credit: +amountPaid,
         narration,
-        // addedBy: req.user.fName + " " + req.user.lName,
+        addedBy: req.user.fName + " " + req.user.lName,
       });
 
       await newDayBookData.save();

@@ -798,7 +798,7 @@ const UpdateAddmission = () => {
                     </div>
                   </div>
                 </div>
-                <div className='col-6'>
+                {/* <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
                       <span className='required'>Installmet Duration</span>
@@ -812,10 +812,6 @@ const UpdateAddmission = () => {
                         className='form-control form-control-lg form-control-solid'
                         placeholderText='DD/MM/YYYY'
                       />
-                      {/* <Calendar
-                          onChange={(date) => formik.setFieldValue('date_of_joining', date)}
-                          value={formik.values.date_of_joining}
-                        /> */}
                       {formik.touched.installment_duration && formik.errors.installment_duration && (
                         <div className='fv-plugins-message-container'>
                           <div className='fv-help-block'>{formik.errors.installment_duration}</div>
@@ -823,7 +819,7 @@ const UpdateAddmission = () => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
 
               {/* ---------------------------FOR OFFICE USE ONLY END HERE ----------------------- */}

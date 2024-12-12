@@ -22,6 +22,7 @@ import DialogAlertPendingStudent from '../Alert_Pending_NewStudents/DialogAlertP
 import {useAuth} from '../../modules/auth'
 import ShowStudentNotesNameDashboard from '../student-issues/ShowStudentNotesNameDashboard'
 import CompleteCourseStudents from '../complete_course_students/CompleteCourseStudents'
+import CollectionDashBoardBox from './CollectionDashBoardBox'
 
 const DashboardPage: FC = () => (
   <>
@@ -48,7 +49,7 @@ const DashboardPage: FC = () => (
 
       {/* begin::Col */}
       <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
-        <CardsWidget17 className='h-md-50 mb-5 mb-xl-10' />
+        <CollectionDashBoardBox className='h-md-50 mb-5 mb-xl-10' />
         {/* <ListsWidget26 className='h-lg-50' /> */}
         <div className='card card-header pt-5 h-lg-50'>
           <h3 className='card-title text-gray-800 fw-bold'>Student Notes Flag</h3>
