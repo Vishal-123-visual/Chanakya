@@ -121,9 +121,8 @@ Visual Media Academy`
               <>
                 {userRoleAccess?.some(
                   (userAccess) =>
-                    (userAccess.studentFeesAccess['Print Recipt'] === true &&
-                      userAccess.role === currentUser?.role) ||
-                    currentUser?.role === 'SuperAdmin'
+                    userAccess.studentFeesAccess['Print Recipt'] === true &&
+                    userAccess.role === currentUser?.role
                 ) && (
                   <Link
                     to={'/print-student-fees-recipt'}
@@ -140,9 +139,8 @@ Visual Media Academy`
                 )}
                 {userRoleAccess?.some(
                   (userAccess) =>
-                    (userAccess.studentFeesAccess['Mail Button'] === true &&
-                      userAccess.role === currentUser?.role) ||
-                    currentUser?.role === 'SuperAdmin'
+                    userAccess.studentFeesAccess['Mail Button'] === true &&
+                    userAccess.role === currentUser?.role
                 ) && (
                   <button
                     onClick={() => sendMailToStudentAgainIfNotAccept(StudentFee)}
@@ -154,9 +152,8 @@ Visual Media Academy`
                 )}
                 {userRoleAccess?.some(
                   (userAccess) =>
-                    (userAccess.studentFeesAccess['Whatsapp Button'] === true &&
-                      userAccess.role === currentUser?.role) ||
-                    currentUser?.role === 'SuperAdmin'
+                    userAccess.studentFeesAccess['Whatsapp Button'] === true &&
+                    userAccess.role === currentUser?.role
                 ) && (
                   <button
                     onClick={() => sendDataWhatsappAsMessage()}
@@ -170,9 +167,8 @@ Visual Media Academy`
             )}
             {userRoleAccess?.some(
               (userAccess) =>
-                (userAccess.studentFeesAccess['Edit Student Fees'] === true &&
-                  userAccess.role === currentUser?.role) ||
-                currentUser?.role === 'SuperAdmin'
+                userAccess.studentFeesAccess['Edit Student Fees'] === true &&
+                userAccess.role === currentUser?.role
             ) && (
               <>
                 <button
@@ -184,9 +180,8 @@ Visual Media Academy`
                 </button>
                 {userRoleAccess?.some(
                   (userAccess) =>
-                    (userAccess.studentFeesAccess['Delete Student Fees'] === true &&
-                      userAccess.role === currentUser?.role) ||
-                    currentUser?.role === 'SuperAdmin'
+                    userAccess.studentFeesAccess['Delete Student Fees'] === true &&
+                    userAccess.role === currentUser?.role
                 ) && (
                   <button
                     onClick={() => delelteStudentCourseFeesHandler(StudentFee?._id)}

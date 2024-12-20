@@ -2,9 +2,12 @@ import {useEffect, useState} from 'react'
 // import {useCompanyContext} from '../company/CompanyContext' // Correct the import path
 import useUserRoleAccessContext from './UserRoleAccessContext'
 import {useCompanyContext} from '../compay/CompanyContext'
+import {useAuth} from '../../modules/auth'
 
 const UserRoleAccessManagement = () => {
-  const [selectedRole, setSelectedRole] = useState('Student')
+  const [selectedRole, setSelectedRole] = useState('SuperAdmin')
+  const {currentUser} = useAuth()
+  // console.log(currentUser)
   const [permissions, setPermissions] = useState({
     role: 'Student',
     companyPermissions: {},
@@ -96,6 +99,9 @@ const UserRoleAccessManagement = () => {
               ))
             ) : (
               <>
+                {currentUser?.role === 'SuperAdmin' && (
+                  <option value='SuperAdmin'>Super Admin</option>
+                )}
                 <option value='Student'>Student</option>
                 <option value='Telecaller'>Telecaller</option>
                 <option value='Accounts'>Accounts</option>

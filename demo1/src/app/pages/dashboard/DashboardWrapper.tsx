@@ -23,6 +23,7 @@ import {useAuth} from '../../modules/auth'
 import ShowStudentNotesNameDashboard from '../student-issues/ShowStudentNotesNameDashboard'
 import CompleteCourseStudents from '../complete_course_students/CompleteCourseStudents'
 import CollectionDashBoardBox from './CollectionDashBoardBox'
+import AllStudentsAccordingToCourses from './AllStudentsAccordingToCourses'
 
 const DashboardPage: FC = () => (
   <>
@@ -61,7 +62,7 @@ const DashboardPage: FC = () => (
 
       {/* begin::Col */}
       <div className='col-xxl-6'>
-        <EngageWidget10 className='h-md-100' />
+        <AllStudentsAccordingToCourses className='h-md-100' />
       </div>
       {/* end::Col */}
     </div>

@@ -6,7 +6,14 @@ const userRoleAccessSchema = new mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ["Student", "Telecaller", "Accounts", "Counsellor", "Admin"], // Enum for predefined roles
+      enum: [
+        "Student",
+        "Telecaller",
+        "Accounts",
+        "Counsellor",
+        "Admin",
+        "SuperAdmin",
+      ], // Enum for predefined roles
     },
     companyPermissions: {
       type: Map,

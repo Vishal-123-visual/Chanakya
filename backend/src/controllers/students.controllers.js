@@ -123,7 +123,7 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       name,
       father_name,
       mobile_number,
-      installment_duration,
+      // installment_duration,
       phone_number,
       present_address,
       //permanent_address,
@@ -148,15 +148,15 @@ export const updateStudentController = asyncHandler(async (req, res, next) => {
       date_of_joining,
       no_of_installments,
     } = req.body;
-    //console.log("req body ", req.body);
+    // console.log("req body ", req.body);
 
     // Use || for conditional updates
     student.companyName = req.body.companyName || student.companyName;
     student.rollNumber = rollNumber || student.rollNumber;
     student.father_name = father_name || student.father_name;
     student.name = name || student.name;
-    student.installment_duration =
-      installment_duration || student.installment_duration;
+    // student.installment_duration =
+    //   installment_duration || student.installment_duration;
     student.courseName = req.body.courseName[1] || student.courseName;
     student.mobile_number = mobile_number || student.mobile_number;
     student.phone_number = phone_number || student.phone_number;

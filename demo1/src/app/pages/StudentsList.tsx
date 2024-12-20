@@ -116,9 +116,8 @@ const StudentsList: React.FC<Props> = ({className}) => {
         >
           {userRoleAccess?.some(
             (userAccess: any) =>
-              (userAccess.studentControlAccess['Add Student'] === true &&
-                userAccess.role === currentUser?.role) ||
-              currentUser?.role === 'SuperAdmin'
+              userAccess.studentControlAccess['Add Student'] === true &&
+              userAccess.role === currentUser?.role
           ) && (
             <button
               className='btn btn-sm btn-light-primary'
@@ -196,9 +195,8 @@ const StudentsList: React.FC<Props> = ({className}) => {
                       <div className='d-flex justify-content-end flex-shrink-0'>
                         {userRoleAccess?.some(
                           (userAccess: any) =>
-                            (userAccess.studentControlAccess['Dropout Student'] === true &&
-                              userAccess.role === currentUser?.role) ||
-                            currentUser?.role === 'SuperAdmin'
+                            userAccess.studentControlAccess['Dropout Student'] === true &&
+                            userAccess.role === currentUser?.role
                         ) && (
                           <label
                             className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
@@ -218,9 +216,8 @@ const StudentsList: React.FC<Props> = ({className}) => {
                         )}
                         {userRoleAccess?.some(
                           (userAccess: any) =>
-                            (userAccess.studentControlAccess['Edit Student'] === true &&
-                              userAccess.role === currentUser?.role) ||
-                            currentUser?.role === 'SuperAdmin'
+                            userAccess.studentControlAccess['Edit Student'] === true &&
+                            userAccess.role === currentUser?.role
                         ) && (
                           <button
                             onClick={() =>
@@ -235,9 +232,8 @@ const StudentsList: React.FC<Props> = ({className}) => {
                         )}
                         {userRoleAccess?.some(
                           (userAccess: any) =>
-                            (userAccess.studentControlAccess['Delete Student'] === true &&
-                              userAccess.role === currentUser?.role) ||
-                            currentUser?.role === 'SuperAdmin'
+                            userAccess.studentControlAccess['Delete Student'] === true &&
+                            userAccess.role === currentUser?.role
                         ) && (
                           <button
                             onClick={() => studentDeleteHandler(student?._id)}

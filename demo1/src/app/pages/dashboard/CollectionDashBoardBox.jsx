@@ -100,7 +100,9 @@ const CollectionDashBoardBox = ({className, chartSize = 70, chartLine = 11, char
             <span className='fs-4 fw-semibold text-gray-400 me-1 align-self-start'>₹</span>
             <span className='fs-2hx fw-bold text-dark me-2 lh-1 ls-n2'>{balanceAmount}</span>
             <span
-              className={`badge fs-base ${isProfit ? 'badge-light-success' : 'badge-light-danger'}`}
+              className={`badge fs-base mx-15 ${
+                isProfit ? 'badge-light-success' : 'badge-light-danger'
+              }`}
             >
               <KTIcon
                 iconName={isProfit ? 'arrow-up' : 'arrow-down'}
@@ -114,7 +116,7 @@ const CollectionDashBoardBox = ({className, chartSize = 70, chartLine = 11, char
       </div>
 
       <div className='card-body pt-2 pb-4 d-flex align-items-center'>
-        <div className='d-flex flex-center me-4'>
+        <div className='d-flex flex-center me-2'>
           <div
             id='kt_card_widget_17_chart'
             ref={chartRef}

@@ -1,12 +1,12 @@
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useStudentCourseFeesContext } from '../courseFees/StudentCourseFeesContext'
-import React, { useState } from 'react'
+import {Link, useNavigate, useParams} from 'react-router-dom'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import React, {useState} from 'react'
 import moment from 'moment'
 
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useCompanyContext } from '../compay/CompanyContext'
-import { useCourseContext } from '../course/CourseContext'
+import {useCompanyContext} from '../compay/CompanyContext'
+import {useCourseContext} from '../course/CourseContext'
 
 const MonthlyCollectionFee = () => {
   const [fromDate, setFromDate] = useState(new Date())
@@ -15,10 +15,14 @@ const MonthlyCollectionFee = () => {
   const paramsData = useParams()
   const ctx = useStudentCourseFeesContext()
   const studentCourseCTX = useCourseContext()
-  const { data, isLoading } = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
+  const {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
+  const studentPayFeeCtx = useStudentCourseFeesContext()
 
+  const {data: result} = studentPayFeeCtx.getAllStudentsCourseFees
   // Fetch all courses data at once
-  const { data: coursesData } = studentCourseCTX.getCourseLists // Assuming there's a hook to fetch all courses
+  const {data: coursesData} = studentCourseCTX.getCourseLists // Assuming there's a hook to fetch all courses
+
+  // console.log(result)
 
   // Map course IDs to names for quick lookup
   const courseIdToName = coursesData?.reduce((acc, course) => {
@@ -27,11 +31,6 @@ const MonthlyCollectionFee = () => {
   }, {})
 
   // Filter data based on installments
-  const filteredData = data?.filter(
-    (item) =>
-      item?.studentInfo?.no_of_installments === item?.installment_number &&
-      item.dropOutStudent === false && Number(item?.expiration_date?.split("-")[1]) <= toDate?.getMonth() + 1
-  )
 
   // console.log(filteredData)
 
@@ -39,10 +38,9 @@ const MonthlyCollectionFee = () => {
 
   const companyCTX = useCompanyContext()
   const params = useParams()
-  const { data: CompanyInfo } = companyCTX?.useGetSingleCompanyData(params?.id)
+  const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
 
-  const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
-  //console.log(filteredData)
+  // console.log(filteredData)
   const navigate = useNavigate()
 
   const calculateMonthDiff = (expireDate) => {
@@ -54,6 +52,16 @@ const MonthlyCollectionFee = () => {
     monthsDiff = Math.floor(monthsDiff)
     return monthsDiff < 0 ? 0 : monthsDiff + 1
   }
+
+  const filteredData = data?.filter(
+    (item) =>
+      calculateMonthDiff(item?.studentInfo?.no_of_installments_expireTimeandAmount) != 0 &&
+      item?.studentInfo?.no_of_installments === item?.installment_number &&
+      item.dropOutStudent === false &&
+      Number(item?.expiration_date?.split('-')[1]) <= toDate?.getMonth() + 1
+  )
+
+  const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
 
   return (
     <div className={`card`}>
@@ -136,8 +144,15 @@ const MonthlyCollectionFee = () => {
                 </tr>
               ) : (
                 filteredData
-                  ?.filter((dropStud) => dropStud.dropOutStudent === false)
+                  ?.filter(
+                    (dropStud) =>
+                      dropStud.dropOutStudent === false &&
+                      calculateMonthDiff(
+                        dropStud?.studentInfo?.no_of_installments_expireTimeandAmount
+                      ) != 0
+                  )
                   ?.filter((searchStudent) => {
+                    // console.log(searchStudent)
                     return (
                       searchValue?.trim() === '' ||
                       searchStudent?.studentInfo?.name

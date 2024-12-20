@@ -58,8 +58,8 @@ const UpdateAddmission = () => {
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState({})
   const [updateUserId, setUpdateUserId] = useState(location.state)
-  // console.log(updateUserId.courseDuration)
-
+  // console.log(selectedCourseNameData)
+  // console.log(updateUserId)
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
 
@@ -193,8 +193,8 @@ const UpdateAddmission = () => {
 
       if (updateUserId) {
         formData.append('id', updateUserId?._id)
-        formData.append('courseName', updateUserId?.courseName?._id)
-        //console.log('course name id ', updateUserId?.courseName._id)
+        formData.append('courseName', selectedCourseNameData?._id)
+        // console.log('course name id ', updateUserId?.courseName._id)
 
         context.updateStudentMutation.mutate(formData)
         setLoading(true)

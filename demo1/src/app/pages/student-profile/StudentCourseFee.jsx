@@ -236,9 +236,8 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           {currentUser.role !== 'Student' &&
           userRoleAccess?.some(
             (userAccess) =>
-              (userAccess.studentFeesAccess['Add Student Fees'] === true &&
-                userAccess.role === currentUser?.role) ||
-              currentUser?.role === 'SuperAdmin'
+              userAccess.studentFeesAccess['Add Student Fees'] === true &&
+              userAccess.role === currentUser?.role
           ) ? (
             <button
               disabled={studentInfoData?.remainingCourseFees === 0}
@@ -283,10 +282,12 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                   <th className='min-w-150px'>Added By</th>
                   {userRoleAccess?.some(
                     (userAccess) =>
-                      userAccess.studentFeesAccess['Edit Student Fees'] === true ||
-                      (userAccess.studentFeesAccess['Delete Student Fees'] === true &&
-                        userAccess.role === currentUser?.role) ||
-                      currentUser?.role === 'SuperAdmin'
+                      (userAccess.studentFeesAccess['Edit Student Fees'] === true ||
+                        userAccess.studentFeesAccess['Print Recipt'] === true ||
+                        userAccess.studentFeesAccess['Whatsapp Button'] === true ||
+                        userAccess.studentFeesAccess['Mail Button'] === true ||
+                        userAccess.studentFeesAccess['Delete Student Fees'] === true) &&
+                      userAccess.role === currentUser?.role
                   ) && <th className='min-w-200px text-end'>Actions</th>}
                 </tr>
               </thead>
