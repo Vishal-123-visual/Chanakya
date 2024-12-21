@@ -1,9 +1,11 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
-import { useCompanyContext } from '../compay/CompanyContext'
-import { useAdmissionContext } from '../../modules/auth/core/Addmission'
+import {useNavigate, useParams} from 'react-router-dom'
+import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
+import {useCompanyContext} from '../compay/CompanyContext'
+import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import moment from 'moment'
-import { useState } from 'react'
+import {useState} from 'react'
+import {useAuth} from '../../modules/auth'
+import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
@@ -12,6 +14,7 @@ const PendingFeesStudents = () => {
   const companyCTX = useCompanyContext()
   const studentsCTX = useAdmissionContext()
   const navigate = useNavigate()
+  const {currentUser} = useAuth()
   const [searchValue, setSearchValue] = useState('')
   // console.log(searchValue)
 
@@ -19,9 +22,11 @@ const PendingFeesStudents = () => {
 
   const params = useParams()
   //console.log(params)
-  const { data } = companyCTX?.useGetSingleCompanyData(params?.id)
+  const {data} = companyCTX?.useGetSingleCompanyData(params?.id)
   //console.log(data)
+  const {getAllUserAccessRoleData} = useUserRoleAccessContext()
 
+  const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
   const filteredStudents = studentsCTX?.studentsLists?.data?.users
     ?.filter(
       (searchStudent) =>
@@ -107,7 +112,11 @@ const PendingFeesStudents = () => {
                 <th className='min-w-150px'>Name</th>
                 <th className='min-w-140px'>Mobile</th>
                 <th className='min-w-120px'>D.O.J</th>
-                <th className='min-w-120px'>Actions</th>
+                {userRoleAccess?.some(
+                  (userAccess) =>
+                    userAccess.studentControlAccess['Dropout Student'] === true &&
+                    userAccess.role === currentUser?.role
+                ) && <th className='min-w-120px'>Actions</th>}
                 {/* <th className='min-w-100px text-end'>Actions</th>  */}
               </tr>
             </thead>
@@ -165,23 +174,29 @@ const PendingFeesStudents = () => {
                       <td className=''>
                         {moment(studentData?.date_of_joining).format('DD-MM-YYYY')}
                       </td>
-                      <td>
-                        <label
-                          className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <input
-                            className='form-check-input me-3'
-                            type='checkbox'
-                            value=''
-                            id='drop-out-student'
-                            hidden
-                            onChange={(e) => dorpOutStudentHandler(studentData, e.target.checked)}
-                            checked={studentData?.dropOutStudent}
-                          />
-                          <KTIcon iconName='dislike' className='fs-3' />
-                        </label>
-                      </td>
+                      {userRoleAccess?.some(
+                        (userAccess) =>
+                          userAccess.studentControlAccess['Dropout Student'] === true &&
+                          userAccess.role === currentUser?.role
+                      ) && (
+                        <td>
+                          <label
+                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            style={{cursor: 'pointer'}}
+                          >
+                            <input
+                              className='form-check-input me-3'
+                              type='checkbox'
+                              value=''
+                              id='drop-out-student'
+                              hidden
+                              onChange={(e) => dorpOutStudentHandler(studentData, e.target.checked)}
+                              checked={studentData?.dropOutStudent}
+                            />
+                            <KTIcon iconName='dislike' className='fs-3' />
+                          </label>
+                        </td>
+                      )}
                       {/* <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
                           <a

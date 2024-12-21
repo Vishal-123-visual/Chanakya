@@ -57,8 +57,9 @@ const UpdateAddmission = () => {
   const [loading, setLoading] = useState(false)
   const location = useLocation()
   const [selectedCourseNameData, setSelectedCourseNameData] = useState({})
+  const [selectedCourseId, setSelectedCourseId] = useState('')
   const [updateUserId, setUpdateUserId] = useState(location.state)
-  // console.log(selectedCourseNameData)
+  console.log(selectedCourseId)
   // console.log(updateUserId)
   const courseCtx = useCourseContext()
   const companyCTX = useCompanyContext()
@@ -92,6 +93,7 @@ const UpdateAddmission = () => {
     //console.log('selected course data ', selectedCourseData)
     setSelectedCourseNameData(selectedCourseData)
     //console.log('course Id', selectedCourseData?._id)
+    setSelectedCourseId(selectedCourseData?._id)
     formik.setFieldValue('select_course', selectedCourse)
 
     formik.setFieldValue('course_fees', selectedCourseData?.courseFees)
@@ -193,8 +195,8 @@ const UpdateAddmission = () => {
 
       if (updateUserId) {
         formData.append('id', updateUserId?._id)
-        formData.append('courseName', selectedCourseNameData?._id)
-        // console.log('course name id ', updateUserId?.courseName._id)
+        // formData.append('course name id ', updateUserId?.courseName._id)
+        formData.append('courseName', selectedCourseId)
 
         context.updateStudentMutation.mutate(formData)
         setLoading(true)
@@ -205,7 +207,7 @@ const UpdateAddmission = () => {
           },
         })
       } else {
-        formData.append('courseName', selectedCourseNameData?._id)
+        formData.append('courseName', selectedCourseId)
         context.createStudentMutation.mutate(formData)
         setLoading(true)
       }
@@ -798,7 +800,7 @@ const UpdateAddmission = () => {
                     </div>
                   </div>
                 </div>
-                {/* <div className='col-6'>
+                <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
                       <span className='required'>Installmet Duration</span>
@@ -819,7 +821,7 @@ const UpdateAddmission = () => {
                       )}
                     </div>
                   </div>
-                </div> */}
+                </div>
               </div>
 
               {/* ---------------------------FOR OFFICE USE ONLY END HERE ----------------------- */}

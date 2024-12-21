@@ -52,8 +52,7 @@ export const getEmailRemainderTextController = asyncHandler(
 export const addEmailRemainderDatesController = asyncHandler(
   async (req, res, next) => {
     try {
-      const { firstRemainderDay, secondRemainderDay, thirdRemainderDay } =
-        req.body;
+      const { firstDueDay, secondDueDay, thirdDueDay } = req.body;
 
       const emailRemainderDates = await emailRemainderDatesModel.find({});
       emailRemainderDates.forEach(
@@ -61,9 +60,9 @@ export const addEmailRemainderDatesController = asyncHandler(
           await emailRemainderDatesModel.deleteOne()
       );
       const emailRemainderDate = new emailRemainderDatesModel({
-        firstRemainderDay,
-        secondRemainderDay,
-        thirdRemainderDay,
+        firstDueDay,
+        secondDueDay,
+        thirdDueDay,
       });
       await emailRemainderDate.save();
       res.status(200).json({ message: "Email Remainder Date Added !!" });

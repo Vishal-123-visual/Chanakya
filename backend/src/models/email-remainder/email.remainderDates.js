@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
 const emailRemainderDatesSchema = new mongoose.Schema({
-  firstRemainderDay: {
+  firstDueDay: {
     type: Number,
     default: 9,
     // required: true,
   },
-  secondRemainderDay: {
+  secondDueDay: {
     type: Number,
     default: 15,
     // required: true,
   },
-  thirdRemainderDay: {
+  thirdDueDay: {
     type: Number,
     default: 20,
     // required: true,

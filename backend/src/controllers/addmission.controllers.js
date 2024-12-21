@@ -49,9 +49,9 @@ export const createAddMissionController = asyncHandler(
         res.status(400);
         throw new Error("Please provide company Name field!");
         return;
-      // case !installment_duration:
-      //   throw new Error("Please provide installment duration field!");
-      //   return;
+      case !installment_duration:
+        throw new Error("Please provide installment duration field!");
+        return;
       case !file:
         res.status(400);
         throw new Error("Please provide image field!");

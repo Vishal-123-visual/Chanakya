@@ -1,18 +1,24 @@
-import { useNavigate, useParams } from 'react-router-dom'
-import { KTIcon, toAbsoluteUrl } from '../../../_metronic/helpers'
-import { useCompanyContext } from '../compay/CompanyContext'
-import { useAdmissionContext } from '../../modules/auth/core/Addmission'
+import {useNavigate, useParams} from 'react-router-dom'
+import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
+import {useCompanyContext} from '../compay/CompanyContext'
+import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import moment from 'moment'
-import { useState } from 'react'
+import {useState} from 'react'
+import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
+import {useAuth} from '../../modules/auth'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 const DropOutStudents = () => {
   const params = useParams()
+  const {currentUser} = useAuth()
   //console.log(params.id)
   const companyCTX = useCompanyContext()
   const ctx = useAdmissionContext()
-  const { data: singleComapnyData } = companyCTX?.useGetSingleCompanyData(params?.id)
+  const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(params?.id)
+  const {getAllUserAccessRoleData} = useUserRoleAccessContext()
+
+  const userRoleAccess = getAllUserAccessRoleData?.data?.roleAccessData
   const filteredStudents = ctx.studentsLists?.data?.users.filter(
     (st) => st.companyName === params.id && st.dropOutStudent === true
   )
@@ -26,7 +32,7 @@ const DropOutStudents = () => {
     if (!window.confirm('Are you sure do you want to drop out this student!')) {
       return
     }
-    ctx.updateDropOutStudentMutation.mutate({ studentId: dropOutStudent._id, isDropOutStudent })
+    ctx.updateDropOutStudentMutation.mutate({studentId: dropOutStudent._id, isDropOutStudent})
   }
 
   const studentDeleteHandler = (studentId) => {
@@ -98,7 +104,13 @@ const DropOutStudents = () => {
                 <th className='min-w-150px'>Name</th>
                 <th className='min-w-140px'>Mobile Number</th>
                 <th className='min-w-120px'>D.O.J</th>
-                <th className='min-w-100px text-end'>Actions</th>
+                {userRoleAccess?.some(
+                  (userAccess) =>
+                    (userAccess.studentControlAccess['Edit Student'] === true ||
+                      userAccess.studentControlAccess['Delete Student'] === true ||
+                      userAccess.studentControlAccess['Dropout Student'] === true) &&
+                    userAccess.role === currentUser?.role
+                ) && <th className='min-w-100px text-end'>Actions</th>}
               </tr>
             </thead>
             {/* end::Table head */}
@@ -128,7 +140,7 @@ const DropOutStudents = () => {
                           <div className='d-flex justify-content-start flex-column'>
                             <div
                               onClick={() => navigate(`/profile/student/${student?._id}`)}
-                              style={{ cursor: 'pointer' }}
+                              style={{cursor: 'pointer'}}
                               className='text-dark fw-bold text-hover-primary fs-6'
                             >
                               {student?.name}
@@ -142,7 +154,7 @@ const DropOutStudents = () => {
                       <td>
                         <div
                           onClick={() => navigate(`/profile/student/${student?._id}`)}
-                          style={{ cursor: 'pointer' }}
+                          style={{cursor: 'pointer'}}
                           className='text-dark fw-bold text-hover-primary d-block fs-6'
                         >
                           +91 {student?.mobile_number}
@@ -155,7 +167,7 @@ const DropOutStudents = () => {
                         <div className='d-flex flex-column w-100 me-2'>
                           <div
                             onClick={() => navigate(`/profile/student/${student?._id}`)}
-                            style={{ cursor: 'pointer' }}
+                            style={{cursor: 'pointer'}}
                             className='d-flex flex-stack mb-2'
                           >
                             <span className='text-muted me-2 fs-7 fw-semibold'>
@@ -166,35 +178,55 @@ const DropOutStudents = () => {
                       </td>
                       <td>
                         <div className='d-flex justify-content-end flex-shrink-0'>
-                          <label
-                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <input
-                              className='form-check-input me-3'
-                              type='checkbox'
-                              value=''
-                              id='drop-out-student'
-                              hidden
-                              onChange={(e) => dorpOutStudentHandler(student, e.target.checked)}
-                              checked={student?.dropOutStudent}
-                            />
-                            <KTIcon iconName='dislike' className='fs-3' />
-                          </label>
-                          <button
-                            onClick={() =>
-                              navigate(`/update-addmission-form/${student?._id}`, { state: student })
-                            }
-                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                          >
-                            <KTIcon iconName='pencil' className='fs-3' />
-                          </button>
-                          <button
-                            onClick={() => studentDeleteHandler(student?._id)}
-                            className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
-                          >
-                            <KTIcon iconName='trash' className='fs-3' />
-                          </button>
+                          {userRoleAccess?.some(
+                            (userAccess) =>
+                              userAccess.studentControlAccess['Dropout Student'] === true &&
+                              userAccess.role === currentUser?.role
+                          ) && (
+                            <label
+                              className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                              style={{cursor: 'pointer'}}
+                            >
+                              <input
+                                className='form-check-input me-3'
+                                type='checkbox'
+                                value=''
+                                id='drop-out-student'
+                                hidden
+                                onChange={(e) => dorpOutStudentHandler(student, e.target.checked)}
+                                checked={student?.dropOutStudent}
+                              />
+                              <KTIcon iconName='dislike' className='fs-3' />
+                            </label>
+                          )}
+                          {userRoleAccess?.some(
+                            (userAccess) =>
+                              userAccess.studentControlAccess['Edit Student'] === true &&
+                              userAccess.role === currentUser?.role
+                          ) && (
+                            <button
+                              onClick={() =>
+                                navigate(`/update-addmission-form/${student?._id}`, {
+                                  state: student,
+                                })
+                              }
+                              className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            >
+                              <KTIcon iconName='pencil' className='fs-3' />
+                            </button>
+                          )}
+                          {userRoleAccess?.some(
+                            (userAccess) =>
+                              userAccess.studentControlAccess['Delete Student'] === true &&
+                              userAccess.role === currentUser?.role
+                          ) && (
+                            <button
+                              onClick={() => studentDeleteHandler(student?._id)}
+                              className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                            >
+                              <KTIcon iconName='trash' className='fs-3' />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

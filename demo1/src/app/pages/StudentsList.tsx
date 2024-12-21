@@ -139,10 +139,10 @@ const StudentsList: React.FC<Props> = ({className}) => {
                 <th className='min-w-120px'>D.O.J</th>
                 {userRoleAccess?.some(
                   (userAccess: any) =>
-                    ((userAccess.studentControlAccess['Edit Student'] === true ||
-                      userAccess.studentControlAccess['Delete Student'] === true) &&
-                      userAccess.role === currentUser?.role) ||
-                    currentUser?.role === 'SuperAdmin'
+                    (userAccess.studentControlAccess['Edit Student'] === true ||
+                      userAccess.studentControlAccess['Delete Student'] === true ||
+                      userAccess.studentControlAccess['Dropout Student'] === true) &&
+                    userAccess.role === currentUser?.role
                 ) && <th className='min-w-100px text-end'>Actions</th>}
               </tr>
             </thead>

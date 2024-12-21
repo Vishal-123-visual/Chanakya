@@ -812,7 +812,7 @@ const AddMissionForm: React.FC = () => {
                   </div>
                 </div>
               </div>
-              {/* <div className='col-6'>
+              <div className='col-6'>
                 <div className='row mb-6'>
                   <label className='col-lg-4 col-form-label fw-bold fs-6'>
                     <span className='required'>Installmet Duration</span>
@@ -833,7 +833,7 @@ const AddMissionForm: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div> */}
+              </div>
               {/* ---------------------------FOR OFFICE USE ONLY END HERE ----------------------- */}
             </div>
 

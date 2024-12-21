@@ -109,7 +109,7 @@ export const getAllMailsControllers = async (req, res, next) => {
 
 // Function to send email
 // Function to send email
-export async function sendEmail(toEmails, subject, text, html, req) {
+export async function sendEmail(toEmails, subject, text, html, req, sendedBy) {
   const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss"); // Format date and time
 
   const mailOptions = {
@@ -119,7 +119,8 @@ export async function sendEmail(toEmails, subject, text, html, req) {
     text: text, // Plain text fallback
     html: html, // HTML content
   };
-
+  // console.log("Mail Options before sending:", mailOptions);
+  // console.log(currentDateTime);
   try {
     const result = await mailTransporter.sendMail(mailOptions);
     const emailLog = new EmailLogModel({
@@ -127,7 +128,7 @@ export async function sendEmail(toEmails, subject, text, html, req) {
       subject: subject, // Email subject
       content: html, // Email content (optional)
       sentAt: currentDateTime, // Timestamp
-      sendedBy: req.user.fName + " " + req.user.lName,
+      sendedBy: sendedBy,
     });
     await emailLog.save(); // Save the email log
 

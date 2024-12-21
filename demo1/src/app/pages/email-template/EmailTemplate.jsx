@@ -12,9 +12,9 @@ const EmailTemplate = () => {
   })
 
   const [remainderDays, setRemainderDays] = useState({
-    firstRemainderDay: emailRemainderDays?.[0]?.firstRemainderDay || '',
-    secondRemainderDay: emailRemainderDays?.[0]?.secondRemainderDay || '',
-    thirdRemainderDay: emailRemainderDays?.[0]?.thirdRemainderDay || '',
+    firstDueDay: emailRemainderDays?.[0]?.firstDueDay || '',
+    secondDueDay: emailRemainderDays?.[0]?.secondDueDay || '',
+    thirdDueDay: emailRemainderDays?.[0]?.thirdDueDay || '',
   })
 
   useEffect(() => {
@@ -25,9 +25,9 @@ const EmailTemplate = () => {
     })
 
     setRemainderDays({
-      firstRemainderDay: emailRemainderDays?.[0]?.firstRemainderDay || '',
-      secondRemainderDay: emailRemainderDays?.[0]?.secondRemainderDay || '',
-      thirdRemainderDay: emailRemainderDays?.[0]?.thirdRemainderDay || '',
+      firstDueDay: emailRemainderDays?.[0]?.firstDueDay || '',
+      secondDueDay: emailRemainderDays?.[0]?.secondDueDay || '',
+      thirdDueDay: emailRemainderDays?.[0]?.thirdDueDay || '',
     })
   }, [emailRemainderData, emailRemainderDays])
 
@@ -53,7 +53,7 @@ const EmailTemplate = () => {
         thirdRemainder: '',
       })
       setRemainderDays({
-        firstRemainderDay: '',
+        firstDueDate: '',
         secondRemainderDay: '',
         thirdRemainderDay: '',
       })
@@ -66,10 +66,11 @@ const EmailTemplate = () => {
       <form onSubmit={handleSubmit}>
         <div className='mb-3'>
           <label htmlFor='firstRemainder' className='form-label'>
-            First Reminder
+            Reminder
           </label>
           <textarea
             id='firstRemainder'
+            rows={10}
             value={textEmailsData.firstRemainder}
             onChange={onChangeHandler}
             type='text'
@@ -77,7 +78,7 @@ const EmailTemplate = () => {
             name='firstRemainder'
           />
           {/* <div class='d-flex align-items-center'> */}
-          <label class='form-label'> First Remainder Date</label>
+          {/* <label class='form-label'> First Remainder Date</label>
           <input
             type='number'
             min={1}
@@ -88,10 +89,10 @@ const EmailTemplate = () => {
             onChange={onChangeInputHandler}
             class='form-control me-2'
             style={{width: '200px'}}
-          />
+          /> */}
           {/* </div> */}
         </div>
-        <div className='mb-3'>
+        {/* <div className='mb-3'>
           <label htmlFor='secondRemainder' className='form-label'>
             Second Reminder
           </label>
@@ -115,30 +116,55 @@ const EmailTemplate = () => {
             class='form-control me-2'
             style={{width: '200px'}}
           />
-        </div>
+        </div> */}
         <div className='mb-3'>
           <label htmlFor='thirdRemainder' className='form-label'>
-            Third Reminder
+            Due Date Reminder
           </label>
           <textarea
             id='thirdRemainder'
+            rows={10}
             value={textEmailsData.thirdRemainder}
             onChange={onChangeHandler}
             type='text'
             className='form-control'
             name='thirdRemainder'
           />
-          <label class='form-label'> Third Remainder Date</label>
+          <label class='form-label'> First Due Day</label>
           <input
             type='number'
             min={1}
             max={31}
-            value={remainderDays.thirdRemainderDay}
-            name='thirdRemainderDay'
-            placeholder='Third Remainder Date...'
+            value={remainderDays.firstDueDay}
+            name='firstDueDay'
+            placeholder='First Due Day...'
             class='form-control me-2'
             onChange={onChangeInputHandler}
-            style={{width: '200px'}}
+            style={{width: '100px'}}
+          />
+          <label class='form-label'> Second Due Day</label>
+          <input
+            type='number'
+            min={1}
+            max={31}
+            value={remainderDays.secondDueDay}
+            name='secondDueDay'
+            placeholder='Second Due Day...'
+            class='form-control me-2'
+            onChange={onChangeInputHandler}
+            style={{width: '100px'}}
+          />
+          <label class='form-label'> Third Due Day</label>
+          <input
+            type='number'
+            min={1}
+            max={31}
+            value={remainderDays.thirdDueDay}
+            name='thirdDueDay'
+            placeholder='Third Due Day...'
+            class='form-control me-2'
+            onChange={onChangeInputHandler}
+            style={{width: '100px'}}
           />
         </div>
         <button
