@@ -53,13 +53,21 @@ const MonthlyCollectionFee = () => {
     return monthsDiff < 0 ? 0 : monthsDiff + 1
   }
 
-  const filteredData = data?.filter(
-    (item) =>
-      calculateMonthDiff(item?.studentInfo?.no_of_installments_expireTimeandAmount) != 0 &&
-      item?.studentInfo?.no_of_installments === item?.installment_number &&
-      item.dropOutStudent === false &&
-      Number(item?.expiration_date?.split('-')[1]) <= toDate?.getMonth() + 1
-  )
+  const filteredData = data?.filter((item) => {
+    const missedMonths = calculateMonthDiff(
+      item?.studentInfo?.no_of_installments_expireTimeandAmount
+    )
+
+    const hasPaidForCurrentMonth =
+      Number(item?.expiration_date?.split('-')[1]) === toDate.getMonth() + 1
+
+    return (
+      missedMonths !== 0 && // Skipped months should not be zero
+      item?.studentInfo?.no_of_installments === item?.installment_number && // Installment matches
+      item.dropOutStudent === false && // Not a dropout student
+      !hasPaidForCurrentMonth // Exclude if they have paid for the current month
+    )
+  })
 
   const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
 
