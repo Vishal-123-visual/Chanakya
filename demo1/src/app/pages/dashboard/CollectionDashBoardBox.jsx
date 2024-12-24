@@ -100,7 +100,7 @@ const CollectionDashBoardBox = ({className, chartSize = 70, chartLine = 11, char
             <span className='fs-4 fw-semibold text-gray-400 me-1 align-self-start'>₹</span>
             <span className='fs-2hx fw-bold text-dark me-2 lh-1 ls-n2'>{balanceAmount}</span>
             <span
-              className={`badge fs-base mx-15 ${
+              className={`badge fs-base mx-4 ${
                 isProfit ? 'badge-light-success' : 'badge-light-danger'
               }`}
             >
