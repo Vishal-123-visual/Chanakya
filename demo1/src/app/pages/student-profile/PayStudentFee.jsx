@@ -3,16 +3,28 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {Fragment} from 'react'
+import {toast} from 'react-toastify'
 
-const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFeeFormToggle}) => {
+const PayStudentFee = ({
+  payStudentFeesAdd,
+  setPayStudentFeesAdd,
+  setAddStudentFeeFormToggle,
+  studentInfoData,
+}) => {
   const paymentOptionCtx = usePaymentOptionContextContext()
-
+  // console.log(studentInfoData)
   // Set initial date to current date if not already set
   useEffect(() => {
     if (!payStudentFeesAdd.amountDate) {
       setPayStudentFeesAdd((prev) => ({...prev, amountDate: new Date()}))
     }
   }, [payStudentFeesAdd.amountDate, setPayStudentFeesAdd])
+
+  useEffect(() => {
+    if (!studentInfoData?.installment_duration) {
+      toast.info('First add the installment due date of student !!')
+    }
+  }, [studentInfoData?.installment_duration])
 
   const remainingFeesHandler = (e) => {
     setPayStudentFeesAdd((prev) => ({
@@ -108,12 +120,14 @@ const PayStudentFee = ({payStudentFeesAdd, setPayStudentFeesAdd, setAddStudentFe
       </td>
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>
-          <button
-            type='submit'
-            className='btn btn-success btn-active-color-primary btn-sm me-1 px-5'
-          >
-            Pay
-          </button>
+          {!studentInfoData?.installment_duration ? null : ( // No toast here, handled in useEffect
+            <button
+              type='submit'
+              className='btn btn-success btn-active-color-primary btn-sm me-1 px-5'
+            >
+              Pay
+            </button>
+          )}
           <button
             type='button'
             onClick={() => setAddStudentFeeFormToggle(false)}

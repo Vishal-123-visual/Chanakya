@@ -98,7 +98,9 @@ const CollectionDashBoardBox = ({className, chartSize = 70, chartLine = 11, char
         <div className='card-title d-flex flex-column'>
           <div className='d-flex align-items-center'>
             <span className='fs-4 fw-semibold text-gray-400 me-1 align-self-start'>₹</span>
-            <span className='fs-2hx fw-bold text-dark me-2 lh-1 ls-n2'>{balanceAmount}</span>
+            <span className='fs-2hx fw-bold text-dark me-2 lh-1 ls-n2'>
+              {new Intl.NumberFormat('en-IN').format(balanceAmount)}
+            </span>
             <span
               className={`badge fs-base mx-4 ${
                 isProfit ? 'badge-light-success' : 'badge-light-danger'
@@ -130,12 +132,16 @@ const CollectionDashBoardBox = ({className, chartSize = 70, chartLine = 11, char
           <div className='d-flex fw-semibold align-items-center mb-3'>
             <div className='bullet w-8px h-3px rounded-2 bg-success me-2'></div>
             <div className='text-gray-500 flex-grow-1 text-truncate'>Total Income</div>
-            <div className='fw-bolder text-gray-700 text-nowrap ms-4'>₹{TotalIncome}</div>
+            <div className='fw-bolder text-gray-700 text-nowrap ms-4'>
+              ₹{new Intl.NumberFormat('en-IN').format(TotalIncome)}
+            </div>
           </div>
           <div className='d-flex fw-semibold align-items-center mb-3'>
             <div className='bullet w-8px h-3px rounded-2 bg-danger me-2'></div>
             <div className='text-gray-500 flex-grow-1 text-truncate'>Total Expense</div>
-            <div className='fw-bolder text-gray-700 text-nowrap ms-4'>₹{TotalExpense}</div>
+            <div className='fw-bolder text-gray-700 text-nowrap ms-4'>
+              ₹{new Intl.NumberFormat('en-IN').format(TotalExpense)}
+            </div>
           </div>
           <div className='d-flex fw-semibold align-items-center'>
             <div
@@ -143,7 +149,9 @@ const CollectionDashBoardBox = ({className, chartSize = 70, chartLine = 11, char
               style={{backgroundColor: '#E4E6EF'}}
             ></div>
             <div className='text-gray-500 flex-grow-1 text-truncate'>Balance</div>
-            <div className='fw-bolder text-gray-700 text-nowrap ms-4'>₹{balanceAmount}</div>
+            <div className='fw-bolder text-gray-700 text-nowrap ms-4'>
+              ₹ {new Intl.NumberFormat('en-IN').format(balanceAmount)}
+            </div>
           </div>
         </div>
       </div>

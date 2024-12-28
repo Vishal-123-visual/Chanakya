@@ -815,7 +815,7 @@ const AddMissionForm: React.FC = () => {
               <div className='col-6'>
                 <div className='row mb-6'>
                   <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                    <span className='required'>Installmet Duration</span>
+                    <span className='required'>Installment Due Date</span>
                   </label>
 
                   <div className='col-lg-8 fv-row'>

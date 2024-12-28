@@ -4,6 +4,8 @@ import {HeaderUserMenu, ThemeModeSwitcher} from '../../../partials'
 import {useLayout} from '../../core'
 import {useAuth} from '../../../../app/modules/auth'
 import {useAdmissionContext} from '../../../../app/modules/auth/core/Addmission'
+import {useCompanyContext} from '../../../../app/pages/compay/CompanyContext'
+import {useNavigate} from 'react-router-dom'
 
 const itemClass = 'ms-1 ms-md-4'
 const btnClass =
@@ -18,14 +20,48 @@ const Navbar = () => {
   const {config} = useLayout()
   const {currentUser} = useAuth()
   //console.log(currentUser?.role)
+  const context = useCompanyContext()
+  const {data: studentIssuesLists} = context.useGetAllStudentIssueStatusQuery
+  //console.log(studentIssuesLists)
+  const navigate = useNavigate()
+
   const studentCTX = useAdmissionContext()
+  const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
+  // console.log(filteredData?.length)
 
   // Fetch current student data based on currentUser's email
   const currentStudent = studentCTX?.useGetSingleStudentUsingWithEmail(currentUser?.email)
 
   return (
     <div className='app-navbar flex-shrink-0'>
-      <div className={clsx('app-navbar-item', itemClass)}>
+      <div className={clsx('app-navbar-item', itemClass)} style={{position: 'relative'}}>
+        <button
+          type='button'
+          className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
+          style={{position: 'relative'}}
+        >
+          <KTIcon iconName='flag' className='fs-1 text-danger' />
+          <span
+            style={{
+              position: 'absolute',
+              top: '-4px', // Adjust as needed
+              right: '-1px', // Adjust as needed
+              backgroundColor: 'red',
+              color: 'white',
+              fontSize: '10px', // Adjust as needed
+              fontWeight: 'bold',
+              borderRadius: '50%',
+              width: '13px', // Adjust as needed
+              height: '13px', // Adjust as needed
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              pointerEvents: 'none',
+            }}
+          >
+            3
+          </span>
+        </button>
         <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
       </div>
 

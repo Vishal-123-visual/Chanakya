@@ -530,13 +530,16 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
           // );
 
           const toEmails = `${req?.user?.email}, ${superAdminEmail}`;
-
+          const sendedBy = `${req.user.fName} ${req.user.lName}`;
           try {
             // Send email
             await sendEmail(
               toEmails,
+              "Reminder: Payment Due for Student",
               "Alert Student Pending Fees",
-              studentData?.particulars
+              studentData?.particulars,
+              req,
+              sendedBy
             );
             studentData.isEmailSent = true;
             await studentData.save();

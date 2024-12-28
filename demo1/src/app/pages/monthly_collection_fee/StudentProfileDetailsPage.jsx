@@ -778,7 +778,7 @@ const StudentProfileDetailsPage = () => {
                 <div className='col-6'>
                   <div className='row mb-6'>
                     <label className='col-lg-4 col-form-label fw-bold fs-6'>
-                      <span className=''>Installment Duration</span>
+                      <span className=''>Installment Due Date</span>
                     </label>
 
                     <div className='col-lg-8 fv-row'>
