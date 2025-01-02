@@ -163,6 +163,9 @@ const DashboardWrapper: FC = () => {
 
       // Fallback: Retry on user interaction if the audio didn't play
       document.addEventListener('click', playAudio, {once: true})
+    } else {
+      // No pending students: Ensure no dialog or audio is triggered
+      setShowDialog(false)
     }
   }, [studentCTX])
 
