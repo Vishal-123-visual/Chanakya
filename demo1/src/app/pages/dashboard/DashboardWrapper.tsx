@@ -137,27 +137,18 @@ const DashboardWrapper: FC = () => {
   const intl = useIntl()
   const {currentUser} = useAuth()
   const [showDialog, setShowDialog] = useState(false)
-  const [audio] = useState(() => new Audio('/audio.wav')) // Initialize audio once
   const studentCTX = useAdmissionContext()
 
-  // Preload audio and ensure it’s ready
   useEffect(() => {
-    audio.load()
-
-    // Enable audio playback on first user interaction (to comply with autoplay policies)
-    const enableAudio = () => {
-      audio.play().catch(() => {})
-      document.removeEventListener('click', enableAudio) // Remove listener after enabling
+    const playAudio = async () => {
+      try {
+        const audio = new Audio('/audio.wav') // Ensure the correct path
+        await audio.play()
+      } catch (error) {
+        console.log('Error playing audio:', error)
+      }
     }
-    document.addEventListener('click', enableAudio)
 
-    return () => {
-      document.removeEventListener('click', enableAudio)
-    }
-  }, [audio])
-
-  // Trigger notification and audio playback
-  useEffect(() => {
     const filteredStudentsAlertData =
       studentCTX.getAllStudentsAlertStudentPendingFeesQuery?.data?.filter(
         (s) =>
@@ -167,15 +158,14 @@ const DashboardWrapper: FC = () => {
     if (filteredStudentsAlertData?.length > 0) {
       setShowDialog(true)
 
-      // Attempt to play audio
-      audio
-        .play()
-        .then(() => console.log('Audio played successfully'))
-        .catch((error) => console.log('Audio playback failed:', error))
-    }
-  }, [studentCTX, audio])
+      // Attempt to play the audio
+      playAudio()
 
-  // Auto-close dialog after 5 seconds
+      // Fallback: Retry on user interaction if the audio didn't play
+      document.addEventListener('click', playAudio, {once: true})
+    }
+  }, [studentCTX])
+
   useEffect(() => {
     if (showDialog) {
       const timer = setTimeout(() => {
