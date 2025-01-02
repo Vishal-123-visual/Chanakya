@@ -17,6 +17,7 @@ const ShowStudentOnDashBoardNavbar = ({className}) => {
       <div
         style={{
           overflowY: 'scroll',
+          overflowX: 'hidden',
           width: '200px', // Adjust the width as needed
           maxHeight: '400px', // Add a max height for scrollable content
           padding: '10px',
