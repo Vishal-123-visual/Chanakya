@@ -1,61 +1,58 @@
 import {Fragment} from 'react'
 import {KTIcon} from '../../../_metronic/helpers'
-import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import {useNavigate} from 'react-router-dom'
 import {useCompanyContext} from '../compay/CompanyContext'
 
 const ShowStudentOnDashBoardNavbar = ({className}) => {
   const context = useCompanyContext()
   const {data: studentIssuesLists} = context.useGetAllStudentIssueStatusQuery
-  //console.log(studentIssuesLists)
   const navigate = useNavigate()
 
+  // Filter the data for students with `showStudent` as true
   const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
-  //console.log(filteredData)
+
   return (
-    <>
-      <div
-        style={{
-          overflowY: 'scroll',
-          overflowX: 'hidden',
-          width: '200px', // Adjust the width as needed
-          maxHeight: '400px', // Add a max height for scrollable content
-          padding: '10px',
-          borderRadius: '8px',
-          backgroundColor: '#fff', // Background color to match design
-        }}
-        // style={{overflowY: 'scroll'}}
-        className={` ${className}`}
-      >
-        {/* <div className='card-body pt-5'> */}
-        {filteredData?.length === 0 && <div>No Student Issue is right now</div>}
-        {filteredData?.map((row, index) => (
-          <Fragment key={`lw26-rows-${index}`}>
-            <div className='d-flex flex-stack'>
-              <a
-                className='text-danger fw-semibold fs-6 me-2'
-                onClick={() => navigate(`/profile/student/${row.studentId}`)}
-                style={{cursor: 'pointer'}}
-              >
-                {row?.studentName}
-              </a>
-              <button
-                onClick={() => navigate(`/profile/student/${row.studentId}`)}
-                type='button'
-                className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
-              >
-                <KTIcon iconName='flag' className='fs-2 text-danger' />
-              </button>
-            </div>
-            {/* <div className='separator separator-dashed my-3' /> */}
-            {filteredData?.length - 1 > index && (
-              <div className='separator separator-dashed my-3' />
-            )}
-          </Fragment>
-        ))}
-        {/* </div> */}
-      </div>
-    </>
+    <div
+      style={{
+        overflowY: 'auto', // Enables scrolling for overflowing content
+        overflowX: 'hidden',
+        width: '200px',
+        maxHeight: '240px', // Adjust to fit approximately 5 students
+        padding: '10px',
+        backgroundColor: '#fff', // Background color to match design
+      }}
+      className={` ${className}`}
+    >
+      {filteredData?.length === 0 && <div>No Student Issue is right now</div>}
+      {filteredData?.map((row, index) => (
+        <Fragment key={`lw26-rows-${index}`}>
+          <div
+            className='d-flex flex-stack'
+            style={{
+              marginBottom: '10px', // Space between items
+              paddingBottom: '5px', // Padding for better spacing
+            }}
+          >
+            <a
+              className='text-danger fw-semibold fs-6 me-2'
+              onClick={() => navigate(`/profile/student/${row.studentId}`)}
+              style={{cursor: 'pointer'}}
+            >
+              {row?.studentName}
+            </a>
+            <button
+              onClick={() => navigate(`/profile/student/${row.studentId}`)}
+              type='button'
+              className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
+            >
+              <KTIcon iconName='flag' className='fs-2 text-danger' />
+            </button>
+          </div>
+          {filteredData?.length - 1 > index && <div className='separator separator-dashed my-3' />}
+        </Fragment>
+      ))}
+    </div>
   )
 }
+
 export default ShowStudentOnDashBoardNavbar

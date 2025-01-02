@@ -69,6 +69,7 @@ const Navbar = () => {
               width: '210px',
               maxHeight: '400px',
               // overflowY: 'auto',
+              overflow: 'hidden',
             }}
             onMouseLeave={() => setNotificationOpen(false)}
           >
