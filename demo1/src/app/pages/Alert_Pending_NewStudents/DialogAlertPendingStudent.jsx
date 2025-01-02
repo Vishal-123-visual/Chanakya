@@ -1,9 +1,10 @@
 import moment from 'moment'
-import { useAdmissionContext } from '../../modules/auth/core/Addmission'
+import {useAdmissionContext} from '../../modules/auth/core/Addmission'
+import {KTIcon} from '../../../_metronic/helpers'
 
 // import KTThemeMode from "../../../../src/"
 
-const DialogAlertPendingStudent = () => {
+const DialogAlertPendingStudent = ({setShowDialog}) => {
   // let mode = KTThemeMode.getMode();
   // console.log(mode)
 
@@ -21,8 +22,6 @@ const DialogAlertPendingStudent = () => {
 
   //console.log(themeMode)
 
-
-
   const studentCTX = useAdmissionContext()
   const filteredStudentsAlertData =
     studentCTX.getAllStudentsAlertStudentPendingFeesQuery?.data?.filter(
@@ -33,15 +32,25 @@ const DialogAlertPendingStudent = () => {
   //console.log(filteredStudentsAlertData)
 
   return (
-    <div className='card' style={{ backgroundColor: themeMode === 'light' ? '#f8f9fa' : 'InfoBackground' }}>
+    <div
+      className='card'
+      style={{backgroundColor: themeMode === 'light' ? '#f8f9fa' : 'InfoBackground'}}
+    >
       {/* begin::Header */}
       <div className='card-header border-0'>
         <h3 className='card-title fw-bold text-dark'>Alert Student Pending Fees</h3>
+        <button
+          className='modal-close'
+          style={{top: '15px', right: '5px'}}
+          onClick={() => setShowDialog(false)}
+        >
+          &times;
+        </button>
         <div className='card-toolbar'></div>
       </div>
       {/* end::Header */}
       {/* begin::Body */}
-      <div className='card-body pt-2 overflow-y-scroll' style={{ maxHeight: '300px' }}>
+      <div className='card-body pt-2 overflow-y-scroll' style={{maxHeight: '300px'}}>
         {filteredStudentsAlertData?.length === 0 ? (
           <div className=''>No Pending Alert Student Available</div>
         ) : (

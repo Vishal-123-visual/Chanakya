@@ -1,70 +1,87 @@
+import {useState} from 'react'
 import clsx from 'clsx'
-import {KTIcon, toAbsoluteUrl} from '../../../helpers'
+import {KTIcon} from '../../../helpers'
 import {HeaderUserMenu, ThemeModeSwitcher} from '../../../partials'
 import {useLayout} from '../../core'
 import {useAuth} from '../../../../app/modules/auth'
 import {useAdmissionContext} from '../../../../app/modules/auth/core/Addmission'
 import {useCompanyContext} from '../../../../app/pages/compay/CompanyContext'
-import {useNavigate} from 'react-router-dom'
+import ShowStudentOnDashBoardNavbar from '../../../../app/pages/student-issues/ShowStudentOnDashBoardNavbar'
 
 const itemClass = 'ms-1 ms-md-4'
-const btnClass =
-  'btn btn-icon btn-custom btn-icon-muted btn-active-light btn-active-color-primary w-35px h-35px'
 const userAvatarClass = 'symbol-35px'
 const btnIconClass = 'fs-2'
-
-const BASE_URL = process.env.REACT_APP_BASE_URL
-const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const Navbar = () => {
   const {config} = useLayout()
   const {currentUser} = useAuth()
-  //console.log(currentUser?.role)
   const context = useCompanyContext()
   const {data: studentIssuesLists} = context.useGetAllStudentIssueStatusQuery
-  //console.log(studentIssuesLists)
-  const navigate = useNavigate()
-
   const studentCTX = useAdmissionContext()
-  const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
-  // console.log(filteredData?.length)
+  const [isNotificationOpen, setNotificationOpen] = useState(false)
 
-  // Fetch current student data based on currentUser's email
+  const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
   const currentStudent = studentCTX?.useGetSingleStudentUsingWithEmail(currentUser?.email)
 
   return (
     <div className='app-navbar flex-shrink-0'>
+      {/* Notification Section */}
       <div className={clsx('app-navbar-item', itemClass)} style={{position: 'relative'}}>
         <button
           type='button'
           className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
           style={{position: 'relative'}}
+          onClick={() => setNotificationOpen(!isNotificationOpen)}
         >
           <KTIcon iconName='flag' className='fs-1 text-danger' />
           <span
             style={{
               position: 'absolute',
-              top: '-4px', // Adjust as needed
-              right: '-1px', // Adjust as needed
+              top: '-8px',
+              right: '-1px',
               backgroundColor: 'red',
               color: 'white',
-              fontSize: '10px', // Adjust as needed
+              fontSize: '10px',
               fontWeight: 'bold',
               borderRadius: '50%',
-              width: '13px', // Adjust as needed
-              height: '13px', // Adjust as needed
+              width: '14px',
+              height: '14px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               pointerEvents: 'none',
             }}
           >
-            3
+            {filteredData?.length}
           </span>
         </button>
         <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
+        {isNotificationOpen && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '80px',
+              right: '0',
+              backgroundColor: 'white',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+              borderRadius: '8px',
+              zIndex: '9999',
+              width: '210px',
+              maxHeight: '400px',
+              overflowY: 'auto',
+            }}
+            onMouseLeave={() => setNotificationOpen(false)}
+          >
+            <h5 className='p-3 border-bottom'>Student Notifications</h5>
+            {/* Render the student component */}
+            <div className='p-3'>
+              <ShowStudentOnDashBoardNavbar className={''} />
+            </div>
+          </div>
+        )}
       </div>
 
+      {/* User Avatar Section */}
       <div className={clsx('app-navbar-item', itemClass)}>
         <div
           className={clsx('cursor-pointer symbol', userAvatarClass)}
@@ -72,14 +89,7 @@ const Navbar = () => {
           data-kt-menu-attach='parent'
           data-kt-menu-placement='bottom-end'
         >
-          <img
-            src={
-              currentStudent?.data?.image
-                ? BASE_URL_Image + '/' + currentStudent?.data?.image
-                : '/300-1.jpg'
-            }
-            alt=''
-          />
+          <img src={currentStudent?.data?.image || '/300-1.jpg'} alt='' />
         </div>
         {currentStudent && <HeaderUserMenu currentStudent={currentStudent?.data} />}
       </div>

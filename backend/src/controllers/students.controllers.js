@@ -535,7 +535,7 @@ export const getAllStudentsAlertPendingFeesDataController = asyncHandler(
             // Send email
             await sendEmail(
               toEmails,
-              "Reminder: Payment Due for Student",
+              `Reminder: Payment Due for Student`,
               "Alert Student Pending Fees",
               studentData?.particulars,
               req,

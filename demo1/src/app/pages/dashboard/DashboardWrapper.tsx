@@ -24,6 +24,8 @@ import ShowStudentNotesNameDashboard from '../student-issues/ShowStudentNotesNam
 import CompleteCourseStudents from '../complete_course_students/CompleteCourseStudents'
 import CollectionDashBoardBox from './CollectionDashBoardBox'
 import AllStudentsAccordingToCourses from './AllStudentsAccordingToCourses'
+import {useAdmissionContext} from '../../modules/auth/core/Addmission'
+import moment from 'moment'
 
 const DashboardPage: FC = () => (
   <>
@@ -134,14 +136,55 @@ const DashboardPage: FC = () => (
 const DashboardWrapper: FC = () => {
   const intl = useIntl()
   const {currentUser} = useAuth()
+  const [showDialog, setShowDialog] = useState(false)
+  const [audio] = useState(() => new Audio('/audio.wav')) // Initialize audio once
+  const studentCTX = useAdmissionContext()
 
-  const [showDialog, setShowDialog] = useState(true)
-
+  // Preload audio and ensure it’s ready
   useEffect(() => {
-    setTimeout(() => {
-      setShowDialog(false)
-    }, 5000)
-  }, [])
+    audio.load()
+
+    // Enable audio playback on first user interaction (to comply with autoplay policies)
+    const enableAudio = () => {
+      audio.play().catch(() => {})
+      document.removeEventListener('click', enableAudio) // Remove listener after enabling
+    }
+    document.addEventListener('click', enableAudio)
+
+    return () => {
+      document.removeEventListener('click', enableAudio)
+    }
+  }, [audio])
+
+  // Trigger notification and audio playback
+  useEffect(() => {
+    const filteredStudentsAlertData =
+      studentCTX.getAllStudentsAlertStudentPendingFeesQuery?.data?.filter(
+        (s) =>
+          s.Status === 'pending' && moment(s?.RemainderDateAndTime).diff(moment(), 'days') === 0
+      )
+
+    if (filteredStudentsAlertData?.length > 0) {
+      setShowDialog(true)
+
+      // Attempt to play audio
+      audio
+        .play()
+        .then(() => console.log('Audio played successfully'))
+        .catch((error) => console.log('Audio playback failed:', error))
+    }
+  }, [studentCTX, audio])
+
+  // Auto-close dialog after 5 seconds
+  useEffect(() => {
+    if (showDialog) {
+      const timer = setTimeout(() => {
+        setShowDialog(false)
+      }, 5000)
+
+      return () => clearTimeout(timer)
+    }
+  }, [showDialog])
 
   return (
     <div style={{position: 'relative'}}>
@@ -156,8 +199,8 @@ const DashboardWrapper: FC = () => {
             zIndex: '1',
           }}
         >
-          {showDialog && <DialogAlertPendingStudent />}
-          <button
+          {showDialog && <DialogAlertPendingStudent setShowDialog={setShowDialog} />}
+          {/* <button
             type='button'
             className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
             data-kt-menu-trigger='click'
@@ -167,7 +210,7 @@ const DashboardWrapper: FC = () => {
             onClick={() => setShowDialog((prev) => !prev)}
           >
             <img src='/whatsapp.png' alt='' className='img-thumbnail' />
-          </button>
+          </button> */}
         </div>
       )}
     </div>
