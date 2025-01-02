@@ -74,9 +74,7 @@ const Navbar = () => {
           >
             <h5 className='p-3 border-bottom'>Student Notifications</h5>
             {/* Render the student component */}
-            <div className='p-3'>
-              <ShowStudentOnDashBoardNavbar className={''} />
-            </div>
+            <ShowStudentOnDashBoardNavbar className={''} />
           </div>
         )}
       </div>
