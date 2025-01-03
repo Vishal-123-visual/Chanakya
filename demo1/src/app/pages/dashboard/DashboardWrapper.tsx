@@ -26,13 +26,16 @@ import CollectionDashBoardBox from './CollectionDashBoardBox'
 import AllStudentsAccordingToCourses from './AllStudentsAccordingToCourses'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import moment from 'moment'
+import TodayTasks from './TodayTasks'
+import PastTask from './PastTask'
+import UpcomingTask from './UpcomingTask'
 
 const DashboardPage: FC = () => (
   <>
     {/* begin::Row */}
     <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
       {/* begin::Col */}
-      <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
+      {/* <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
         <CardsWidget20
           className='h-md-50 mb-5 mb-xl-10'
           description='Active Projects'
@@ -47,15 +50,15 @@ const DashboardPage: FC = () => (
           labelColor='dark'
           textColor='gray-300'
         />
-      </div>
+      </div> */}
       {/* end::Col */}
 
       {/* begin::Col */}
-      <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-3 mb-md-5 mb-xl-10'>
+      <div className='col-md-6 col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10'>
         <CollectionDashBoardBox className='h-md-50 mb-5 mb-xl-10' />
         {/* <ListsWidget26 className='h-lg-50' /> */}
         <div className='card card-header pt-5 h-lg-50'>
-          <h3 className='card-title text-gray-800 fw-bold'>Student Notes Flag</h3>
+          <h3 className='card-title text-gray-800 fw-bold'>Flagged Students</h3>
           <div className='card-toolbar'></div>
           <ShowStudentNotesNameDashboard className={''} />
         </div>
@@ -63,7 +66,7 @@ const DashboardPage: FC = () => (
       {/* end::Col */}
 
       {/* begin::Col */}
-      <div className='col-xxl-6'>
+      <div className='col-xxl-8'>
         <AllStudentsAccordingToCourses className='h-md-100' />
       </div>
       {/* end::Col */}
@@ -106,19 +109,23 @@ const DashboardPage: FC = () => (
     {/* begin::Row */}
     <div className='row gy-5 g-xl-8'>
       <div className='col-xl-4'>
-        <ListsWidget2 className='card-xl-stretch mb-xl-8' />
+        {/* <ListsWidget2 className='card-xl-stretch mb-xl-8' /> */}
+        <PastTask className='card-xl-stretch mb-xl-8' />
       </div>
       <div className='col-xl-4'>
-        <ListsWidget6 className='card-xl-stretch mb-xl-8' />
+        {/* <ListsWidget6 className='card-xl-stretch mb-xl-8' /> */}
+        <TodayTasks className='card-xl-stretch mb-xl-8' />
       </div>
       <div className='col-xl-4'>
-        <ListsWidget4 className='card-xl-stretch mb-5 mb-xl-8' items={5} />
+        {/* <ListsWidget4 className='card-xl-stretch mb-5 mb-xl-8' items={5} /> */}
+        <UpcomingTask className='card-xl-stretch mb-xl-8' />
+
         {/* partials/widgets/lists/_widget-4', 'class' => 'card-xl-stretch mb-5 mb-xl-8', 'items' => '5' */}
       </div>
     </div>
     {/* end::Row */}
 
-    <div className='row g-5 gx-xxl-8'>
+    {/* <div className='row g-5 gx-xxl-8'>
       <div className='col-xxl-4'>
         <MixedWidget8
           className='card-xxl-stretch mb-xl-3'
@@ -129,7 +136,7 @@ const DashboardPage: FC = () => (
       <div className='col-xxl-8'>
         <TablesWidget5 className='card-xxl-stretch mb-5 mb-xxl-8' />
       </div>
-    </div>
+    </div> */}
   </>
 )
 
@@ -162,22 +169,22 @@ const DashboardWrapper: FC = () => {
       playAudio()
 
       // Fallback: Retry on user interaction if the audio didn't play
-      document.addEventListener('click', playAudio, {once: true})
+      // document.addEventListener('click', playAudio, {once: true})
     } else {
       // No pending students: Ensure no dialog or audio is triggered
       setShowDialog(false)
     }
   }, [studentCTX])
 
-  useEffect(() => {
-    if (showDialog) {
-      const timer = setTimeout(() => {
-        setShowDialog(false)
-      }, 5000)
+  // useEffect(() => {
+  //   if (showDialog) {
+  //     const timer = setTimeout(() => {
+  //       setShowDialog(false)
+  //     }, 5000)
 
-      return () => clearTimeout(timer)
-    }
-  }, [showDialog])
+  //     return () => clearTimeout(timer)
+  //   }
+  // }, [showDialog])
 
   return (
     <div style={{position: 'relative'}}>
@@ -187,7 +194,7 @@ const DashboardWrapper: FC = () => {
         <div
           style={{
             position: 'fixed',
-            top: '60%',
+            top: '50%',
             right: '0px',
             zIndex: '1',
           }}

@@ -1,12 +1,14 @@
 import moment from 'moment'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import {KTIcon} from '../../../_metronic/helpers'
+import {useNavigate} from 'react-router-dom'
 
 // import KTThemeMode from "../../../../src/"
 
 const DialogAlertPendingStudent = ({setShowDialog}) => {
   // let mode = KTThemeMode.getMode();
   // console.log(mode)
+  const navigate = useNavigate()
 
   let themeMode = 'system'
 
@@ -50,7 +52,14 @@ const DialogAlertPendingStudent = ({setShowDialog}) => {
       </div>
       {/* end::Header */}
       {/* begin::Body */}
-      <div className='card-body pt-2 overflow-y-scroll' style={{maxHeight: '300px'}}>
+      <div
+        className='card-body pt-2 '
+        style={{
+          maxHeight: filteredStudentsAlertData?.length === 1 ? '100px' : '180px',
+          overflowX: 'hidden',
+          overflowY: filteredStudentsAlertData?.length === 2 ? 'hidden' : 'scroll',
+        }}
+      >
         {filteredStudentsAlertData?.length === 0 ? (
           <div className=''>No Pending Alert Student Available</div>
         ) : (
@@ -61,7 +70,13 @@ const DialogAlertPendingStudent = ({setShowDialog}) => {
                   <span className='bullet bullet-vertical h-40px bg-danger'></span>
                   <div className='form-check form-check-custom form-check-solid mx-5'></div>
                   <div className='flex-grow-1'>
-                    <a className='text-gray-800 text-hover-primary fw-bold fs-6'>
+                    <a
+                      onClick={() =>
+                        navigate(`/profile/student/${studentAlertData?.studentId?._id}`)
+                      }
+                      style={{cursor: 'pointer'}}
+                      className='text-gray-800 text-hover-primary fw-bold fs-6'
+                    >
                       {studentAlertData?.studentId?.name}
                     </a>
                     <span className='text-muted fw-semibold d-block'>

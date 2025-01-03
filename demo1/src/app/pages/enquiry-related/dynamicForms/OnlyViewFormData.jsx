@@ -15,7 +15,7 @@ const OnlyViewFormData = ({rowId, setOpenModal, openEditFormData}) => {
 
   const allDefaultSelects = getAllDefaultSelectFields?.data?.defaultSelects
 
-  console.log(formFieldValues)
+  // console.log(formFieldValues)
   const {data: singleFormValueData} = useGetSingleFormValueById(rowId)
   const companyId = singleFormValueData?.companyId
   const formId = singleFormValueData?.formId

@@ -15,7 +15,7 @@ export const addStudentNotesController = async (req, res, next) => {
       // endTime,
       userId,
       companyId,
-      addedBy: req.user.fName,
+      addedBy: ` ${req.user.fName} ${req.user.lName}`,
     });
     await studentNotes.save();
     res
@@ -61,14 +61,19 @@ export const updateSingleStudentNoteByIdController = async (req, res, next) => {
     const { id } = req.params;
     const updatedStudentNote = await studentNotesModel.findByIdAndUpdate(
       id,
-      req.body,
+      {
+        ...req.body,
+        addedBy: `${req.user.fName} ${req.user.lName}`, // Add addedBy directly in the update data
+      },
       { new: true }
     );
+
     if (!updatedStudentNote) {
       return res
         .status(404)
         .json({ success: false, message: "Student note not found" });
     }
+
     res.status(200).json({ success: true, updatedStudentNote });
   } catch (error) {
     res

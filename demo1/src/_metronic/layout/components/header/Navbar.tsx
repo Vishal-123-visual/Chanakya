@@ -7,6 +7,7 @@ import {useAuth} from '../../../../app/modules/auth'
 import {useAdmissionContext} from '../../../../app/modules/auth/core/Addmission'
 import {useCompanyContext} from '../../../../app/pages/compay/CompanyContext'
 import ShowStudentOnDashBoardNavbar from '../../../../app/pages/student-issues/ShowStudentOnDashBoardNavbar'
+import NotificationOfAlertStudentOnNavbar from '../../../../app/pages/Alert_Pending_NewStudents/NotificationOfAlertStudentOnNavbar'
 
 const itemClass = 'ms-1 ms-md-4'
 const userAvatarClass = 'symbol-35px'
@@ -18,7 +19,12 @@ const Navbar = () => {
   const context = useCompanyContext()
   const {data: studentIssuesLists} = context.useGetAllStudentIssueStatusQuery
   const studentCTX = useAdmissionContext()
+  const filteredStudentsAlertData =
+    studentCTX.getAllStudentsAlertStudentPendingFeesQuery?.data?.filter(
+      (s) => s.Status === 'pending'
+    )
   const [isNotificationOpen, setNotificationOpen] = useState(false)
+  const [isAlertNotificationOpen, setAlertNotificationOpen] = useState(false)
 
   const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
   const currentStudent = studentCTX?.useGetSingleStudentUsingWithEmail(currentUser?.email)
@@ -29,31 +35,67 @@ const Navbar = () => {
       <div className={clsx('app-navbar-item', itemClass)} style={{position: 'relative'}}>
         <button
           type='button'
+          className='btn btn-icon btn-md h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
+          style={{position: 'relative'}}
+          onClick={() => setAlertNotificationOpen(!isAlertNotificationOpen)}
+        >
+          <KTIcon iconName='notification' className='fs-1 text-warning' />
+          {filteredStudentsAlertData?.length === 0 ? (
+            ''
+          ) : (
+            <span
+              style={{
+                position: 'absolute',
+                top: '-8px',
+                right: '-1px',
+                backgroundColor: 'red',
+                color: 'white',
+                fontSize: '10px',
+                fontWeight: 'bold',
+                borderRadius: '50%',
+                width: '14px',
+                height: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                pointerEvents: 'none',
+              }}
+            >
+              {filteredStudentsAlertData?.length}
+            </span>
+          )}
+        </button>
+        <button
+          type='button'
           className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
           style={{position: 'relative'}}
           onClick={() => setNotificationOpen(!isNotificationOpen)}
         >
           <KTIcon iconName='flag' className='fs-1 text-danger' />
-          <span
-            style={{
-              position: 'absolute',
-              top: '-8px',
-              right: '-1px',
-              backgroundColor: 'red',
-              color: 'white',
-              fontSize: '10px',
-              fontWeight: 'bold',
-              borderRadius: '50%',
-              width: '14px',
-              height: '14px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              pointerEvents: 'none',
-            }}
-          >
-            {filteredData?.length}
-          </span>
+          {filteredData?.length === 0 ? (
+            ''
+          ) : (
+            <span
+              style={{
+                position: 'absolute',
+                top: '-8px',
+                right: '-1px',
+                backgroundColor: 'red',
+                color: 'white',
+                fontSize: '10px',
+                fontWeight: 'bold',
+                borderRadius: '50%',
+                width: '14px',
+                height: '14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                pointerEvents: 'none',
+              }}
+            >
+              {filteredData?.length}
+            </span>
+          )}
         </button>
         <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
         {isNotificationOpen && (
@@ -73,9 +115,31 @@ const Navbar = () => {
             }}
             onMouseLeave={() => setNotificationOpen(false)}
           >
-            <h5 className='p-3 border-bottom'>Student Notifications</h5>
+            <h5 className='p-3 border-bottom'>Flagged Students</h5>
             {/* Render the student component */}
             <ShowStudentOnDashBoardNavbar className={''} />
+          </div>
+        )}
+        {isAlertNotificationOpen && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '80px',
+              right: '0',
+              backgroundColor: 'white',
+              boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)',
+              borderRadius: '8px',
+              zIndex: '9999',
+              width: '210px',
+              maxHeight: '400px',
+              // overflowY: 'auto',
+              overflow: 'hidden',
+            }}
+            onMouseLeave={() => setAlertNotificationOpen(false)}
+          >
+            <h6 className='p-3 border-bottom'>Alert Student Pending Fees</h6>
+            {/* Render the student component */}
+            <NotificationOfAlertStudentOnNavbar />
           </div>
         )}
       </div>
