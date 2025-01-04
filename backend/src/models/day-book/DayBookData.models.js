@@ -30,6 +30,9 @@ const dayBookDataSchema = new mongoose.Schema(
     accountName: {
       type: String,
     },
+    commissionPersonName: {
+      type: String,
+    },
     naretion: {
       type: String,
     },

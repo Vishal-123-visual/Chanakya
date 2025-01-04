@@ -30,8 +30,15 @@ const ViewDayBook = () => {
       const itemDate = new Date(item.dayBookDatadate)
       const currentYear = toDate.getFullYear()
       const currentMonth = toDate.getMonth()
-      // Only include data up to the end of the previous month relative to the selected toDate
-      return item.companyId === params?.id && itemDate.getMonth() < currentMonth
+
+      // Only include data where:
+      // - The year is less than the current year
+      // - OR the year is the same, but the month is less than the current month
+      return (
+        item.companyId === params?.id &&
+        (itemDate.getFullYear() < currentYear ||
+          (itemDate.getFullYear() === currentYear && itemDate.getMonth() < currentMonth))
+      )
     })
     .reduce((acc, cur) => {
       // Summing up credit, subtracting debit, and adding late fees
@@ -265,7 +272,9 @@ const ViewDayBook = () => {
                                 : `/daybook/viewDaybook/${params?.id}`
                             }
                           >
-                            {dayBookEntry?.accountName || dayBookEntry?.StudentName}
+                            {dayBookEntry?.commissionPersonName
+                              ? dayBookEntry?.commissionPersonName
+                              : dayBookEntry?.accountName || dayBookEntry?.StudentName}
                           </Link>
                         </td>
                         <td className='text-dark fw-bold text-hover-primary fs-6'>

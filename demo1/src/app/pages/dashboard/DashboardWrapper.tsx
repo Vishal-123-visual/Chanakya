@@ -29,6 +29,8 @@ import moment from 'moment'
 import TodayTasks from './TodayTasks'
 import PastTask from './PastTask'
 import UpcomingTask from './UpcomingTask'
+import TodayTasksNotification from './TodayTasksNotification'
+import {useCustomFormFieldContext} from '../enquiry-related/dynamicForms/CustomFormFieldDataContext'
 
 const DashboardPage: FC = () => (
   <>
@@ -90,7 +92,7 @@ const DashboardPage: FC = () => (
     {/* end::Row */}
 
     {/* begin::Row */}
-    <div className='row gy-5 gx-xl-8'>
+    <div className='row gy-5 gx-xl-8 mb-xl-10'>
       <div className='col-xxl-4'>
         {/* <ListsWidget3 className='card-xxl-stretch mb-xl-3' /> */}
         {/* --------------------------- Start here  Alert Pending Student Show here ------------------- */}
@@ -107,7 +109,7 @@ const DashboardPage: FC = () => (
     {/* end::Row */}
 
     {/* begin::Row */}
-    <div className='row gy-5 g-xl-8'>
+    <div className='row gy-5 g-xl-8 mb-xl-10'>
       <div className='col-xl-4'>
         {/* <ListsWidget2 className='card-xl-stretch mb-xl-8' /> */}
         <PastTask className='card-xl-stretch mb-xl-8' />
@@ -144,7 +146,9 @@ const DashboardWrapper: FC = () => {
   const intl = useIntl()
   const {currentUser} = useAuth()
   const [showDialog, setShowDialog] = useState(false)
+  const [showTask, setShowTask] = useState(false)
   const studentCTX = useAdmissionContext()
+  const studentNotesCTX = useCustomFormFieldContext()
 
   useEffect(() => {
     const playAudio = async () => {
@@ -164,7 +168,6 @@ const DashboardWrapper: FC = () => {
 
     if (filteredStudentsAlertData?.length > 0) {
       setShowDialog(true)
-
       // Attempt to play the audio
       playAudio()
 
@@ -175,6 +178,31 @@ const DashboardWrapper: FC = () => {
       setShowDialog(false)
     }
   }, [studentCTX])
+
+  useEffect(() => {
+    const playAudio = async () => {
+      try {
+        const audio = new Audio('/audio.wav') // Ensure the correct path
+        await audio.play()
+      } catch (error) {
+        console.log('Error playing audio:', error)
+      }
+    }
+
+    const studentData = studentNotesCTX?.getStudentNotesListsQuery?.data?.allStudentNotes
+
+    if (studentData?.length > 0) {
+      setShowTask(true)
+      // Attempt to play the audio
+      playAudio()
+
+      // Fallback: Retry on user interaction if the audio didn't play
+      // document.addEventListener('click', playAudio, {once: true})
+    } else {
+      // No pending students: Ensure no dialog or audio is triggered
+      setShowTask(false)
+    }
+  }, [studentNotesCTX])
 
   // useEffect(() => {
   //   if (showDialog) {
@@ -191,16 +219,18 @@ const DashboardWrapper: FC = () => {
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</PageTitle>
       <DashboardPage />
       {currentUser?.role !== 'Student' && (
-        <div
-          style={{
-            position: 'fixed',
-            top: '50%',
-            right: '0px',
-            zIndex: '1',
-          }}
-        >
-          {showDialog && <DialogAlertPendingStudent setShowDialog={setShowDialog} />}
-          {/* <button
+        <>
+          {' '}
+          <div
+            style={{
+              position: 'fixed',
+              top: '40%',
+              right: '0px',
+              zIndex: '1',
+            }}
+          >
+            {showDialog && <DialogAlertPendingStudent setShowDialog={setShowDialog} />}
+            {/* <button
             type='button'
             className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
             data-kt-menu-trigger='click'
@@ -211,7 +241,18 @@ const DashboardWrapper: FC = () => {
           >
             <img src='/whatsapp.png' alt='' className='img-thumbnail' />
           </button> */}
-        </div>
+          </div>
+          <div
+            style={{
+              position: 'fixed',
+              top: '65%',
+              right: '0px',
+              zIndex: '1',
+            }}
+          >
+            {showTask && <TodayTasksNotification setShowTask={setShowTask} />}
+          </div>
+        </>
       )}
     </div>
   )

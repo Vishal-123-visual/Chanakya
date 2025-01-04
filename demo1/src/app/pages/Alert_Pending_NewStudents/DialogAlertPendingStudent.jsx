@@ -53,11 +53,11 @@ const DialogAlertPendingStudent = ({setShowDialog}) => {
       {/* end::Header */}
       {/* begin::Body */}
       <div
-        className='card-body pt-2 '
+        className='card-body pt-2'
         style={{
-          maxHeight: filteredStudentsAlertData?.length === 1 ? '100px' : '180px',
+          maxHeight: filteredStudentsAlertData?.length > 1 ? '90px' : '90px', // Adjust height based on the number of items
           overflowX: 'hidden',
-          overflowY: filteredStudentsAlertData?.length === 2 ? 'hidden' : 'scroll',
+          overflowY: filteredStudentsAlertData?.length > 1 ? 'scroll' : 'hidden', // Show scrollbar if more than 1 alert
         }}
       >
         {filteredStudentsAlertData?.length === 0 ? (
@@ -95,9 +95,8 @@ const DialogAlertPendingStudent = ({setShowDialog}) => {
             })}
           </div>
         )}
-
-        {/* end:Item */}
       </div>
+
       {/* end::Body */}
     </div>
   )

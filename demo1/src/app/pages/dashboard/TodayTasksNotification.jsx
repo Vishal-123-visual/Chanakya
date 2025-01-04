@@ -1,9 +1,11 @@
 import React from 'react'
-import {KTIcon} from '../../../_metronic/helpers'
 import {useCustomFormFieldContext} from '../enquiry-related/dynamicForms/CustomFormFieldDataContext'
 import moment from 'moment'
+import {useNavigate} from 'react-router-dom'
+import {KTIcon} from '../../../_metronic/helpers'
 
-const TodayTasks = ({className}) => {
+const TodayTasksNotification = ({setShowTask}) => {
+  const navigate = useNavigate()
   const studentNotesCTX = useCustomFormFieldContext()
   const studentData = studentNotesCTX?.getStudentNotesListsQuery?.data?.allStudentNotes
 
@@ -17,31 +19,50 @@ const TodayTasks = ({className}) => {
       moment(task.startTime).month() === today.month() && // Ensure the same month
       moment(task.startTime).year() === today.year() // Ensure the same year
   )
-  //   console.log(todaysTasks)
-  // Get the first 4 tasks to show
-  const tasksToShow = todaysTasks?.slice(0, 4)
+
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
+  document.documentElement.setAttribute('data-bs-theme', themeMode)
 
   return (
-    <div className='card card-xl-stretch mb-5 mb-xl-8'>
+    <div
+      className='card'
+      style={{backgroundColor: themeMode === 'light' ? '#f8f9fa' : 'InfoBackground'}}
+    >
       {/* begin::Header */}
       <div className='card-header border-0'>
         <h3 className='card-title fw-bold text-dark'>Today Tasks</h3>
+        <button
+          className='modal-close'
+          style={{top: '15px', right: '5px'}}
+          onClick={() => setShowTask(false)}
+        >
+          &times;
+        </button>
+        <div className='card-toolbar'></div>
       </div>
       {/* end::Header */}
-
       {/* begin::Body */}
       <div
         className='card-body pt-0'
         style={{
-          maxHeight: '500px', // Set the max height for the body
-          overflowY: tasksToShow?.length > 4 ? 'auto' : 'hidden', // Show scrollbar if more than 4 tasks
+          maxHeight: todaysTasks?.length > 1 ? '90px' : '90px', // Adjust height based on the number of items
           overflowX: 'hidden',
+          overflowY: todaysTasks?.length > 1 ? 'scroll' : 'hidden',
         }}
       >
-        {tasksToShow?.length === 0 ? (
+        {todaysTasks?.length === 0 ? (
           <div>No tasks for today</div>
         ) : (
-          tasksToShow?.map((task) => (
+          todaysTasks?.map((task) => (
             <div
               className='d-flex align-items-center bg-light-success rounded p-5 mb-7'
               key={task._id}
@@ -76,9 +97,10 @@ const TodayTasks = ({className}) => {
           ))
         )}
       </div>
+
       {/* end::Body */}
     </div>
   )
 }
 
-export default TodayTasks
+export default TodayTasksNotification

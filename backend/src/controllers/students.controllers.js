@@ -367,6 +367,7 @@ export const addStudentComissionController = asyncHandler(
       commissionPersonName,
       voucherNumber,
       commissionAmount,
+      dayBookAccountId,
       commissionDate,
       commissionNaretion,
       companyId,
@@ -397,7 +398,8 @@ export const addStudentComissionController = asyncHandler(
             message: "Commission Naretion is required!",
           });
       }
-
+      console.log(req.body);
+      // console.log(dayBookAccountId);
       const commissionStudent = new StudentComissionModel({
         ...req.body,
       });
@@ -430,6 +432,8 @@ export const addStudentComissionController = asyncHandler(
       const newDayBookData = new DayBookDataModel({
         rollNo: studentName.split("-")[1],
         StudentName: studentName.split("-")[0],
+        commissionPersonName,
+        dayBookAccountId,
         dayBookDatadate: commissionDate,
         debit: +commissionAmount,
         companyId,

@@ -32,7 +32,7 @@ const PastTask = ({className}) => {
     <div className='card card-xl-stretch mb-5 mb-xl-8'>
       {/* begin::Header */}
       <div className='card-header border-0'>
-        <h3 className='card-title fw-bold text-dark'>Past's Task</h3>
+        <h3 className='card-title fw-bold text-dark'>Past Tasks</h3>
       </div>
       {/* end::Header */}
 
@@ -76,7 +76,7 @@ const PastTask = ({className}) => {
 
               {/* begin::Label */}
               <span className='fw-bold text-danger py-1'>
-                {`Overdue by ${moment().diff(moment(task.startTime), 'days')} Days`}
+                {moment(task.startTime).format('DD-MM-YYYY')}
               </span>
               {/* end::Label */}
             </div>

@@ -22,7 +22,7 @@ const ListAlertPendingStudent = () => {
       <div
         className='card-body pt-2'
         style={{
-          maxHeight: filteredStudentsAlertData?.length > 2 ? '200px' : 'auto', // Adjust height for multiple students
+          maxHeight: filteredStudentsAlertData?.length > 2 ? 'auto' : 'auto', // Adjust height for multiple students
           minHeight: filteredStudentsAlertData?.length === 0 ? '145px' : 'auto', // Ensures full space when no students
           overflowY: filteredStudentsAlertData?.length > 2 ? 'auto' : 'hidden', // Enable scroll if needed
           overflowX: 'hidden',

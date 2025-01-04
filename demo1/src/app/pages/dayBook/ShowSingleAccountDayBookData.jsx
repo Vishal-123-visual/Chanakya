@@ -60,7 +60,9 @@ const ShowSingleAccountDayBookData = () => {
         {/* begin::Header */}
         <div className='card-header border-0 pt-5'>
           <h3 className='card-title align-items-start flex-column'>
-            <span className='card-label fw-bold fs-3 mb-1'>{data && data[0]?.accountName}</span>
+            <span className='card-label fw-bold fs-3 mb-1'>
+              {data && data[0]?.commissionPersonName}
+            </span>
             <span className='text-muted mt-1 fw-semibold fs-7'>
               {' '}
               {result.data?.companyId?.companyName}
@@ -83,7 +85,7 @@ const ShowSingleAccountDayBookData = () => {
                   <th className='min-w-50px'>SR.NO</th>
                   <th className='min-w-50px'>Created At</th>
                   <th className='min-w-80px'>Account Name</th>
-                  <th className='min-w-200px'>Naretion</th>
+                  <th className='min-w-200px'>Narration</th>
                   <th className='min-w-50px'>Credit</th>
                   <th className='min-w-50px'>Debit</th>
                 </tr>
@@ -117,7 +119,8 @@ const ShowSingleAccountDayBookData = () => {
                           </td>
                           <td>
                             <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                              {dayBookAccountData?.accountName}
+                              {dayBookAccountData?.accountName ||
+                                dayBookAccountData?.commissionPersonName}
                             </a>
                           </td>
                           <td style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}>

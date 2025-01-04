@@ -71,7 +71,7 @@ const UpcomingTask = ({className}) => {
 
                 {/* begin::Label */}
                 <span className='fw-bold text-warning py-1'>
-                  {`Due in ${dueInDays} Days`} {/* Display due in days */}
+                  {moment(task.startTime).format('DD-MM-YYYY')}
                 </span>
                 {/* end::Label */}
               </div>

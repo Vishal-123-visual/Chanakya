@@ -6,6 +6,7 @@ import {toast} from 'react-toastify'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {useCompanyContext} from '../compay/CompanyContext'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const CourseSchema = Yup.object().shape({
   studentName: Yup.string().required('Student Name is required'),
@@ -20,14 +21,31 @@ const StudentCommission = () => {
   const [loading, setLoading] = useState(false)
   const params = useParams()
   const location = useLocation()
+  const [selectedAccountId, setSelectedAccountId] = useState(null)
   //console.log(location.state.name)
   //console.log(params)
   const studentCTX = useCompanyContext()
   const {data} = studentCTX.useGetStudentsAccordingToCompanyQuery(params.companyId)
   const companyData = studentCTX.useGetSingleCompanyData(params.companyId)
   //console.log(companyData?.data?.companyName)
+  const dayBookAccountCtx = usePaymentOptionContextContext()
+  // const result = dayBookAccountCtx.getDayBookAccountsLists?.data?.filter(
+  //   (cp) => cp.companyId === params.companyId && cp.accountType === 'Commission'
+  // )
+  // console.log(selectedAccountId)
 
-  // console.log(data)
+  const handleCommissionPersonChange = (e) => {
+    const selectedName = e.target.value
+    const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists?.data?.find(
+      (cp) =>
+        cp.companyId === params.companyId &&
+        cp.accountType === 'Commission' &&
+        cp.accountName === selectedName
+    )
+    const accountId = selectedAccount?._id || null
+    setSelectedAccountId(accountId)
+    formik.setFieldValue('dayBookAccountId', accountId)
+  }
 
   const navigate = useNavigate()
   let initialValues = {
@@ -37,6 +55,7 @@ const StudentCommission = () => {
     commissionAmount: '',
     commissionDate: '',
     commissionNaretion: '',
+    dayBookAccountId: '',
     companyId: params.companyId,
   }
 
@@ -44,6 +63,7 @@ const StudentCommission = () => {
     initialValues,
     validationSchema: CourseSchema,
     onSubmit: async (values) => {
+      // console.log(values)
       try {
         setLoading(true)
         studentCTX.createStudentCommissionMutation.mutate(values)
@@ -115,11 +135,28 @@ const StudentCommission = () => {
                   Commission Person Name{' '}
                   <div className='fv-row mt-5 '>
                     <input
-                      type='text'
+                      type='search'
                       className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
                       placeholder='Enter Commission Person Name'
+                      list='commissionPersonName'
                       {...formik.getFieldProps('commissionPersonName')}
+                      onChange={(e) => {
+                        formik.handleChange(e) // Update Formik state
+                        handleCommissionPersonChange(e) // Update selected account ID state
+                      }}
                     />
+                    <datalist id='commissionPersonName'>
+                      {dayBookAccountCtx.getDayBookAccountsLists?.data
+                        ?.filter(
+                          (cp) =>
+                            cp.companyId === params.companyId && cp.accountType === 'Commission'
+                        )
+                        .map((item) => (
+                          <option key={item._id} value={item.accountName}>
+                            {item.accountName}
+                          </option>
+                        ))}
+                    </datalist>
                     {formik.touched.commissionPersonName && formik.errors.commissionPersonName && (
                       <div className='fv-plugins-message-container'>
                         <div className='fv-help-block'>{formik.errors?.commissionPersonName}</div>
