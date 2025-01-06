@@ -7,29 +7,17 @@ const PastTask = ({className}) => {
   const studentNotesCTX = useCustomFormFieldContext()
   const studentData = studentNotesCTX?.getStudentNotesListsQuery?.data?.allStudentNotes
 
-  // Get today's date, and set it to start of the day to avoid time issues in comparison
+  // Get today's date, and set it to the start of the day
   const today = moment().startOf('day')
 
-  // Filter past tasks: Tasks that are before today's date
+  // Filter past tasks: Tasks before today's date
   const pastTasks = studentData?.filter((task) => {
-    const taskDate = moment(task.startTime) // Convert task date to moment
-    return taskDate.isBefore(today, 'day') // Check if task date is before today
-  })
-
-  // Additional filter to include tasks from the current year or previous year
-  const filteredPastTasks = pastTasks?.filter((task) => {
     const taskDate = moment(task.startTime)
-    return (
-      taskDate.year() < today.year() || // Tasks from previous years
-      (taskDate.year() === today.year() && taskDate.isBefore(today, 'day')) // Tasks before today in the current year
-    )
+    return taskDate.isBefore(today, 'day')
   })
-
-  // Get the first 4 tasks to display
-  const tasksToShow = filteredPastTasks?.slice(0, 4)
 
   return (
-    <div className='card card-xl-stretch mb-5 mb-xl-8'>
+    <div className={`card card-xl-stretch mb-5 mb-xl-8 ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0'>
         <h3 className='card-title fw-bold text-dark'>Past Tasks</h3>
@@ -40,15 +28,15 @@ const PastTask = ({className}) => {
       <div
         className='card-body pt-0'
         style={{
-          maxHeight: '500px', // Adjust as needed for the desired height
-          overflowY: filteredPastTasks?.length > 4 ? 'auto' : 'hidden', // Show scrollbar if more than 4 tasks
+          maxHeight: '380px', // Adjust the view height minus header or padding
+          overflowY: pastTasks?.length > 4 ? 'auto' : 'hidden', // Show scrollbar only for more than 4 tasks
           overflowX: 'hidden',
         }}
       >
-        {tasksToShow?.length === 0 ? (
+        {pastTasks?.length === 0 ? (
           <div>No past tasks available</div>
         ) : (
-          tasksToShow?.map((task) => (
+          pastTasks.map((task) => (
             <div
               className='d-flex align-items-center bg-light-danger rounded p-5 mb-7'
               key={task._id}
@@ -63,13 +51,13 @@ const PastTask = ({className}) => {
               <div className='flex-grow-1 me-2'>
                 <a
                   href={`/reminder-task/${task?.companyId}`}
-                  target='blank'
+                  target='_blank'
                   className='fw-bold text-gray-800 text-hover-primary fs-6'
                 >
-                  <strong>{task.particulars}</strong> {/* Bold the particulars */}
+                  <strong>{task.particulars}</strong>
                 </a>
                 <span className='text-muted fw-semibold d-block'>
-                  <span className='text-muted'>{`Added by: ${task.addedBy}`}</span>
+                  {`Added by: ${task.addedBy}`}
                 </span>
               </div>
               {/* end::Title */}

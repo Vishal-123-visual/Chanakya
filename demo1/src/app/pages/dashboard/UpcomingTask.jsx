@@ -7,20 +7,17 @@ const UpcomingTask = ({className}) => {
   const studentNotesCTX = useCustomFormFieldContext()
   const studentData = studentNotesCTX?.getStudentNotesListsQuery?.data?.allStudentNotes
 
-  // Get today's date, and set it to start of the day to avoid time issues in comparison
+  // Get today's date, set to the start of the day
   const today = moment().startOf('day')
 
   // Filter upcoming tasks: Tasks where the startTime is in the future
   const upcomingTasks = studentData?.filter((task) => {
-    const taskDate = moment(task.startTime) // Convert task startTime to moment
-    return taskDate.isAfter(today, 'day') // Check if task startTime is after today
+    const taskDate = moment(task.startTime)
+    return taskDate.isAfter(today, 'day')
   })
 
-  // Get the first 4 tasks to display
-  const tasksToShow = upcomingTasks?.slice(0, 4)
-
   return (
-    <div className='card card-xl-stretch mb-5 mb-xl-8'>
+    <div className={`card card-xl-stretch mb-5 mb-xl-8 ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0'>
         <h3 className='card-title fw-bold text-dark'>Upcoming Tasks</h3>
@@ -31,17 +28,17 @@ const UpcomingTask = ({className}) => {
       <div
         className='card-body pt-0'
         style={{
-          maxHeight: '500px', // Adjust as needed for the desired height
-          overflowY: upcomingTasks?.length > 4 ? 'auto' : 'hidden', // Show scrollbar if more than 4 tasks
-          overflowX: 'hidden',
+          maxHeight: '380px', // Set max height for the card body
+          overflowY: 'auto', // Enable scrolling when content exceeds height
+          overflowX: 'hidden', // Prevent horizontal scrolling
         }}
       >
-        {tasksToShow?.length === 0 ? (
+        {upcomingTasks?.length === 0 ? (
           <div>No upcoming tasks</div>
         ) : (
-          tasksToShow?.map((task) => {
+          upcomingTasks.map((task) => {
             const taskDate = moment(task.startTime)
-            const dueInDays = taskDate.diff(today, 'days') // Calculate how many days until the task
+            const dueInDays = taskDate.diff(today, 'days') // Calculate days until the task
 
             return (
               <div
@@ -58,10 +55,10 @@ const UpcomingTask = ({className}) => {
                 <div className='flex-grow-1 me-2'>
                   <a
                     href={`/reminder-task/${task?.companyId}`}
-                    target='blank'
+                    target='_blank'
                     className='fw-bold text-gray-800 text-hover-primary fs-6'
                   >
-                    <strong>{task.particulars}</strong> {/* Bold the particulars */}
+                    <strong>{task.particulars}</strong>
                   </a>
                   <span className='text-muted fw-semibold d-block'>
                     {`Added By: ${task.addedBy}`}

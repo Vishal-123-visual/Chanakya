@@ -191,15 +191,15 @@ const DashboardWrapper: FC = () => {
 
     const studentData = studentNotesCTX?.getStudentNotesListsQuery?.data?.allStudentNotes
 
-    if (studentData?.length > 0) {
-      setShowTask(true)
-      // Attempt to play the audio
-      playAudio()
+    // Filter tasks for today
+    const today = moment().startOf('day')
+    const todaysTasks = studentData?.filter((task) => moment(task.startTime).isSame(today, 'day'))
 
-      // Fallback: Retry on user interaction if the audio didn't play
-      // document.addEventListener('click', playAudio, {once: true})
+    if (todaysTasks?.length > 0) {
+      setShowTask(true)
+      // Play audio only when there are tasks for today
+      playAudio()
     } else {
-      // No pending students: Ensure no dialog or audio is triggered
       setShowTask(false)
     }
   }, [studentNotesCTX])

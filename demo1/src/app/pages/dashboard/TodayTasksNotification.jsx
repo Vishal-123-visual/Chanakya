@@ -54,7 +54,7 @@ const TodayTasksNotification = ({setShowTask}) => {
       <div
         className='card-body pt-0'
         style={{
-          maxHeight: todaysTasks?.length > 1 ? '90px' : '90px', // Adjust height based on the number of items
+          maxHeight: todaysTasks?.length > 1 ? '180px' : '90px', // Adjust height based on the number of items
           overflowX: 'hidden',
           overflowY: todaysTasks?.length > 1 ? 'scroll' : 'hidden',
         }}
