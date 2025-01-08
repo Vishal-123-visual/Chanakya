@@ -153,6 +153,12 @@ export const createAddMissionController = asyncHandler(
       }
     });
 
+    let newAddmission = await addMissionFormModel.create({
+      ...req.body,
+      image: file,
+      courseDuration: courseRemainderDuration,
+    });
+
     sendEmail(
       `${email}, ${companyData.email},${superAdminEmail}`,
       ` Welcome to the  ${companyData.companyName}`,
@@ -243,12 +249,6 @@ export const createAddMissionController = asyncHandler(
 `,
       req
     );
-
-    let newAddmission = await addMissionFormModel.create({
-      ...req.body,
-      image: file,
-      courseDuration: courseRemainderDuration,
-    });
 
     res.status(200).json({
       success: true,

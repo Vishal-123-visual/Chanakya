@@ -36,7 +36,7 @@ const PastTask = ({className}) => {
         {pastTasks?.length === 0 ? (
           <div>No past tasks available</div>
         ) : (
-          pastTasks.map((task) => (
+          pastTasks?.map((task) => (
             <div
               className='d-flex align-items-center bg-light-danger rounded p-5 mb-7'
               key={task._id}

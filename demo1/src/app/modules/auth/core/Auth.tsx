@@ -39,8 +39,8 @@ const useAuth = () => {
 const AuthProvider: FC<WithChildren> = ({children}) => {
   const [auth, setAuth] = useState<AuthModel | undefined>(authHelper.getAuth())
   const [currentUser, setCurrentUser] = useState<UserModel | undefined>()
-  // console.log(auth);
-  // console.log(currentUser);
+  // console.log(auth)
+  // console.log(currentUser)
 
   const saveAuth = (auth: AuthModel | undefined) => {
     setAuth(auth)
@@ -73,7 +73,7 @@ const AuthInit: FC<WithChildren> = ({children}) => {
       try {
         if (!didRequest.current) {
           const {data} = await getUserByToken(apiToken)
-          //console.log(data)
+          // console.log(data)
           if (data) {
             setCurrentUser(data)
           }

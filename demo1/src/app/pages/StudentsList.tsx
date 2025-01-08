@@ -65,6 +65,12 @@ const StudentsList: React.FC<Props> = ({className}) => {
     })
   }
 
+  console.log(
+    ctx.studentsLists?.data?.users?.filter(
+      (c: any) => params?.id === c?.companyName && c.dropOutStudent === false
+    )
+  )
+
   const filteredStudents =
     ctx.studentsLists?.data?.users
       ?.filter((c: any) => params?.id === c?.companyName && c.dropOutStudent === false)

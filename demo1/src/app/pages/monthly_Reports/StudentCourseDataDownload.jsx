@@ -1,21 +1,20 @@
+import React, {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../../_metronic/helpers'
-import {useGetCourseCategoryContextContext} from './CourseCategoryContext'
+import {useCourseContext} from '../course/CourseContext'
+import ExcelSheetDownload from '../../pages/course/category/ExcelSheetDownload'
+import {useAdmissionContext} from '../../modules/auth/core/Addmission'
+import {useGetCourseCategoryContextContext} from '../course/category/CourseCategoryContext'
+import {KTIcon} from '../../../_metronic/helpers'
 import moment from 'moment'
-import {useCourseContext} from '../CourseContext'
-import {useAdmissionContext} from '../../../modules/auth/core/Addmission'
-import ExcelSheetDownload from './ExcelSheetDownload'
+import {DatePicker} from 'antd'
 
-type Props = {
-  className: string
-}
-
-const CourseCategory: React.FC<Props> = ({className}) => {
+const StudentCourseDataDownload = () => {
   const navigate = useNavigate()
   const courseCTX = useCourseContext()
   const studentCTX = useAdmissionContext()
   const ctx = useGetCourseCategoryContextContext()
-
+  const [toDate, setToDate] = useState(null)
+  const [fromDate, setFromDate] = useState(null)
   // console.log(ctx.getCourseCategoryLists?.data)
   // Get all categories
   const allCategories = ctx.getCourseCategoryLists?.data || []
@@ -24,7 +23,7 @@ const CourseCategory: React.FC<Props> = ({className}) => {
   const allCourses = courseCTX.getCourseLists?.data || []
 
   // Map each category to the count of courses it contains
-  const courseCountsByCategory = allCategories.reduce((acc: Record<string, number>, category) => {
+  const courseCountsByCategory = allCategories.reduce((acc, category) => {
     acc[category.category] = allCourses.filter(
       (course) => course.category.category === category.category
     ).length
@@ -48,33 +47,50 @@ const CourseCategory: React.FC<Props> = ({className}) => {
   // Log the result to verify
   // console.log(courseCountsByCategory)
 
-  const deleteCourseCategoryHandler = (courseCategoryId: string) => {
+  const deleteCourseCategoryHandler = (courseCategoryId) => {
     if (!window.confirm('Are you sure you want to delete this course category?')) {
       return
     }
     ctx.deleteCourseCategoryMutation.mutate(courseCategoryId)
   }
   return (
-    <div className={`card ${className}`}>
+    <div className={`card `}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bold fs-3 mb-1'>Course Category</span>
         </h3>
+        <div className='d-flex gap-3'>
+          <div className='d-flex gap-3'>
+            <label className='d-flex align-items-center'>
+              From
+              <DatePicker
+                selected={fromDate}
+                onChange={(date) => setFromDate(date)}
+                dateFormat='dd/MM/yyyy'
+                className='form-control form-control-sm ms-2'
+                placeholderText='DD/MM/YYYY'
+              />
+            </label>
+            <label className='d-flex align-items-center'>
+              To
+              <DatePicker
+                selected={toDate}
+                onChange={(date) => setToDate(date)}
+                dateFormat='dd/MM/yyyy'
+                className='form-control form-control-sm ms-2'
+                placeholderText='DD/MM/YYYY'
+              />
+            </label>
+          </div>
+        </div>
         <div
           className='card-toolbar'
           data-bs-toggle='tooltip'
           data-bs-placement='top'
           data-bs-trigger='hover'
-          title='Click to add a user'
         >
-          <button
-            onClick={() => navigate('/course/category/add')}
-            className='btn btn-sm btn-light-primary'
-          >
-            <KTIcon iconName='plus' className='fs-3' />
-            Add New Category
-          </button>
+          <button className='btn btn-primary btn-sm'> All Course PDF</button>
         </div>
       </div>
       {/* end::Header */}
@@ -102,7 +118,7 @@ const CourseCategory: React.FC<Props> = ({className}) => {
             {/* begin::Table body */}
             <tbody>
               {ctx.getCourseCategoryLists?.data?.length > 0 ? (
-                ctx.getCourseCategoryLists?.data?.map((category: any) => (
+                ctx.getCourseCategoryLists?.data?.map((category) => (
                   <tr key={category?._id}>
                     <td>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'>
@@ -164,19 +180,24 @@ const CourseCategory: React.FC<Props> = ({className}) => {
                     </td>
                     <td>
                       <div className='d-flex justify-content-end flex-shrink-0'>
-                        {/* <ExcelSheetDownload /> */}
-                        <button
+                        <ExcelSheetDownload
+                          fromDate={fromDate}
+                          toDate={toDate}
+                          companyId={category?.companyName}
+                          categoryId={category?._id}
+                        />
+                        {/* <button
                           onClick={() => navigate('/course/category/add', {state: category})}
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                         >
                           <KTIcon iconName='pencil' className='fs-3' />
-                        </button>
-                        <button
+                        </button> */}
+                        {/* <button
                           onClick={() => deleteCourseCategoryHandler(category._id)}
                           className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
                         >
                           <KTIcon iconName='trash' className='fs-3' />
-                        </button>
+                        </button> */}
                       </div>
                     </td>
                   </tr>
@@ -200,4 +221,5 @@ const CourseCategory: React.FC<Props> = ({className}) => {
     </div>
   )
 }
-export default CourseCategory
+
+export default StudentCourseDataDownload

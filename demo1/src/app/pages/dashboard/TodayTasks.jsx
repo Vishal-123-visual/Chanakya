@@ -33,7 +33,7 @@ const TodayTasks = ({className}) => {
         {todaysTasks?.length === 0 ? (
           <div>No tasks for today</div>
         ) : (
-          todaysTasks.map((task) => (
+          todaysTasks?.map((task) => (
             <div
               className='d-flex align-items-center bg-light-success rounded p-5 mb-7'
               key={task._id}

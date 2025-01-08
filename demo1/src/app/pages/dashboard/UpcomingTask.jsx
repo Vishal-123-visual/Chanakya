@@ -36,14 +36,14 @@ const UpcomingTask = ({className}) => {
         {upcomingTasks?.length === 0 ? (
           <div>No upcoming tasks</div>
         ) : (
-          upcomingTasks.map((task) => {
+          upcomingTasks?.map((task) => {
             const taskDate = moment(task.startTime)
             const dueInDays = taskDate.diff(today, 'days') // Calculate days until the task
 
             return (
               <div
                 className='d-flex align-items-center bg-light-warning rounded p-5 mb-7'
-                key={task._id}
+                key={task?._id}
               >
                 {/* begin::Icon */}
                 <span className='text-warning me-5'>
@@ -58,10 +58,10 @@ const UpcomingTask = ({className}) => {
                     target='_blank'
                     className='fw-bold text-gray-800 text-hover-primary fs-6'
                   >
-                    <strong>{task.particulars}</strong>
+                    <strong>{task?.particulars}</strong>
                   </a>
                   <span className='text-muted fw-semibold d-block'>
-                    {`Added By: ${task.addedBy}`}
+                    {`Added By: ${task?.addedBy}`}
                   </span>
                 </div>
                 {/* end::Title */}

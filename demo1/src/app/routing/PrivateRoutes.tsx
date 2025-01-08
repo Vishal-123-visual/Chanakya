@@ -9,7 +9,6 @@ import {WithChildren} from '../../_metronic/helpers'
 import BuilderPageWrapper from '../pages/layout-builder/BuilderPageWrapper'
 import {useAuth} from '../modules/auth'
 import {useAdmissionContext} from '../modules/auth/core/Addmission'
-import StudentProfile from '../pages/student-profile/StudentProfile'
 import UpdateAddmission from '../pages/UpdateAddmission'
 import WhatsappMessageSuggestion from '../pages/email-template/WhatsappMessageSuggestion'
 import PendingFeesStudents from '../pages/student-with-feesClear-and-remaining/PendingFeesStudents'
@@ -71,6 +70,8 @@ import UserRoleAccessManagement from '../pages/userRoleAccessManagement/UserRole
 import DynamicEmailTemplate from '../pages/email-template/DynamicEmailTemplate'
 import PaymentApproval from '../pages/Payment_Approval/PaymentApproval'
 import DayBookAccountTable from '../pages/dayBook/DayBookAccountTable'
+import StudentCourseDataDownload from '../pages/monthly_Reports/StudentCourseDataDownload'
+import StudentProfileView from '../pages/student-profile/StudentProfileView'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -311,8 +312,9 @@ const PrivateRoutes = () => {
             <Route path='/reminder-task/:id' element={<TodoCalendarRemainder />} />
             <Route path='/add-enquiry/:id' element={<AddEnquiryForm />} />
             {/* <---------------- Student Profile Page Starts Here ------------------>*/}
-            <Route path='/student/:id' element={<StudentProfile />} />
+            {/* <Route path='/student/:id' element={<StudentProfile />} /> */}
             <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
+            {/* <Route path='/student/:id' element={<StudentProfileDetailsPage />} /> */}
             {/* <----------------- Attendance Related Routes Starts Here ------------------> */}
             {/* <Route path='/add-trainer/:id' element={<TrainersList />} />
             <Route path='/add-lab/:id' element={<LabsList />} />
@@ -324,6 +326,14 @@ const PrivateRoutes = () => {
               element={
                 <>
                   <MonthlyReportsDashBoard />
+                </>
+              }
+            />
+            <Route
+              path='/student-reports/:id'
+              element={
+                <>
+                  <StudentCourseDataDownload />
                 </>
               }
             />
@@ -451,12 +461,12 @@ const PrivateRoutes = () => {
           </>
         ) : (
           <>
-            <Route path='dashboard' element={<DashboardWrapper />} />
+            {/* <Route path='student/:id' element={<StudentProfileView />} /> */}
             <Route
               path='/student/:id'
               element={
                 <>
-                  <StudentProfile />
+                  <StudentProfileView />
                 </>
               }
             />
@@ -465,10 +475,7 @@ const PrivateRoutes = () => {
             <Route
               path='*'
               element={
-                <Navigate
-                  to={`/student/${currentStudent?.data?._id}`}
-                  state={currentStudent?.data}
-                />
+                <Navigate to={`/student/${currentUser?.studentId}`} state={currentStudent?.data} />
               }
             />
           </>

@@ -186,6 +186,7 @@ export const getUserByTokn = asyncHandler(async (req, res, next) => {
       created_at: user.createdAt,
       updated_at: user.createdAt,
       role: user.role,
+      studentId: user.studentId || null,
       api_token: user.api_token,
     });
   } catch (error) {
@@ -215,7 +216,7 @@ export const requsetUserPasswordController = asyncHandler(
       sendEmail(
         user.email,
         "Reset Password",
-        `${BACKEND_URL}/reset-password/${user?._id}/${token}`
+        `${FRONTEND_URL}/reset-password/${user?._id}/${token}`
       );
       res.status(200).json({ success: true });
       // console.log(user);

@@ -12,6 +12,7 @@ import EditOnlyCourseFee from './EditOnlyCourseFee'
 import {toast} from 'react-toastify'
 import {useCompanyContext} from '../compay/CompanyContext'
 import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
+
 const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentInfoData)
   const params = useParams()
@@ -233,8 +234,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           data-bs-trigger='hover'
           title='Click to pay fees'
         >
-          {currentUser.role !== 'Student' &&
-          userRoleAccess?.some(
+          {userRoleAccess?.some(
             (userAccess) =>
               userAccess.studentFeesAccess['Add Student Fees'] === true &&
               userAccess.role === currentUser?.role

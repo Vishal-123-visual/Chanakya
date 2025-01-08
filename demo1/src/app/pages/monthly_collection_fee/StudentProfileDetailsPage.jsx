@@ -24,14 +24,14 @@ const StudentProfileDetailsPage = () => {
   const navigate = useNavigate()
   // console.log(params)
   const {currentUser} = useAuth()
-  //console.log(params)
+  // console.log(params)
   const {data: studentInfoData} = studentCTX.useGetSingleStudentUsingById(params.id)
   //console.log(studentCTX.useGetSingleStudentUsingById())
   const {data: singleComapnyData} = companyCTX?.useGetSingleCompanyData(
     studentInfoData?.companyName
   )
 
-  // console.log(singleComapnyData)
+  // console.log(studentInfoData)
   let cutWithGSTAmount =
     singleComapnyData?.isGstBased === 'Yes'
       ? (Number(studentInfoData?.totalPaid) /
@@ -50,6 +50,7 @@ const StudentProfileDetailsPage = () => {
     let value = studentInfoData?.remainingCourseFees % studentInfoData?.no_of_installments
     return value.toFixed(2)
   }
+
   return (
     <>
       <div className='card mb-5 mb-xl-10'>

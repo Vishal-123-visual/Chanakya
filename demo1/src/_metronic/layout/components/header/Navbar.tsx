@@ -33,70 +33,74 @@ const Navbar = () => {
     <div className='app-navbar flex-shrink-0'>
       {/* Notification Section */}
       <div className={clsx('app-navbar-item', itemClass)} style={{position: 'relative'}}>
-        <button
-          type='button'
-          className='btn btn-icon btn-md h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
-          style={{position: 'relative'}}
-          onClick={() => setAlertNotificationOpen(!isAlertNotificationOpen)}
-        >
-          <KTIcon iconName='notification' className='fs-1 text-warning' />
-          {filteredStudentsAlertData?.length === 0 ? (
-            ''
-          ) : (
-            <span
-              style={{
-                position: 'absolute',
-                top: '-8px',
-                right: '-1px',
-                backgroundColor: 'red',
-                color: 'white',
-                fontSize: '10px',
-                fontWeight: 'bold',
-                borderRadius: '50%',
-                width: '14px',
-                height: '14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                pointerEvents: 'none',
-              }}
-            >
-              {filteredStudentsAlertData?.length}
-            </span>
-          )}
-        </button>
-        <button
-          type='button'
-          className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
-          style={{position: 'relative'}}
-          onClick={() => setNotificationOpen(!isNotificationOpen)}
-        >
-          <KTIcon iconName='flag' className='fs-1 text-danger' />
-          {filteredData?.length === 0 ? (
-            ''
-          ) : (
-            <span
-              style={{
-                position: 'absolute',
-                top: '-8px',
-                right: '-1px',
-                backgroundColor: 'red',
-                color: 'white',
-                fontSize: '10px',
-                fontWeight: 'bold',
-                borderRadius: '50%',
-                width: '14px',
-                height: '14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                pointerEvents: 'none',
-              }}
-            >
-              {filteredData?.length}
-            </span>
-          )}
-        </button>
+        {currentUser?.role !== 'Student' && (
+          <button
+            type='button'
+            className='btn btn-icon btn-md h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
+            style={{position: 'relative'}}
+            onClick={() => setAlertNotificationOpen(!isAlertNotificationOpen)}
+          >
+            <KTIcon iconName='notification' className='fs-1 text-warning' />
+            {filteredStudentsAlertData?.length === 0 ? (
+              ''
+            ) : (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '-8px',
+                  right: '-1px',
+                  backgroundColor: 'red',
+                  color: 'white',
+                  fontSize: '10px',
+                  fontWeight: 'bold',
+                  borderRadius: '50%',
+                  width: '14px',
+                  height: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pointerEvents: 'none',
+                }}
+              >
+                {filteredStudentsAlertData?.length}
+              </span>
+            )}
+          </button>
+        )}
+        {currentUser?.role !== 'Student' && (
+          <button
+            type='button'
+            className='btn btn-icon btn-sm h-auto btn-color-gray-400 btn-active-color-primary justify-content-end'
+            style={{position: 'relative'}}
+            onClick={() => setNotificationOpen(!isNotificationOpen)}
+          >
+            <KTIcon iconName='flag' className='fs-1 text-danger' />
+            {filteredData?.length === 0 ? (
+              ''
+            ) : (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '-8px',
+                  right: '-1px',
+                  backgroundColor: 'red',
+                  color: 'white',
+                  fontSize: '10px',
+                  fontWeight: 'bold',
+                  borderRadius: '50%',
+                  width: '14px',
+                  height: '14px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pointerEvents: 'none',
+                }}
+              >
+                {filteredData?.length}
+              </span>
+            )}
+          </button>
+        )}
         <ThemeModeSwitcher toggleBtnClass={clsx('btn-active-light-primary btn-custom')} />
         {isNotificationOpen && (
           <div

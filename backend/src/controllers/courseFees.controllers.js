@@ -103,6 +103,13 @@ export const createCourseFeesController = asyncHandler(
         // );
       }
 
+      const userName =
+        req.user.fName === req.user.lName
+          ? req.user.fName
+          : `${req.user.fName} ${req.user.lName}`;
+
+      // console.log(userName);
+
       const newDayBookData = new DayBookDataModel({
         studentInfo: student._id,
         rollNo: student.rollNumber,
@@ -113,7 +120,7 @@ export const createCourseFeesController = asyncHandler(
         reciptNumber,
         credit: +amountPaid,
         narration,
-        addedBy: req.user.fName + " " + req.user.lName,
+        addedBy: userName,
       });
 
       await newDayBookData.save();
@@ -140,7 +147,7 @@ export const createCourseFeesController = asyncHandler(
           ...req.body,
           reciptNumber,
           companyName: student.companyName._id,
-          addedBy: req.user.fName + " " + req.user.lName,
+          addedBy: userName,
           gst_percentage: studentGSTStatus[0]?.gst_percentage,
         });
 
@@ -740,7 +747,7 @@ export const createCourseFeesController = asyncHandler(
         ...req.body,
         reciptNumber,
         companyName: student.companyName._id,
-        addedBy: req.user.fName + " " + req.user.lName,
+        addedBy: userName,
         gst_percentage: studentGSTStatus[0]?.gst_percentage,
       });
       let reciptNumberString = Number(reciptNumber.split("-")[1]) + 1;

@@ -61,15 +61,14 @@ const SidebarMenuMain = () => {
 
   return (
     <>
-      <SidebarMenuItem
-        to='/dashboard'
-        icon='element-11'
-        title={intl.formatMessage({id: 'MENU.DASHBOARD'})}
-        fontIcon='bi-app-indicator'
-      />
-
       {currentUser?.role !== 'Student' ? (
         <>
+          <SidebarMenuItem
+            to='/dashboard'
+            icon='element-11'
+            title={intl.formatMessage({id: 'MENU.DASHBOARD'})}
+            fontIcon='bi-app-indicator'
+          />
           {/* ----------------------------- Company Menu Start Here ............................... */}
           {companyCTX.getCompanyLists?.data?.map((CompanyListData: any, index: number) => (
             <React.Fragment key={index}>
@@ -184,6 +183,11 @@ const SidebarMenuMain = () => {
                       title='Monthly Collections'
                       hasBullet={true}
                     />
+                    <SidebarMenuItem
+                      to={`/student-reports/${CompanyListData?._id}`}
+                      title='Student Reports'
+                      hasBullet={true}
+                    />
                   </SidebarMenuItemWithSub>
 
                   <SidebarMenuItem
@@ -294,7 +298,7 @@ const SidebarMenuMain = () => {
       ) : (
         <>
           <SidebarMenuItem
-            to='/student'
+            to={`/student/${currentUser?.studentId}`}
             icon='abstract-28'
             title='Student Profile'
             fontIcon='bi-layers'

@@ -57,7 +57,7 @@ export const getAllStudentsController = asyncHandler(async (req, res, next) => {
       .populate(["courseName"])
       .sort({ name: "asc" });
 
-    //console.log(users);
+    // console.log(users);
 
     for (const student of users) {
       let existedStudent = await userModel.findOne({ email: student.email });
@@ -68,12 +68,15 @@ export const getAllStudentsController = asyncHandler(async (req, res, next) => {
           await bcryptjs.genSalt(10)
         );
 
+        // console.log(student);
+
         existedStudent = new userModel({
+          studentId: student?._id,
           fName: student?.name,
           lName: student?.name,
-          email: student.email,
+          email: student?.email,
           password: hashPassword,
-          phone: student.mobile_number,
+          phone: student?.mobile_number,
           role: "Student",
         });
 
