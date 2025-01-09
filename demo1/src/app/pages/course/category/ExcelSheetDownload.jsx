@@ -17,17 +17,17 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
   const studentPayFeeCtx = useStudentCourseFeesContext()
   // console.log(categoryId)
   // Fetch student fee data
-  const studentFees = studentPayFeeCtx.getAllStudentsCourseFees?.data || []
+  const studentFees = studentPayFeeCtx?.getAllStudentsCourseFees?.data || []
 
   const formattedFromDate = fromDate ? moment(fromDate).startOf('day') : null
   const formattedToDate = toDate ? moment(toDate).endOf('day') : null
 
-  const filteredStudentFees = studentFees.filter((fee) => {
-    const feeDate = moment(fee.amountDate).startOf('day') // Parse fee date and set time to midnight
-    const companyMatch = fee?.companyName === params.id // Match on company ID
-    const fromDateMatch = !formattedFromDate || feeDate.isSameOrAfter(formattedFromDate, 'day')
-    const toDateMatch = !formattedToDate || feeDate.isSameOrBefore(formattedToDate, 'day')
-    const courseMatch = fee.courseName.category === categoryId // Match on course category
+  const filteredStudentFees = studentFees?.filter((fee) => {
+    const feeDate = moment(fee?.amountDate).startOf('day') // Parse fee date and set time to midnight
+    const companyMatch = fee?.companyName === params?.id // Match on company ID
+    const fromDateMatch = !formattedFromDate || feeDate?.isSameOrAfter(formattedFromDate, 'day')
+    const toDateMatch = !formattedToDate || feeDate?.isSameOrBefore(formattedToDate, 'day')
+    const courseMatch = fee?.courseName?.category === categoryId // Match on course category
 
     // Debugging logs to see the dates being compared
 
@@ -39,29 +39,29 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
   // console.log(c)
 
   // Group the filtered fees by course
-  const groupedByCourse = filteredStudentFees.reduce((acc, fee) => {
-    const courseId = fee.courseName._id
+  const groupedByCourse = filteredStudentFees?.reduce((acc, fee) => {
+    const courseId = fee?.courseName?._id
     if (!acc[courseId]) {
       acc[courseId] = []
     }
-    acc[courseId].push(fee)
+    acc[courseId]?.push(fee)
     return acc
   }, {})
 
   // Map filtered fees to include student details
   const dataForPDF = (fees) =>
     fees.map((fee) => ({
-      rollNumber: fee.studentInfo?.rollNumber || 'N/A',
-      studentName: fee.studentInfo?.name || 'N/A',
-      fatherName: fee.studentInfo?.father_name || 'N/A',
-      mobileNumber: fee.studentInfo?.mobile_number || 'N/A',
-      courseName: fee.courseName?.courseName || 'N/A',
-      reciptNumber: fee.reciptNumber || 'N/A',
-      courseFees: fee.studentInfo?.netCourseFees || 0,
-      remainingFees: fee.remainingFees || 0,
+      rollNumber: fee?.studentInfo?.rollNumber || 'N/A',
+      studentName: fee?.studentInfo?.name || 'N/A',
+      fatherName: fee?.studentInfo?.father_name || 'N/A',
+      mobileNumber: fee?.studentInfo?.mobile_number || 'N/A',
+      courseName: fee?.courseName?.courseName || 'N/A',
+      reciptNumber: fee?.reciptNumber || 'N/A',
+      courseFees: fee?.studentInfo?.netCourseFees || 0,
+      remainingFees: fee?.remainingFees || 0,
       totalPaid: fee?.studentInfo?.totalPaid || 0,
-      amountDate: moment(fee?.studentInfo?.createdAt).format('DD/MM/YYYY'),
-      addedBy: fee.addedBy || 'N/A',
+      amountDate: moment(fee?.studentInfo?.createdAt)?.format('DD/MM/YYYY'),
+      addedBy: fee?.addedBy || 'N/A',
     }))
 
   // console.log(categoryCTX.getCourseCategoryLists)
@@ -69,9 +69,9 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
   // Function to generate PDF for each course
   const generatePDF = () => {
     const doc = new jsPDF()
-    doc.setFontSize(12)
+    doc?.setFontSize(12)
 
-    const courseIds = Object.keys(groupedByCourse)
+    const courseIds = Object?.keys(groupedByCourse)
 
     courseIds.forEach((courseId, index) => {
       const courseFees = groupedByCourse[courseId]
@@ -116,40 +116,40 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
       // Add table data
       const data = dataForPDF(courseFees).map((item) => {
         // Sum the values for totals
-        totalCourseFees += item.courseFees || 0
-        totalPaid += item.totalPaid || 0
-        totalRemainingFees += item.remainingFees || 0
+        totalCourseFees += item?.courseFees || 0
+        totalPaid += item?.totalPaid || 0
+        totalRemainingFees += item?.remainingFees || 0
 
         return [
-          item.rollNumber,
-          item.studentName,
-          item.fatherName,
-          item.mobileNumber,
-          item.courseName,
-          item.courseFees,
-          item.totalPaid,
-          item.remainingFees,
-          item.amountDate,
-          item.addedBy,
+          item?.rollNumber,
+          item?.studentName,
+          item?.fatherName,
+          item?.mobileNumber,
+          item?.courseName,
+          item?.courseFees,
+          item?.totalPaid,
+          item?.remainingFees,
+          item?.amountDate,
+          item?.addedBy,
         ]
       })
 
       // Add a totals row at the end of the data
-      data.push([
+      data?.push([
         '', // Empty space for "Roll Number"
         '', // Empty space for "Name"
         '', // Empty space for "Father Name"
         '', // Empty space for "Mobile Number"
         'Total', // Label for totals
-        totalCourseFees.toFixed(2), // Course Fees Total
-        totalPaid.toFixed(2), // Total Paid
-        totalRemainingFees.toFixed(2), // Remaining Fees
+        totalCourseFees?.toFixed(2), // Course Fees Total
+        totalPaid?.toFixed(2), // Total Paid
+        totalRemainingFees?.toFixed(2), // Remaining Fees
         '', // Empty space for "Date"
         '', // Empty space for "Added By"
       ])
 
       // Add table using autoTable
-      doc.autoTable({
+      doc?.autoTable({
         head: headers,
         body: data,
         startY: 40, // Start after the date range text
@@ -162,19 +162,19 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
 
       // Add a new page for the next course if more than one course exists
       if (index < courseIds.length - 1) {
-        doc.addPage()
+        doc?.addPage()
       }
     })
 
     // Generate the file name using the selected category name
     const selectedCategoryName =
-      categoryCTX.getCourseCategoryLists?.data?.find((cat) => cat._id === categoryId)?.category ||
+      categoryCTX?.getCourseCategoryLists?.data?.find((cat) => cat?._id === categoryId)?.category ||
       'Unknown_Category'
-    const fileName = `Student_Fee_Report_${selectedCategoryName.replace(/\s+/g, '_')}.pdf`
+    const fileName = `Student_Fee_Report_${selectedCategoryName?.replace(/\s+/g, '_')}.pdf`
 
     // Convert PDF to Blob URL for preview
-    const pdfBlob = doc.output('blob')
-    const pdfURL = URL.createObjectURL(pdfBlob)
+    const pdfBlob = doc?.output('blob')
+    const pdfURL = URL?.createObjectURL(pdfBlob)
 
     // Open PDF in a new tab for preview
     const newTab = window.open(pdfURL, '_blank')

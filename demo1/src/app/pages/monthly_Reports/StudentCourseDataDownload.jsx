@@ -26,20 +26,20 @@ const StudentCourseDataDownload = () => {
   const allCategories = ctx.getCourseCategoryLists?.data || []
 
   // Get all courses
-  const allCourses = courseCTX.getCourseLists?.data || []
+  const allCourses = courseCTX?.getCourseLists?.data || []
 
   const handleGeneratePDF = () => {
     const doc = new jsPDF()
 
     // Title
-    doc.setFontSize(12)
-    doc.text('All Students Data', 10, 10)
+    doc?.setFontSize(12)
+    doc?.text('All Students Data', 10, 10)
 
     // Date range
     if (fromDate && toDate) {
-      doc.setFontSize(12)
-      doc.text(
-        `Date Range: ${moment(fromDate).format('DD/MM/YYYY')} - ${moment(toDate).format(
+      doc?.setFontSize(12)
+      doc?.text(
+        `Date Range: ${moment(fromDate)?.format('DD/MM/YYYY')} - ${moment(toDate)?.format(
           'DD/MM/YYYY'
         )}`,
         10,
@@ -48,20 +48,20 @@ const StudentCourseDataDownload = () => {
     }
 
     // Filter students by date range and year if dates are selected, otherwise show all data
-    const filteredStudentFees = studentFees.filter((student) => {
+    const filteredStudentFees = studentFees?.filter((student) => {
       if (!fromDate && !toDate) {
         // If no date range is selected, show all data
         return true
       }
 
       const admissionDate = moment(student.admissionDate)
-      const fromDateMatch = fromDate ? admissionDate.isSameOrAfter(moment(fromDate), 'day') : true
-      const toDateMatch = toDate ? admissionDate.isSameOrBefore(moment(toDate), 'day') : true
+      const fromDateMatch = fromDate ? admissionDate?.isSameOrAfter(moment(fromDate), 'day') : true
+      const toDateMatch = toDate ? admissionDate?.isSameOrBefore(moment(toDate), 'day') : true
 
       // Ensure the date range includes the exact 'fromDate' and 'toDate'
-      const isDateInRange = admissionDate.isBetween(
-        moment(fromDate).startOf('day'),
-        moment(toDate).endOf('day'),
+      const isDateInRange = admissionDate?.isBetween(
+        moment(fromDate)?.startOf('day'),
+        moment(toDate)?.endOf('day'),
         null,
         '[]'
       )
@@ -84,30 +84,30 @@ const StudentCourseDataDownload = () => {
     ]
 
     // Prepare table rows
-    const tableRows = filteredStudentFees.map((student) => [
-      student.studentInfo?.rollNumber || 'N/A',
-      student.studentInfo?.name || 'N/A',
-      student.studentInfo?.father_name || 'N/A',
-      student.studentInfo?.mobile_number || 'N/A',
-      student.courseName?.courseName || 'N/A',
-      student.studentInfo?.netCourseFees || 0,
-      student.studentInfo?.totalPaid || 0,
-      student.remainingFees || 0,
-      moment(student.admissionDate).format('DD/MM/YYYY') || 'N/A',
-      student.addedBy || 'N/A',
+    const tableRows = filteredStudentFees?.map((student) => [
+      student?.studentInfo?.rollNumber || 'N/A',
+      student?.studentInfo?.name || 'N/A',
+      student?.studentInfo?.father_name || 'N/A',
+      student?.studentInfo?.mobile_number || 'N/A',
+      student?.courseName?.courseName || 'N/A',
+      student?.studentInfo?.netCourseFees || 0,
+      student?.studentInfo?.totalPaid || 0,
+      student?.remainingFees || 0,
+      moment(student?.admissionDate)?.format('DD/MM/YYYY') || 'N/A',
+      student?.addedBy || 'N/A',
     ])
 
     // Calculate the totals across all filtered students
-    const totalCourseFees = filteredStudentFees.reduce(
-      (sum, student) => sum + (student.studentInfo?.netCourseFees || 0),
+    const totalCourseFees = filteredStudentFees?.reduce(
+      (sum, student) => sum + (student?.studentInfo?.netCourseFees || 0),
       0
     )
-    const totalPaid = filteredStudentFees.reduce(
-      (sum, student) => sum + (student.studentInfo?.totalPaid || 0),
+    const totalPaid = filteredStudentFees?.reduce(
+      (sum, student) => sum + (student?.studentInfo?.totalPaid || 0),
       0
     )
-    const totalRemainingFees = filteredStudentFees.reduce(
-      (sum, student) => sum + (student.remainingFees || 0),
+    const totalRemainingFees = filteredStudentFees?.reduce(
+      (sum, student) => sum + (student?.remainingFees || 0),
       0
     )
 
@@ -118,9 +118,9 @@ const StudentCourseDataDownload = () => {
       '', // Empty space for "Father Name"
       '', // Empty space for "Mobile Number"
       'Total', // Label for totals
-      totalCourseFees.toFixed(2), // Total Course Fees
-      totalPaid.toFixed(2), // Total Paid
-      totalRemainingFees.toFixed(2), // Total Remaining Fees
+      totalCourseFees?.toFixed(2), // Total Course Fees
+      totalPaid?.toFixed(2), // Total Paid
+      totalRemainingFees?.toFixed(2), // Total Remaining Fees
       '', // Empty space for "Date"
       '', // Empty space for "Added By"
     ])
@@ -138,26 +138,26 @@ const StudentCourseDataDownload = () => {
     })
 
     // Open PDF in a new tab
-    const pdfBlob = doc.output('blob')
-    const pdfURL = URL.createObjectURL(pdfBlob)
-    window.open(pdfURL, '_blank')
+    const pdfBlob = doc?.output('blob')
+    const pdfURL = URL?.createObjectURL(pdfBlob)
+    window?.open(pdfURL, '_blank')
   }
 
-  const courseCountsByCategory = allCategories.reduce((acc, category) => {
-    acc[category.category] = allCourses.filter(
-      (course) => course.category.category === category.category
+  const courseCountsByCategory = allCategories?.reduce((acc, category) => {
+    acc[category.category] = allCourses?.filter(
+      (course) => course?.category?.category === category?.category
     ).length
     return acc
   }, {})
 
   // Group students by category
-  const studentCountsByCategory = allCategories.reduce((acc, category) => {
+  const studentCountsByCategory = allCategories?.reduce((acc, category) => {
     // Assuming category has a unique _id property
-    const studentsInCategory = students.filter(
+    const studentsInCategory = students?.filter(
       (student) => student?.courseName?.category === category?._id // Compare category IDs
     )
 
-    acc[category.category] = studentsInCategory.length // Use category._id as the key
+    acc[category?.category] = studentsInCategory?.length // Use category._id as the key
     return acc
   }, {})
 
