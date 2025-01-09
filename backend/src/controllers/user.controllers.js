@@ -216,7 +216,7 @@ export const requsetUserPasswordController = asyncHandler(
       sendEmail(
         user.email,
         "Reset Password",
-        `${FRONTEND_URL}/reset-password/${user?._id}/${token}`
+        `${BACKEND_URL}/reset-password/${user?._id}/${token}`
       );
       res.status(200).json({ success: true });
       // console.log(user);
