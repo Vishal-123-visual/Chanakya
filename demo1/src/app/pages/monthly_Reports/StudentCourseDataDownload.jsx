@@ -1,12 +1,16 @@
 import React, {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import {useNavigate, useParams} from 'react-router-dom'
 import {useCourseContext} from '../course/CourseContext'
 import ExcelSheetDownload from '../../pages/course/category/ExcelSheetDownload'
 import {useAdmissionContext} from '../../modules/auth/core/Addmission'
 import {useGetCourseCategoryContextContext} from '../course/category/CourseCategoryContext'
 import {KTIcon} from '../../../_metronic/helpers'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
 import moment from 'moment'
-import {DatePicker} from 'antd'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 
 const StudentCourseDataDownload = () => {
   const navigate = useNavigate()
@@ -15,22 +19,136 @@ const StudentCourseDataDownload = () => {
   const ctx = useGetCourseCategoryContextContext()
   const [toDate, setToDate] = useState(null)
   const [fromDate, setFromDate] = useState(null)
-  // console.log(ctx.getCourseCategoryLists?.data)
-  // Get all categories
+  const params = useParams()
+  const studentPayFeeCtx = useStudentCourseFeesContext()
+  const studentFees = studentPayFeeCtx.getAllStudentsCourseFees?.data || []
+  const students = studentCTX?.studentsLists?.data?.users || []
   const allCategories = ctx.getCourseCategoryLists?.data || []
 
   // Get all courses
   const allCourses = courseCTX.getCourseLists?.data || []
 
-  // Map each category to the count of courses it contains
+  const handleGeneratePDF = () => {
+    const doc = new jsPDF()
+
+    // Title
+    doc.setFontSize(12)
+    doc.text('All Students Data', 10, 10)
+
+    // Date range
+    if (fromDate && toDate) {
+      doc.setFontSize(12)
+      doc.text(
+        `Date Range: ${moment(fromDate).format('DD/MM/YYYY')} - ${moment(toDate).format(
+          'DD/MM/YYYY'
+        )}`,
+        10,
+        20
+      )
+    }
+
+    // Filter students by date range and year if dates are selected, otherwise show all data
+    const filteredStudentFees = studentFees.filter((student) => {
+      if (!fromDate && !toDate) {
+        // If no date range is selected, show all data
+        return true
+      }
+
+      const admissionDate = moment(student.admissionDate)
+      const fromDateMatch = fromDate ? admissionDate.isSameOrAfter(moment(fromDate), 'day') : true
+      const toDateMatch = toDate ? admissionDate.isSameOrBefore(moment(toDate), 'day') : true
+
+      // Ensure the date range includes the exact 'fromDate' and 'toDate'
+      const isDateInRange = admissionDate.isBetween(
+        moment(fromDate).startOf('day'),
+        moment(toDate).endOf('day'),
+        null,
+        '[]'
+      )
+
+      return fromDateMatch && toDateMatch && isDateInRange
+    })
+
+    // Table headers and data
+    const tableColumn = [
+      'Roll Number',
+      'Name',
+      'Father Name',
+      'Mobile Number',
+      'Course',
+      'Course Fees',
+      'Total Paid',
+      'Remaining Fees',
+      'Date',
+      'Added By',
+    ]
+
+    // Prepare table rows
+    const tableRows = filteredStudentFees.map((student) => [
+      student.studentInfo?.rollNumber || 'N/A',
+      student.studentInfo?.name || 'N/A',
+      student.studentInfo?.father_name || 'N/A',
+      student.studentInfo?.mobile_number || 'N/A',
+      student.courseName?.courseName || 'N/A',
+      student.studentInfo?.netCourseFees || 0,
+      student.studentInfo?.totalPaid || 0,
+      student.remainingFees || 0,
+      moment(student.admissionDate).format('DD/MM/YYYY') || 'N/A',
+      student.addedBy || 'N/A',
+    ])
+
+    // Calculate the totals across all filtered students
+    const totalCourseFees = filteredStudentFees.reduce(
+      (sum, student) => sum + (student.studentInfo?.netCourseFees || 0),
+      0
+    )
+    const totalPaid = filteredStudentFees.reduce(
+      (sum, student) => sum + (student.studentInfo?.totalPaid || 0),
+      0
+    )
+    const totalRemainingFees = filteredStudentFees.reduce(
+      (sum, student) => sum + (student.remainingFees || 0),
+      0
+    )
+
+    // Add totals row at the end of the table rows
+    tableRows.push([
+      '', // Empty space for "Roll Number"
+      '', // Empty space for "Name"
+      '', // Empty space for "Father Name"
+      '', // Empty space for "Mobile Number"
+      'Total', // Label for totals
+      totalCourseFees.toFixed(2), // Total Course Fees
+      totalPaid.toFixed(2), // Total Paid
+      totalRemainingFees.toFixed(2), // Total Remaining Fees
+      '', // Empty space for "Date"
+      '', // Empty space for "Added By"
+    ])
+
+    // Add table to PDF
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+      margin: {left: 5, right: 5},
+      styles: {halign: 'center'}, // Center-align text by default
+      headStyles: {fillColor: [22, 160, 233]}, // Header color
+      bodyStyles: {textColor: 20},
+      footStyles: {fontStyle: 'bold', halign: 'center'}, // Bold and aligned footer
+    })
+
+    // Open PDF in a new tab
+    const pdfBlob = doc.output('blob')
+    const pdfURL = URL.createObjectURL(pdfBlob)
+    window.open(pdfURL, '_blank')
+  }
+
   const courseCountsByCategory = allCategories.reduce((acc, category) => {
     acc[category.category] = allCourses.filter(
       (course) => course.category.category === category.category
     ).length
     return acc
   }, {})
-
-  const students = studentCTX?.studentsLists?.data?.users || []
 
   // Group students by category
   const studentCountsByCategory = allCategories.reduce((acc, category) => {
@@ -47,50 +165,38 @@ const StudentCourseDataDownload = () => {
   // Log the result to verify
   // console.log(courseCountsByCategory)
 
-  const deleteCourseCategoryHandler = (courseCategoryId) => {
-    if (!window.confirm('Are you sure you want to delete this course category?')) {
-      return
-    }
-    ctx.deleteCourseCategoryMutation.mutate(courseCategoryId)
-  }
   return (
-    <div className={`card `}>
-      {/* begin::Header */}
+    <div className='card'>
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bold fs-3 mb-1'>Course Category</span>
+          <span className='card-label fw-bold fs-3 mb-1'>Student Reports</span>
         </h3>
         <div className='d-flex gap-3'>
-          <div className='d-flex gap-3'>
-            <label className='d-flex align-items-center'>
-              From
-              <DatePicker
-                selected={fromDate}
-                onChange={(date) => setFromDate(date)}
-                dateFormat='dd/MM/yyyy'
-                className='form-control form-control-sm ms-2'
-                placeholderText='DD/MM/YYYY'
-              />
-            </label>
-            <label className='d-flex align-items-center'>
-              To
-              <DatePicker
-                selected={toDate}
-                onChange={(date) => setToDate(date)}
-                dateFormat='dd/MM/yyyy'
-                className='form-control form-control-sm ms-2'
-                placeholderText='DD/MM/YYYY'
-              />
-            </label>
-          </div>
+          <label className='d-flex align-items-center'>
+            From
+            <DatePicker
+              selected={fromDate}
+              onChange={(date) => setFromDate(date)}
+              dateFormat='dd/MM/yyyy'
+              className='form-control form-control-sm ms-2'
+              placeholderText='DD/MM/YYYY'
+            />
+          </label>
+          <label className='d-flex align-items-center'>
+            To
+            <DatePicker
+              selected={toDate}
+              onChange={(date) => setToDate(date)}
+              dateFormat='dd/MM/yyyy'
+              className='form-control form-control-sm ms-2'
+              placeholderText='DD/MM/YYYY'
+            />
+          </label>
         </div>
-        <div
-          className='card-toolbar'
-          data-bs-toggle='tooltip'
-          data-bs-placement='top'
-          data-bs-trigger='hover'
-        >
-          <button className='btn btn-primary btn-sm'> All Course PDF</button>
+        <div className='card-toolbar'>
+          <button className='btn btn-primary btn-sm' onClick={handleGeneratePDF}>
+            All Students PDF
+          </button>
         </div>
       </div>
       {/* end::Header */}

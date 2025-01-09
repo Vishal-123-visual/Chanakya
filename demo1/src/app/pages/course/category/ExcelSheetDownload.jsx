@@ -6,17 +6,16 @@ import {useStudentCourseFeesContext} from '../../courseFees/StudentCourseFeesCon
 import moment from 'moment'
 import {useParams} from 'react-router-dom'
 import {useCourseContext} from '../CourseContext'
+import {useGetCourseCategoryContextContext} from './CourseCategoryContext'
 
 const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
   const [isPreviewVisible, setIsPreviewVisible] = useState(false)
   const [pdfURL, setPdfURL] = useState('')
   const ctx = useCourseContext()
+  const categoryCTX = useGetCourseCategoryContextContext()
   const params = useParams()
   const studentPayFeeCtx = useStudentCourseFeesContext()
-
-  const courseIds = ctx.getCourseLists?.data?.map((course) => course?.category?._id)
   // console.log(categoryId)
-
   // Fetch student fee data
   const studentFees = studentPayFeeCtx.getAllStudentsCourseFees?.data || []
 
@@ -55,14 +54,17 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
       rollNumber: fee.studentInfo?.rollNumber || 'N/A',
       studentName: fee.studentInfo?.name || 'N/A',
       fatherName: fee.studentInfo?.father_name || 'N/A',
+      mobileNumber: fee.studentInfo?.mobile_number || 'N/A',
       courseName: fee.courseName?.courseName || 'N/A',
       reciptNumber: fee.reciptNumber || 'N/A',
-      amountPaid: fee.amountPaid || 0,
+      courseFees: fee.studentInfo?.netCourseFees || 0,
       remainingFees: fee.remainingFees || 0,
       totalPaid: fee?.studentInfo?.totalPaid || 0,
       amountDate: moment(fee?.studentInfo?.createdAt).format('DD/MM/YYYY'),
       addedBy: fee.addedBy || 'N/A',
     }))
+
+  // console.log(categoryCTX.getCourseCategoryLists)
 
   // Function to generate PDF for each course
   const generatePDF = () => {
@@ -76,7 +78,19 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
       const courseName = courseFees[0]?.courseName?.courseName || 'Unknown Course'
 
       // Title for each course PDF
-      doc.text(`${courseName} - Student Fee Report`, 20, 20)
+      doc.text(`${courseName} - Student Fee Report`, 10, 20)
+
+      // Date Range Section
+      if (fromDate && toDate) {
+        doc.setFontSize(12)
+        doc.text(
+          `Date Range: ${moment(fromDate).format('DD/MM/YYYY')} - ${moment(toDate).format(
+            'DD/MM/YYYY'
+          )}`,
+          10,
+          30 // Positioning after the course name title
+        )
+      }
 
       // Add table header
       const headers = [
@@ -84,8 +98,9 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
           'Roll Number',
           'Name',
           'Father Name',
+          'Mobile Number',
           'Course',
-          'Amount Paid',
+          'Course Fees',
           'Total Paid',
           'Remaining Fees',
           'Date',
@@ -93,29 +108,57 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
         ],
       ]
 
+      // Initialize totals for the course
+      let totalCourseFees = 0
+      let totalPaid = 0
+      let totalRemainingFees = 0
+
       // Add table data
-      const data = dataForPDF(courseFees).map((item) => [
-        item.rollNumber,
-        item.studentName,
-        item.fatherName,
-        item.courseName,
-        item.amountPaid,
-        item.totalPaid,
-        item.remainingFees,
-        item.amountDate,
-        item.addedBy,
+      const data = dataForPDF(courseFees).map((item) => {
+        // Sum the values for totals
+        totalCourseFees += item.courseFees || 0
+        totalPaid += item.totalPaid || 0
+        totalRemainingFees += item.remainingFees || 0
+
+        return [
+          item.rollNumber,
+          item.studentName,
+          item.fatherName,
+          item.mobileNumber,
+          item.courseName,
+          item.courseFees,
+          item.totalPaid,
+          item.remainingFees,
+          item.amountDate,
+          item.addedBy,
+        ]
+      })
+
+      // Add a totals row at the end of the data
+      data.push([
+        '', // Empty space for "Roll Number"
+        '', // Empty space for "Name"
+        '', // Empty space for "Father Name"
+        '', // Empty space for "Mobile Number"
+        'Total', // Label for totals
+        totalCourseFees.toFixed(2), // Course Fees Total
+        totalPaid.toFixed(2), // Total Paid
+        totalRemainingFees.toFixed(2), // Remaining Fees
+        '', // Empty space for "Date"
+        '', // Empty space for "Added By"
       ])
 
       // Add table using autoTable
       doc.autoTable({
         head: headers,
         body: data,
-        startY: 30,
+        startY: 40, // Start after the date range text
+        margin: {left: 5, right: 5},
+        styles: {halign: 'center'}, // Center-align text by default
+        headStyles: {fillColor: [22, 160, 233]}, // Header color
+        bodyStyles: {textColor: 20},
+        footStyles: {fontStyle: 'bold', halign: 'center'}, // Bold and aligned footer
       })
-
-      // Calculate total amount paid for the course
-      const totalAmount = courseFees.reduce((sum, fee) => sum + fee.amountPaid, 0)
-      doc.text(`Total Amount Paid: ${totalAmount}`, 20, doc.lastAutoTable.finalY + 10)
 
       // Add a new page for the next course if more than one course exists
       if (index < courseIds.length - 1) {
@@ -123,13 +166,27 @@ const DocumentViewer = ({companyId, toDate, fromDate, categoryId}) => {
       }
     })
 
+    // Generate the file name using the selected category name
+    const selectedCategoryName =
+      categoryCTX.getCourseCategoryLists?.data?.find((cat) => cat._id === categoryId)?.category ||
+      'Unknown_Category'
+    const fileName = `Student_Fee_Report_${selectedCategoryName.replace(/\s+/g, '_')}.pdf`
+
     // Convert PDF to Blob URL for preview
     const pdfBlob = doc.output('blob')
     const pdfURL = URL.createObjectURL(pdfBlob)
-    setPdfURL(pdfURL)
 
-    // Show modal for preview
-    setIsPreviewVisible(true)
+    // Open PDF in a new tab for preview
+    const newTab = window.open(pdfURL, '_blank')
+    if (newTab) {
+      newTab.focus() // Focus on the new tab
+    }
+
+    // Trigger download with the correct file name
+    const downloadLink = document.createElement('a')
+    downloadLink.href = pdfURL
+    downloadLink.download = fileName
+    downloadLink.click()
   }
 
   return (
