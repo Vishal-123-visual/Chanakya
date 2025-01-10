@@ -11,7 +11,8 @@ import UpdateFormData from '../dynamicForms/UpdateFormData'
 import OnlyViewFormData from '../dynamicForms/OnlyViewFormData'
 import {useAuth} from '../../../modules/auth'
 import {Modal} from 'react-bootstrap'
-import {DatePicker} from 'antd'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import moment from 'moment'
 
 const reorder = (list, startIndex, endIndex) => {
@@ -722,13 +723,26 @@ export default function ViewAllEnquiryFormsData() {
 
                       {/* Modal Component */}
                       {/* Modal Component */}
-                      <Modal show={isModalOpen} onHide={closeModal}>
-                        <Modal.Header closeButton>
-                          <Modal.Title>{selectedFieldName}</Modal.Title>
+                      <Modal
+                        show={isModalOpen}
+                        onHide={closeModal}
+                        style={{backgroundColor: themeMode === 'dark' ? '' : ''}}
+                      >
+                        <Modal.Header
+                          closeButton
+                          style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}
+                        >
+                          <Modal.Title
+                            style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}
+                          >
+                            {selectedFieldName}
+                          </Modal.Title>
                         </Modal.Header>
-                        <Modal.Body>
+                        <Modal.Body
+                          style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}
+                        >
                           {selectedFieldName?.trim() === 'Lead Source' && (
-                            <div>
+                            <div style={{background: themeMode === 'dark' ? 'black' : '#f2f2ff'}}>
                               {selectField
                                 ?.filter((field) => field.selectName === 'Lead Source')
                                 .map((select) => (
