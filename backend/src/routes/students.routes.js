@@ -70,14 +70,15 @@ router.post("/sendWarningMail", requireSignIn, async (req, res, next) => {
         adminEmails += user.email + ",";
       }
     });
-
+    let sendedBy = `${req.user.fName} ${req.user.lName}`;
     // Send the formatted letter via email
     await sendEmail(
       `${studentData?.studentInfo?.email},${studentData?.companyName?.email}`,
       `Final Notice Regarding Pending Fees for ${studentData?.courseName?.courseName} Course - ${studentData?.companyName?.companyName}`,
       `Dear ${studentData?.studentInfo?.name}, this is a notice regarding unpaid fees.`,
       formattedEmailContent, // Use formatted content with HTML line breaks
-      req
+      req,
+      sendedBy
     );
 
     res.status(200).json({
@@ -119,6 +120,7 @@ router.post("/sendMailStudent", requireSignIn, async (req, res, next) => {
         100
       : Number(studentData.amountPaid);
   let cutGSTAmount = studentData.amountPaid - gstAmount;
+  let sendedBy = `${req.user.fName} ${req.user.lName}`;
   sendEmail(
     `${studentData.studentInfo.email},${studentData.companyName.email}`,
     `Your Fees Submitted Successfully - ${studentData.companyName.companyName}`,
@@ -691,7 +693,8 @@ router.post("/sendMailStudent", requireSignIn, async (req, res, next) => {
   </body>
 
   </html>`,
-    req
+    req,
+    sendedBy
   );
   res
     .status(200)

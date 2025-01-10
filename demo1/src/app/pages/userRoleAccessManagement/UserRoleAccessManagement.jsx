@@ -79,6 +79,16 @@ const UserRoleAccessManagement = () => {
     postUserRoleAccessData.mutate(updatedPermissions)
   }
 
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <div className='card mb-5 mb-xl-10'>
       <div className='card-header border-0 cursor-pointer'>
@@ -144,7 +154,11 @@ const UserRoleAccessManagement = () => {
                 <label
                   className='form-check-label'
                   htmlFor={`company-checkbox-${company._id}`}
-                  style={{marginLeft: '10px', color: 'black'}}
+                  style={{
+                    marginLeft: '10px',
+                    color: 'black',
+                    color: themeMode === 'dark' ? '#fff' : '',
+                  }}
                 >
                   {company.companyName}
                 </label>
@@ -182,7 +196,11 @@ const UserRoleAccessManagement = () => {
                 <label
                   className='form-check-label'
                   htmlFor={`student-${action.toLowerCase().replace(' ', '-')}`}
-                  style={{marginLeft: '10px', color: 'black'}}
+                  style={{
+                    marginLeft: '10px',
+                    color: 'black',
+                    color: themeMode === 'dark' ? '#fff' : '',
+                  }}
                 >
                   {action}
                 </label>
@@ -227,7 +245,11 @@ const UserRoleAccessManagement = () => {
                 <label
                   className='form-check-label'
                   htmlFor={`fees-${action.toLowerCase().replace(' ', '-')}`}
-                  style={{marginLeft: '10px', color: 'black'}}
+                  style={{
+                    marginLeft: '10px',
+                    color: 'black',
+                    color: themeMode === 'dark' ? '#fff' : '',
+                  }}
                 >
                   {action}
                 </label>
@@ -246,6 +268,16 @@ const UserRoleAccessManagement = () => {
   )
 }
 
+let themeMode = 'system'
+
+if (localStorage.getItem('kt_theme_mode_value')) {
+  themeMode = localStorage.getItem('kt_theme_mode_value')
+}
+
+if (themeMode === 'system') {
+  themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
 const fieldsetLegendStyle = {
   fontWeight: 'bold',
   color: 'GrayText',
@@ -259,6 +291,7 @@ const fieldsetLegendStyle = {
   left: '50%',
   transform: 'translateX(-50%)',
   background: '#fff',
+  background: themeMode === 'dark' ? '#323338' : '#fff',
 }
 
 export default UserRoleAccessManagement

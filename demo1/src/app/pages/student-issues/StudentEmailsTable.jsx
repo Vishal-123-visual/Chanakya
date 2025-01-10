@@ -116,6 +116,16 @@ const StudentEmailsTable = ({studentInfoData}) => {
     setIsEmailContentModalOpen(true) // Open the email content modal
   }
 
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <>
       <div className={`card my-10`}>
@@ -155,7 +165,9 @@ const StudentEmailsTable = ({studentInfoData}) => {
                   </tr>
                 ) : (
                   emailLogs
-                    ?.filter((check) => check.recipientEmails?.includes(studentInfoData?.email))
+                    ?.filter((check) =>
+                      check.recipientEmails?.[0]?.includes(studentInfoData?.email)
+                    )
                     .map((email, index) => (
                       <tr key={index}>
                         <td>
@@ -215,7 +227,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
               style={{
                 fontFamily: 'Gill Sans, sans-serif',
                 fontSize: '12px',
-                color: '#333',
+                color: themeMode === 'dark' ? '#fff' : 'black',
                 padding: '4px',
               }}
             >
@@ -241,9 +253,12 @@ const StudentEmailsTable = ({studentInfoData}) => {
           show={isEmailContentModalOpen}
           handleClose={() => setIsEmailContentModalOpen(false)}
         >
-          <div className='mt-10'>
+          <div className='mt-10' style={{background: themeMode === 'dark' ? '#323333' : '#fff'}}>
             <h5>{selectedEmail.subject}</h5>
-            <div dangerouslySetInnerHTML={{__html: selectedEmail.content}} />
+            <div
+              style={{color: themeMode === 'dark' ? '#323333' : 'black'}}
+              dangerouslySetInnerHTML={{__html: selectedEmail.content}}
+            />
           </div>
         </PopUpModal>
       )}

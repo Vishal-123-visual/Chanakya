@@ -10,6 +10,16 @@ const ShowStudentNotesNameDashboard = ({className}) => {
 
   const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
 
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <div
       style={{
@@ -18,6 +28,7 @@ const ShowStudentNotesNameDashboard = ({className}) => {
         padding: '10px',
         borderRadius: '8px',
         backgroundColor: '#fff', // Optional background color
+        background: themeMode === 'dark' ? '#323338' : '#fff',
       }}
       className={` ${className}`}
     >
