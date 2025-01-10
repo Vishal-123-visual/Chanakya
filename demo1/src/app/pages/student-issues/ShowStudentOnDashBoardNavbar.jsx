@@ -11,6 +11,16 @@ const ShowStudentOnDashBoardNavbar = ({className}) => {
   // Filter the data for students with `showStudent` as true
   const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
 
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <div
       style={{
@@ -19,7 +29,7 @@ const ShowStudentOnDashBoardNavbar = ({className}) => {
         width: '200px',
         maxHeight: '240px', // Adjust to fit approximately 5 students
         padding: '10px',
-        backgroundColor: '#fff', // Background color to match design
+        background: themeMode === 'dark' ? 'black' : '#fff',
       }}
       className={` ${className}`}
     >

@@ -10,6 +10,16 @@ const NotificationOfAlertStudentOnNavbar = () => {
       (s) => s.Status === 'pending'
     )
 
+  let themeMode = 'system'
+
+  if (localStorage.getItem('kt_theme_mode_value')) {
+    themeMode = localStorage.getItem('kt_theme_mode_value')
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <div
       style={{
@@ -18,6 +28,7 @@ const NotificationOfAlertStudentOnNavbar = () => {
         overflowX: 'hidden', // Disable horizontal scroll
         padding: '10px', // Add padding for aesthetics
         backgroundColor: '#fff', // Ensure consistent background
+        background: themeMode === 'dark' ? 'black' : '#fff',
       }}
     >
       {filteredStudentsAlertData?.length === 0 ? (

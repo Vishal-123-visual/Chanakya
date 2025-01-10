@@ -29,6 +29,17 @@ const Navbar = () => {
   const filteredData = studentIssuesLists?.filter((s) => s?.showStudent === true)
   const currentStudent = studentCTX?.useGetSingleStudentUsingWithEmail(currentUser?.email)
 
+  let themeMode: string = 'light'
+
+  const storedThemeMode = localStorage.getItem('kt_theme_mode_value')
+  if (storedThemeMode) {
+    themeMode = storedThemeMode // storedThemeMode is always a string here
+  }
+
+  if (themeMode === 'system') {
+    themeMode = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  }
+
   return (
     <div className='app-navbar flex-shrink-0'>
       {/* Notification Section */}
@@ -115,6 +126,7 @@ const Navbar = () => {
               width: '210px',
               maxHeight: '400px',
               // overflowY: 'auto',
+              background: themeMode === 'dark' ? 'black' : '#fff',
               overflow: 'hidden',
             }}
             onMouseLeave={() => setNotificationOpen(false)}
@@ -136,6 +148,7 @@ const Navbar = () => {
               zIndex: '9999',
               width: '210px',
               maxHeight: '400px',
+              background: themeMode === 'dark' ? 'black' : '#fff',
               // overflowY: 'auto',
               overflow: 'hidden',
             }}
