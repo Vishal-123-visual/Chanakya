@@ -75,9 +75,8 @@ const StudentCommission = () => {
   })
 
   // Helper function to render datalist options based on filter
+  const filteredStudents = data?.filter((student) => student.companyName === params.companyId)
   function renderAccountNameOptions() {
-    const filteredStudents = data?.filter((student) => student.companyName === params.companyId)
-
     if (!filteredStudents || filteredStudents.length === 0) {
       return null
     }
@@ -114,38 +113,39 @@ const StudentCommission = () => {
                 <label className='col-6 col-form-label fw-bold fs-6'>
                   Student Name{' '}
                   <div className='fv-row mt-5'>
-                    <input
-                      type='search'
-                      className='form-control'
+                    <select
+                      className='form-select'
                       {...formik.getFieldProps('studentName')}
-                      list='accountNameOptions'
                       placeholder='Enter Student Name'
-                    />
-                    {renderAccountNameOptions()}
+                    >
+                      <option value=''>--Select Student Name--</option>
+                      {filteredStudents.map((student) => (
+                        <option key={student._id} value={`${student.name}-${student.rollNumber}`}>
+                          {student.name}
+                        </option>
+                      ))}
+                    </select>
+                    {formik.touched.studentName && formik.errors.studentName && (
+                      <div className='fv-plugins-message-container'>
+                        <div className='fv-help-block'>{formik.errors?.studentName}</div>
+                      </div>
+                    )}
                   </div>
-                  {formik.touched.studentName && formik.errors.studentName && (
-                    <div className='fv-plugins-message-container'>
-                      <div className='fv-help-block'>{formik.errors?.studentName}</div>
-                    </div>
-                  )}
                 </label>
 
                 {/* ----------------------- Commission Person Name Start----------------------------- */}
                 <label className='col-6 col-form-label fw-bold fs-6'>
                   Commission Person Name{' '}
-                  <div className='fv-row mt-5 '>
-                    <input
-                      type='search'
-                      className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
-                      placeholder='Enter Commission Person Name'
-                      list='commissionPersonName'
+                  <div className='fv-row mt-5'>
+                    <select
+                      className='form-select form-select-lg form-select-solid mb-3 mb-lg-0'
                       {...formik.getFieldProps('commissionPersonName')}
                       onChange={(e) => {
                         formik.handleChange(e) // Update Formik state
                         handleCommissionPersonChange(e) // Update selected account ID state
                       }}
-                    />
-                    <datalist id='commissionPersonName'>
+                    >
+                      <option value=''>--Select Commission Person--</option>
                       {dayBookAccountCtx.getDayBookAccountsLists?.data
                         ?.filter(
                           (cp) =>
@@ -156,7 +156,7 @@ const StudentCommission = () => {
                             {item.accountName}
                           </option>
                         ))}
-                    </datalist>
+                    </select>
                     {formik.touched.commissionPersonName && formik.errors.commissionPersonName && (
                       <div className='fv-plugins-message-container'>
                         <div className='fv-help-block'>{formik.errors?.commissionPersonName}</div>
@@ -164,6 +164,7 @@ const StudentCommission = () => {
                     )}
                   </div>
                 </label>
+
                 {/* -----------------------  Commission Person Name End ----------------------------- */}
 
                 {/* ----------------------- Commission Amount Field Start----------------------------- */}
@@ -207,7 +208,7 @@ const StudentCommission = () => {
 
                 {/* ============================ Commission Naretion Start here ==================== */}
                 <label className='col-6 col-form-label fw-bold fs-6'>
-                  Commission Naretion{' '}
+                  Commission Narration{' '}
                   <div className='fv-row mt-5 '>
                     <input
                       type='text'
