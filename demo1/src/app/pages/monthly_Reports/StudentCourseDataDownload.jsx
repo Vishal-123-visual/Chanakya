@@ -11,6 +11,7 @@ import moment from 'moment'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const StudentCourseDataDownload = () => {
   const navigate = useNavigate()
@@ -20,11 +21,16 @@ const StudentCourseDataDownload = () => {
   const [toDate, setToDate] = useState(null)
   const [fromDate, setFromDate] = useState(null)
   const params = useParams()
+  const COURSEctx = useStudentCourseFeesContext()
+  const {data, isLoading} = COURSEctx.useGetStudentMonthlyCourseFeesCollection(params?.id)
   const studentPayFeeCtx = useStudentCourseFeesContext()
+  const companyCTX = useCompanyContext()
+  const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
   const studentFees = studentPayFeeCtx.getAllStudentsCourseFees?.data || []
   const students = studentCTX?.studentsLists?.data?.users || []
   const allCategories = ctx.getCourseCategoryLists?.data || []
 
+  const {data: coursesData} = courseCTX.getCourseLists
   // Get all courses
   const allCourses = courseCTX?.getCourseLists?.data || []
 
@@ -161,6 +167,88 @@ const StudentCourseDataDownload = () => {
     return acc
   }, {})
 
+  const courseIdToName = coursesData?.reduce((acc, course) => {
+    acc[course._id] = course.courseName
+    return acc
+  }, {})
+
+  const calculateMonthDiff = (expireDate) => {
+    const currentDate = moment() // Current date
+    const expireDateObj = moment(expireDate) // Expiry date
+    let monthsDiff = currentDate.diff(expireDateObj, 'months', true) // Floating point difference
+    monthsDiff = Math.floor(monthsDiff) // Round down
+    return monthsDiff < 0 ? 0 : monthsDiff + 1
+  }
+
+  const filteredData = data?.filter((item) => {
+    const missedMonths = calculateMonthDiff(
+      item?.studentInfo?.no_of_installments_expireTimeandAmount
+    )
+    const hasPaidForCurrentMonth =
+      Number(item?.expiration_date?.split('-')[1]) === toDate?.getMonth() + 1
+
+    return (
+      missedMonths !== 0 &&
+      item?.studentInfo?.no_of_installments === item?.installment_number &&
+      item.dropOutStudent === false &&
+      !hasPaidForCurrentMonth
+    )
+  })
+
+  const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
+
+  const downloadPDF = (fromDate, toDate) => {
+    const doc = new jsPDF()
+    const tableColumn = [
+      'Roll Number',
+      'Name',
+      'Course',
+      'Missing Months',
+      'Contact',
+      'Installment Amount',
+    ]
+    const tableRows = []
+
+    filteredData?.forEach((student) => {
+      const rowData = [
+        student?.studentInfo?.rollNumber,
+        student?.studentInfo?.name,
+        courseIdToName[student?.studentInfo?.courseName],
+        calculateMonthDiff(student?.studentInfo?.no_of_installments_expireTimeandAmount),
+        student?.studentInfo?.mobile_number,
+        student?.installment_amount.toFixed(2),
+      ]
+      tableRows.push(rowData)
+    })
+
+    // Add title and filter details
+    doc.text(`Monthly Collection Fee Report - ${CompanyInfo?.companyName}`, 14, 10)
+    if (fromDate && toDate) {
+      doc.text(`From: ${fromDate} To: ${toDate}`, 14, 16) // Add From and To dates
+    }
+    doc.text(`Total Collection Fees: Rs. ${collectionFeesBalance?.toFixed(2)}`, 14, 22)
+
+    // Add the table
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+      columnStyles: {
+        0: {halign: 'center'}, // Center-align the 1st column
+        1: {halign: 'center'}, // Center-align the 2nd column
+        2: {halign: 'center'}, // Center-align the 3rd column
+        3: {halign: 'center'}, // Center-align the 4th column
+        4: {halign: 'center'}, // Center-align the 5th column
+        5: {halign: 'center'}, // Center-align the 6th column
+      },
+    })
+
+    // Open the PDF in a new tab
+    const pdfBlob = doc.output('blob')
+    const pdfURL = URL.createObjectURL(pdfBlob)
+    window.open(pdfURL, '_blank')
+  }
+
   // console.log(studentCountsByCategory)
   // Log the result to verify
   // console.log(courseCountsByCategory)
@@ -193,10 +281,17 @@ const StudentCourseDataDownload = () => {
             />
           </label>
         </div>
-        <div className='card-toolbar'>
-          <button className='btn btn-primary btn-sm' onClick={handleGeneratePDF}>
-            All Students PDF
-          </button>
+        <div style={{display: 'flex', gap: '10px'}}>
+          <div className='card-toolbar'>
+            <button className='btn btn-primary btn-sm' onClick={downloadPDF}>
+              Download Monthly Report PDF
+            </button>
+          </div>
+          <div className='card-toolbar'>
+            <button className='btn btn-primary btn-sm' onClick={handleGeneratePDF}>
+              All Students PDF
+            </button>
+          </div>
         </div>
       </div>
       {/* end::Header */}

@@ -1,10 +1,11 @@
-import {Link, useNavigate, useParams} from 'react-router-dom'
-import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import React, {useState} from 'react'
+import {Link, useNavigate, useParams} from 'react-router-dom'
 import moment from 'moment'
-
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import {jsPDF} from 'jspdf'
+import 'jspdf-autotable'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 import {useCompanyContext} from '../compay/CompanyContext'
 import {useCourseContext} from '../course/CourseContext'
 
@@ -17,39 +18,27 @@ const MonthlyCollectionFee = () => {
   const studentCourseCTX = useCourseContext()
   const {data, isLoading} = ctx.useGetStudentMonthlyCourseFeesCollection(paramsData?.id)
   const studentPayFeeCtx = useStudentCourseFeesContext()
-
   const {data: result} = studentPayFeeCtx.getAllStudentsCourseFees
-  // Fetch all courses data at once
-  const {data: coursesData} = studentCourseCTX.getCourseLists // Assuming there's a hook to fetch all courses
 
-  // console.log(result)
+  // Fetch all courses data
+  const {data: coursesData} = studentCourseCTX.getCourseLists
 
-  // Map course IDs to names for quick lookup
+  // Map course IDs to names
   const courseIdToName = coursesData?.reduce((acc, course) => {
     acc[course._id] = course.courseName
     return acc
   }, {})
 
-  // Filter data based on installments
-
-  // console.log(filteredData)
-
-  // console.log(Number(filteredData[0].expiration_date.split("-")[1]), toDate.getMonth() + 1)
-
   const companyCTX = useCompanyContext()
   const params = useParams()
   const {data: CompanyInfo} = companyCTX?.useGetSingleCompanyData(params?.id)
-
-  // console.log(filteredData)
   const navigate = useNavigate()
 
   const calculateMonthDiff = (expireDate) => {
     const currentDate = moment() // Current date
     const expireDateObj = moment(expireDate) // Expiry date
-    // Get the difference in total months
-    let monthsDiff = currentDate.diff(expireDateObj, 'months', true) // 'true' for floating point number
-    // Round down to get the full month difference
-    monthsDiff = Math.floor(monthsDiff)
+    let monthsDiff = currentDate.diff(expireDateObj, 'months', true) // Floating point difference
+    monthsDiff = Math.floor(monthsDiff) // Round down
     return monthsDiff < 0 ? 0 : monthsDiff + 1
   }
 
@@ -57,19 +46,70 @@ const MonthlyCollectionFee = () => {
     const missedMonths = calculateMonthDiff(
       item?.studentInfo?.no_of_installments_expireTimeandAmount
     )
-
     const hasPaidForCurrentMonth =
       Number(item?.expiration_date?.split('-')[1]) === toDate.getMonth() + 1
 
     return (
-      missedMonths !== 0 && // Skipped months should not be zero
-      item?.studentInfo?.no_of_installments === item?.installment_number && // Installment matches
-      item.dropOutStudent === false && // Not a dropout student
-      !hasPaidForCurrentMonth // Exclude if they have paid for the current month
+      missedMonths !== 0 &&
+      item?.studentInfo?.no_of_installments === item?.installment_number &&
+      item.dropOutStudent === false &&
+      !hasPaidForCurrentMonth
     )
   })
 
   const collectionFeesBalance = filteredData?.reduce((acc, cur) => acc + cur?.installment_amount, 0)
+
+  const downloadPDF = (fromDate, toDate) => {
+    const doc = new jsPDF()
+    const tableColumn = [
+      'Roll Number',
+      'Name',
+      'Course',
+      'Missing Months',
+      'Contact',
+      'Installment Amount',
+    ]
+    const tableRows = []
+
+    filteredData?.forEach((student) => {
+      const rowData = [
+        student?.studentInfo?.rollNumber,
+        student?.studentInfo?.name,
+        courseIdToName[student?.studentInfo?.courseName],
+        calculateMonthDiff(student?.studentInfo?.no_of_installments_expireTimeandAmount),
+        student?.studentInfo?.mobile_number,
+        student?.installment_amount.toFixed(2),
+      ]
+      tableRows.push(rowData)
+    })
+
+    // Add title and filter details
+    doc.text(`Monthly Collection Fee Report - ${CompanyInfo?.companyName}`, 14, 10)
+    if (fromDate && toDate) {
+      doc.text(`From: ${fromDate} To: ${toDate}`, 14, 16) // Add From and To dates
+    }
+    doc.text(`Total Collection Fees: Rs. ${collectionFeesBalance?.toFixed(2)}`, 14, 22)
+
+    // Add the table
+    doc.autoTable({
+      head: [tableColumn],
+      body: tableRows,
+      startY: 30,
+      columnStyles: {
+        0: {halign: 'center'}, // Center-align the 1st column
+        1: {halign: 'center'}, // Center-align the 2nd column
+        2: {halign: 'center'}, // Center-align the 3rd column
+        3: {halign: 'center'}, // Center-align the 4th column
+        4: {halign: 'center'}, // Center-align the 5th column
+        5: {halign: 'center'}, // Center-align the 6th column
+      },
+    })
+
+    // Open the PDF in a new tab
+    const pdfBlob = doc.output('blob')
+    const pdfURL = URL.createObjectURL(pdfBlob)
+    window.open(pdfURL, '_blank')
+  }
 
   return (
     <div className={`card`}>
@@ -117,6 +157,11 @@ const MonthlyCollectionFee = () => {
             </div>
           </label>
         </div>
+      </div>
+      <div className='card-toolbar  d-flex justify-content-end px-8'>
+        <button className='btn btn-primary btn-sm' onClick={downloadPDF}>
+          Download PDf
+        </button>
       </div>
 
       {/* Body */}
