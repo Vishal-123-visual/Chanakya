@@ -119,7 +119,7 @@ const StudentCommission = () => {
                       placeholder='Enter Student Name'
                     >
                       <option value=''>--Select Student Name--</option>
-                      {filteredStudents.map((student) => (
+                      {filteredStudents?.map((student) => (
                         <option key={student._id} value={`${student.name}-${student.rollNumber}`}>
                           {student.name}
                         </option>
