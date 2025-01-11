@@ -196,7 +196,7 @@ const studentInfoToSendMailToStudent = async (req, res, next) => {
 
 export default async function startSchedulerStudentRemainderFeesToStudents() {
   try {
-    const cronSchedule = "0 9 * * *"; // Run daily at 1:30 PM
+    const cronSchedule = "0 9 * * *"; // Run daily at 9:00 AM
     cron.schedule(cronSchedule, studentInfoToSendMailToStudent);
     console.log("Scheduler for sending reminder fees to students has started.");
   } catch (error) {
