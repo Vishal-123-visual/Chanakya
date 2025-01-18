@@ -1,7 +1,7 @@
-import { useLocation } from 'react-router-dom'
+import {useLocation} from 'react-router-dom'
 import moment from 'moment'
 import './StudentMarksResult.css' // Assuming you have a CSS file for styling
-import { useEffect, useState } from 'react'
+import {useEffect, useState} from 'react'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
@@ -9,7 +9,7 @@ const StudentMarksResult = () => {
   const [studentMarksResultData, setStudentMarksResultData] = useState(
     JSON.parse(localStorage.getItem('student-result')) || {}
   )
-  //console.log(studentMarksResultData)
+  // console.log(studentMarksResultData)
   const location = useLocation()
 
   const handlePrint = () => {
@@ -18,7 +18,21 @@ const StudentMarksResult = () => {
     window.print()
   }
 
-  const calculateTotalMarks = studentMarksResultData.state.data.reduce(
+  const filteredAndSortedSubjects =
+    studentMarksResultData.state.data &&
+    studentMarksResultData.state.data
+      ?.filter((item) => {
+        // Check if the subject is true in the subjects object
+        return item.subjects[item.Subjects._id] === true
+      })
+      ?.sort((a, b) => {
+        // Extract the numeric part of the subjectCode and sort accordingly
+        const codeA = parseInt(a?.Subjects?.subjectCode?.split('-')[1], 10)
+        const codeB = parseInt(b?.Subjects?.subjectCode?.split('-')[1], 10)
+        return codeA - codeB
+      })
+
+  const calculateTotalMarks = filteredAndSortedSubjects?.reduce(
     (acc, cur) => {
       return {
         maxMarksTotals: Number(acc.maxMarksTotals) + Number(cur.Subjects.fullMarks),
@@ -46,7 +60,7 @@ const StudentMarksResult = () => {
                   cellSpacing='0'
                   className='marks'
                   border='1'
-                  style={{ marginTop: '15%' }}
+                  style={{marginTop: '15%'}}
                 >
                   <thead>
                     <tr>
@@ -58,13 +72,13 @@ const StudentMarksResult = () => {
                   </thead>
                   <tbody>
                     <tr>
-                      <td style={{ borderRight: '1px solid black' }}>
+                      <td style={{borderRight: '1px solid black'}}>
                         RN-{studentMarksResultData.state.data[0].studentInfo.rollNumber}
                       </td>
-                      <td style={{ borderRight: '1px solid black' }}>
+                      <td style={{borderRight: '1px solid black'}}>
                         {studentMarksResultData.state.courseType}
                       </td>
-                      <td style={{ borderRight: '1px solid black' }}>
+                      <td style={{borderRight: '1px solid black'}}>
                         {studentMarksResultData.state.courseType.split(' ')[0]}
                       </td>
                       <td>
@@ -77,7 +91,7 @@ const StudentMarksResult = () => {
               </td>
             </tr>
             <tr>
-              <td style={{ display: 'flex', alignItems: 'center' }}>
+              <td style={{display: 'flex', alignItems: 'center'}}>
                 <table width='100%' cellPadding='0' cellSpacing='0' className='stu-details'>
                   <tbody>
                     <tr>
@@ -111,7 +125,7 @@ const StudentMarksResult = () => {
                   </tbody>
                 </table>
                 <img
-                  style={{ marginRight: '30px', borderRadius: '10px' }}
+                  style={{marginRight: '30px', borderRadius: '10px'}}
                   width={100}
                   src={`${BASE_URL}/api/images/${studentMarksResultData.state.data[0].studentInfo.image}`}
                   alt='student image'
@@ -160,23 +174,23 @@ const StudentMarksResult = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {studentMarksResultData?.state?.data &&
-                      studentMarksResultData?.state?.data?.sort((a, b) => a?.Subjects?.subjectCode?.split("-")[1] - b?.Subjects?.subjectCode?.split("-")[1])?.map((marksStudentData) => {
+                    {filteredAndSortedSubjects &&
+                      filteredAndSortedSubjects?.map((marksStudentData) => {
                         return (
-                          <tr key={marksStudentData?._id} style={{ borderBottom: '1px solid black' }}>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
+                          <tr key={marksStudentData?._id} style={{borderBottom: '1px solid black'}}>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
                               {marksStudentData.Subjects.subjectCode}
                             </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
                               {marksStudentData.Subjects.subjectName}
                             </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
                               {marksStudentData.Subjects.fullMarks}
                             </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
                               {marksStudentData.practical}
                             </td>
-                            <td style={{ borderRight: '1px solid black' }} align='center'>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
                               {marksStudentData.theory}
                             </td>
 

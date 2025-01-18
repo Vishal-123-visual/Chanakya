@@ -17,6 +17,13 @@ const commissionSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    commissionRemaining: {
+      type: String,
+    },
+    commissionPaid: {
+      type: String,
+      required: true,
+    },
     commissionDate: {
       type: String,
       required: true,

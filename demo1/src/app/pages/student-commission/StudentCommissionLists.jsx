@@ -12,6 +12,7 @@ const StudentCommissionLists = ({studentInfoData}) => {
   let studentName = studentInfoData?.name?.split(' ').join('_') + '-' + studentInfoData?.rollNumber
 
   const {data, isLoading} = studentCTX.useGetStudentCommissionDataQuery(studentName)
+
   return (
     <div className={`card my-10`}>
       {/* begin::Header */}
@@ -68,6 +69,8 @@ const StudentCommissionLists = ({studentInfoData}) => {
                 <th className='min-w-150px'>Student Name</th>
                 <th className='min-w-140px'>Commission Person Name</th>
                 <th className='min-w-120px'>Commission Amount</th>
+                <th className='min-w-120px'>Commission Paid</th>
+                <th className='min-w-120px'>Remaining Commission</th>
                 <th className='min-w-100px'>Commission Date</th>
               </tr>
             </thead>
@@ -119,13 +122,24 @@ const StudentCommissionLists = ({studentInfoData}) => {
                           {studentCommissionData.commissionNaretion}
                         </span>
                       </td>
+
                       <td>
                         <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
                           {studentCommissionData.commissionAmount}
                         </a>
+                      </td>
+                      <td>
+                        <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          {studentCommissionData.commissionPaid}
+                        </a>
                         <span className='text-muted fw-semibold text-muted d-block fs-7'>
                           V.C {studentCommissionData.voucherNumber}
                         </span>
+                      </td>
+                      <td>
+                        <a className='text-dark fw-bold text-hover-primary d-block fs-6'>
+                          {studentCommissionData?.commissionRemaining}
+                        </a>
                       </td>
                       <td>
                         <a className='text-dark fw-bold text-hover-primary d-block fs-6'>

@@ -9,14 +9,29 @@ const PrintStudentResult = () => {
   const [studentMarksResultData, setStudentMarksResultData] = useState(
     JSON.parse(localStorage.getItem('print-student-result')) || {}
   )
-  console.table(studentMarksResultData.state.data[0].Subjects.subjectCode.split('-')[1])
+  // console.log(studentMarksResultData)
+  // console.table(studentMarksResultData.state.data[0].Subjects.subjectCode.split('-')[1])
   const handlePrint = () => {
     var actContents = document.body.innerHTML
     document.body.innerHTML = actContents
     window.print()
   }
 
-  const calculateTotalMarks = studentMarksResultData.state.data.reduce(
+  const filteredAndSortedSubjects =
+    studentMarksResultData.state.data &&
+    studentMarksResultData.state.data
+      ?.filter((item) => {
+        // Check if the subject is true in the subjects object
+        return item.subjects[item.Subjects._id] === true
+      })
+      ?.sort((a, b) => {
+        // Extract the numeric part of the subjectCode and sort accordingly
+        const codeA = parseInt(a?.Subjects?.subjectCode?.split('-')[1], 10)
+        const codeB = parseInt(b?.Subjects?.subjectCode?.split('-')[1], 10)
+        return codeA - codeB
+      })
+
+  const calculateTotalMarks = filteredAndSortedSubjects?.reduce(
     (acc, cur) => {
       return {
         maxMarksTotals: Number(acc.maxMarksTotals) + Number(cur.Subjects.fullMarks),
@@ -28,7 +43,7 @@ const PrintStudentResult = () => {
       passMarksTotals: 0,
     }
   )
-  //console.log(calculateTotalMarks)
+  // console.log(filteredAndSortedSubjects)
 
   return (
     <>
@@ -158,41 +173,32 @@ const PrintStudentResult = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {studentMarksResultData.state.data &&
-                      studentMarksResultData.state.data
-                        ?.sort(
-                          (a, b) =>
-                            a?.Subjects?.subjectCode?.split('-')[1] -
-                            b?.Subjects?.subjectCode?.split('-')[1]
+                    {filteredAndSortedSubjects &&
+                      filteredAndSortedSubjects?.map((marksStudentData) => {
+                        return (
+                          <tr key={marksStudentData._id} style={{borderBottom: '1px solid black'}}>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.Subjects.subjectCode}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.Subjects.subjectName}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.Subjects.fullMarks}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.practical}
+                            </td>
+                            <td style={{borderRight: '1px solid black'}} align='center'>
+                              {marksStudentData.theory}
+                            </td>
+
+                            <td align='center'>{marksStudentData.totalMarks}</td>
+
+                            {/* <td align='center'>A</td> */}
+                          </tr>
                         )
-                        .map((marksStudentData) => {
-                          return (
-                            <tr
-                              key={marksStudentData._id}
-                              style={{borderBottom: '1px solid black'}}
-                            >
-                              <td style={{borderRight: '1px solid black'}} align='center'>
-                                {marksStudentData.Subjects.subjectCode}
-                              </td>
-                              <td style={{borderRight: '1px solid black'}} align='center'>
-                                {marksStudentData.Subjects.subjectName}
-                              </td>
-                              <td style={{borderRight: '1px solid black'}} align='center'>
-                                {marksStudentData.Subjects.fullMarks}
-                              </td>
-                              <td style={{borderRight: '1px solid black'}} align='center'>
-                                {marksStudentData.practical}
-                              </td>
-                              <td style={{borderRight: '1px solid black'}} align='center'>
-                                {marksStudentData.theory}
-                              </td>
-
-                              <td align='center'>{marksStudentData.totalMarks}</td>
-
-                              {/* <td align='center'>A</td> */}
-                            </tr>
-                          )
-                        })}
+                      })}
                     <tr>
                       <td align='center' colSpan='2'>
                         <strong>Total Marks</strong>

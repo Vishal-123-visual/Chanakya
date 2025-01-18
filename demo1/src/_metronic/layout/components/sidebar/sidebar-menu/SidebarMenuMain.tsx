@@ -167,6 +167,28 @@ const SidebarMenuMain = () => {
                       />
                     </SidebarMenuItemWithSub>
                   </SidebarMenuItemWithSub>
+                  {/* <SidebarMenuItemWithSub
+                    to='/apps/chat'
+                    title={'Attendance'}
+                    fontIcon='bi-chat-left'
+                    icon='message-text-2'
+                  >
+                    <SidebarMenuItem
+                      to={`/add-trainer/${CompanyListData?._id}`}
+                      title='Add Trainers'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/add-lab/${CompanyListData?._id}`}
+                      title='Add Labs'
+                      hasBullet={true}
+                    />
+                    <SidebarMenuItem
+                      to={`/add-batch/${CompanyListData?._id}`}
+                      title='Add Batches'
+                      hasBullet={true}
+                    />
+                  </SidebarMenuItemWithSub> */}
                   <SidebarMenuItemWithSub
                     to='/apps/chat'
                     title={'Reports'}

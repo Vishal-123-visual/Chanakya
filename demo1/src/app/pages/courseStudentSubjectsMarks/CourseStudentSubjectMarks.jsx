@@ -13,7 +13,9 @@ const CourseStudentSubjectMarks = () => {
   const navigate = useNavigate()
   const {auth} = useAuth()
 
+  const [selectedCourses, setSelectedCourses] = useState({})
   //console.log(location?.state?.courseName._id === undefined)
+  // console.log(selectedCourses)
 
   const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
     location?.state?.courseName._id === undefined
@@ -29,6 +31,8 @@ const CourseStudentSubjectMarks = () => {
     isLoading: studentSubjectMarksIsLoading,
   } = courseSubjectsCtx.useGetStudentSubjectsMarksBasedOnCourse(location?.state?._id)
 
+  // console.log(studentSubjectMarksData)
+
   useEffect(() => {
     if (studentSubjectMarksData) {
       const initialMarksData = studentSubjectMarksData.reduce((acc, marksData) => {
@@ -39,6 +43,9 @@ const CourseStudentSubjectMarks = () => {
         }
         return acc
       }, {})
+      setSelectedCourses({
+        ...studentSubjectMarksData?.[0]?.subjects,
+      })
       setMarksData(initialMarksData)
     }
   }, [studentSubjectMarksData])
@@ -66,13 +73,27 @@ const CourseStudentSubjectMarks = () => {
           [name]: parsedValue,
         },
       }
-
       const theory = updatedData[id]?.theory || 0
       const practical = updatedData[id]?.practical || 0
 
       updatedData[id].totalMarks = theory + practical
 
       return updatedData
+    })
+  }
+
+  const handleCheckBoxChange = (id, event) => {
+    const isChecked = event.target.checked // Determine if the checkbox is checked
+
+    setSelectedCourses((prevState) => {
+      // Update the selectedCourses state by toggling the value for the clicked checkbox
+      const updatedState = {
+        ...prevState,
+        [id]: isChecked, // Set the checkbox value (true/false)
+      }
+
+      // Return the updated state object
+      return updatedState
     })
   }
 
@@ -83,6 +104,7 @@ const CourseStudentSubjectMarks = () => {
         courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
           subjectId: id,
           ...marksData[id],
+          subjects: selectedCourses,
           courseId:
             location?.state?.courseName._id === undefined
               ? location?.state?.courseName
@@ -110,12 +132,13 @@ const CourseStudentSubjectMarks = () => {
   }
 
   const groupSubjectsBySemester = YearandSemesterSets.reduce((acc, semYear) => {
+    // console.log(semYear)
     acc[semYear] =
       studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
     return acc
   }, {})
 
-  // console.log(YearandSemesterSets[activeTab - 1], groupSubjectsBySemester)
+  // console.log(groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]])
   // console.log(
   //   YearandSemesterSets[activeTab - 1],
   //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length
@@ -172,12 +195,13 @@ const CourseStudentSubjectMarks = () => {
                     <th className='w-25px'>
                       <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
                     </th>
-                    <th className='min-w-150px'>Sr.No</th>
-                    <th className='min-w-140px'>Subject Name</th>
+                    <th className='min-w-100px'>Sr.No</th>
+                    {/* <th className='min-w-100px'></th> */}
+                    <th className='min-w-120px'>Subject Name</th>
                     <th className='min-w-120px'>Subject Code</th>
-                    <th className='min-w-120px'>Full Marks</th>
-                    <th className='min-w-120px'>Pass Marks</th>
-                    <th className='min-w-120px'>Theory</th>
+                    <th className='min-w-140px'>Full Marks</th>
+                    <th className='min-w-140px'>Pass Marks</th>
+                    <th className='min-w-140px'>Theory</th>
                     <th className='min-w-120px'>Practical</th>
                     <th className='min-w-120px'>Total Marks</th>
                   </tr>
@@ -186,24 +210,41 @@ const CourseStudentSubjectMarks = () => {
                   {data
                     ?.filter((subject) => subject.semYear === YearandSemesterSets[activeTab - 1])
                     ?.map((yearWiseSubject, indexValue) => {
+                      // Find the student's marks data for this subject
                       const studentMarks = studentSubjectMarksData?.find(
                         (singleStudentMarksData) =>
                           singleStudentMarksData.Subjects._id === yearWiseSubject._id
                       )
+                      // console.log(studentMarks?.subjects[yearWiseSubject._id])
+                      // Check if the subject ID exists in the `subjects` object and get its value (true/false)
+                      // console.log(selectedCourses?.subjects?.[yearWiseSubject?._id])
 
                       return (
                         <tr key={yearWiseSubject._id}>
-                          <td>
-                            <div className='form-check form-check-sm form-check-custom form-check-solid'></div>
+                          <td className='w-25px'>
+                            <div className='form-check form-check-sm form-check-custom form-check-solid'>
+                              <input
+                                className='form-check-input'
+                                type='checkbox'
+                                onChange={(event) =>
+                                  handleCheckBoxChange(yearWiseSubject._id, event)
+                                }
+                                value={yearWiseSubject?._id}
+                                checked={selectedCourses?.[yearWiseSubject?._id] || false}
+                                data-kt-check='true'
+                                data-kt-check-target='.widget-9-check'
+                              />
+                            </div>
                           </td>
                           <td>
                             <div className='d-flex align-items-center'>
                               <div className='symbol symbol-45px me-5'></div>
                               <div className='d-flex justify-content-start flex-column'>
-                                <span className=' fw-semibold  d-block fs-7'>{indexValue + 1}</span>
+                                <span className='fw-semibold d-block fs-7'>{indexValue + 1}</span>
                               </div>
                             </div>
                           </td>
+
                           <td>
                             <button className='btn text-dark fw-bold text-hover-primary d-block fs-6'>
                               {yearWiseSubject.subjectName}
@@ -212,7 +253,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className=' me-2 fs-7 fw-semibold'>
+                                <span className='me-2 fs-7 fw-semibold'>
                                   {yearWiseSubject.subjectCode}
                                 </span>
                               </div>
@@ -221,7 +262,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className=' me-2 fs-7 fw-semibold'>
+                                <span className='me-2 fs-7 fw-semibold'>
                                   {yearWiseSubject.fullMarks}
                                 </span>
                               </div>
@@ -230,7 +271,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className=' me-2 fs-7 fw-semibold'>
+                                <span className='me-2 fs-7 fw-semibold'>
                                   {yearWiseSubject.passMarks}
                                 </span>
                               </div>
@@ -239,7 +280,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className=' me-2 fs-7 fw-semibold'>
+                                <span className='me-2 fs-7 fw-semibold'>
                                   <input
                                     type='text'
                                     name='theory'
@@ -261,7 +302,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className=' me-2 fs-7 fw-semibold'>
+                                <span className='me-2 fs-7 fw-semibold'>
                                   <input
                                     type='text'
                                     name='practical'
@@ -283,7 +324,7 @@ const CourseStudentSubjectMarks = () => {
                           <td className='text-end'>
                             <div className='d-flex flex-column w-100 me-2'>
                               <div className='d-flex flex-stack mb-2'>
-                                <span className=' me-2 fs-7 fw-semibold'>
+                                <span className='me-2 fs-7 fw-semibold'>
                                   <input
                                     type='number'
                                     name='totalMarks'
@@ -300,14 +341,6 @@ const CourseStudentSubjectMarks = () => {
                               </div>
                             </div>
                           </td>
-                          {/* <td>
-                            <button
-                              onClick={() => handleEditStudentMarks(studentMarks)}
-                              className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
-                            >
-                              <KTIcon iconName='pencil' className='fs-3' />
-                            </button>
-                          </td> */}
                         </tr>
                       )
                     })}

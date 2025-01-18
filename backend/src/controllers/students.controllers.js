@@ -369,12 +369,17 @@ export const addStudentComissionController = asyncHandler(
       studentName,
       commissionPersonName,
       voucherNumber,
+      commissionPaid,
+      commissionRemaining,
       commissionAmount,
       dayBookAccountId,
       commissionDate,
       commissionNaretion,
       companyId,
     } = req.body;
+
+    console.log(req.body);
+
     try {
       switch (true) {
         case !studentName:
@@ -391,6 +396,16 @@ export const addStudentComissionController = asyncHandler(
             success: false,
             message: "Commission amount is required!",
           });
+        // case !commissionRemaining:
+        //   return res.status(400).json({
+        //     success: false,
+        //     message: "Commission remaining is required!",
+        //   });
+        case !commissionPaid:
+          return res.status(400).json({
+            success: false,
+            message: "Commission paid is required!",
+          });
         case !commissionDate:
           return res
             .status(400)
@@ -401,7 +416,7 @@ export const addStudentComissionController = asyncHandler(
             message: "Commission Naretion is required!",
           });
       }
-      console.log(req.body);
+      // console.log(req.body);
       // console.log(dayBookAccountId);
       const commissionStudent = new StudentComissionModel({
         ...req.body,
@@ -438,7 +453,7 @@ export const addStudentComissionController = asyncHandler(
         commissionPersonName,
         dayBookAccountId,
         dayBookDatadate: commissionDate,
-        debit: +commissionAmount,
+        debit: +commissionPaid,
         companyId,
         naretion: commissionNaretion,
       });

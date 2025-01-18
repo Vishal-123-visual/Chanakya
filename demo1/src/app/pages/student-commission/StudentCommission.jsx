@@ -13,6 +13,8 @@ const CourseSchema = Yup.object().shape({
   commissionPersonName: Yup.string().required('Commission Person Name is required'),
   voucherNumber: Yup.string(),
   commissionAmount: Yup.string().required('Commission amount  is required'),
+  commissionPaid: Yup.string().required('Commission Paid  is required'),
+  commissionRemaining: Yup.string().required('Commission Remaining  is required'),
   commissionDate: Yup.string().required('Commission Date is required'),
   commissionNaretion: Yup.string().required('Commission naretion is required!'),
 })
@@ -34,6 +36,27 @@ const StudentCommission = () => {
   // )
   // console.log(selectedAccountId)
 
+  const {data: studentCommission, isLoading} = studentCTX.useGetStudentCommissionDataQuery(
+    location?.state?.name
+  )
+
+  const dayBookDataId = dayBookAccountCtx.getDayBookAccountsLists?.data?.find(
+    (cp) =>
+      cp.companyId === params.companyId &&
+      cp.accountType === 'Commission' &&
+      cp.accountName === studentCommission?.[0]?.commissionPersonName
+  )
+
+  // console.log(studentCommission)
+
+  useEffect(() => {
+    if (dayBookDataId) {
+      setSelectedAccountId(dayBookDataId?._id)
+    }
+  }, [dayBookDataId])
+
+  // console.log(studentCommission)
+
   const handleCommissionPersonChange = (e) => {
     const selectedName = e.target.value
     const selectedAccount = dayBookAccountCtx.getDayBookAccountsLists?.data?.find(
@@ -47,20 +70,36 @@ const StudentCommission = () => {
     formik.setFieldValue('dayBookAccountId', accountId)
   }
 
+  // console.log(selectedAccountId)
+
   const navigate = useNavigate()
   let initialValues = {
     studentName: location?.state?.name ? location?.state?.name : '',
-    commissionPersonName: '',
+    commissionPersonName:
+      studentCommission?.length > 0 &&
+      studentCommission[studentCommission.length - 1]?.commissionRemaining > 0
+        ? studentCommission?.[0]?.commissionPersonName
+        : '',
     voucherNumber: '',
-    commissionAmount: '',
+    commissionAmount:
+      studentCommission?.length > 0 &&
+      studentCommission[studentCommission.length - 1]?.commissionRemaining > 0
+        ? studentCommission[studentCommission.length - 1]?.commissionRemaining
+        : '',
+
+    commissionPaid: '',
+    commissionRemaining: '',
     commissionDate: '',
     commissionNaretion: '',
-    dayBookAccountId: '',
+    dayBookAccountId: dayBookDataId?._id || '',
     companyId: params.companyId,
   }
 
+  // console.log(location?.state)
+
   const formik = useFormik({
     initialValues,
+    enableReinitialize: true,
     validationSchema: CourseSchema,
     onSubmit: async (values) => {
       // console.log(values)
@@ -121,7 +160,7 @@ const StudentCommission = () => {
                       <option value=''>--Select Student Name--</option>
                       {filteredStudents?.map((student) => (
                         <option key={student._id} value={`${student.name}-${student.rollNumber}`}>
-                          {student.name}
+                          {`${student.name}-${student.rollNumber}`}
                         </option>
                       ))}
                     </select>
@@ -168,23 +207,291 @@ const StudentCommission = () => {
                 {/* -----------------------  Commission Person Name End ----------------------------- */}
 
                 {/* ----------------------- Commission Amount Field Start----------------------------- */}
-                <label className='col-6 col-form-label fw-bold fs-6'>
-                  Commission Amount{' '}
-                  <div className='fv-row mt-5 '>
-                    <input
-                      type='number'
-                      min={0}
-                      className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
-                      placeholder='Enter Commission Amount'
-                      {...formik.getFieldProps('commissionAmount')}
-                    />
-                    {formik.touched.commissionAmount && formik.errors.commissionAmount && (
-                      <div className='fv-plugins-message-container'>
-                        <div className='fv-help-block'>{formik.errors?.commissionAmount}</div>
-                      </div>
+                {studentCommission?.length > 0 && (
+                  <>
+                    {studentCommission[studentCommission.length - 1]?.commissionRemaining > 0 ? (
+                      // If there is a remaining commission
+                      <>
+                        <label className='col-6 col-form-label fw-bold fs-6'>
+                          Remaining Commission Amount
+                          <div className='fv-row mt-5'>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Enter Commission Amount'
+                              {...formik.getFieldProps('commissionAmount')}
+                              onChange={(e) => {
+                                const value = Number(e.target.value) || 0
+                                formik.setFieldValue('commissionAmount', value)
+                                const commissionPaid = Number(formik.values.commissionPaid) || 0
+                                formik.setFieldValue('commissionRemaining', value - commissionPaid)
+                              }}
+                            />
+                            {formik.touched.commissionAmount && formik.errors.commissionAmount && (
+                              <div className='fv-plugins-message-container'>
+                                <div className='fv-help-block'>
+                                  {formik.errors.commissionAmount}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </label>
+
+                        <label className='col-6 col-form-label fw-bold fs-6'>
+                          Pay Remaining Commission
+                          <div className='fv-row mt-5'>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Enter Commission Paid'
+                              {...formik.getFieldProps('commissionPaid')}
+                              onChange={(e) => {
+                                const value = Number(e.target.value) || 0
+                                formik.setFieldValue('commissionPaid', value)
+                                const commissionAmount = Number(formik.values.commissionAmount) || 0
+                                formik.setFieldValue(
+                                  'commissionRemaining',
+                                  commissionAmount - value
+                                )
+                              }}
+                            />
+                            {formik.touched.commissionPaid && formik.errors.commissionPaid && (
+                              <div className='fv-plugins-message-container'>
+                                <div className='fv-help-block'>{formik.errors.commissionPaid}</div>
+                              </div>
+                            )}
+                          </div>
+                        </label>
+
+                        <label className='col-6 col-form-label fw-bold fs-6'>
+                          Remaining Commission
+                          <div className='fv-row mt-5'>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Remaining Commission'
+                              value={formik.values.commissionRemaining || 0}
+                              readOnly
+                            />
+                          </div>
+                        </label>
+                      </>
+                    ) : (
+                      // If there is no remaining commission
+                      <>
+                        <label className='col-6 col-form-label fw-bold fs-6'>
+                          Commission Amount
+                          <div className='fv-row mt-5'>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Enter Commission Amount'
+                              {...formik.getFieldProps('commissionAmount')}
+                              onChange={(e) => {
+                                const value = Number(e.target.value) || 0
+                                formik.setFieldValue('commissionAmount', value)
+                                const commissionPaid = Number(formik.values.commissionPaid) || 0
+                                formik.setFieldValue('commissionRemaining', value - commissionPaid)
+                              }}
+                            />
+                            {formik.touched.commissionAmount && formik.errors.commissionAmount && (
+                              <div className='fv-plugins-message-container'>
+                                <div className='fv-help-block'>
+                                  {formik.errors.commissionAmount}
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </label>
+
+                        <label className='col-6 col-form-label fw-bold fs-6'>
+                          {studentCommission?.length > 0 &&
+                            (studentCommission[studentCommission.length - 1]?.commissionRemaining >
+                            0
+                              ? 'Pay Remaining Commission'
+                              : 'Commission Paid')}
+                          <div className='fv-row mt-5 '>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Enter Commission Paid'
+                              {...formik.getFieldProps('commissionPaid')}
+                              onChange={(e) => {
+                                const value = Number(e.target.value) || 0
+                                formik.setFieldValue('commissionPaid', value)
+                                const commissionAmount = Number(formik.values.commissionAmount) || 0
+                                formik.setFieldValue(
+                                  'commissionRemaining',
+                                  commissionAmount - value
+                                )
+                              }}
+                            />
+                            {formik.touched.commissionPaid && formik.errors.commissionPaid && (
+                              <div className='fv-plugins-message-container'>
+                                <div className='fv-help-block'>{formik.errors?.commissionPaid}</div>
+                              </div>
+                            )}
+                          </div>
+                        </label>
+
+                        {/* <label className='col-6 col-form-label fw-bold fs-6'>
+                          Commission Paid
+                          <div className='fv-row mt-5'>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Enter Commission Paid'
+                              {...formik.getFieldProps('commissionPaid')}
+                              onChange={(e) => {
+                                const value = Number(e.target.value) || 0
+                                formik.setFieldValue('commissionPaid', value)
+                                const commissionAmount = Number(formik.values.commissionAmount) || 0
+                                formik.setFieldValue(
+                                  'commissionRemaining',
+                                  commissionAmount - value
+                                )
+                              }}
+                            />
+                            {formik.touched.commissionPaid && formik.errors.commissionPaid && (
+                              <div className='fv-plugins-message-container'>
+                                <div className='fv-help-block'>{formik.errors.commissionPaid}</div>
+                              </div>
+                            )}
+                          </div>
+                        </label> */}
+                      </>
                     )}
-                  </div>
-                </label>
+                  </>
+                )}
+
+                {studentCommission?.length > 0 && (
+                  <>
+                    {studentCommission[studentCommission.length - 1]?.commissionRemaining > 0 ? (
+                      <>
+                        <label className='col-6 col-form-label fw-bold fs-6'>
+                          Remaining Commission{' '}
+                          <div className='fv-row mt-5 '>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Remaining Commission'
+                              value={formik.values.commissionRemaining || 0}
+                              readOnly
+                            />
+                            {formik.touched.commissionRemaining &&
+                              formik.errors.commissionRemaining && (
+                                <div className='fv-plugins-message-container'>
+                                  <div className='fv-help-block'>
+                                    {formik.errors?.commissionRemaining}
+                                  </div>
+                                </div>
+                              )}
+                          </div>
+                        </label>
+                      </>
+                    ) : (
+                      <>
+                        <label className='col-6 col-form-label fw-bold fs-6'>
+                          Remaining Commission{' '}
+                          <div className='fv-row mt-5 '>
+                            <input
+                              type='number'
+                              min={0}
+                              className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                              placeholder='Remaining Commission'
+                              value={formik.values.commissionRemaining || 0}
+                              readOnly
+                            />
+                            {formik.touched.commissionRemaining &&
+                              formik.errors.commissionRemaining && (
+                                <div className='fv-plugins-message-container'>
+                                  <div className='fv-help-block'>
+                                    {formik.errors?.commissionRemaining}
+                                  </div>
+                                </div>
+                              )}
+                          </div>
+                        </label>
+                      </>
+                    )}
+                  </>
+                )}
+                {studentCommission?.length === 0 && (
+                  <>
+                    <label className='col-6 col-form-label fw-bold fs-6'>
+                      Commission Amount
+                      <div className='fv-row mt-5'>
+                        <input
+                          type='number'
+                          min={0}
+                          className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                          placeholder='Enter Commission Amount'
+                          {...formik.getFieldProps('commissionAmount')}
+                          onChange={(e) => {
+                            const value = Number(e.target.value) || 0
+                            formik.setFieldValue('commissionAmount', value)
+                            const commissionPaid = Number(formik.values.commissionPaid) || 0
+                            formik.setFieldValue('commissionRemaining', value - commissionPaid)
+                          }}
+                        />
+                        {formik.touched.commissionAmount && formik.errors.commissionAmount && (
+                          <div className='fv-plugins-message-container'>
+                            <div className='fv-help-block'>{formik.errors.commissionAmount}</div>
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                    <label className='col-6 col-form-label fw-bold fs-6'>
+                      Commission Paid
+                      <div className='fv-row mt-5 '>
+                        <input
+                          type='number'
+                          min={0}
+                          className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                          placeholder='Enter Commission Paid'
+                          {...formik.getFieldProps('commissionPaid')}
+                          onChange={(e) => {
+                            const value = Number(e.target.value) || 0
+                            formik.setFieldValue('commissionPaid', value)
+                            const commissionAmount = Number(formik.values.commissionAmount) || 0
+                            formik.setFieldValue('commissionRemaining', commissionAmount - value)
+                          }}
+                        />
+                        {formik.touched.commissionPaid && formik.errors.commissionPaid && (
+                          <div className='fv-plugins-message-container'>
+                            <div className='fv-help-block'>{formik.errors?.commissionPaid}</div>
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                    <label className='col-6 col-form-label fw-bold fs-6'>
+                      Remaining Commission{' '}
+                      <div className='fv-row mt-5 '>
+                        <input
+                          type='number'
+                          min={0}
+                          className='form-control form-control-lg form-control-solid mb-3 mb-lg-0'
+                          placeholder='Remaining Commission'
+                          value={formik.values.commissionRemaining || 0}
+                          readOnly
+                        />
+                        {formik.touched.commissionRemaining && formik.errors.commissionRemaining && (
+                          <div className='fv-plugins-message-container'>
+                            <div className='fv-help-block'>{formik.errors.commissionRemaining}</div>
+                          </div>
+                        )}
+                      </div>
+                    </label>
+                  </>
+                )}
+
                 {/* ----------------------- Commission Amount Field End ----------------------------- */}
 
                 {/* ----------------------- Commission Voucher number Field Start----------------------------- */}

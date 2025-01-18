@@ -4,7 +4,7 @@ import {useCompanyContext} from '../compay/CompanyContext'
 const SendEmailSuggestion = () => {
   const companyCtx = useCompanyContext()
 
-  //console.log(companyCtx.getEmailSuggestionStatus.data.emailSuggestions[0].emailSuggestionStatus)
+  // console.log(companyCtx.getEmailSuggestionStatus.data.emailSuggestions[0].emailSuggestionStatus)
 
   const handleCheckboxChange = (e) => {
     // console.log(e.target.checked)

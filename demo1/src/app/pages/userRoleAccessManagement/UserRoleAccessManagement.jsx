@@ -15,6 +15,8 @@ const UserRoleAccessManagement = () => {
     studentFeesAccess: {},
   })
 
+  // console.log(permissions?.companyPermissions)
+
   const {postUserRoleAccessData, getAllUserAccessRoleData} = useUserRoleAccessContext()
   const {getCompanyLists} = useCompanyContext()
   const companyName = getCompanyLists?.data || []

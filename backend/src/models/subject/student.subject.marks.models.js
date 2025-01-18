@@ -30,6 +30,10 @@ const studentSubjectMarksSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    subjects: {
+      type: Map,
+      of: Boolean,
+    },
     totalMarks: {
       type: Number,
       default: 0,

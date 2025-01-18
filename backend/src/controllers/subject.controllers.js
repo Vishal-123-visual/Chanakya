@@ -10,9 +10,12 @@ export const addSubjectController = asyncHandler(async (req, res, next) => {
       fullMarks,
       passMarks,
       semYear,
+      subjects,
       course,
       courseType,
     } = req.body;
+
+    // console.log(req.body);
 
     switch (true) {
       case !subjectName:
@@ -59,13 +62,14 @@ export const updateCourseSubjectController = asyncHandler(
       console.log(req.body);
       const { id } = req.params;
       const findSubject = await SubjectModel.findById({ _id: id });
-      console.log(findSubject);
+      // console.log(findSubject);
       //console.log(req.body);
 
       findSubject.subjectName = req.body.subjectName || findSubject.subjectName;
       findSubject.subjectCode = req.body.subjectCode || findSubject.subjectCode;
       findSubject.fullMarks = req.body.fullMarks || findSubject.fullMarks;
       findSubject.passMarks = req.body.passMarks || findSubject.passMarks;
+      // findSubject.subjects = req.body.subjects || findSubject.subjects;
       // findSubject.theory = req.body.theory || findSubject.theory;
       // findSubject.practical = req.body.practical || findSubject.practical;
       // findSubject.totalMarks = req.body.totalMarks || findSubject.totalMarks;

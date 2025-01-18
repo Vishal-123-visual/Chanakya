@@ -316,10 +316,10 @@ const PrivateRoutes = () => {
             <Route path='/profile/student/:id' element={<StudentProfileDetailsPage />} />
             {/* <Route path='/student/:id' element={<StudentProfileDetailsPage />} /> */}
             {/* <----------------- Attendance Related Routes Starts Here ------------------> */}
-            {/* <Route path='/add-trainer/:id' element={<TrainersList />} />
+            <Route path='/add-trainer/:id' element={<TrainersList />} />
             <Route path='/add-lab/:id' element={<LabsList />} />
             <Route path='/add-batch/:id' element={<BatchForm />} />
-            <Route path='/add-timing/:id' element={<TimingList />} /> */}
+            <Route path='/add-timing/:id' element={<TimingList />} />
             {/* <------------------- Monthly Reports Routes Starts Here -------------------> */}
             <Route
               path='/monthly-reports/:id'
