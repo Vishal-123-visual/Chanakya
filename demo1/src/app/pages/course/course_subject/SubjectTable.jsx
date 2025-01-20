@@ -122,6 +122,9 @@ const SubjectTable = ({className, yearWiseAndSemster, activeTab, editCourse}) =>
                   {subjects
                     .filter((subject) => {
                       const semester = parseInt(subject?.semYear.split(' ')[1])
+                      if (subject?.AddOnSubjects === 'AddOnSubject') {
+                        return false
+                      }
                       //console.log(editCourse?.courseName === subject.course.courseName)
                       // Check if the semester matches the activeTab
                       return (
@@ -132,7 +135,7 @@ const SubjectTable = ({className, yearWiseAndSemster, activeTab, editCourse}) =>
                           subject.course?.courseName
                       )
                     })
-                    .map((subject, index) => (
+                    ?.map((subject, index) => (
                       <Fragment key={subject?._id}>
                         {editSubjectId === subject?._id ? (
                           <EditSubjectForm

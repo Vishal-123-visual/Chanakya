@@ -138,7 +138,7 @@ const EditCourse = () => {
                       {...formik.getFieldProps('courseType')}
                     >
                       <option value=''>select--</option>
-                      {courseTypesLists.data.map((courseTypeData) => (
+                      {courseTypesLists?.data?.map((courseTypeData) => (
                         <option key={courseTypeData._id} value={courseTypeData._id}>
                           {courseTypeData.courseType}
                         </option>
@@ -161,7 +161,7 @@ const EditCourse = () => {
                       {...formik.getFieldProps('numberOfYears')}
                     >
                       <option value=''>select--</option>
-                      {numberOfCourseYearsTypesLists.data.map((courseNumberOfYearsTypeData) => (
+                      {numberOfCourseYearsTypesLists?.data?.map((courseNumberOfYearsTypeData) => (
                         <option
                           key={courseNumberOfYearsTypeData._id}
                           value={courseNumberOfYearsTypeData._id}
@@ -185,7 +185,7 @@ const EditCourse = () => {
                       {...formik.getFieldProps('category')}
                     >
                       <option value=''>select--</option>
-                      {getCourseCategoryLists.data.map((courseCategoryData) => (
+                      {getCourseCategoryLists?.data?.map((courseCategoryData) => (
                         <option key={courseCategoryData._id} value={courseCategoryData._id}>
                           {courseCategoryData.category}
                         </option>

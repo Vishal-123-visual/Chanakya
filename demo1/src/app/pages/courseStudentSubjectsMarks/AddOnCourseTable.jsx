@@ -1,182 +1,45 @@
-import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom'
+import React, {useEffect, useState} from 'react'
 import {useCourseSubjectContext} from '../course/course_subject/CourseSubjectContext'
-import {useState, useEffect} from 'react'
+import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useAuth} from '../../modules/auth'
 import {toast} from 'react-toastify'
-import PopUpModal from '../../modules/accounts/components/popUpModal/PopUpModal'
-import AddSubjects from './AddSubjects'
-import AddOnCourseTable from './AddOnCourseTable'
+import {KTIcon} from '../../../_metronic/helpers'
 
-const CourseStudentSubjectMarks = () => {
+const AddOnCourseTable = ({
+  handleCheckBoxChange,
+  data,
+  isLoading,
+  error,
+  selectedCourses,
+  groupSubjectsBySemester,
+  marksData,
+  activeTab,
+  handleInputChange,
+  setOpenModal,
+  handleTabClick,
+  handleClick,
+  isSubmitting,
+  handleSubmit,
+  studentSubjectMarksData,
+  YearandSemesterSets,
+}) => {
   const courseSubjectsCtx = useCourseSubjectContext()
-  const [activeTab, setActiveTab] = useState(1)
-  const [marksData, setMarksData] = useState({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [openModal, setOpenModal] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
   const {auth} = useAuth()
-
-  const [selectedCourses, setSelectedCourses] = useState({})
   //console.log(location?.state?.courseName._id === undefined)
   // console.log(location?.state?._id)
+  // console.log(groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]])
 
-  const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
-    location?.state?.courseName._id === undefined
-      ? location?.state?.courseName
-      : location?.state?.courseName?._id
-  )
-
+  // const {data, error, isLoading} = courseSubjectsCtx.getAddOnSubjectsList
   // console.log(data)
-
-  // console.log(location?.state?.updateUserId)
-
-  const {
-    data: studentSubjectMarksData,
-    error: studentSubjectMarksError,
-    isLoading: studentSubjectMarksIsLoading,
-  } = courseSubjectsCtx.useGetStudentSubjectsMarksBasedOnCourse(location?.state?._id)
-
-  // console.log(studentSubjectMarksData)
-
-  useEffect(() => {
-    if (studentSubjectMarksData) {
-      const initialMarksData = studentSubjectMarksData.reduce((acc, marksData) => {
-        acc[marksData?.Subjects?._id] = {
-          theory: marksData.theory,
-          practical: marksData.practical,
-          totalMarks: marksData.theory + marksData.practical,
-        }
-        return acc
-      }, {})
-      setSelectedCourses({
-        ...studentSubjectMarksData?.[0]?.subjects,
-      })
-      setMarksData(initialMarksData)
-    }
-  }, [studentSubjectMarksData])
-
-  if (location?.state === undefined) {
-    navigate(-1)
-    return null
-  }
-
-  const YearandSemesterSets = Array.from(new Set(data?.map((item) => item?.semYear) || []))
-
-  const handleClick = () => {
-    setOpenModal(true)
-  }
-
-  const handleTabClick = (index) => {
-    setActiveTab(index)
-  }
-
-  const handleInputChange = (e, id, fullMarks) => {
-    const {name, value} = e.target
-    const parsedValue = parseInt(value) || 0
-    // console.log(id)
-
-    setMarksData((prev) => {
-      const updatedData = {
-        ...prev,
-        [id]: {
-          ...prev[id],
-          [name]: parsedValue,
-        },
-      }
-      const theory = updatedData[id]?.theory || 0
-      const practical = updatedData[id]?.practical || 0
-
-      updatedData[id].totalMarks = theory + practical
-
-      return updatedData
-    })
-  }
-
-  // console.log(marksData)
-
-  const handleCheckBoxChange = (id, event) => {
-    const isChecked = event.target.checked // Determine if the checkbox is checked
-
-    setSelectedCourses((prevState) => {
-      // Update the selectedCourses state by toggling the value for the clicked checkbox
-      const updatedState = {
-        ...prevState,
-        [id]: isChecked, // Set the checkbox value (true/false)
-      }
-
-      // Return the updated state object
-      return updatedState
-    })
-  }
-
-  const filterData =
-    data?.filter((data) => {
-      // Ensure the filter logic includes the required conditions
-      return data.studentInfo && data.AddOnSubjects !== 'AddOnSubject'
-    }).length > 0
-
-  const handleSubmit = async () => {
-    try {
-      setIsSubmitting(true)
-      Object.keys(marksData).map((id) =>
-        courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
-          subjectId: id,
-          ...marksData[id],
-          subjects: selectedCourses,
-          courseId:
-            location?.state?.courseName._id === undefined
-              ? location?.state?.courseName
-              : location?.state?.courseName._id,
-          studentId: location.state._id,
-          companyName: location.state.companyName,
-        })
-      )
-
-      toast.success('Added marks successfully!', {
-        style: {
-          fontSize: '16px',
-        },
-      })
-    } catch (error) {
-      //console.log(error)
-      toast.error('Error adding marks', {
-        style: {
-          fontSize: '16px',
-        },
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  const groupSubjectsBySemester = YearandSemesterSets.reduce((acc, semYear) => {
-    // console.log(semYear)
-    acc[semYear] =
-      studentSubjectMarksData?.filter((subject) => subject?.Subjects?.semYear === semYear) || []
-    return acc
-  }, {})
-
-  // console.log()
-  // console.log(
-  //   YearandSemesterSets[activeTab - 1],
-  //   groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length
-  // )
-  //console.log(studentSubjectMarksData)
-
-  const checkStudentMarksFillHandler = () => {
-    if (groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]].length === 0) {
-      window.alert(YearandSemesterSets[activeTab - 1] + ' Please add marks for all the subjects')
-      return false
-    }
-  }
 
   return (
     <>
       <div className='card'>
         <div className='card-header border-0 pt-5'>
           <h3 className='card-title align-items-start flex-column'>
-            <span className='card-label fw-bold fs-3 mb-1'>Course Subjects Results</span>
+            <span className='card-label fw-bold fs-3 mb-1'>Add On Course Subjects</span>
             <span className=' mt-1 fw-semibold fs-7'>Student Name : {location?.state?.name}</span>
           </h3>
 
@@ -228,14 +91,12 @@ const CourseStudentSubjectMarks = () => {
                   </thead>
                   <tbody>
                     {data
-                      ?.filter((subject) => {
-                        // Exclude subjects where AddOnSubjects === "AddOnSubject"
-                        if (subject?.AddOnSubjects === 'AddOnSubject') {
-                          return false
-                        }
-                        // Check if semYear matches the active tab's YearandSemesterSets
-                        return subject.semYear === YearandSemesterSets[activeTab - 1]
-                      })
+                      ?.filter(
+                        (subject) =>
+                          subject.semYear === YearandSemesterSets[activeTab - 1] &&
+                          subject?.AddOnSubjects === 'AddOnSubject' &&
+                          subject.studentInfo === location?.state?._id
+                      )
                       ?.map((yearWiseSubject, indexValue) => {
                         // Find the student's marks data for this subject
                         const studentMarks = studentSubjectMarksData?.find(
@@ -334,13 +195,13 @@ const CourseStudentSubjectMarks = () => {
                                       type='text'
                                       name='practical'
                                       className='form-control w-auto'
-                                      id={`practical_${yearWiseSubject._id}`}
+                                      id={`practical_${yearWiseSubject?._id}`}
                                       defaultValue={studentMarks?.practical}
                                       onChange={(e) =>
                                         handleInputChange(
                                           e,
-                                          yearWiseSubject._id,
-                                          Number(yearWiseSubject.fullMarks)
+                                          yearWiseSubject?._id,
+                                          Number(yearWiseSubject?.fullMarks)
                                         )
                                       }
                                     />
@@ -358,7 +219,7 @@ const CourseStudentSubjectMarks = () => {
                                       className='form-control w-auto'
                                       id={`totalMarks_${yearWiseSubject._id}`}
                                       value={
-                                        marksData[yearWiseSubject._id]?.totalMarks ||
+                                        marksData[yearWiseSubject?._id]?.totalMarks ||
                                         studentMarks?.totalMarks ||
                                         0
                                       }
@@ -373,7 +234,7 @@ const CourseStudentSubjectMarks = () => {
                       })}
                   </tbody>
                 </table>
-                {/* <hr />
+                <hr />
                 <div className='d-flex align-items-center gap-5'>
                   {(auth.role === 'Admin' || auth.role === 'SuperAdmin') && (
                     <button
@@ -449,45 +310,14 @@ const CourseStudentSubjectMarks = () => {
                     Add Subject
                   </button>
                 </div>
-                <hr /> */}
+                <hr />
               </>
             )}
           </div>
         </div>
       </div>
-      <div className='mt-10'>
-        <AddOnCourseTable
-          handleCheckBoxChange={handleCheckBoxChange}
-          selectedCourses={selectedCourses}
-          handleClick={handleClick}
-          handleSubmit={handleSubmit}
-          data={data}
-          isSubmitting={isSubmitting}
-          isLoading={isLoading}
-          error={error}
-          groupSubjectsBySemester={groupSubjectsBySemester}
-          marksData={marksData}
-          activeTab={activeTab}
-          setOpenModal={setOpenModal}
-          YearandSemesterSets={YearandSemesterSets}
-          studentSubjectMarksData={studentSubjectMarksData}
-          handleTabClick={handleTabClick}
-          handleInputChange={handleInputChange}
-        />
-      </div>
-      {
-        <PopUpModal show={openModal} handleClose={() => setOpenModal(false)}>
-          <div className='mt-9'>
-            <AddSubjects
-              setOpenModal={setOpenModal}
-              studentId={location?.state?._id}
-              semYear={[YearandSemesterSets[activeTab - 1]]}
-            />
-          </div>
-        </PopUpModal>
-      }
     </>
   )
 }
 
-export default CourseStudentSubjectMarks
+export default AddOnCourseTable

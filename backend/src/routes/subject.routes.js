@@ -26,6 +26,14 @@ router
 router.post("/marks", addCourseSubjectMarksController);
 router.get("/marks/:studentId", getCourseSubjectMarksController);
 router.put("/marks/:studentId/:marksId", updateCourseSubjectMarksController);
+
+// router.post(
+//   "/add-on-subject",
+//   requireSignIn,
+//   studentAddOnCourseSubjectController
+// );
+
+// router.get("/all-add-on-subjects", getAllAddOnSubjectController);
 // get subject according to course
 router.get("/:courseId", getSubjectBasedOnCourseController);
 

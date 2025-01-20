@@ -6,6 +6,13 @@ const subjectSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    studentInfo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Student",
+    },
+    AddOnSubjects: {
+      type: String,
+    },
     subjectCode: {
       type: String,
       required: true,

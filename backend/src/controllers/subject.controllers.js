@@ -59,7 +59,7 @@ export const getCourseSubjectsListsController = asyncHandler(
 export const updateCourseSubjectController = asyncHandler(
   async (req, res, next) => {
     try {
-      console.log(req.body);
+      // console.log(req.body);
       const { id } = req.params;
       const findSubject = await SubjectModel.findById({ _id: id });
       // console.log(findSubject);

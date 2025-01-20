@@ -121,6 +121,40 @@ export const CourseSubjectContextProvider = ({children}) => {
       }
     },
   })
+
+  // const addOnSubjectControllerMutation = useMutation({
+  //   mutationFn: async (data) => {
+  //     // console.log(data)
+  //     return axios
+  //       .post(`${BASE_URL}/api/subjects/add-on-subject`, data, config) // Corrected order of arguments
+  //       .then((res) => res.data)
+  //   },
+  //   onSettled: async (_, error, data) => {
+  //     if (error) {
+  //       //alert('Error while updating student...', error)
+  //     } else {
+  //       // console.log('from course subject context ---->> ', data)
+  //       await queryClient.invalidateQueries({
+  //         queryKey: ['getAddOnSubjects'],
+  //       })
+  //       // await queryClient.invalidateQueries({queryKey: ['getCourseSubjectLists', data._id]})
+  //       //await queryClient.invalidateQueries({queryKey: ['getStudentSubjectsMarksBasedOnCourse']})
+  //     }
+  //   },
+  // })
+
+  // const getAddOnSubjectsList = useQuery({
+  //   queryKey: ['getAddOnSubjects'],
+  //   queryFn: async () => {
+  //     try {
+  //       const response = await axios.get(`${BASE_URL}/api/subjects/all-add-on-subjects`, config)
+  //       return response.data
+  //     } catch (error) {
+  //       throw new Error('Error fetching student data: ' + error.message)
+  //     }
+  //   },
+  // })
+
   const updateStudentSubjectMarksMutation = useMutation({
     mutationFn: async (updateData) => {
       // console.log(updateData)
@@ -172,6 +206,9 @@ export const CourseSubjectContextProvider = ({children}) => {
         updateCourseSubjectMarksMutation,
         useGetStudentSubjectsMarksBasedOnCourse,
         updateStudentSubjectMarksMutation,
+        //Add-On-Subjects
+        // addOnSubjectControllerMutation,
+        // getAddOnSubjectsList,
       }}
     >
       {children}
