@@ -45,12 +45,15 @@ router.post("/sendWarningMail", requireSignIn, async (req, res, next) => {
 
     // Function to replace placeholders in the template with actual values from studentData
     const generateEmailFromTemplate = (template, data) => {
-      return template.replace(/\$\{(.*?)\}/g, (_, key) => {
-        return (
-          key.split(".").reduce((obj, keyPart) => obj && obj[keyPart], data) ||
-          ""
-        );
-      });
+      return template
+        .replace(/<b>(.*?)<\/b>/g, "<strong>$1</strong>")
+        .replace(/\$\{(.*?)\}/g, (_, key) => {
+          return (
+            key
+              .split(".")
+              .reduce((obj, keyPart) => obj && obj[keyPart], data) || ""
+          );
+        });
     };
 
     // Replace placeholders in the letter template with actual data
@@ -92,6 +95,77 @@ router.post("/sendWarningMail", requireSignIn, async (req, res, next) => {
       .json({ success: false, message: "Failed to send the email" });
   }
 });
+
+router.post(
+  "/sendAddmissionCancellationMail",
+  requireSignIn,
+  async (req, res, next) => {
+    try {
+      const studentData = req.body;
+      // console.log(req.body);
+      const templates = await EmailTemplateModel.find({});
+      if (templates.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "No email templates found" });
+      }
+
+      // Assuming you want the first template; adjust as needed.
+      let emailContent = templates[0]?.cancellationTemplate;
+
+      // Function to replace placeholders in the template with actual values from studentData
+      const generateEmailFromTemplate = (template, data) => {
+        return template
+          .replace(/<b>(.*?)<\/b>/g, "<strong>$1</strong>")
+          .replace(/\$\{(.*?)\}/g, (_, key) => {
+            return (
+              key
+                .split(".")
+                .reduce((obj, keyPart) => obj && obj[keyPart], data) || ""
+            );
+          });
+      };
+
+      // Replace placeholders in the letter template with actual data
+      const finalEmailContent = generateEmailFromTemplate(
+        emailContent,
+        studentData
+      );
+
+      // Convert line breaks to <br> tags for HTML formatting
+      const formattedEmailContent = finalEmailContent.replace(/\n/g, "<br>");
+
+      // Gather admin emails
+      let adminEmails = "";
+      const users = await userModel.find({});
+      users?.forEach((user) => {
+        if (user.role === "SuperAdmin") {
+          adminEmails += user.email + ",";
+        }
+      });
+      let sendedBy = `${req.user.fName} ${req.user.lName}`;
+      // Send the formatted letter via email
+      await sendEmail(
+        `${studentData?.studentInfo?.email},${studentData?.companyName?.email}`,
+        `Final Confirmation of Admission Cancellation`,
+        `Dear ${studentData?.studentInfo?.name}, this is a notice regarding Confirmation of Admission Cancellation`,
+        formattedEmailContent, // Use formatted content with HTML line breaks
+        req,
+        sendedBy
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Letter email sent to student successfully!",
+      });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to send the email" });
+    }
+  }
+);
 
 router.post("/sendMailStudent", requireSignIn, async (req, res, next) => {
   // console.log(req.body);
@@ -699,29 +773,6 @@ router.post("/sendMailStudent", requireSignIn, async (req, res, next) => {
   res
     .status(200)
     .json({ success: true, message: "send mail to student successfully!" });
-});
-
-router.post("/reminderMails", async (req, res, next) => {
-  try {
-    const studentData = req.body;
-    // console.log(studentData);
-    const emailRemainderData = await EmailRemainderModel.findOne({});
-    // console.log(emailRemainderData)
-    let adminEmails = "";
-    const users = await userModel.find({});
-
-    users?.map((user) => {
-      //console.log(user.role, user.email);
-      if (user.role === "SuperAdmin") {
-        adminEmails += user.email + ",";
-      }
-    });
-    sendEmail(
-      `${studentData.studentInfo.email},${studentData.companyName.email}`,
-      `Remainder For Fees - ${studentData.companyName.companyName}`,
-      `Hello ${studentData.studentInfo.name} this is the fees Remainder to you `
-    );
-  } catch (error) {}
 });
 
 router.put(

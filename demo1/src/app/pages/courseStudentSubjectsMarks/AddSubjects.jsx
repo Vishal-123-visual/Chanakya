@@ -33,6 +33,7 @@ const AddSubjects = ({setOpenModal, studentId, semYear}) => {
           onSuccess: () => {
             setLoading(false)
             setOpenModal(false)
+            setNewSubject({subjectName: '', subjectCode: '', fullMarks: 0, passMarks: 0})
             toast.success('Subject added successfully! 🎉', {
               autoClose: 3000, // 3 seconds
             })

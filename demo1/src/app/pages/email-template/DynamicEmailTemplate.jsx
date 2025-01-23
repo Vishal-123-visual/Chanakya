@@ -10,13 +10,17 @@ const DynamicEmailTemplate = () => {
   const {data: emailTemplates} = companyCTX.getEmailTemplate
   const [emailTemplate, setEmailTemplate] = useState({
     customTemplate: '',
+    cancellationTemplate: '',
   })
+
+  // console.log(emailTemplates)
 
   // Update the email template when `emailTemplates` changes
   useEffect(() => {
     if (emailTemplates && emailTemplates[0]) {
       setEmailTemplate({
         customTemplate: emailTemplates[0]?.customTemplate || '',
+        cancellationTemplate: emailTemplates[0]?.cancellationTemplate || '',
       })
     }
   }, [emailTemplates])
@@ -39,6 +43,7 @@ const DynamicEmailTemplate = () => {
     } finally {
       setEmailTemplate({
         customTemplate: '',
+        cancellationTemplate: '',
       })
     }
   }
@@ -64,6 +69,18 @@ const DynamicEmailTemplate = () => {
             type='text'
             className='form-control'
             name='customTemplate'
+          />
+          <label htmlFor='cancellationTemplate' className='form-label'>
+            Addmission Cancellation Letter Template
+          </label>
+          <textarea
+            id='cancellationTemplate'
+            rows={15}
+            value={emailTemplate.cancellationTemplate}
+            onChange={onChangeHandler}
+            type='text'
+            className='form-control'
+            name='cancellationTemplate'
           />
         </div>
         <button

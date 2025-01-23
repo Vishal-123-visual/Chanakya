@@ -4,9 +4,15 @@ import {Link, NavLink, useLocation, useNavigate} from 'react-router-dom'
 import {useAuth} from '../../modules/auth'
 import {toast} from 'react-toastify'
 import {KTIcon} from '../../../_metronic/helpers'
+import PopUpModal from '../../modules/accounts/components/popUpModal/PopUpModal'
+import EditAddOnSubjects from './EditAddOnSubjects'
+import axios from 'axios'
+
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const AddOnCourseTable = ({
   handleCheckBoxChange,
+  studentData,
   data,
   isLoading,
   error,
@@ -15,7 +21,6 @@ const AddOnCourseTable = ({
   marksData,
   activeTab,
   handleInputChange,
-  setOpenModal,
   handleTabClick,
   handleClick,
   isSubmitting,
@@ -25,21 +30,57 @@ const AddOnCourseTable = ({
 }) => {
   const courseSubjectsCtx = useCourseSubjectContext()
   const location = useLocation()
+  const [subjects, setSubjects] = useState({})
   const navigate = useNavigate()
+  const [semYear, setSemYear] = useState('')
+  const [isSendingEmail, setIsSendingEmail] = useState(false)
+  const [editSubjectId, setEditSubjectId] = useState(null)
   const {auth} = useAuth()
-  //console.log(location?.state?.courseName._id === undefined)
-  // console.log(location?.state?._id)
-  // console.log(groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]])
+  const [openModal, setOpenModal] = useState(false)
 
-  // const {data, error, isLoading} = courseSubjectsCtx.getAddOnSubjectsList
-  // console.log(data)
+  const handleDeleteSubject = (id) => {
+    if (!window.confirm('Are you sure you want to delete this Additional Course !!')) {
+      return
+    }
+    courseSubjectsCtx.deleteCourseSubjectMutation.mutate(id)
+  }
+
+  const handleEdit = (id, semYear, subjects) => {
+    setEditSubjectId(id)
+    setSemYear(semYear)
+    setSubjects(subjects)
+    setOpenModal(true)
+  }
+
+  const sendSubjectsEmail = async (subjectData) => {
+    setIsSendingEmail(true)
+    try {
+      const res = await axios.post(`${BASE_URL}/api/subjects/subject-mail`, subjectData)
+      // console.log(res)
+      if (res.data.success) {
+        toast.success(res.data.message, {
+          style: {
+            fontSize: '18px',
+            color: 'white',
+            background: 'black',
+          },
+        })
+        setIsSendingEmail(false)
+      }
+    } catch (error) {
+      console.error('Error sending email:', error)
+      toast.error('Failed to send email')
+    } finally {
+      setIsSendingEmail(false) // Stop sending email
+    }
+  }
 
   return (
     <>
       <div className='card'>
         <div className='card-header border-0 pt-5'>
           <h3 className='card-title align-items-start flex-column'>
-            <span className='card-label fw-bold fs-3 mb-1'>Add On Course Subjects</span>
+            <span className='card-label fw-bold fs-3 mb-1'>Additional Course Subjects</span>
             <span className=' mt-1 fw-semibold fs-7'>Student Name : {location?.state?.name}</span>
           </h3>
 
@@ -99,6 +140,7 @@ const AddOnCourseTable = ({
                       )
                       ?.map((yearWiseSubject, indexValue) => {
                         // Find the student's marks data for this subject
+                        // console.log(yearWiseSubject)
                         const studentMarks = studentSubjectMarksData?.find(
                           (singleStudentMarksData) =>
                             singleStudentMarksData?.Subjects?._id === yearWiseSubject?._id
@@ -229,6 +271,26 @@ const AddOnCourseTable = ({
                                 </div>
                               </div>
                             </td>
+                            <td className='text-center d-flex'>
+                              <button
+                                onClick={() =>
+                                  handleEdit(
+                                    yearWiseSubject?._id,
+                                    yearWiseSubject?.semYear,
+                                    yearWiseSubject
+                                  )
+                                }
+                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                              >
+                                <KTIcon iconName='pencil' className='fs-3' />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteSubject(yearWiseSubject?._id)}
+                                className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm'
+                              >
+                                <KTIcon iconName='trash' className='fs-3' />
+                              </button>
+                            </td>
                           </tr>
                         )
                       })}
@@ -305,7 +367,13 @@ const AddOnCourseTable = ({
                   >
                     Print Result
                   </Link>
-                  <button className='btn btn-primary text-uppercase'>Send Email</button>
+                  <button
+                    className='btn btn-primary text-uppercase'
+                    onClick={() => sendSubjectsEmail(studentData)}
+                    disabled={isSendingEmail === true}
+                  >
+                    {isSendingEmail ? 'Sending...' : 'Send Email'}
+                  </button>
                   <button className='btn btn-info text-uppercase' onClick={handleClick}>
                     Add Subject
                   </button>
@@ -316,6 +384,18 @@ const AddOnCourseTable = ({
           </div>
         </div>
       </div>
+      <PopUpModal show={openModal} handleClose={() => setOpenModal(false)}>
+        <div className='mt-9'>
+          <EditAddOnSubjects
+            semYear={semYear}
+            activeTab={activeTab}
+            editSubjectId={editSubjectId}
+            setOpenModal={setOpenModal}
+            subjects={subjects}
+            setSubjects={setSubjects}
+          />
+        </div>
+      </PopUpModal>
     </>
   )
 }

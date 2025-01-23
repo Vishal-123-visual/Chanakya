@@ -20,7 +20,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
   const [isSendEmailModalOpen, setIsSendEmailModalOpen] = useState(false) // For sending email modal
   const [isEmailContentModalOpen, setIsEmailContentModalOpen] = useState(false) // For viewing email content modal
   const [selectedEmail, setSelectedEmail] = useState({subject: '', content: ''}) // Email content for modal
-
+  // console.log(selectedEmail.content)
   const companyCTX = useCompanyContext()
   const studentPayFeeCtx = useStudentCourseFeesContext()
   const result = studentPayFeeCtx.useSingleStudentCourseFees(studentInfoData?._id)
@@ -49,6 +49,9 @@ const StudentEmailsTable = ({studentInfoData}) => {
         if (res.data.length > 0) {
           setSelectValue(res.data[0]?.customTemplate) // Set the first template as selected
         }
+        if (selectValue === res.data?.[0]?.cancellationTemplate) {
+          setSelectValue(res.data?.[0]?.cancellationTemplate)
+        }
       } catch (error) {
         console.log('Failed to fetch email templates')
       }
@@ -67,6 +70,31 @@ const StudentEmailsTable = ({studentInfoData}) => {
     setIsSendingEmail(true) // Start sending email
     try {
       const res = await axios.post(`${BASE_URL}/api/students/sendWarningMail`, studentData)
+      if (res.data.success) {
+        toast.success(res.data.message, {
+          style: {
+            fontSize: '18px',
+            color: 'white',
+            background: 'black',
+          },
+        })
+        setIsSendEmailModalOpen(false) // Close the modal after sending email
+      }
+    } catch (error) {
+      console.error('Error sending email:', error)
+      toast.error('Failed to send email')
+    } finally {
+      setIsSendingEmail(false) // Stop sending email
+    }
+  }
+
+  const sendAddmissionCancellationMail = async (studentData) => {
+    setIsSendingEmail(true) // Start sending email
+    try {
+      const res = await axios.post(
+        `${BASE_URL}/api/students/sendAddmissionCancellationMail`,
+        studentData
+      )
       if (res.data.success) {
         toast.success(res.data.message, {
           style: {
@@ -109,6 +137,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
 
   // Handle opening the content modal
   const handleEmailClick = (email) => {
+    // console.log(email)
     setSelectedEmail({
       subject: email.subject,
       content: email.content || 'No content available',
@@ -213,9 +242,14 @@ const StudentEmailsTable = ({studentInfoData}) => {
             >
               {emailTemplates?.length > 0 ? (
                 emailTemplates.map((email) => (
-                  <option key={email._id} value={email.customTemplate}>
-                    Warning Letter
-                  </option>
+                  <>
+                    <option key={email._id} value={email.customTemplate}>
+                      Warning Letter
+                    </option>
+                    <option value={email.cancellationTemplate}>
+                      Addmission Cancellation Letter
+                    </option>
+                  </>
                 ))
               ) : (
                 <option disabled>No templates available</option>
@@ -237,7 +271,11 @@ const StudentEmailsTable = ({studentInfoData}) => {
           <div className='footer d-flex justify-content-end'>
             <button
               className='btn btn-primary'
-              onClick={() => sendWarningEmail(student.length > 0 ? student[0] : null)}
+              onClick={() => {
+                selectValue === emailTemplates?.[0]?.customTemplate
+                  ? sendWarningEmail(student.length > 0 ? student[0] : null)
+                  : sendAddmissionCancellationMail(student.length > 0 ? student[0] : null)
+              }}
               disabled={studentInfoData?.remainingCourseFees === 0 || isSendingEmail}
             >
               <KTIcon iconName='send' className='fs-3' />
@@ -256,7 +294,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
           <div className='mt-10' style={{background: themeMode === 'dark' ? '#323333' : '#fff'}}>
             <h5>{selectedEmail.subject}</h5>
             <div
-              style={{color: themeMode === 'dark' ? '#323333' : 'black'}}
+              style={{color: themeMode === 'dark' ? '#fff' : 'black'}}
               dangerouslySetInnerHTML={{__html: selectedEmail.content}}
             />
           </div>

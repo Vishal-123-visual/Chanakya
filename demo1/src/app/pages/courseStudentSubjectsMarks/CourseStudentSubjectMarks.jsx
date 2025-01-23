@@ -19,7 +19,7 @@ const CourseStudentSubjectMarks = () => {
 
   const [selectedCourses, setSelectedCourses] = useState({})
   //console.log(location?.state?.courseName._id === undefined)
-  // console.log(location?.state?._id)
+  // console.log(location?.state)
 
   const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
     location?.state?.courseName._id === undefined
@@ -473,6 +473,7 @@ const CourseStudentSubjectMarks = () => {
           studentSubjectMarksData={studentSubjectMarksData}
           handleTabClick={handleTabClick}
           handleInputChange={handleInputChange}
+          studentData={location?.state}
         />
       </div>
       {
