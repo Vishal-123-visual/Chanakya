@@ -294,7 +294,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
           <div className='mt-10' style={{background: themeMode === 'dark' ? '#323333' : '#fff'}}>
             <h5>{selectedEmail.subject}</h5>
             <div
-              style={{color: themeMode === 'dark' ? '#fff' : 'black'}}
+              style={{color: themeMode === 'dark' ? '#323333' : 'black'}}
               dangerouslySetInnerHTML={{__html: selectedEmail.content}}
             />
           </div>
