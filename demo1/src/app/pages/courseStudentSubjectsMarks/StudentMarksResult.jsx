@@ -6,11 +6,13 @@ import {useEffect, useState} from 'react'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const StudentMarksResult = () => {
+  const location = useLocation()
   const [studentMarksResultData, setStudentMarksResultData] = useState(
     JSON.parse(localStorage.getItem('student-result')) || {}
   )
-  // console.log(studentMarksResultData)
-  const location = useLocation()
+  // console.log(studentMarksResultData?.state?.data)
+
+  // console.log(location)
 
   const handlePrint = () => {
     var actContents = document.body.innerHTML
@@ -18,12 +20,22 @@ const StudentMarksResult = () => {
     window.print()
   }
 
+  const singleStudentId = studentMarksResultData?.state?.studentData?._id
+
+  const singleStudentData = studentMarksResultData?.state?.data?.filter(
+    (stud) => stud?.studentInfo?._id === singleStudentId
+  )
+
+  // console.log(singleStudentData)
+
   const filteredAndSortedSubjects =
-    studentMarksResultData.state.data &&
-    studentMarksResultData.state.data
+    studentMarksResultData?.state?.data &&
+    studentMarksResultData?.state?.data
       ?.filter((item) => {
         // Check if the subject is true in the subjects object
-        return item.subjects[item.Subjects._id] === true
+        return (
+          item?.subjects[item?.Subjects?._id] === true && item?.studentInfo?._id === singleStudentId
+        )
       })
       ?.sort((a, b) => {
         // Extract the numeric part of the subjectCode and sort accordingly
@@ -35,8 +47,8 @@ const StudentMarksResult = () => {
   const calculateTotalMarks = filteredAndSortedSubjects?.reduce(
     (acc, cur) => {
       return {
-        maxMarksTotals: Number(acc.maxMarksTotals) + Number(cur.Subjects.fullMarks),
-        passMarksTotals: Number(acc.passMarksTotals) + Number(cur.totalMarks),
+        maxMarksTotals: Number(acc?.maxMarksTotals) + Number(cur?.Subjects?.fullMarks),
+        passMarksTotals: Number(acc?.passMarksTotals) + Number(cur?.totalMarks),
       }
     },
     {
@@ -73,17 +85,17 @@ const StudentMarksResult = () => {
                   <tbody>
                     <tr>
                       <td style={{borderRight: '1px solid black'}}>
-                        RN-{studentMarksResultData.state.data[0].studentInfo.rollNumber}
+                        RN-{singleStudentData?.[0]?.studentInfo?.rollNumber}
                       </td>
                       <td style={{borderRight: '1px solid black'}}>
-                        {studentMarksResultData.state.courseType}
+                        {studentMarksResultData?.state?.courseType}
                       </td>
                       <td style={{borderRight: '1px solid black'}}>
-                        {studentMarksResultData.state.courseType.split(' ')[0]}
+                        {studentMarksResultData?.state?.courseType?.split(' ')[0]}
                       </td>
                       <td>
                         CN-
-                        {studentMarksResultData.state.data[0].studentInfo.rollNumber}
+                        {singleStudentData?.[0]?.studentInfo?.rollNumber}
                       </td>
                     </tr>
                   </tbody>
@@ -100,26 +112,26 @@ const StudentMarksResult = () => {
                     </tr>
                     <tr>
                       <td width='25%'>This is to certify That</td>
-                      <td width='75%'>{studentMarksResultData.state.data[0].studentInfo.name}</td>
+                      <td width='75%'>{singleStudentData?.[0]?.studentInfo?.name}</td>
                     </tr>
                     <tr>
                       <td width='25%'>Course Name</td>
-                      <td width='75%'>{studentMarksResultData.state.data[0].course.courseName}</td>
+                      <td width='75%'>{singleStudentData?.[0]?.course?.courseName}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Father's Name</small>
                       </td>
-                      <td>{studentMarksResultData.state.data[0].studentInfo.father_name}</td>
+                      <td>{singleStudentData?.[0]?.studentInfo?.father_name}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Date of Birth</small>
                       </td>
                       <td>
-                        {moment(
-                          studentMarksResultData.state.data[0].studentInfo.date_of_birth
-                        ).format('DD/MM/YYYY')}
+                        {moment(singleStudentData?.[0]?.studentInfo?.date_of_birth).format(
+                          'DD/MM/YYYY'
+                        )}
                       </td>
                     </tr>
                   </tbody>
@@ -127,7 +139,7 @@ const StudentMarksResult = () => {
                 <img
                   style={{marginRight: '30px', borderRadius: '10px'}}
                   width={100}
-                  src={`${BASE_URL}/api/images/${studentMarksResultData.state.data[0].studentInfo.image}`}
+                  src={`${BASE_URL}/api/images/${singleStudentData?.[0]?.studentInfo?.image}`}
                   alt='student image'
                 />
               </td>
@@ -176,25 +188,26 @@ const StudentMarksResult = () => {
                   <tbody>
                     {filteredAndSortedSubjects &&
                       filteredAndSortedSubjects?.map((marksStudentData) => {
+                        // console.log(marksStudentData)
                         return (
                           <tr key={marksStudentData?._id} style={{borderBottom: '1px solid black'}}>
                             <td style={{borderRight: '1px solid black'}} align='center'>
-                              {marksStudentData.Subjects.subjectCode}
+                              {marksStudentData?.Subjects?.subjectCode}
                             </td>
                             <td style={{borderRight: '1px solid black'}} align='center'>
-                              {marksStudentData.Subjects.subjectName}
+                              {marksStudentData?.Subjects?.subjectName}
                             </td>
                             <td style={{borderRight: '1px solid black'}} align='center'>
-                              {marksStudentData.Subjects.fullMarks}
+                              {marksStudentData?.Subjects?.fullMarks}
                             </td>
                             <td style={{borderRight: '1px solid black'}} align='center'>
-                              {marksStudentData.practical}
+                              {marksStudentData?.practical}
                             </td>
                             <td style={{borderRight: '1px solid black'}} align='center'>
-                              {marksStudentData.theory}
+                              {marksStudentData?.theory}
                             </td>
 
-                            <td align='center'>{marksStudentData.totalMarks}</td>
+                            <td align='center'>{marksStudentData?.totalMarks}</td>
 
                             {/* <td align='center'>A</td> */}
                           </tr>
@@ -204,10 +217,10 @@ const StudentMarksResult = () => {
                       <td align='center' colSpan='2'>
                         <strong>Total Marks</strong>
                       </td>
-                      <td align='center'>{calculateTotalMarks.maxMarksTotals}</td>
+                      <td align='center'>{calculateTotalMarks?.maxMarksTotals}</td>
                       <td align='center'>-</td>
                       <td align='center'>-</td>
-                      <td align='center'>{calculateTotalMarks.passMarksTotals}</td>
+                      <td align='center'>{calculateTotalMarks?.passMarksTotals}</td>
                       <td align='center'>-</td>
                     </tr>
                   </tbody>

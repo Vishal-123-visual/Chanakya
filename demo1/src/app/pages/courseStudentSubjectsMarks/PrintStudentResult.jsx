@@ -9,6 +9,7 @@ const PrintStudentResult = () => {
   const [studentMarksResultData, setStudentMarksResultData] = useState(
     JSON.parse(localStorage.getItem('print-student-result')) || {}
   )
+  const location = useLocation()
   // console.log(studentMarksResultData)
   // console.table(studentMarksResultData.state.data[0].Subjects.subjectCode.split('-')[1])
   const handlePrint = () => {
@@ -17,12 +18,22 @@ const PrintStudentResult = () => {
     window.print()
   }
 
+  const singleStudentId = studentMarksResultData?.state?.studentData?._id
+
+  const singleStudentData = studentMarksResultData?.state?.data?.filter(
+    (stud) => stud?.studentInfo?._id === singleStudentId
+  )
+
+  // console.log(studentMarksResultData)
+
   const filteredAndSortedSubjects =
-    studentMarksResultData.state.data &&
-    studentMarksResultData.state.data
+    studentMarksResultData?.state?.data &&
+    studentMarksResultData?.state?.data
       ?.filter((item) => {
         // Check if the subject is true in the subjects object
-        return item.subjects[item.Subjects._id] === true
+        return (
+          item?.subjects[item?.Subjects?._id] === true && item?.studentInfo?._id === singleStudentId
+        )
       })
       ?.sort((a, b) => {
         // Extract the numeric part of the subjectCode and sort accordingly
@@ -73,17 +84,17 @@ const PrintStudentResult = () => {
                   <tbody>
                     <tr>
                       <td style={{borderRight: '1px solid black'}}>
-                        RN-{studentMarksResultData.state.data[0].studentInfo.rollNumber}
+                        RN-{singleStudentData?.[0]?.studentInfo?.rollNumber}
                       </td>
                       <td style={{borderRight: '1px solid black'}}>
-                        {studentMarksResultData.state.courseType}
+                        {studentMarksResultData?.state?.courseType}
                       </td>
                       <td style={{borderRight: '1px solid black'}}>
-                        {studentMarksResultData.state.courseType.split(' ')[0]}
+                        {studentMarksResultData?.state?.courseType.split(' ')[0]}
                       </td>
                       <td>
                         CN-
-                        {studentMarksResultData.state.data[0].studentInfo.rollNumber}
+                        {singleStudentData?.[0]?.studentInfo?.rollNumber}
                       </td>
                     </tr>
                   </tbody>
@@ -100,26 +111,26 @@ const PrintStudentResult = () => {
                     </tr>
                     <tr>
                       <td width='25%'>This is to certify That</td>
-                      <td width='75%'>{studentMarksResultData.state.data[0].studentInfo.name}</td>
+                      <td width='75%'>{singleStudentData?.[0]?.studentInfo?.name}</td>
                     </tr>
                     <tr>
                       <td width='25%'>Course Name</td>
-                      <td width='75%'>{studentMarksResultData.state.data[0].course.courseName}</td>
+                      <td width='75%'>{singleStudentData?.[0]?.course?.courseName}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Father's Name</small>
                       </td>
-                      <td>{studentMarksResultData.state.data[0].studentInfo.father_name}</td>
+                      <td>{singleStudentData?.[0]?.studentInfo?.father_name}</td>
                     </tr>
                     <tr>
                       <td>
                         <small>Date of Birth</small>
                       </td>
                       <td>
-                        {moment(
-                          studentMarksResultData.state.data[0].studentInfo.date_of_birth
-                        ).format('DD/MM/YYYY')}
+                        {moment(singleStudentData?.[0]?.studentInfo?.date_of_birth).format(
+                          'DD/MM/YYYY'
+                        )}
                       </td>
                     </tr>
                   </tbody>
@@ -127,7 +138,7 @@ const PrintStudentResult = () => {
                 <img
                   style={{marginRight: '30px', borderRadius: '10px'}}
                   width={100}
-                  src={`${BASE_URL}/api/images/${studentMarksResultData.state.data[0].studentInfo.image}`}
+                  src={`${BASE_URL}/api/images/${singleStudentData?.[0]?.studentInfo?.image}`}
                   alt='student image'
                 />
               </td>
@@ -175,6 +186,7 @@ const PrintStudentResult = () => {
                   <tbody>
                     {filteredAndSortedSubjects &&
                       filteredAndSortedSubjects?.map((marksStudentData) => {
+                        // console.log(marksStudentData)
                         return (
                           <tr key={marksStudentData._id} style={{borderBottom: '1px solid black'}}>
                             <td style={{borderRight: '1px solid black'}} align='center'>

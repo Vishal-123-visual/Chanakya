@@ -4,7 +4,6 @@ import studentSubjectMarksModel from "../models/subject/student.subject.marks.mo
 export const addCourseSubjectMarksController = asyncHandler(
   async (req, res, next) => {
     try {
-      // console.log(req.body.subjectId);
       // Check if a record already exists for the student, subject, and course combination
       const existingRecord = await studentSubjectMarksModel.findOne({
         studentInfo: req.body.studentId,
@@ -12,34 +11,18 @@ export const addCourseSubjectMarksController = asyncHandler(
         course: req.body.courseId,
         companyName: req.body.companyName,
       });
-      // console.log(existingRecord);
+
       if (existingRecord) {
-        // Update the subjects field if the record exists
-        if (req.body.theory !== undefined) {
-          existingRecord.theory = req.body.theory;
-        }
-        if (req.body.practical !== undefined) {
-          existingRecord.practical = req.body.practical;
-        }
-        if (req.body.totalMarks !== undefined) {
-          existingRecord.totalMarks = req.body.totalMarks;
-        }
-        if (req.body.subjects !== undefined) {
-          existingRecord.subjects = req.body.subjects; // Update the subjects
-          await existingRecord.save(); // Save the updated record
-          return res.status(200).json({
-            success: true,
-            message: "Subjects updated successfully",
-          });
-        } else {
-          return res.status(400).json({
-            success: false,
-            message: "No subjects provided to update",
-          });
-        }
+        // Delete the existing record
+        await studentSubjectMarksModel.deleteOne({
+          studentInfo: req.body.studentId,
+          Subjects: req.body.subjectId,
+          course: req.body.courseId,
+          companyName: req.body.companyName,
+        });
       }
 
-      // If no existing record, create a new one
+      // Create a new record with the updated data
       const saveStudentSubjectMarks = new studentSubjectMarksModel({
         ...req.body,
         studentInfo: req.body.studentId,
@@ -49,10 +32,13 @@ export const addCourseSubjectMarksController = asyncHandler(
       });
 
       await saveStudentSubjectMarks.save();
-      res.status(200).json({ success: true, message: "Marks added" });
+
+      return res
+        .status(200)
+        .json({ success: true, message: "Marks added/updated successfully" });
     } catch (error) {
-      console.log("Error while adding/updating marks:", error);
-      res.status(500).json({ success: false, message: error.message });
+      console.error("Error while adding/updating marks:", error);
+      return res.status(500).json({ success: false, message: error.message });
     }
   }
 );

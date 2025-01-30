@@ -6,6 +6,8 @@ import {toast} from 'react-toastify'
 import PopUpModal from '../../modules/accounts/components/popUpModal/PopUpModal'
 import AddSubjects from './AddSubjects'
 import AddOnCourseTable from './AddOnCourseTable'
+import StudentMarksResult from './StudentMarksResult'
+import PrintStudentResult from './PrintStudentResult'
 
 const CourseStudentSubjectMarks = () => {
   const courseSubjectsCtx = useCourseSubjectContext()
@@ -22,7 +24,7 @@ const CourseStudentSubjectMarks = () => {
   // console.log(location?.state)
 
   const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
-    location?.state?.courseName._id === undefined
+    location?.state?.courseName?._id === undefined
       ? location?.state?.courseName
       : location?.state?.courseName?._id
   )
@@ -49,12 +51,19 @@ const CourseStudentSubjectMarks = () => {
         }
         return acc
       }, {})
+
+      const studentSubjectSuggestion = studentSubjectMarksData
+        ?.filter((stud) => stud?.studentInfo?._id === location?.state?._id)
+        .map((data) => data)
+
+      // console.log(studentSubjectSuggestion)
+
       setSelectedCourses({
-        ...studentSubjectMarksData?.[0]?.subjects,
+        ...studentSubjectSuggestion?.[0]?.subjects,
       })
       setMarksData(initialMarksData)
     }
-  }, [studentSubjectMarksData])
+  }, [studentSubjectMarksData, studentSubjectMarksData?.studentInfo?._id])
 
   if (location?.state === undefined) {
     navigate(-1)
@@ -242,6 +251,7 @@ const CourseStudentSubjectMarks = () => {
                           (singleStudentMarksData) =>
                             singleStudentMarksData?.Subjects?._id === yearWiseSubject?._id
                         )
+                        // console.log(studentMarks)
                         // console.log(studentMarks?.subjects[yearWiseSubject._id])
                         // Check if the subject ID exists in the `subjects` object and get its value (true/false)
                         // console.log(selectedCourses?.subjects?.[yearWiseSubject?._id])
@@ -254,7 +264,7 @@ const CourseStudentSubjectMarks = () => {
                                   className='form-check-input'
                                   type='checkbox'
                                   onChange={(event) =>
-                                    handleCheckBoxChange(yearWiseSubject._id, event)
+                                    handleCheckBoxChange(yearWiseSubject?._id, event)
                                   }
                                   value={yearWiseSubject?._id}
                                   checked={selectedCourses?.[yearWiseSubject?._id] || false}

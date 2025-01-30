@@ -38,6 +38,8 @@ const AddOnCourseTable = ({
   const {auth} = useAuth()
   const [openModal, setOpenModal] = useState(false)
 
+  // console.log(location)
+
   const handleDeleteSubject = (id) => {
     if (!window.confirm('Are you sure you want to delete this Additional Course !!')) {
       return
@@ -52,10 +54,13 @@ const AddOnCourseTable = ({
     setOpenModal(true)
   }
 
-  const sendSubjectsEmail = async (subjectData) => {
+  const sendSubjectsEmail = async (subjectData, studentData) => {
     setIsSendingEmail(true)
     try {
-      const res = await axios.post(`${BASE_URL}/api/subjects/subject-mail`, subjectData)
+      const res = await axios.post(`${BASE_URL}/api/subjects/subject-mail`, {
+        subjectData,
+        studentData,
+      })
       // console.log(res)
       if (res.data.success) {
         toast.success(res.data.message, {
@@ -74,6 +79,16 @@ const AddOnCourseTable = ({
       setIsSendingEmail(false) // Stop sending email
     }
   }
+
+  const filteredData = data?.filter(
+    (subject) =>
+      subject?.semYear === YearandSemesterSets[activeTab - 1] &&
+      subject?.AddOnSubjects === 'AddOnSubject' &&
+      subject?.studentInfo === location?.state?._id
+  )
+
+  // console.log(filteredData)
+  // console.log(location)
 
   return (
     <>
@@ -134,13 +149,13 @@ const AddOnCourseTable = ({
                     {data
                       ?.filter(
                         (subject) =>
-                          subject.semYear === YearandSemesterSets[activeTab - 1] &&
+                          subject?.semYear === YearandSemesterSets[activeTab - 1] &&
                           subject?.AddOnSubjects === 'AddOnSubject' &&
-                          subject.studentInfo === location?.state?._id
+                          subject?.studentInfo === location?.state?._id &&
+                          subject?.course === location?.state?.courseName
                       )
                       ?.map((yearWiseSubject, indexValue) => {
                         // Find the student's marks data for this subject
-                        // console.log(yearWiseSubject)
                         const studentMarks = studentSubjectMarksData?.find(
                           (singleStudentMarksData) =>
                             singleStudentMarksData?.Subjects?._id === yearWiseSubject?._id
@@ -331,6 +346,7 @@ const AddOnCourseTable = ({
                           state: {
                             courseType: YearandSemesterSets[activeTab - 1],
                             data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                            studentData: studentData,
                           },
                         })
                       )
@@ -360,6 +376,7 @@ const AddOnCourseTable = ({
                           state: {
                             courseType: YearandSemesterSets[activeTab - 1],
                             data: groupSubjectsBySemester[YearandSemesterSets[activeTab - 1]],
+                            studentData: studentData,
                           },
                         })
                       )
@@ -369,7 +386,7 @@ const AddOnCourseTable = ({
                   </Link>
                   <button
                     className='btn btn-primary text-uppercase'
-                    onClick={() => sendSubjectsEmail(studentData)}
+                    onClick={() => sendSubjectsEmail(studentSubjectMarksData, studentData)}
                     disabled={isSendingEmail === true}
                   >
                     {isSendingEmail ? 'Sending...' : 'Send Email'}

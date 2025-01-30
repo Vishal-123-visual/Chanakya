@@ -126,7 +126,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
       .replace(/\${courseName.courseName}/g, studentInfoData.select_course || '')
       .replace(/\${companyName.companyName}/g, singleCompanyData.companyName || '')
       .replace(/\${studentInfo.remainingCourseFees}/g, studentInfoData.remainingCourseFees || '')
-      .replace(/\$${studentInfo.rollNumber}/g, studentInfoData.rollNumber || '')
+      .replace(/\${studentInfo.rollNumber}/g, studentInfoData.rollNumber || '')
       .replace(/\${studentInfo.email}/g, studentInfoData.email || '')
       .replace(/\${courseName.courseFees}/g, studentInfoData.course_fees || '')
       .replace(/\${companyName.companyPhone}/g, singleCompanyData.companyPhone || '')
@@ -294,7 +294,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
           <div className='mt-10' style={{background: themeMode === 'dark' ? '#323333' : '#fff'}}>
             <h5>{selectedEmail.subject}</h5>
             <div
-              style={{color: themeMode === 'dark' ? '#323333' : 'black'}}
+              style={{color: themeMode === 'dark' ? '#fff' : ''}}
               dangerouslySetInnerHTML={{__html: selectedEmail.content}}
             />
           </div>
