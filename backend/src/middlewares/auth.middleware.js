@@ -30,7 +30,11 @@ export const isAdmin = async (req, res, next) => {
   try {
     const user = await userModel.findById(req?.user?._id);
     // console.log(user);
-    if (user?.role === "Admin" || user.role === "SuperAdmin") {
+    if (
+      user?.role === "Admin" ||
+      user.role === "SuperAdmin" ||
+      user.role === "Counsellor"
+    ) {
       next();
     } else {
       return res.status(401).json({
