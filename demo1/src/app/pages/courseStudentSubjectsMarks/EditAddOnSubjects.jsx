@@ -30,7 +30,7 @@ const EditAddOnSubjects = ({setOpenModal, editSubjectId, semYear, subjects, setS
         })
       },
     })
-    // window.location.reload()
+    window.location.reload()
     setOpenModal(false)
   }
 
