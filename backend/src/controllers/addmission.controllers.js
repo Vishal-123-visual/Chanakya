@@ -7,6 +7,7 @@ import CompanyModels from "../models/company/company.models.js";
 import EmailLogModel from "../models/mail.models.js";
 import { userModel } from "../models/user.models.js";
 import { mailTransporter } from "../utils/mail_helpers.js";
+import WelcomeEmailModel from "../models/email-remainder/welcomeEmailSuggestion.models.js";
 
 export const createAddMissionController = asyncHandler(
   async (req, res, next) => {
@@ -42,6 +43,7 @@ export const createAddMissionController = asyncHandler(
       courseRemainderDuration,
     } = req.body;
 
+    const data = await WelcomeEmailModel.find({});
     // console.log(req.body);
     const file = req?.file?.filename;
     switch (true) {
@@ -159,96 +161,98 @@ export const createAddMissionController = asyncHandler(
       courseDuration: courseRemainderDuration,
     });
 
-    //     sendEmail(
-    //       `${email}, ${companyData.email},${superAdminEmail}`,
-    //       ` Welcome to the  ${companyData.companyName}`,
-    //       `Hello ${name} welcome here`,
-    //       `<!DOCTYPE html>
-    // <html lang="en">
-    // <head>
-    //   <meta charset="UTF-8">
-    //   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    //   <title>Welcome Letter</title>
-    //   <style>
-    //     body {
-    //       font-family: Arial, sans-serif;
-    //       line-height: 1.6;
-    //       background-color: #f8f9fa;
-    //       color: #333;
-    //       margin: 0;
-    //       padding: 20px;
-    //     }
-    //     .container {
-    //       max-width: 700px;
-    //       margin: 0 auto;
-    //       background: #fff;
-    //       padding: 20px;
-    //       border-radius: 10px;
-    //       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    //     }
-    //     h1 {
-    //       color: #007bff;
-    //     }
-    //     .details {
-    //       margin: 20px 0;
-    //     }
-    //     .details p {
-    //       margin: 5px 0;
-    //     }
-    //     .footer {
-    //       margin-top: 20px;
-    //       padding-top: 20px;
-    //       border-top: 1px solid #ddd;
-    //       font-size: 0.9em;
-    //     }
-    //     .footer p {
-    //       margin: 5px 0;
-    //     }
-    //   </style>
-    // </head>
-    // <body>
-    //   <div class="container">
-    //     <h1>Welcome to ${companyData.companyName}</h1>
-    //     <p>Dear ${name},</p>
-    //     <p>
-    //       Congratulations on your admission in <strong>${select_course}</strong>! We are thrilled to welcome you to our community of creative learners and professionals dedicated to excellence in web design.
-    //     </p>
-
-    //     <div class="details">
-    //       <h2>Student Details:</h2>
-    //       <p><strong>Student Name:</strong> ${name}</p>
-    //       <p><strong>Father’s Name:</strong> ${father_name}</p>
-    //       <p><strong>Mobile:</strong> ${mobile_number}</p>
-    //       <p><strong>Email:</strong> ${email}</p>
-    //       <p><strong>Course Start Date:</strong> ${date}</p>
-    //       <p><strong>Course Name:</strong> ${select_course}</p>
-    //     </div>
-
-    //     <p>
-    //       Our instructors are industry experts committed to guiding you through each step of your learning journey. We encourage you to ask questions, share ideas, and collaborate with your peers to maximize your learning experience.
-    //     </p>
-
-    //     <p>
-    //       Should you have any questions or need assistance, please don’t hesitate to contact us at
-    //       <strong>${companyData.email}</strong> or <strong>${companyData.companyPhone}</strong>.
-    //     </p>
-
-    //     <p>
-    //       Once again, welcome to <strong>${companyData.companyName}</strong>. We’re excited to have you on board and look forward to seeing the innovative designs and projects you’ll create!
-    //     </p>
-
-    //     <div class="footer">
-    //       <p>Warm regards,</p>
-    //       <p><strong>Centre Manager</strong></p>
-    //       <p><strong>${companyData.companyName}</strong></p>
-    //       <p>Contact: ${companyData.companyPhone}</p>
-    //     </div>
-    //   </div>
-    // </body>
-    // </html>
-    // `,
-    //       req
-    //     );
+    if (data?.[0]?.welcomeemailsuggestion) {
+      sendEmail(
+        `${email}, ${companyData.email},${superAdminEmail}`,
+        ` Welcome to the  ${companyData.companyName}`,
+        `Hello ${name} welcome here`,
+        `<!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome Letter</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+          }
+          .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+          h1 {
+            color: #007bff;
+          }
+          .details {
+            margin: 20px 0;
+          }
+          .details p {
+            margin: 5px 0;
+          }
+          .footer {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            font-size: 0.9em;
+          }
+          .footer p {
+            margin: 5px 0;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Welcome to ${companyData.companyName}</h1>
+          <p>Dear ${name},</p>
+          <p>
+            Congratulations on your admission in <strong>${select_course}</strong>! We are thrilled to welcome you to our community of creative learners and professionals dedicated to excellence in web design.
+          </p>
+  
+          <div class="details">
+            <h2>Student Details:</h2>
+            <p><strong>Student Name:</strong> ${name}</p>
+            <p><strong>Father’s Name:</strong> ${father_name}</p>
+            <p><strong>Mobile:</strong> ${mobile_number}</p>
+            <p><strong>Email:</strong> ${email}</p>
+            <p><strong>Course Start Date:</strong> ${date}</p>
+            <p><strong>Course Name:</strong> ${select_course}</p>
+          </div>
+  
+          <p>
+            Our instructors are industry experts committed to guiding you through each step of your learning journey. We encourage you to ask questions, share ideas, and collaborate with your peers to maximize your learning experience.
+          </p>
+  
+          <p>
+            Should you have any questions or need assistance, please don’t hesitate to contact us at
+            <strong>${companyData.email}</strong> or <strong>${companyData.companyPhone}</strong>.
+          </p>
+  
+          <p>
+            Once again, welcome to <strong>${companyData.companyName}</strong>. We’re excited to have you on board and look forward to seeing the innovative designs and projects you’ll create!
+          </p>
+  
+          <div class="footer">
+            <p>Warm regards,</p>
+            <p><strong>Centre Manager</strong></p>
+            <p><strong>${companyData.companyName}</strong></p>
+            <p>Contact: ${companyData.companyPhone}</p>
+          </div>
+        </div>
+      </body>
+      </html>
+      `,
+        req
+      );
+    }
 
     res.status(200).json({
       success: true,

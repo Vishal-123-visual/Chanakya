@@ -54,6 +54,18 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  const getWelcomeEmailSuggestionStatus = useQuery({
+    queryKey: ['getWelcomeEmailRemainderSuggesstions'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/emailRemainder/welcome/status`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
   //console.log(getCompanyLists)
 
   //console.log(studentsLists)
@@ -214,6 +226,34 @@ export const CompanyContextProvider = ({children}) => {
         alert(error.response.data.error)
       } else {
         await queryClient.invalidateQueries({queryKey: ['getEmailRemainderSuggesstions']})
+      }
+    },
+  })
+
+  const postWelcomeEmailSuggestionStatus = useMutation({
+    mutationFn: async (data) => {
+      console.log(data)
+      return axios.post(`${BASE_URL}/api/emailRemainder/welcome/status`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getWelcomeEmailRemainderSuggesstions']})
       }
     },
   })
@@ -648,6 +688,8 @@ export const CompanyContextProvider = ({children}) => {
         postEmailRemainderDays,
         postEmailSuggestionStatus,
         getEmailSuggestionStatus,
+        postWelcomeEmailSuggestionStatus,
+        getWelcomeEmailSuggestionStatus,
         useGetStudentsAccordingToCompanyQuery,
         createStudentCommissionMutation,
         useGetStudentCommissionDataQuery,

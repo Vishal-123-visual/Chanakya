@@ -3,6 +3,7 @@ import EmailSuggestionModel from "../models/email-remainder/EmailSuggestions.mod
 import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Suggestion.js";
 import EmailRemainderModel from "../models/email-remainder/email.remainder.models.js";
 import emailRemainderDatesModel from "../models/email-remainder/email.remainderDates.js";
+import WelcomeEmailModel from "../models/email-remainder/welcomeEmailSuggestion.models.js";
 
 export const addEmailRemainderController = asyncHandler(
   async (req, res, next) => {
@@ -100,10 +101,42 @@ export const addEmailSuggestionController = asyncHandler(
     }
   }
 );
+
+export const addWelcomeEmailSuggestionController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const { welcomeemailsuggestion } = req.body;
+      // console.log(req.body);
+      const emailRemainder = await WelcomeEmailModel.find({});
+      emailRemainder.forEach(
+        async (emailRemainder) => await emailRemainder.deleteOne()
+      );
+      const emailSuggestion = new WelcomeEmailModel({
+        welcomeemailsuggestion,
+      });
+      await emailSuggestion.save();
+      res.status(200).json({ message: "Email Suggestion Added" });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
 export const getEmailSuggestionController = asyncHandler(
   async (req, res, next) => {
     try {
       const emailSuggestions = await EmailSuggestionModel.find({});
+      res.status(200).json({ emailSuggestions });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const getWelcomeEmailSuggestionController = asyncHandler(
+  async (req, res, next) => {
+    try {
+      const emailSuggestions = await WelcomeEmailModel.find({});
       res.status(200).json({ emailSuggestions });
     } catch (error) {
       console.log(error);
