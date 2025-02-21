@@ -12,6 +12,9 @@ import EditOnlyCourseFee from './EditOnlyCourseFee'
 import {toast} from 'react-toastify'
 import {useCompanyContext} from '../compay/CompanyContext'
 import useUserRoleAccessContext from '../userRoleAccessManagement/UserRoleAccessContext'
+import PayStudentFeeOnline from './PayStudentFeeOnline'
+
+const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const StudentCourseFee = ({className, studentInfoData}) => {
   //console.log(studentInfoData)
@@ -27,6 +30,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   // console.log(companyCtx.getWhatsAppMessageuggestionStatus?.data[0]?.whatsappSuggestionStatus)
 
   const [addStudentFeeFormToggle, setAddStudentFeeFormToggle] = useState(false)
+  const [addOnlineStudentFeeFormToggle, setAddOnlineStudentFeeFormToggle] = useState(false)
   const [studentCourseFeeEditId, setStudentCourseFeesEditId] = useState(null)
   //console.log(studentCourseFeeEditId)
   const {getAllRecieptStatusData} = useStudentCourseFeesContext()
@@ -62,9 +66,17 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   // console.log(result)
   const addStudentFeeFormToggleHandler = () => {
     setAddStudentFeeFormToggle((prev) => !prev)
+    // console.log(addStudentFeeFormToggle)
+  }
+
+  const addEasebuzzStudentFeeFormToggleHandler = () => {
+    setAddOnlineStudentFeeFormToggle((prev) => !prev)
+    // console.log(addStudentFeeFormToggle)
   }
 
   const [payStudentFeesAdd, setPayStudentFeesAdd] = useState()
+  // const [payStudentFeesOnlineAdd, setPayStudentFeesOnlineAdd] = useState()
+
   useEffect(() => {
     const initialAmountPaid =
       result.data?.length > 0
@@ -131,7 +143,6 @@ const StudentCourseFee = ({className, studentInfoData}) => {
               courseName: studentInfoData?.courseName,
             })
             setAddStudentFeeFormToggle(false)
-
             setPayStudentFeesAdd({
               netCourseFees: 0,
               remainingFees: 0,
@@ -198,6 +209,56 @@ const StudentCourseFee = ({className, studentInfoData}) => {
     }
   }
 
+  const payOnlineStudentFeesAddHandler = async (e) => {
+    e.preventDefault()
+    setPayStudentFeesAdd({
+      ...payStudentFeesAdd,
+      studentInfo: studentInfoData?._id,
+      no_of_installments_amount: studentInfoData.no_of_installments_amount,
+      no_of_installments: studentInfoData.no_of_installments,
+      courseName: studentInfoData?.courseName,
+    })
+
+    if (payStudentFeesAdd.amountPaid === '') {
+      toast.error('Please enter the amount paid', {bodyStyle: {fontSize: '18px'}})
+      return
+    } else if (payStudentFeesAdd.amountDate === '') {
+      toast.error('Please enter the Date', {bodyStyle: {fontSize: '18px'}})
+      return
+    } else if (payStudentFeesAdd.paymentOption === '') {
+      toast.error('Please select the payment option', {bodyStyle: {fontSize: '18px'}})
+      return
+    }
+
+    try {
+      const response = await axios.post(`${BASE_URL}/api/courseFees/online-payment`, {
+        ...payStudentFeesAdd,
+        studentInfo: studentInfoData?._id,
+        no_of_installments_amount: studentInfoData.no_of_installments_amount,
+        no_of_installments: studentInfoData.no_of_installments,
+        courseName: studentInfoData?.courseName,
+      })
+
+      console.log('Response from backend:', response.data)
+
+      if (response.data.success && response.data.paymentLink) {
+        // Open the payment link in a new tab
+        // window.open(response.data.paymentLink)
+        window.location.href = response.data.paymentLink
+      } else if (response.data.failureMessage) {
+        // Redirect to the profile page and show a popup with the failure message
+        // console.log(response)
+        toast.error(response.data.failureMessage, {bodyStyle: {fontSize: '18px'}})
+        navigate(`/payment/failure`)
+      } else {
+        toast.error('Payment initiation failed')
+      }
+    } catch (error) {
+      console.error('Error initiating payment:', error)
+      toast.error('Error initiating payment')
+    }
+  }
+
   const editStudentCourseFessHandler = (e) => {
     // console.log(editStudentCourseFees)
     e.preventDefault()
@@ -237,19 +298,41 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           {userRoleAccess?.some(
             (userAccess) =>
               userAccess.studentFeesAccess['Add Student Fees'] === true &&
-              userAccess.role === currentUser?.role
+              userAccess.role === currentUser?.role &&
+              currentUser.role !== 'Student'
           ) ? (
             <button
               disabled={studentInfoData?.remainingCourseFees === 0}
               onClick={addStudentFeeFormToggleHandler}
               className='btn btn-sm btn-light-primary'
             >
-              <KTIcon iconName='plus' className='fs-3' />
-              {studentInfoData?.remainingCourseFees === 0 ? 'Student paid all fees' : 'Pay Fees'}
+              {studentInfoData?.remainingCourseFees === 0 ? (
+                ''
+              ) : (
+                <KTIcon iconName='plus' className='fs-3' />
+              )}
+              {studentInfoData?.remainingCourseFees === 0
+                ? `${studentInfoData?.name} paid all fees`
+                : 'Pay Fees'}
             </button>
           ) : (
-            <p className='btn btn-sm btn-light-primary'>Student Course Fees Record</p>
+            ''
+            // <p className='btn btn-sm btn-light-primary'>Student Course Fees Record</p>
           )}
+          <button
+            disabled={studentInfoData?.remainingCourseFees === 0}
+            onClick={addEasebuzzStudentFeeFormToggleHandler}
+            className='btn btn-sm btn-light-primary mx-5'
+          >
+            {studentInfoData?.remainingCourseFees === 0 ? (
+              ''
+            ) : (
+              <KTIcon iconName='plus' className='fs-3' />
+            )}
+            {studentInfoData?.remainingCourseFees === 0
+              ? `${studentInfoData?.name} paid all fees`
+              : 'Pay Online'}
+          </button>
         </div>
       </div>
       {/* end::Header */}
@@ -260,7 +343,11 @@ const StudentCourseFee = ({className, studentInfoData}) => {
           {/* begin::Table */}
           <form
             onSubmit={
-              studentCourseFeeEditId ? editStudentCourseFessHandler : payStudentFeesAddHandler
+              studentCourseFeeEditId
+                ? editStudentCourseFessHandler
+                : addEasebuzzStudentFeeFormToggleHandler
+                ? payOnlineStudentFeesAddHandler
+                : payStudentFeesAddHandler
             }
           >
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
@@ -301,6 +388,14 @@ const StudentCourseFee = ({className, studentInfoData}) => {
                     setPayStudentFeesAdd={setPayStudentFeesAdd}
                     studentInfoData={studentInfoData}
                     setAddStudentFeeFormToggle={setAddStudentFeeFormToggle}
+                  />
+                )}
+                {addOnlineStudentFeeFormToggle && (
+                  <PayStudentFeeOnline
+                    payStudentFeesAdd={payStudentFeesAdd}
+                    setPayStudentFeesAdd={setPayStudentFeesAdd}
+                    studentInfoData={studentInfoData}
+                    setAddOnlineStudentFeeFormToggle={setAddOnlineStudentFeeFormToggle}
                   />
                 )}
                 {result.data?.length > 0 ? (

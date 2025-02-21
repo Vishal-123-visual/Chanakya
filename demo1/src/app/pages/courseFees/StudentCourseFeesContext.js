@@ -175,6 +175,59 @@ export const StudentCourseFeesContextProvider = ({children}) => {
     },
   })
 
+  const createStudentCourseFeesOnlineMutation = useMutation({
+    mutationFn: async (data) => {
+      try {
+        const res = await axios.post(`${BASE_URL}/api/courseFees/online-payment`, data, config)
+        console.log(res)
+        return res.data
+      } catch (error) {
+        // Throwing the error will trigger the onError callback
+        throw error
+      }
+    },
+
+    onMutate: () => {
+      //console.log('Mutation started')
+    },
+
+    onError: (error) => {
+      // Display the error message to the user before any page reload
+      //console.error('Mutation failed:', error)
+      toast.error(`Error: ${error.response?.data?.error || error.message}`)
+      // Optionally, you can prevent a page reload by stopping event propagation or further actions here
+    },
+
+    onSuccess: async (data) => {
+      //console.log('Mutation succeeded:', data)
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudents', data?.id],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getStudentCourseFeesLists'],
+      })
+      await queryClient.invalidateQueries({
+        queryKey: ['getDayBookDataLists'],
+      })
+      toast.success('Added Student Course fee Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      if (error) {
+        // Display the error message before any further actions
+        console.error('Error during mutation:', error.response?.data?.error || error.message)
+        toast.error(`Error: ${error.response?.data?.error || error.message}`)
+
+        // Optionally, throw the error again if you need to trigger global error handling
+        throw new Error(error.response?.data?.error || 'An unknown error occurred')
+      } else {
+        await queryClient.invalidateQueries({
+          queryKey: ['getStudentCourseFeesLists'],
+        })
+      }
+    },
+  })
+
   // Course Types
   const deleteCourseMutation = useMutation({
     mutationFn: async (id) => {
@@ -303,6 +356,7 @@ export const StudentCourseFeesContextProvider = ({children}) => {
         useDeleteSingleStudentCourseFees,
         deleteCourseMutation,
         createStudentCourseFeesMutation,
+        createStudentCourseFeesOnlineMutation,
         updateStudentSingleCourseFeesMutation,
         useGetStudentMonthlyCourseFeesCollection,
         useGetStudentMonthlyCourseFeesCollectionExpireationInstallment,

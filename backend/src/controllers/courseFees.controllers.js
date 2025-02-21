@@ -1,8 +1,16 @@
 import mongoose, { get, now } from "mongoose";
+import crypto from "crypto";
 import asyncHandler from "../middlewares/asyncHandler.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
-import { BACKEND_URL, USER_EMAIL } from "../config/config.js";
+import {
+  BACKEND_URL,
+  EASEBUZZ_ENV,
+  EASEBUZZ_KEY,
+  EASEBUZZ_SALT,
+  USER_EMAIL,
+} from "../config/config.js";
+import axios from "axios";
 import { mailTransporter } from "../utils/mail_helpers.js";
 import { MailHTML } from "../../helpers/mail/index.js";
 import CourseModel from "../models/course/courses.models.js";
@@ -17,6 +25,7 @@ import moment from "moment";
 import SubjectModel from "../models/subject/subject.models.js";
 import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Suggestion.js";
 import EmailLogModel from "../models/mail.models.js";
+import qs from "qs";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -1402,6 +1411,141 @@ export const createCourseFeesController = asyncHandler(
   }
 );
 
+// 🔹 Generate Hash for Payment Request
+const generateHash = (data) => {
+  const hashString = `${EASEBUZZ_KEY}|${data.txnid}|${data.amountPaid}|${data.productinfo}|${data.firstname}|${data.email}|||||||||||${EASEBUZZ_SALT}`;
+  const hash = crypto.createHash("sha512").update(hashString).digest("hex");
+  return hash;
+};
+
+// 🔹 Initiate Payment
+export const createEaseBuzzCourseFeesController = async (req, res) => {
+  try {
+    // Check for EaseBuzz credentials
+    if (!EASEBUZZ_KEY || !EASEBUZZ_SALT) {
+      return res
+        .status(500)
+        .json({ message: "EaseBuzz credentials are missing" });
+    }
+
+    const {
+      studentInfo,
+      remainingFees,
+      amountPaid,
+      narration,
+      amountDate,
+      lateFees,
+      paymentOption,
+    } = req.body;
+
+    // console.log(req.body)
+
+    if (!amountPaid || !amountDate || !studentInfo) {
+      return res.status(400).json({ message: "Required fields are missing" });
+    }
+
+    // Fetch student details
+    const student = await admissionFormModel
+      .findById(studentInfo)
+      .populate(["courseName", "companyName"]);
+    if (!student) {
+      return res.status(404).json({ message: "Student not found" });
+    }
+
+    const txnid = "Txn" + Date.now(); // Generates a unique, shorter ID
+
+    const hash = generateHash({
+      txnid,
+      amountPaid,
+      productinfo: "Online Student Fees",
+      firstname: student.name,
+      phone: student.phone_number,
+      email: student.email,
+    });
+
+    const paymentData = {
+      key: EASEBUZZ_KEY,
+      txnid,
+      amount: String(amountPaid), // Ensure amount is a string
+      productinfo: "Online Student Fees",
+      firstname: student.name,
+      email: student.email,
+      phone: student.phone_number,
+      surl: `${BACKEND_URL}/api/courseFees/payment/success`,
+      furl: `${BACKEND_URL}/api/courseFees/payment/failure`,
+      hash,
+    };
+
+    // Determine the EaseBuzz URL based on the environment
+    const easeBuzzURL =
+      EASEBUZZ_ENV === "prod"
+        ? "https://pay.easebuzz.in/payment/initiateLink"
+        : "https://testpay.easebuzz.in/payment/initiateLink";
+
+    try {
+      const response = await axios.post(
+        easeBuzzURL,
+        qs.stringify(paymentData),
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          timeout: 10000, // Set a timeout of 10 seconds
+        }
+      );
+
+      // console.log("📢 EaseBuzz Response:", JSON.stringify(response.data));
+
+      // Check if Payment API request was successful
+      if (
+        !response.data ||
+        response.data.status !== 1 || // Ensure status = 1 (Success)
+        response.data.payment?.error_desc // Ensure no error is returned
+      ) {
+        // console.error("⚠️ Payment Failed:", response.data);
+        return res.status(400).json({
+          message: "Payment initiation failed",
+          error: response.data?.error_desc || "Unknown error",
+        });
+      }
+
+      // If the payment initiation is successful, send the payment link as a response
+      const paymentLink = `https://pay.easebuzz.in/pay/${response.data.data}`;
+      return res.json({ success: true, paymentLink }); // Send the link as a response
+    } catch (axiosError) {
+      console.error(" Axios Error:", axiosError);
+      if (axiosError.response) {
+        console.error(
+          " EaseBuzz API Error Response:",
+          axiosError.response.data
+        );
+        return res.status(axiosError.response.status).json({
+          message: "Payment initiation failed",
+          error: axiosError.response.data,
+        });
+      } else if (axiosError.request) {
+        console.error(
+          "No response received from EaseBuzz API:",
+          axiosError.request
+        );
+        return res.status(500).json({
+          message: "No response received from EaseBuzz API",
+          error: axiosError.request,
+        });
+      } else {
+        console.error(" Error in setting up the request:", axiosError.message);
+        return res.status(500).json({
+          message: "Error in setting up the request",
+          error: axiosError.message,
+        });
+      }
+    }
+  } catch (error) {
+    console.error(" Error:", error);
+    return res.status(500).json({
+      message: "Payment initiation failed",
+      error: error.message || "Unknown Error",
+    });
+  }
+};
 // Function to send email asynchronously
 async function sendEmail(toEmails, subject, text, html, req) {
   const mailOptions = {

@@ -15,6 +15,7 @@ import AddEnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/AddEnq
 import EnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryForm'
 import EnquiryFormCssChange from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryFormCssChange'
 import ResetPassword from '../modules/auth/components/ResetPassword'
+import PaymentFailurePage from '../pages/student-profile/PaymentFailurePage'
 
 /**
  * Base URL of the website.
@@ -34,7 +35,8 @@ const AppRoutes: FC = () => {
     () => import('../pages/print-student-fee-recipt/PrintStudentFeesRecipt')
   )
   const {currentUser} = useAuth()
-  //console.log(currentUser)
+  // console.log(currentUser)
+
   return (
     <BrowserRouter>
       <Routes>
@@ -65,6 +67,10 @@ const AppRoutes: FC = () => {
               <Route path='*' element={<Navigate to='/auth' />} />
             </>
           )}
+          <Route
+            path='/payment/failure'
+            element={<PaymentFailurePage studentId={currentUser?.studentId} />}
+          />
         </Route>
       </Routes>
     </BrowserRouter>
