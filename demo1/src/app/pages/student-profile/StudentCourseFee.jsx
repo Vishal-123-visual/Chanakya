@@ -239,7 +239,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         courseName: studentInfoData?.courseName,
       })
 
-      console.log('Response from backend:', response.data)
+      // console.log('Response from backend:', response.data)
 
       if (response.data.success && response.data.paymentLink) {
         // Open the payment link in a new tab
@@ -345,9 +345,9 @@ const StudentCourseFee = ({className, studentInfoData}) => {
             onSubmit={
               studentCourseFeeEditId
                 ? editStudentCourseFessHandler
-                : addEasebuzzStudentFeeFormToggleHandler
-                ? payOnlineStudentFeesAddHandler
-                : payStudentFeesAddHandler
+                : addStudentFeeFormToggle
+                ? payStudentFeesAddHandler
+                : payOnlineStudentFeesAddHandler
             }
           >
             <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>

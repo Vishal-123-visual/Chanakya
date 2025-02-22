@@ -16,6 +16,7 @@ import EnquiryForm from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryFo
 import EnquiryFormCssChange from '../pages/enquiry-related/viewEnquiryFormsData/EnquiryFormCssChange'
 import ResetPassword from '../modules/auth/components/ResetPassword'
 import PaymentFailurePage from '../pages/student-profile/PaymentFailurePage'
+import PaymentSuccessPage from '../pages/student-profile/PaymentSuccessPage'
 
 /**
  * Base URL of the website.
@@ -70,6 +71,10 @@ const AppRoutes: FC = () => {
           <Route
             path='/payment/failure'
             element={<PaymentFailurePage studentId={currentUser?.studentId} />}
+          />
+          <Route
+            path='/payment/success'
+            element={<PaymentSuccessPage studentId={currentUser?.studentId} />}
           />
         </Route>
       </Routes>

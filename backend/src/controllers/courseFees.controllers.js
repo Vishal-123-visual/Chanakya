@@ -39,7 +39,7 @@ export const createCourseFeesController = asyncHandler(
         lateFees,
         paymentOption,
       } = req.body;
-      // console.log(req.body)
+      // console.log(req.body);
 
       // Validate required fields
       if (!amountPaid || !amountDate || !studentInfo) {
@@ -1412,8 +1412,9 @@ export const createCourseFeesController = asyncHandler(
 );
 
 // 🔹 Generate Hash for Payment Request
+// 🔹 Generate Hash for Payment Request
 const generateHash = (data) => {
-  const hashString = `${EASEBUZZ_KEY}|${data.txnid}|${data.amountPaid}|${data.productinfo}|${data.firstname}|${data.email}|||||||||||${EASEBUZZ_SALT}`;
+  const hashString = `${EASEBUZZ_KEY}|${data.txnid}|${data.amountPaid}|${data.productinfo}|${data.firstname}|${data.email}|${data.udf1}|${data.udf2}|${data.udf3}|${data.udf4}|${data.udf5}|${data.udf6}|${data.udf7}||||${EASEBUZZ_SALT}`;
   const hash = crypto.createHash("sha512").update(hashString).digest("hex");
   return hash;
 };
@@ -1430,12 +1431,16 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
 
     const {
       studentInfo,
-      remainingFees,
       amountPaid,
       narration,
       amountDate,
       lateFees,
+      courseName,
+      remainingFees,
       paymentOption,
+      no_of_installments_amount,
+      no_of_installments,
+      netCourseFees,
     } = req.body;
 
     // console.log(req.body)
@@ -1448,6 +1453,7 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
     const student = await admissionFormModel
       .findById(studentInfo)
       .populate(["courseName", "companyName"]);
+
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
@@ -1461,7 +1467,20 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       firstname: student.name,
       phone: student.phone_number,
       email: student.email,
+      udf1: studentInfo,
+      udf2: courseName,
+      udf3: remainingFees,
+      udf4: no_of_installments,
+      udf5: no_of_installments_amount,
+      udf6: netCourseFees,
+      udf7: paymentOption,
+      udf8: lateFees,
     });
+
+    const userName =
+      req.user.fName === req.user.lName
+        ? req.user.fName
+        : `${req.user.fName} ${req.user.lName}`;
 
     const paymentData = {
       key: EASEBUZZ_KEY,
@@ -1471,6 +1490,13 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       firstname: student.name,
       email: student.email,
       phone: student.phone_number,
+      udf1: studentInfo,
+      udf2: courseName,
+      udf3: remainingFees,
+      udf4: no_of_installments,
+      udf5: no_of_installments_amount,
+      udf6: netCourseFees,
+      udf7: paymentOption,
       surl: `${BACKEND_URL}/api/courseFees/payment/success`,
       furl: `${BACKEND_URL}/api/courseFees/payment/failure`,
       hash,
@@ -1508,7 +1534,7 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       }
 
       // If the payment initiation is successful, send the payment link as a response
-      const paymentLink = `https://pay.easebuzz.in/pay/${response.data.data}`;
+      const paymentLink = `	https://testpay.easebuzz.in/pay/${response.data.data}`;
       return res.json({ success: true, paymentLink }); // Send the link as a response
     } catch (axiosError) {
       console.error(" Axios Error:", axiosError);
@@ -1546,6 +1572,7 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
     });
   }
 };
+
 // Function to send email asynchronously
 async function sendEmail(toEmails, subject, text, html, req) {
   const mailOptions = {
