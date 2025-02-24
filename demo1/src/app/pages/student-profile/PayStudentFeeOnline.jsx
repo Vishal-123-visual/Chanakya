@@ -25,19 +25,19 @@ const PayStudentFeeOnline = ({
       toast.info('First add the installment due date of student !!')
     } else {
       const installmentDuration = new Date(studentInfoData.installment_duration)
-      const currentDate = new Date()
+      const amountDate = payStudentFeesAdd.amountDate || new Date()
 
       // Set the time to 00:00:00 to avoid any time differences
       installmentDuration.setHours(0, 0, 0, 0)
-      currentDate.setHours(0, 0, 0, 0)
+      amountDate.setHours(0, 0, 0, 0)
 
       // Calculate the difference in days
-      const overdueDays = Math.ceil((currentDate - installmentDuration) / (1000 * 60 * 60 * 24))
+      const overdueDays = Math.ceil((amountDate - installmentDuration) / (1000 * 60 * 60 * 24))
       const lateFees = overdueDays > 0 ? overdueDays * 100 : 0
 
       setPayStudentFeesAdd((prev) => ({...prev, lateFees}))
     }
-  }, [studentInfoData?.installment_duration])
+  }, [studentInfoData?.installment_duration, payStudentFeesAdd.amountDate])
 
   const remainingFeesHandler = (e) => {
     setPayStudentFeesAdd((prev) => ({
