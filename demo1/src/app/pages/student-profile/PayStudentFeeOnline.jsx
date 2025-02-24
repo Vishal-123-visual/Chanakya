@@ -13,6 +13,7 @@ const PayStudentFeeOnline = ({
 }) => {
   const {currentUser} = useAuth()
   const paymentOptionCtx = usePaymentOptionContextContext()
+
   useEffect(() => {
     if (!payStudentFeesAdd.amountDate) {
       setPayStudentFeesAdd((prev) => ({...prev, amountDate: new Date()}))
@@ -22,6 +23,19 @@ const PayStudentFeeOnline = ({
   useEffect(() => {
     if (!studentInfoData?.installment_duration) {
       toast.info('First add the installment due date of student !!')
+    } else {
+      const installmentDuration = new Date(studentInfoData.installment_duration)
+      const currentDate = new Date()
+
+      // Set the time to 00:00:00 to avoid any time differences
+      installmentDuration.setHours(0, 0, 0, 0)
+      currentDate.setHours(0, 0, 0, 0)
+
+      // Calculate the difference in days
+      const overdueDays = Math.ceil((currentDate - installmentDuration) / (1000 * 60 * 60 * 24))
+      const lateFees = overdueDays > 0 ? overdueDays * 100 : 0
+
+      setPayStudentFeesAdd((prev) => ({...prev, lateFees}))
     }
   }, [studentInfoData?.installment_duration])
 
@@ -63,13 +77,13 @@ const PayStudentFeeOnline = ({
           onChange={remainingFeesHandler}
           value={payStudentFeesAdd.amountPaid}
         />
-        <input
+        {/*  <input
           type='text'
           placeholder='Enter Narration...'
           onChange={(e) => setPayStudentFeesAdd({...payStudentFeesAdd, narration: e.target.value})}
           value={payStudentFeesAdd.narration}
           className='form-control min-w-150px'
-        />
+        /> */}
       </td>
       <td>
         <input
@@ -122,6 +136,7 @@ const PayStudentFeeOnline = ({
           type='text'
           className='form-control w-min-100px'
           value={payStudentFeesAdd.lateFees}
+          disabled={currentUser?.role === 'Student'}
           onChange={(e) =>
             setPayStudentFeesAdd({...payStudentFeesAdd, lateFees: Number(e.target.value)})
           }

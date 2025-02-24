@@ -30,7 +30,6 @@ router.post(
 );
 
 router.post("/payment/success", async (req, res) => {
-  // console.log(req.body.addedon);
   try {
     const {
       firstname,
@@ -47,29 +46,24 @@ router.post("/payment/success", async (req, res) => {
       email,
       phone,
     } = req.body;
-    // console.log(
-    //   firstname,
-    //   amount,
-    //   status,
-    //   udf1,
-    //   udf2,
-    //   udf3,
-    //   udf4,
-    //   udf5,
-    //   udf6,
-    //   udf7,
-    //   addedon,
-    //   email,
-    //   phone
-    // );
+
+    const params = new URLSearchParams(udf2);
+    const { courseName, lateFees } = Object.fromEntries(params);
+
+    // Check if the payment status is "success"
+    if (status !== "success") {
+      console.error("Payment status is not success:", status);
+      return res.status(400).json({ message: "Payment status is not success" });
+    }
+
     // Fetch student details
     const student = await admissionFormModel
       .findOne({ email })
       .populate(["courseName", "companyName"]);
-
     if (!student) {
       return res.status(404).json({ message: "Student not found" });
     }
+
     // Save the payment details
     let reciptNumber;
     const currentCompany = await CompanyModels.findById(
@@ -78,62 +72,54 @@ router.post("/payment/success", async (req, res) => {
     if (student.companyName.reciptNumber) {
       reciptNumber = student.companyName.reciptNumber;
     }
+
     const alreadyExistsReciptNumberInCourseFees = await CourseFeesModel.findOne(
-      { reciptNumber: reciptNumber }
+      { reciptNumber }
     );
     if (alreadyExistsReciptNumberInCourseFees) {
-      // return res.status(404).json({
-      //   success: false,
-      //   error: `Already Exists this recipt number ${reciptNumber}.to solve this problem you have to increase the recipt number by 1 from manage company`,
-      // });
       currentCompany.reciptNumber = `${reciptNumber?.split("-")[0]}-${
         Number(reciptNumber?.split("-")[1]) + 1
       }`;
       await currentCompany.save();
       reciptNumber = currentCompany.reciptNumber;
-      // console.log(
-      //   "current company recipt number ",
-      //   currentCompany.reciptNumber
-      // );
     }
-    // console.log(userName);
+
     const newDayBookData = new DayBookDataModel({
       udf3: student._id,
       rollNo: student.rollNumber,
       StudentName: student.name,
-      studentLateFees: +0,
+      studentLateFees: +lateFees,
       companyId: student?.companyName?._id,
       dayBookDatadate: moment(addedon, "YYYY-MM-DD HH:mm:ss").toDate(),
       reciptNumber,
-      credit: +Number(amount),
+      credit: +Number(amount) - Number(lateFees),
       narration: "Paid By Easebuzz",
       addedBy: firstname,
     });
     await newDayBookData.save();
+
     const studentGSTStatus = await StudentGST_GuggestionModel.find();
-    //console.log(studentGSTStatus[0].studentGST_Guggestion);
     let gstAmount =
       student.companyName.isGstBased === "Yes"
         ? (Number(amount) / (studentGSTStatus[0]?.gst_percentage + 100)) * 100
         : Number(amount);
     let cutGSTAmount = Number(amount) - gstAmount;
-    //console.log("gst amount: " + gstAmount);
+
     if (Number(udf3) === 0 && student.installmentPaymentSkipMonth === 0) {
       student.remainingCourseFees = 0;
       student.no_of_installments_expireTimeandAmount = null;
-      // Save course fees
-      // console.log(req.user);
+
       const newCourseFees = new CourseFeesModel({
         netCourseFees: udf6,
-        amountPaid: Number(amount),
+        amountPaid: Number(amount) - Number(lateFees),
         remainingFees: udf3,
         narration: "Paid By Easebuzz",
         paymentOption: udf7,
         studentInfo: udf1,
-        lateFees: 0,
+        lateFees: lateFees,
         no_of_installments_amount: udf5,
         no_of_installments: udf4,
-        courseName: udf2,
+        courseName: courseName,
         amountDate: moment(addedon, "YYYY-MM-DD HH:mm:ss").toDate(),
         reciptNumber,
         companyName: student.companyName._id,
@@ -141,32 +127,34 @@ router.post("/payment/success", async (req, res) => {
         gst_percentage: studentGSTStatus[0]?.gst_percentage,
       });
       const savedCourseFees = await newCourseFees.save();
-      // const currentCompany = await CompanyModels.findById(
-      //   student.companyName._id
-      // );
+
       student.down_payment = Number(amount);
       student.remainingCourseFees = Number(udf3);
-      student.totalPaid += Number(amount);
+      student.totalPaid += Number(amount) - Number(lateFees);
       student.no_of_installments = 0;
       await student.save();
-      return res.status(200).json({
-        status: true,
-        message: "all course fees paid",
-        id: student._id,
-      });
+
+      const queryParam = new URLSearchParams({
+        status: "Approved",
+        recipt: savedCourseFees?._id,
+        student: student?._id,
+        companyId: student?.companyName?._id,
+      }).toString();
+
+      return res.redirect(`${FRONTEND_URL}/payment/success?${queryParam}`);
     }
-    // Save course fees
+
     const newCourseFees = new CourseFeesModel({
       netCourseFees: udf6,
-      amountPaid: Number(amount),
+      amountPaid: Number(amount) - Number(lateFees),
       remainingFees: udf3,
       narration: "Paid By Easebuzz",
       paymentOption: udf7,
       studentInfo: udf1,
-      lateFees: 0,
+      lateFees: lateFees,
       no_of_installments_amount: udf5,
       no_of_installments: udf4,
-      courseName: udf2,
+      courseName: courseName,
       amountDate: moment(addedon, "YYYY-MM-DD HH:mm:ss").toDate(),
       reciptNumber,
       companyName: student.companyName._id,
@@ -174,28 +162,26 @@ router.post("/payment/success", async (req, res) => {
       gst_percentage: studentGSTStatus[0]?.gst_percentage,
     });
 
-    // console.log(reciptNumber);
     let reciptNumberString = Number(reciptNumber?.split("-")[1]) + 1;
     const savedCourseFees = await newCourseFees.save();
-    //console.log(reciptNumberString);
-    currentCompany.reciptNumber =
-      reciptNumber?.split("-")[0] + "-" + reciptNumberString;
+    currentCompany.reciptNumber = `${
+      reciptNumber?.split("-")[0]
+    }-${reciptNumberString}`;
     await currentCompany.save();
-    //console.log("saved course fees", savedCourseFees);
-    // Update student's payment information
+
     student.down_payment = Number(amount);
     student.remainingCourseFees = udf3;
-    student.totalPaid += Number(amount);
+    student.totalPaid += Number(amount) - Number(lateFees);
     student.no_of_installments -= 1;
-    // Calculate and store new installment expiration times
+
     let expirationDate = moment(addedon).toDate();
     const nextInstallment = Number(udf4) - 1;
     const installmentAmount = Math.floor(Number(udf3) / nextInstallment);
-    //console.log("Installment amount :  ".installmentAmount);
+
     const lastPaymentInstallmentExpirationTime =
-      await PaymentInstallmentTimeExpireModel.findOne({
-        udf3,
-      }).sort({ createdAt: -1 });
+      await PaymentInstallmentTimeExpireModel.findOne({ udf3 }).sort({
+        createdAt: -1,
+      });
     if (lastPaymentInstallmentExpirationTime) {
       if (
         Number(lastPaymentInstallmentExpirationTime.installment_number) ===
@@ -204,33 +190,46 @@ router.post("/payment/success", async (req, res) => {
         await lastPaymentInstallmentExpirationTime.deleteOne();
       }
     }
-    // Create the entry for the current due installment
-    // console.log(student);
-    // console.log(req.body);
+
     const currentInstallmentExpiration = new PaymentInstallmentTimeExpireModel({
       udf3,
       companyName: student.companyName._id,
       courseName: student?.courseName?._id,
-      expiration_date: expirationDate, // Set to current date
-      installment_number: udf4, // Current installment number
-      installment_amount: Number(amount),
+      expiration_date: expirationDate,
+      installment_number: udf4,
+      installment_amount: Number(amount) - Number(lateFees),
     });
     expirationDate = moment(addedon).add(1, "months");
-    // Create the entry for the next installment
+
     const nextInstallmentExpiration = new PaymentInstallmentTimeExpireModel({
       udf3,
       companyName: student.companyName._id,
       courseName: student?.courseName?._id,
-      expiration_date: expirationDate.toDate(), // Convert moment object to Date
+      expiration_date: expirationDate.toDate(),
       installment_number: nextInstallment,
       installment_amount: installmentAmount,
     });
+
     await currentInstallmentExpiration.save();
     await nextInstallmentExpiration.save();
-    student.no_of_installments_expireTimeandAmount = expirationDate.toDate(); // Convert moment object to Date
+
+    student.no_of_installments_expireTimeandAmount = expirationDate.toDate();
     student.no_of_installments_amount = installmentAmount;
     await student.save();
-    res.redirect(`${FRONTEND_URL}/payment/success`);
+
+    // console.log(data);
+    // const data = await CourseFeesModel.findOne({ studentInfo: student?._id });
+
+    const queryParams = new URLSearchParams({
+      status: "Approved",
+      recipt: savedCourseFees?._id,
+      student: student?._id,
+      companyId: student?.companyName?._id,
+    }).toString();
+
+    // res.redirect(`${FRONTEND_URL}/payment/success`);
+
+    return res.redirect(`${FRONTEND_URL}/payment/success?${queryParams}`);
   } catch (error) {
     console.error("❌ Error:", error);
     return res.status(500).json({
@@ -244,8 +243,6 @@ router.post("/payment/success", async (req, res) => {
 router.post("/payment/failure", async (req, res) => {
   try {
     const { email } = req.body;
-
-    // console.log("route", req.body);
 
     // Fetch student details
     const student = await admissionFormModel.findOne({ email });

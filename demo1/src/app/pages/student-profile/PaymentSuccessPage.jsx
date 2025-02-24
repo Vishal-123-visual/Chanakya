@@ -3,22 +3,36 @@ import {useNavigate} from 'react-router-dom'
 import {CheckCircle} from 'lucide-react'
 import './PaymentSuccessPage.css' // Import the CSS file
 import {useAuth} from '../../modules/auth'
+import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
 
 const PaymentSuccessPage = ({studentId}) => {
   const {currentUser} = useAuth()
   const navigate = useNavigate()
   const [countdown, setCountdown] = useState(5) // Initialize countdown at 5 seconds
+  const {createStudentStatusMutation} = useStudentCourseFeesContext()
+  const queryParams = new URLSearchParams(window.location.search)
+  const status = queryParams.get('status')
+  const recipt = queryParams.get('recipt')
+  const student = queryParams.get('student')
+  const companyId = queryParams.get('companyId')
 
   useEffect(() => {
     // Start countdown
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev === 1) {
+          createStudentStatusMutation.mutate({
+            studentId: student,
+            companyId: companyId,
+            reciept: recipt,
+            status: status,
+            check: false,
+          })
           clearInterval(timer) // Clear interval when countdown reaches 1
           if (currentUser?.role === 'student') {
             navigate(`/profile/student/${studentId}`)
           } else {
-            navigate(`/dashboard`)
+            navigate(`/profile/student/${student}`)
           }
         }
         return prev - 1

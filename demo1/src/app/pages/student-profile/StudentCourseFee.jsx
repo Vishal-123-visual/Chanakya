@@ -33,7 +33,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const [addOnlineStudentFeeFormToggle, setAddOnlineStudentFeeFormToggle] = useState(false)
   const [studentCourseFeeEditId, setStudentCourseFeesEditId] = useState(null)
   //console.log(studentCourseFeeEditId)
-  const {getAllRecieptStatusData} = useStudentCourseFeesContext()
+  const {getAllRecieptStatusData, createStudentStatusMutation} = useStudentCourseFeesContext()
   const approvalData = getAllRecieptStatusData?.data?.approvalData?.filter(
     (data) => data.studentId?._id === params.id
   )
@@ -230,6 +230,21 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       return
     }
 
+    // Check if the amount paid is less than the no_of_installment_amount
+    if (currentUser?.role === 'Student') {
+      if (
+        Number(payStudentFeesAdd.amountPaid) < Number(studentInfoData.no_of_installments_amount)
+      ) {
+        toast.error(
+          `Amount paid cannot be less than ${studentInfoData.no_of_installments_amount}`,
+          {
+            bodyStyle: {fontSize: '18px'},
+          }
+        )
+        return
+      }
+    }
+
     try {
       const response = await axios.post(`${BASE_URL}/api/courseFees/online-payment`, {
         ...payStudentFeesAdd,
@@ -239,7 +254,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         courseName: studentInfoData?.courseName,
       })
 
-      // console.log('Response from backend:', response.data)
+      // console.log('Response from backend:', response.data);
 
       if (response.data.success && response.data.paymentLink) {
         // Open the payment link in a new tab
@@ -247,7 +262,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
         window.location.href = response.data.paymentLink
       } else if (response.data.failureMessage) {
         // Redirect to the profile page and show a popup with the failure message
-        // console.log(response)
+        // console.log(response);
         toast.error(response.data.failureMessage, {bodyStyle: {fontSize: '18px'}})
         navigate(`/payment/failure`)
       } else {

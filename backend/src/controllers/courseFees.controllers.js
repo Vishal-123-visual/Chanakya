@@ -1449,6 +1449,8 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       return res.status(400).json({ message: "Required fields are missing" });
     }
 
+    const totalAmountPaid = Number(amountPaid) + Number(lateFees);
+
     // Fetch student details
     const student = await admissionFormModel
       .findById(studentInfo)
@@ -1460,15 +1462,22 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
 
     const txnid = "Txn" + Date.now(); // Generates a unique, shorter ID
 
+    const userName =
+      req.user.fName === req.user.lName
+        ? req.user.fName
+        : `${req.user.fName} ${req.user.lName}`;
+
+    let data = { courseName, lateFees };
+
     const hash = generateHash({
       txnid,
-      amountPaid,
+      amountPaid: totalAmountPaid,
       productinfo: "Online Student Fees",
-      firstname: student.name,
+      firstname: userName,
       phone: student.phone_number,
       email: student.email,
       udf1: studentInfo,
-      udf2: courseName,
+      udf2: qs.stringify(data),
       udf3: remainingFees,
       udf4: no_of_installments,
       udf5: no_of_installments_amount,
@@ -1477,26 +1486,22 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       udf8: lateFees,
     });
 
-    const userName =
-      req.user.fName === req.user.lName
-        ? req.user.fName
-        : `${req.user.fName} ${req.user.lName}`;
-
     const paymentData = {
       key: EASEBUZZ_KEY,
       txnid,
-      amount: String(amountPaid), // Ensure amount is a string
+      amount: String(totalAmountPaid), // Ensure amount is a string
       productinfo: "Online Student Fees",
-      firstname: student.name,
+      firstname: userName,
       email: student.email,
       phone: student.phone_number,
       udf1: studentInfo,
-      udf2: courseName,
+      udf2: qs.stringify(data),
       udf3: remainingFees,
       udf4: no_of_installments,
       udf5: no_of_installments_amount,
       udf6: netCourseFees,
       udf7: paymentOption,
+      udf8: lateFees,
       surl: `${BACKEND_URL}/api/courseFees/payment/success`,
       furl: `${BACKEND_URL}/api/courseFees/payment/failure`,
       hash,
