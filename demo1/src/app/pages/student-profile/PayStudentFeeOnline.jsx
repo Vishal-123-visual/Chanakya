@@ -31,8 +31,18 @@ const PayStudentFeeOnline = ({
       installmentDuration.setHours(0, 0, 0, 0)
       amountDate.setHours(0, 0, 0, 0)
 
+      // Check if the payment is for the current month
+      const isCurrentMonthPayment =
+        amountDate.getFullYear() === installmentDuration.getFullYear() &&
+        amountDate.getMonth() === installmentDuration.getMonth()
+
       // Calculate the difference in days
-      const overdueDays = Math.ceil((amountDate - installmentDuration) / (1000 * 60 * 60 * 24))
+      let overdueDays = 0
+      if (isCurrentMonthPayment) {
+        // If payment is for the current month, calculate overdue days from installment duration
+        overdueDays = Math.ceil((amountDate - installmentDuration) / (1000 * 60 * 60 * 24))
+      }
+
       const lateFees = overdueDays > 0 ? overdueDays * 100 : 0
 
       setPayStudentFeesAdd((prev) => ({...prev, lateFees}))
@@ -77,13 +87,6 @@ const PayStudentFeeOnline = ({
           onChange={remainingFeesHandler}
           value={payStudentFeesAdd.amountPaid}
         />
-        {/*  <input
-          type='text'
-          placeholder='Enter Narration...'
-          onChange={(e) => setPayStudentFeesAdd({...payStudentFeesAdd, narration: e.target.value})}
-          value={payStudentFeesAdd.narration}
-          className='form-control min-w-150px'
-        /> */}
       </td>
       <td>
         <input
@@ -144,7 +147,7 @@ const PayStudentFeeOnline = ({
       </td>
       <td>
         <div className='d-flex justify-content-end flex-shrink-0'>
-          {!studentInfoData?.installment_duration ? null : ( // No toast here, handled in useEffect
+          {!studentInfoData?.installment_duration ? null : (
             <button
               type='submit'
               className='btn btn-success btn-active-color-primary btn-sm me-1 px-5'

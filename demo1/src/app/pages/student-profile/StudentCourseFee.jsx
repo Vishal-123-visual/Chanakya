@@ -61,7 +61,8 @@ const StudentCourseFee = ({className, studentInfoData}) => {
   const studentPayFeeCtx = useStudentCourseFeesContext()
 
   const result = studentPayFeeCtx.useSingleStudentCourseFees(studentInfoData?._id)
-  // console.log(result)
+  const newRecipt = result?.data?.length ? result?.data[result?.data.length - 1] : null
+  // console.log(newRecipt)
   //console.log(studentPayFeeCtx.createStudentCourseFeesMutation.data)
   // console.log(result)
   const addStudentFeeFormToggleHandler = () => {
