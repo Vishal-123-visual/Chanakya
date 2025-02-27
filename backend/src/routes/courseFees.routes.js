@@ -13,7 +13,7 @@ import {
 } from "../controllers/courseFees.controllers.js";
 import admissionFormModel from "../models/addmission_form.models.js";
 import CourseFeesModel from "../models/courseFees/courseFees.models.js";
-import { FRONTEND_URL } from "../config/config.js";
+import { BACKEND_URL, FRONTEND_URL } from "../config/config.js";
 import moment from "moment";
 import CompanyModels from "../models/company/company.models.js";
 import DayBookDataModel from "../models/day-book/DayBookData.models.js";
@@ -259,7 +259,7 @@ router.post("/payment/failure", async (req, res) => {
     });
 
     // Redirect URL and failure message
-    res.redirect(`${FRONTEND_URL}/payment/failure?${queryParams}`);
+    res.redirect(`${BACKEND_URL}/payment/failure?${queryParams}`);
   } catch (error) {
     console.error("❌ Error:", error);
     return res.status(500).json({
