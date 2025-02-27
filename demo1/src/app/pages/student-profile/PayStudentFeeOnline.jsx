@@ -115,23 +115,15 @@ const PayStudentFeeOnline = ({
           }
         >
           <option>select payment option</option>
-          {currentUser?.role === 'Student'
-            ? paymentOptionCtx.getPaymentOptionsData.data
-                ?.filter((pay) => pay.name !== 'Cash' && pay.name !== 'Cheque')
-                .map((paymentOpt) => (
-                  <Fragment key={paymentOpt._id}>
-                    <option key={paymentOpt._id} value={paymentOpt._id}>
-                      {paymentOpt.name}
-                    </option>
-                  </Fragment>
-                ))
-            : paymentOptionCtx.getPaymentOptionsData.data?.map((paymentOpt) => (
-                <Fragment key={paymentOpt._id}>
-                  <option key={paymentOpt._id} value={paymentOpt._id}>
-                    {paymentOpt.name}
-                  </option>
-                </Fragment>
-              ))}
+          {paymentOptionCtx.getPaymentOptionsData.data
+            ?.filter((pay) => pay.name !== 'Cash' && pay.name !== 'Cheque')
+            .map((paymentOpt) => (
+              <Fragment key={paymentOpt._id}>
+                <option key={paymentOpt._id} value={paymentOpt._id}>
+                  {paymentOpt.name}
+                </option>
+              </Fragment>
+            ))}
         </select>
       </td>
       <td>

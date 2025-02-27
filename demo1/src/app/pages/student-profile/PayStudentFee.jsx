@@ -23,8 +23,31 @@ const PayStudentFee = ({
   useEffect(() => {
     if (!studentInfoData?.installment_duration) {
       toast.info('First add the installment due date of student !!')
+    } else {
+      const installmentDuration = new Date(studentInfoData.installment_duration)
+      const amountDate = payStudentFeesAdd.amountDate || new Date()
+
+      // Set the time to 00:00:00 to avoid any time differences
+      installmentDuration.setHours(0, 0, 0, 0)
+      amountDate.setHours(0, 0, 0, 0)
+
+      // Check if the payment is for the current month
+      const isCurrentMonthPayment =
+        amountDate.getFullYear() === installmentDuration.getFullYear() &&
+        amountDate.getMonth() === installmentDuration.getMonth()
+
+      // Calculate the difference in days
+      let overdueDays = 0
+      if (isCurrentMonthPayment) {
+        // If payment is for the current month, calculate overdue days from installment duration
+        overdueDays = Math.ceil((amountDate - installmentDuration) / (1000 * 60 * 60 * 24))
+      }
+
+      const lateFees = overdueDays > 0 ? overdueDays * 100 : 0
+
+      setPayStudentFeesAdd((prev) => ({...prev, lateFees}))
     }
-  }, [studentInfoData?.installment_duration])
+  }, [studentInfoData?.installment_duration, payStudentFeesAdd.amountDate])
 
   const remainingFeesHandler = (e) => {
     setPayStudentFeesAdd((prev) => ({
