@@ -5,9 +5,11 @@ import './PaymentFailurePage.css' // Import custom CSS for styling
 
 const PaymentFailurePage = ({studentId}) => {
   const navigate = useNavigate()
+  const queryParams = new URLSearchParams(window.location.search)
+  const student = queryParams.get('student')
 
   const goToProfile = () => {
-    navigate(`/profile/student/${studentId}`)
+    navigate(`/profile/student/${student}`)
   }
 
   return (

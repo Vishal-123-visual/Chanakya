@@ -253,9 +253,13 @@ router.post("/payment/failure", async (req, res) => {
 
     // Log the failure
     // console.error("⚠️ Route:", student);
+    const queryParams = new URLSearchParams({
+      status: "Failed",
+      student: student?._id,
+    });
 
     // Redirect URL and failure message
-    res.redirect(`${FRONTEND_URL}/payment/failure`);
+    res.redirect(`${FRONTEND_URL}/payment/failure?${queryParams}`);
   } catch (error) {
     console.error("❌ Error:", error);
     return res.status(500).json({
