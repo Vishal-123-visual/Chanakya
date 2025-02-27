@@ -229,7 +229,7 @@ router.post("/payment/success", async (req, res) => {
 
     // res.redirect(`${FRONTEND_URL}/payment/success`);
 
-    return res.redirect(`${FRONTEND_URL}/payment/success?${queryParams}`);
+    return res.redirect(`${BACKEND_URL}/payment/success?${queryParams}`);
   } catch (error) {
     console.error("❌ Error:", error);
     return res.status(500).json({
