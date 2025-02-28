@@ -9,6 +9,8 @@ import {
   getAllRemainderDatesController,
   addWelcomeEmailSuggestionController,
   getWelcomeEmailSuggestionController,
+  addLateFeesSuggestionController,
+  getLateFeesSuggestionController,
 } from "../controllers/emailremainder.controllers.js";
 const router = Router();
 
@@ -19,6 +21,20 @@ router.post(
   isAdmin,
   addWelcomeEmailSuggestionController
 );
+
+router.post(
+  "/late-fees/status",
+  requireSignIn,
+  isAdmin,
+  addLateFeesSuggestionController
+);
+router.get(
+  "/late-fees/status",
+  requireSignIn,
+  isAdmin,
+  getLateFeesSuggestionController
+);
+
 router.get("/status", requireSignIn, isAdmin, getEmailSuggestionController);
 router.get(
   "/welcome/status",

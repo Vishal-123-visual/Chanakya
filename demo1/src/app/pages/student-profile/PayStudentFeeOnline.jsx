@@ -4,6 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import {toast} from 'react-toastify'
 import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 import {useAuth} from '../../modules/auth'
+import {useCompanyContext} from '../compay/CompanyContext'
 
 const PayStudentFeeOnline = ({
   payStudentFeesAdd,
@@ -12,7 +13,22 @@ const PayStudentFeeOnline = ({
   studentInfoData,
 }) => {
   const {currentUser} = useAuth()
+  const companyCtx = useCompanyContext()
   const paymentOptionCtx = usePaymentOptionContextContext()
+
+  useEffect(() => {
+    if (!payStudentFeesAdd.paymentOption && paymentOptionCtx.getPaymentOptionsData.data) {
+      const easeBuzzOption = paymentOptionCtx.getPaymentOptionsData.data.find((pay) =>
+        /easebuzz/i.test(pay.name)
+      )
+      if (easeBuzzOption) {
+        setPayStudentFeesAdd((prev) => ({
+          ...prev,
+          paymentOption: easeBuzzOption._id,
+        }))
+      }
+    }
+  }, [paymentOptionCtx.getPaymentOptionsData.data, payStudentFeesAdd.paymentOption])
 
   useEffect(() => {
     if (!payStudentFeesAdd.amountDate) {
@@ -21,33 +37,42 @@ const PayStudentFeeOnline = ({
   }, [payStudentFeesAdd.amountDate, setPayStudentFeesAdd])
 
   useEffect(() => {
-    if (!studentInfoData?.installment_duration) {
-      toast.info('First add the installment due date of student !!')
-    } else {
-      const installmentDuration = new Date(studentInfoData.installment_duration)
-      const amountDate = payStudentFeesAdd.amountDate || new Date()
+    if (companyCtx?.getLateFeesSuggestionStatus?.data?.lateFeesSuggestion?.[0]?.lateFees) {
+      if (!studentInfoData?.installment_duration) {
+        toast.info('First add the installment due date of student !!')
+      } else {
+        const installmentDuration = new Date(studentInfoData.installment_duration)
+        const amountDate = payStudentFeesAdd.amountDate || new Date()
 
-      // Set the time to 00:00:00 to avoid any time differences
-      installmentDuration.setHours(0, 0, 0, 0)
-      amountDate.setHours(0, 0, 0, 0)
+        // Set the time to 00:00:00 to avoid any time differences
+        installmentDuration.setHours(0, 0, 0, 0)
+        amountDate.setHours(0, 0, 0, 0)
 
-      // Check if the payment is for the current month
-      const isCurrentMonthPayment =
-        amountDate.getFullYear() === installmentDuration.getFullYear() &&
-        amountDate.getMonth() === installmentDuration.getMonth()
+        // Check if the payment is for the current month
+        const isCurrentMonthPayment =
+          amountDate.getFullYear() === installmentDuration.getFullYear() &&
+          amountDate.getMonth() === installmentDuration.getMonth()
 
-      // Calculate the difference in days
-      let overdueDays = 0
-      if (isCurrentMonthPayment) {
-        // If payment is for the current month, calculate overdue days from installment duration
-        overdueDays = Math.ceil((amountDate - installmentDuration) / (1000 * 60 * 60 * 24))
+        // Calculate the difference in days
+        let overdueDays = 0
+        if (isCurrentMonthPayment) {
+          // If payment is for the current month, calculate overdue days from installment duration
+          overdueDays = Math.ceil((amountDate - installmentDuration) / (1000 * 60 * 60 * 24))
+        }
+
+        const lateFees = overdueDays > 0 ? overdueDays * 100 : 0
+
+        setPayStudentFeesAdd((prev) => ({...prev, lateFees}))
       }
-
-      const lateFees = overdueDays > 0 ? overdueDays * 100 : 0
-
-      setPayStudentFeesAdd((prev) => ({...prev, lateFees}))
+    } else {
+      // Allow manual addition of late fees
+      setPayStudentFeesAdd((prev) => ({...prev, lateFees: 0})) // Reset late fees to 0 or any default value
     }
-  }, [studentInfoData?.installment_duration, payStudentFeesAdd.amountDate])
+  }, [
+    studentInfoData?.installment_duration,
+    payStudentFeesAdd.amountDate,
+    companyCtx?.getLateFeesSuggestionStatus?.data?.lateFeesSuggestion,
+  ])
 
   const remainingFeesHandler = (e) => {
     setPayStudentFeesAdd((prev) => ({
@@ -109,20 +134,15 @@ const PayStudentFeeOnline = ({
       <td>
         <select
           className='form-select form-select-solid form-select-lg min-w-150px'
-          value={payStudentFeesAdd.paymentOption}
-          onChange={(e) =>
-            setPayStudentFeesAdd({...payStudentFeesAdd, paymentOption: e.target.value})
-          }
+          value={payStudentFeesAdd.paymentOption || ''}
+          disabled
         >
-          <option>select payment option</option>
           {paymentOptionCtx.getPaymentOptionsData.data
-            ?.filter((pay) => pay.name !== 'Cash' && pay.name !== 'Cheque')
+            ?.filter((pay) => /easebuzz/i.test(pay.name))
             .map((paymentOpt) => (
-              <Fragment key={paymentOpt._id}>
-                <option key={paymentOpt._id} value={paymentOpt._id}>
-                  {paymentOpt.name}
-                </option>
-              </Fragment>
+              <option key={paymentOpt._id} value={paymentOpt._id}>
+                {paymentOpt.name}
+              </option>
             ))}
         </select>
       </td>

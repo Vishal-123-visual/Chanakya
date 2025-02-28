@@ -287,6 +287,46 @@ export const CompanyContextProvider = ({children}) => {
     },
   })
 
+  const postLateFeesSuggestionStatus = useMutation({
+    mutationFn: async (data) => {
+      //console.log(data)
+      return axios.post(`${BASE_URL}/api/emailRemainder/late-fees/status`, data, config)
+    },
+    onMutate: () => {
+      //console.log('mutate')
+    },
+
+    onError: () => {
+      //console.log('error')
+    },
+
+    onSuccess: () => {
+      //alert('Added Course  Successfully!')
+    },
+
+    onSettled: async (_, error) => {
+      //console.log('settled')
+      if (error) {
+        //console.log(error)
+        alert(error.response.data.error)
+      } else {
+        await queryClient.invalidateQueries({queryKey: ['getLateFeesSuggesstions']})
+      }
+    },
+  })
+
+  const getLateFeesSuggestionStatus = useQuery({
+    queryKey: ['getLateFeesSuggesstions'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/emailRemainder/late-fees/status`, config)
+        return response.data
+      } catch (error) {
+        throw new Error('Error fetching student data: ' + error.message)
+      }
+    },
+  })
+
   const getEmailRemainderTextMessage = useQuery({
     queryKey: ['getRemainderText'],
     queryFn: async () => {
@@ -705,6 +745,10 @@ export const CompanyContextProvider = ({children}) => {
         getWhatsAppMessageuggestionStatus,
         getEmailRemainderTextMessage,
         getEmailRemainderDays,
+        /***************************  whatsapp Message Suggestion end   *****************************/
+        /***************************  whatsapp Message Suggestion start   *****************************/
+        postLateFeesSuggestionStatus,
+        getLateFeesSuggestionStatus,
         /***************************  whatsapp Message Suggestion end   *****************************/
 
         // student issues start here --------------------------------------
