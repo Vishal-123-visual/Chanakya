@@ -6,14 +6,14 @@ import PopUpModal from '../../modules/accounts/components/popUpModal/PopUpModal'
 const DynamicEmailTemplate = () => {
   const companyCTX = useCompanyContext()
   const {openModal: contextOpenModal, setOpenModal: setcontextOpenModal} = useDynamicFieldContext()
-  // const [modalOpen, setModalOpen] = useState('Student')
+  const [modalOpen, setModalOpen] = useState(null) // Use null to indicate no modal is open
+
   const {data: emailTemplates} = companyCTX.getEmailTemplate
   const [emailTemplate, setEmailTemplate] = useState({
     customTemplate: '',
     cancellationTemplate: '',
+    dynamicTemplate: '',
   })
-
-  // console.log(emailTemplates)
 
   // Update the email template when `emailTemplates` changes
   useEffect(() => {
@@ -21,13 +21,17 @@ const DynamicEmailTemplate = () => {
       setEmailTemplate({
         customTemplate: emailTemplates[0]?.customTemplate || '',
         cancellationTemplate: emailTemplates[0]?.cancellationTemplate || '',
+        dynamicTemplate: emailTemplates[0]?.dynamicTemplate || '',
       })
     }
   }, [emailTemplates])
 
   const handleStudent = () => {
-    // setModalOpen('Student')
-    setcontextOpenModal(true)
+    setModalOpen('student') // Open the student modal
+  }
+
+  const handleData = () => {
+    setModalOpen('data') // Open the data modal
   }
 
   const onChangeHandler = (e) => {
@@ -51,16 +55,18 @@ const DynamicEmailTemplate = () => {
   return (
     <div className='card p-10'>
       <div className='d-flex justify-content-between'>
-        <h1>Email Templates </h1>
+        <h1>Email Templates</h1>
         <button className='btn btn-primary btn-sm' onClick={handleStudent}>
-          Details
+          Student Details
         </button>
       </div>
       <form onSubmit={handleSubmit}>
         <div className='mb-3'>
-          <label htmlFor='customTemplate' className='form-label'>
-            Warning Letter Template
-          </label>
+          <div className='py-2'>
+            <label htmlFor='customTemplate' className='form-label'>
+              Warning Letter Template
+            </label>
+          </div>
           <textarea
             id='customTemplate'
             rows={15}
@@ -70,9 +76,11 @@ const DynamicEmailTemplate = () => {
             className='form-control'
             name='customTemplate'
           />
-          <label htmlFor='cancellationTemplate' className='form-label'>
-            Addmission Cancellation Letter Template
-          </label>
+          <div className='py-2'>
+            <label htmlFor='cancellationTemplate' className='form-label'>
+              Admission Cancellation Letter Template
+            </label>
+          </div>
           <textarea
             id='cancellationTemplate'
             rows={15}
@@ -81,6 +89,23 @@ const DynamicEmailTemplate = () => {
             type='text'
             className='form-control'
             name='cancellationTemplate'
+          />
+          <div className='d-flex justify-content-between py-2  '>
+            <label htmlFor='dynamicTemplate' className='form-label'>
+              Dynamic Template
+            </label>
+            <button className='btn btn-primary btn-sm' onClick={handleData}>
+              Data Details
+            </button>
+          </div>
+          <textarea
+            id='dynamicTemplate'
+            rows={15}
+            value={emailTemplate.dynamicTemplate}
+            onChange={onChangeHandler}
+            type='text'
+            className='form-control'
+            name='dynamicTemplate'
           />
         </div>
         <button
@@ -91,47 +116,67 @@ const DynamicEmailTemplate = () => {
           {companyCTX.postEmailTemplate.isLoading ? 'Adding' : 'Submit'}
         </button>
       </form>
-      <PopUpModal show={contextOpenModal} handleClose={() => setcontextOpenModal(false)}>
-        <h2>Student Details</h2>
-        <div className='mt-5 d-flex'>
-          <ul className='px-10'>
-            <strong>Student Name :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.name}'}</li>
-            <strong>Student Father Name :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.father_name}'}</li>
-            <strong>Student Mobile Number :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.mobile_number}'}</li>
-            <strong>Student Present Address :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.present_address}'}</li>
-            <strong>Student Roll Number :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.rollNumber}'}</li>
-          </ul>
-          <ul className='px-10'>
-            <strong>Student Email:</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.email}'}</li>
-            <strong>Student City :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.city}'}</li>
-            <strong>Student Remaining Course Fees :</strong>
-            <li style={{marginBottom: '10px'}}>{'${studentInfo.remainingCourseFees}'}</li>
-            <strong>Course Name :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${courseName.courseName}'}</li>
-            <strong>Course Fees :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${courseName.courseFees}'}</li>
-          </ul>
-          <ul className='px-10'>
-            <strong>Company Name :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${companyName.companyName}'}</li>
-            <strong>Company Email :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${companyName.email}'}</li>
-            <strong>Company Phone :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${companyName.companyPhone}'}</li>
-            <strong>Company Address :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${companyName.companyAddress}'}</li>
-            <strong>Company Website :</strong>{' '}
-            <li style={{marginBottom: '10px'}}>{'${companyName.companyWebsite}'}</li>
-          </ul>
-        </div>
-      </PopUpModal>
+      {modalOpen === 'student' && (
+        <PopUpModal show={modalOpen === 'student'} handleClose={() => setModalOpen(null)}>
+          <h2>Student Details</h2>
+          <div className='mt-5 d-flex'>
+            <ul className='px-10'>
+              <strong>Student Name :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.name}'}</li>
+              <strong>Student Father Name :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.father_name}'}</li>
+              <strong>Student Mobile Number :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.mobile_number}'}</li>
+              <strong>Student Present Address :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.present_address}'}</li>
+              <strong>Student Roll Number :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.rollNumber}'}</li>
+            </ul>
+            <ul className='px-10'>
+              <strong>Student Email:</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.email}'}</li>
+              <strong>Student City :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.city}'}</li>
+              <strong>Student Remaining Course Fees :</strong>
+              <li style={{marginBottom: '10px'}}>{'${studentInfo.remainingCourseFees}'}</li>
+              <strong>Course Name :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${courseName.courseName}'}</li>
+              <strong>Course Fees :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${courseName.courseFees}'}</li>
+            </ul>
+            <ul className='px-10'>
+              <strong>Company Name :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyName.companyName}'}</li>
+              <strong>Company Email :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyName.email}'}</li>
+              <strong>Company Phone :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyName.companyPhone}'}</li>
+              <strong>Company Address :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyName.companyAddress}'}</li>
+              <strong>Company Website :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyName.companyWebsite}'}</li>
+            </ul>
+          </div>
+        </PopUpModal>
+      )}
+      {modalOpen === 'data' && (
+        <PopUpModal show={modalOpen === 'data'} handleClose={() => setModalOpen(null)}>
+          <h2>Company Details</h2>
+          <div className='mt-5'>
+            <ul className='px-10'>
+              <strong>Company Name :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyName}'}</li>
+              <strong>Company Email :</strong> <li style={{marginBottom: '10px'}}>{'${email}'}</li>
+              <strong>Company Phone :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyPhone}'}</li>
+              <strong>Company Address :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyAddress}'}</li>
+              <strong>Company Website :</strong>{' '}
+              <li style={{marginBottom: '10px'}}>{'${companyWebsite}'}</li>
+            </ul>
+          </div>
+        </PopUpModal>
+      )}
     </div>
   )
 }

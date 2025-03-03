@@ -26,6 +26,7 @@ import { userModel } from "../models/user.models.js";
 import EmailRemainderModel from "../models/email-remainder/email.remainder.models.js";
 import EmailTemplateModel from "../models/email-remainder/emailTemplate.models.js";
 import moment from "moment";
+import admissionFormModel from "../models/addmission_form.models.js";
 
 const router = Router();
 
@@ -154,7 +155,7 @@ router.post(
         sendedBy
       );
 
-      res.status(200).json({
+      return res.status(200).json({
         success: true,
         message: "Letter email sent to student successfully!",
       });
@@ -774,6 +775,99 @@ router.post("/sendMailStudent", requireSignIn, async (req, res, next) => {
     .status(200)
     .json({ success: true, message: "send mail to student successfully!" });
 });
+
+router.post(
+  "/sendMailToSelectedStudents",
+  requireSignIn,
+  async (req, res, next) => {
+    try {
+      const { userIds, company } = req.body;
+
+      // Ensure company is an object
+      if (!company || typeof company !== "object") {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid company data" });
+      }
+
+      const allEmails = await admissionFormModel.find(
+        { _id: { $in: userIds } },
+        "email"
+      );
+
+      const templates = await EmailTemplateModel.find({});
+      if (templates.length === 0) {
+        return res
+          .status(404)
+          .json({ success: false, message: "No email templates found" });
+      }
+
+      let emailContent = templates[0]?.dynamicTemplate;
+      if (!emailContent) {
+        return res.status(404).json({
+          success: false,
+          message: "Email template content not found",
+        });
+      }
+
+      const generateEmailFromTemplate = (template, data) => {
+        return template.replace(/\$\{(.*?)\}/g, (_, key) => {
+          return (
+            key
+              .split(".")
+              .reduce((obj, keyPart) => (obj ? obj[keyPart] : ""), data) || ""
+          );
+        });
+      };
+
+      const finalEmailContent = generateEmailFromTemplate(
+        emailContent,
+        company
+      );
+
+      // Convert line breaks to <br> tags for HTML formatting
+      const formattedEmailContent = finalEmailContent.replace(/\n/g, "<br>");
+
+      const users = allEmails?.map((email) => email.email) || [];
+
+      let adminEmails = [];
+      const mainUser = await userModel.find({});
+      mainUser?.forEach((mainUser) => {
+        if (mainUser.role === "SuperAdmin") {
+          adminEmails.push(mainUser.email);
+        }
+      });
+
+      let sendedBy = `${req.user.fName} ${req.user.lName}`;
+      console.log("Company", company);
+      console.log("Sent by", sendedBy);
+
+      // Combine all email addresses
+      const allRecipients = [...users, ...adminEmails, company?.email]
+        .filter(Boolean)
+        .join(",");
+
+      await sendEmail(
+        allRecipients,
+        `Final Confirmation of Admission Cancellation`,
+        `Dear Student`,
+        formattedEmailContent,
+        req,
+        sendedBy
+      );
+
+      return res.status(200).json({
+        success: true,
+        message: "Letter email sent to all selected students successfully!",
+      });
+    } catch (error) {
+      console.error(error);
+      res
+        .status(500)
+        .json({ success: false, message: "Failed to send the email" });
+    }
+  }
+);
 
 router.put(
   "/renewStudentCourseFees/:id",

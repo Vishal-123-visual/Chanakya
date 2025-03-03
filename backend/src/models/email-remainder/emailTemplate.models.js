@@ -10,6 +10,10 @@ const emailTemplateSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    dynamicTemplate: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );
