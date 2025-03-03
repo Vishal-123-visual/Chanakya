@@ -8,6 +8,7 @@ import {
   EASEBUZZ_ENV,
   EASEBUZZ_KEY,
   EASEBUZZ_SALT,
+  FRONTEND_URL,
   USER_EMAIL,
 } from "../config/config.js";
 import axios from "axios";
@@ -1502,8 +1503,8 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       udf6: netCourseFees,
       udf7: paymentOption,
       udf8: lateFees,
-      surl: `${BACKEND_URL}/api/courseFees/payment/success`,
-      furl: `${BACKEND_URL}/api/courseFees/payment/failure`,
+      surl: `${FRONTEND_URL}/api/courseFees/payment/success`,
+      furl: `${FRONTEND_URL}/api/courseFees/payment/failure`,
       hash,
     };
 
@@ -1539,7 +1540,7 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       }
 
       // If the payment initiation is successful, send the payment link as a response
-      const paymentLink = `	https://pay.easebuzz.in/pay/${response.data.data}`;
+      const paymentLink = `	https://testpay.easebuzz.in/pay/${response.data.data}`;
       return res.json({ success: true, paymentLink }); // Send the link as a response
     } catch (axiosError) {
       console.error(" Axios Error:", axiosError);
