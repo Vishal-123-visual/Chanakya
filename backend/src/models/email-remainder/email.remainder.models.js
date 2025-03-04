@@ -6,10 +6,6 @@ const emailRemainderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    secondRemainder: {
-      type: String,
-      required: true,
-    },
     thirdRemainder: {
       type: String,
       required: true,

@@ -25,7 +25,6 @@ export const addEmailRemainderController = asyncHandler(
 
       const emailRemainder = new EmailRemainderModel({
         firstRemainder,
-        secondRemainder,
         thirdRemainder,
       });
       await emailRemainder.save();

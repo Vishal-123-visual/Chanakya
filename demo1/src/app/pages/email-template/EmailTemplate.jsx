@@ -12,12 +12,12 @@ const EmailTemplate = () => {
 
   const [remainderDays, setRemainderDays] = useState({
     firstDueDay: emailRemainderDays?.[0]?.firstDueDay || '',
-    secondDueDay: emailRemainderDays?.[0]?.secondDueDay || '',
     thirdDueDay: emailRemainderDays?.[0]?.thirdDueDay || '',
   })
 
   useEffect(() => {
     setTextEmailsData({
+      firstRemainder: emailRemainderData?.[0]?.firstRemainder || '',
       thirdRemainder: emailRemainderData?.[0]?.thirdRemainder || '',
     })
 
