@@ -12,6 +12,7 @@ const EmailTemplate = () => {
 
   const [remainderDays, setRemainderDays] = useState({
     firstDueDay: emailRemainderDays?.[0]?.firstDueDay || '',
+    secondDueDay: emailRemainderDays?.[0]?.secondDueDay || '',
     thirdDueDay: emailRemainderDays?.[0]?.thirdDueDay || '',
   })
 
@@ -23,6 +24,7 @@ const EmailTemplate = () => {
 
     setRemainderDays({
       firstDueDay: emailRemainderDays?.[0]?.firstDueDay || '',
+      secondDueDay: emailRemainderDays?.[0]?.secondDueDay || '',
       thirdDueDay: emailRemainderDays?.[0]?.thirdDueDay || '',
     })
   }, [emailRemainderData, emailRemainderDays])
