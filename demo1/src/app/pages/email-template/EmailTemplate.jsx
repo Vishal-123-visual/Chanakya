@@ -7,7 +7,6 @@ const EmailTemplate = () => {
   const {data: emailRemainderDays} = companyCTX.getEmailRemainderDays
   const [textEmailsData, setTextEmailsData] = useState({
     firstRemainder: emailRemainderData?.[0]?.firstRemainder || '',
-    secondRemainder: emailRemainderData?.[0]?.secondRemainder || '',
     thirdRemainder: emailRemainderData?.[0]?.thirdRemainder || '',
   })
 
@@ -19,14 +18,11 @@ const EmailTemplate = () => {
 
   useEffect(() => {
     setTextEmailsData({
-      firstRemainder: emailRemainderData?.[0]?.firstRemainder || '',
-      secondRemainder: emailRemainderData?.[0]?.secondRemainder || '',
       thirdRemainder: emailRemainderData?.[0]?.thirdRemainder || '',
     })
 
     setRemainderDays({
       firstDueDay: emailRemainderDays?.[0]?.firstDueDay || '',
-      secondDueDay: emailRemainderDays?.[0]?.secondDueDay || '',
       thirdDueDay: emailRemainderDays?.[0]?.thirdDueDay || '',
     })
   }, [emailRemainderData, emailRemainderDays])
@@ -49,12 +45,10 @@ const EmailTemplate = () => {
     } finally {
       setTextEmailsData({
         firstRemainder: '',
-        secondRemainder: '',
         thirdRemainder: '',
       })
       setRemainderDays({
         firstDueDate: '',
-        secondRemainderDay: '',
         thirdRemainderDay: '',
       })
     }

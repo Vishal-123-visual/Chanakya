@@ -14,10 +14,6 @@ export const addEmailRemainderController = asyncHandler(
         return res.status(400).json({
           error: "All fields are required",
         });
-      } else if (!secondRemainder) {
-        return res.status(400).json({
-          error: "All fields are required",
-        });
       } else if (!thirdRemainder) {
         return res.status(400).json({
           error: "All fields are required",

@@ -7,6 +7,7 @@ export const addEmailTemplateController = asyncHandler(
       // console.log(req.body)
       const { customTemplate, cancellationTemplate, dynamicTemplate } =
         req.body;
+
       if (!customTemplate) {
         return res.status(400).json({
           error: "All fields are required",
