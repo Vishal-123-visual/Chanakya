@@ -32,7 +32,7 @@ const ShowSingleAccountDayBookData = () => {
     },
   })
   let credit = 0
-  console.log(data)
+  // console.log(data)
   // const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
 
   const result = useQuery({

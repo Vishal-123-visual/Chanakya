@@ -37,10 +37,11 @@ const ShowSingleLinkAccountData = () => {
   //     )
   //   )
   const linkedAccountData = dayBookAccountCtx?.getDayBookDataQuery?.data?.filter(
-    (cp) => cp.linkAccountType === 'Link' && cp.linkDayBookAccountData === params?.id
+    (cp) => cp.linkAccountType === 'Link' && cp?.linkDayBookAccountData?._id == params?.id
   )
   //   console.log(location?.state?.data)
-  console.log(linkedAccountData)
+  // console.log(linkedAccountData)
+  // console.log(params?.id)
   let credit = 0
   // const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
 
