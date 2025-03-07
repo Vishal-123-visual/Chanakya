@@ -72,6 +72,8 @@ import PaymentApproval from '../pages/Payment_Approval/PaymentApproval'
 import DayBookAccountTable from '../pages/dayBook/DayBookAccountTable'
 import StudentCourseDataDownload from '../pages/monthly_Reports/StudentCourseDataDownload'
 import StudentProfileView from '../pages/student-profile/StudentProfileView'
+import ViewLinkAccount from '../pages/dayBook/ViewLinkAccount'
+import ShowSingleLinkAccountData from '../pages/dayBook/ShowSingleLinkAccountData'
 // import DynamicEnquiryForm from '../pages/enquiry-related/DynamicEnquiryForm'
 // import GeneralSettingForm from '../pages/general-setting-dynamic-form/GeneralSettingForm'
 // import TopBarFormSelector from '../pages/general-setting-dynamic-form/TopBarFormSelector'
@@ -120,6 +122,14 @@ const PrivateRoutes = () => {
               }
             />
             <Route
+              path='/daybook/singleLinkAccount/:id'
+              element={
+                <>
+                  <ShowSingleLinkAccountData />
+                </>
+              }
+            />
+            <Route
               path='/daybook/editAccount/:id'
               element={
                 <>
@@ -132,6 +142,14 @@ const PrivateRoutes = () => {
               element={
                 <>
                   <ViewDayBookAccount />
+                </>
+              }
+            />
+            <Route
+              path='/daybook/viewLinkAccount/:id'
+              element={
+                <>
+                  <ViewLinkAccount />
                 </>
               }
             />

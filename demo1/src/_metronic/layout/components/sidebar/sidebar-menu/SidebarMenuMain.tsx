@@ -245,6 +245,11 @@ const SidebarMenuMain = () => {
                       title='View Account'
                       hasBullet={true}
                     />
+                    <SidebarMenuItem
+                      to={`/daybook/viewLinkAccount/${CompanyListData._id}`}
+                      title='View Link Account'
+                      hasBullet={true}
+                    />
                   </SidebarMenuItemWithSub>
                   {/* End Day Book */}
                 </SidebarMenuItemWithSub>

@@ -61,6 +61,8 @@ const AddDayBookAccountFromDayBook = ({setShowAddAccountBtn}) => {
           <option value=''>--select--</option>
           <option value='Expense'>Expense</option>
           <option value='Income'>Income</option>
+          <option value='Commission'>Commission</option>
+          <option value='Link'>Link</option>
         </select>
         {/* ----------------------- Account Type End ----------------------------- */}
       </td>

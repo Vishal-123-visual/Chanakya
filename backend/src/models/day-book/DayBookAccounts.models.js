@@ -7,6 +7,9 @@ const DayBookAccountSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
+    accountId: {
+      type: String,
+    },
     accountType: {
       type: String,
       required: true,

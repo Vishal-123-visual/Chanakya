@@ -1,16 +1,15 @@
-import {useNavigate, useParams} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
-import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import moment from 'moment'
-import {toast} from 'react-toastify'
+import axios from 'axios'
+import React from 'react'
 import {useQuery} from 'react-query'
 import {useAuth} from '../../modules/auth'
-import axios from 'axios'
+import {useLocation, useNavigate, useParams} from 'react-router-dom'
+import moment from 'moment'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
-const ShowSingleAccountDayBookData = () => {
+const ShowSingleLinkAccountData = () => {
   const {auth, currentUser} = useAuth()
   let config = {
     headers: {
@@ -22,6 +21,7 @@ const ShowSingleAccountDayBookData = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
   const {id} = useParams()
+  const location = useLocation()
 
   const {data, isLoading} = useQuery({
     queryKey: ['getDayBookDataLists', id],
@@ -31,8 +31,17 @@ const ShowSingleAccountDayBookData = () => {
         .then((res) => res.data)
     },
   })
+  //   console.log(
+  //     dayBookAccountCtx?.getDayBookDataQuery?.data?.filter(
+  //       (cp) => cp.linkAccountType === 'Link' && cp.linkDayBookAccountData === params?.id
+  //     )
+  //   )
+  const linkedAccountData = dayBookAccountCtx?.getDayBookDataQuery?.data?.filter(
+    (cp) => cp.linkAccountType === 'Link' && cp.linkDayBookAccountData === params?.id
+  )
+  //   console.log(location?.state?.data)
+  console.log(linkedAccountData)
   let credit = 0
-  console.log(data)
   // const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
 
   const result = useQuery({
@@ -41,7 +50,7 @@ const ShowSingleAccountDayBookData = () => {
       return axios.get(`${BASE_URL}/api/dayBook/singleAccountAccount/${id}`).then((res) => res.data)
     },
   })
-  // console.log(result.data)
+  //   console.log(result.data)
   let debitAmount = 0
   let creditAmount = 0
 
@@ -102,7 +111,7 @@ const ShowSingleAccountDayBookData = () => {
                   </tr>
                 ) : (
                   <>
-                    {data?.map((dayBookAccountData, index) => {
+                    {linkedAccountData?.map((dayBookAccountData, index) => {
                       debitAmount = debitAmount + dayBookAccountData?.debit
                       creditAmount = creditAmount + dayBookAccountData?.credit
                       return (
@@ -182,4 +191,5 @@ const ShowSingleAccountDayBookData = () => {
     </>
   )
 }
-export default ShowSingleAccountDayBookData
+
+export default ShowSingleLinkAccountData

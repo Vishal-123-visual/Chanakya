@@ -276,6 +276,9 @@ const ViewDayBook = () => {
                               ? dayBookEntry?.commissionPersonName
                               : dayBookEntry?.accountName || dayBookEntry?.StudentName}
                           </Link>
+                          <span className='text-muted fw-semibold text-muted d-block fs-7'>
+                            {dayBookEntry?.linkDayBookAccountData?.accountName}
+                          </span>
                         </td>
                         <td className='text-dark fw-bold text-hover-primary fs-6'>
                           {dayBookEntry.naretion || '--'}

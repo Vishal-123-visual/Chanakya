@@ -48,6 +48,14 @@ const dayBookDataSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "DayBookAccount",
     },
+    linkDayBookAccountData: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "DayBookAccount",
+      required: false,
+    },
+    linkAccountType: {
+      type: String,
+    },
     balance: {
       type: Number,
       default: 0,

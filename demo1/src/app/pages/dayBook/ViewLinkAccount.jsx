@@ -1,12 +1,12 @@
+import React from 'react'
 import {useNavigate, useParams} from 'react-router-dom'
-import {KTIcon, toAbsoluteUrl} from '../../../_metronic/helpers'
-import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
-import {useCompanyContext} from '../compay/CompanyContext'
 import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
-import moment from 'moment'
 import {useAuth} from '../../modules/auth'
+import {usePaymentOptionContextContext} from '../payment_option/PaymentOption.Context'
+import {KTIcon} from '../../../_metronic/helpers'
+import {useCompanyContext} from '../compay/CompanyContext'
 
-const ViewDayBookAccount = () => {
+const ViewLinkAccount = () => {
   const dayBookAccountCtx = usePaymentOptionContextContext()
   const navigate = useNavigate()
   const {currentUser} = useAuth()
@@ -16,16 +16,17 @@ const ViewDayBookAccount = () => {
   // console.log(studentCTX.getAllRecieptStatusData?.data?.approvalData)
   const companyCTX = useCompanyContext()
   const result = companyCTX.useGetSingleCompanyData(params.id)
-  //console.log(dayBookAccountCtx.getDayBookAccountsLists.data[0].companyId === params.id)
+  //   console.log(dayBookAccountCtx.getDayBookAccountsLists.data)
 
   const accountName = dayBookAccountCtx.getDayBookAccountsLists.data?.filter(
     (cp) => cp?.companyId === params?.id && cp?.accountName === 'Himanshu Walia'
   )
 
-  // console.log(result)
+  // console.log(accountName)
+  const data = dayBookAccountCtx.getDayBookAccountsLists.data
 
   const navigateHandler = (accountId) => {
-    navigate('/daybook/singleAccount/' + accountId)
+    navigate('/daybook/singleLinkAccount/' + accountId, {state: {data}})
   }
 
   let themeMode = 'system'
@@ -101,7 +102,7 @@ const ViewDayBookAccount = () => {
                 ) : (
                   <>
                     {dayBookAccountCtx.getDayBookAccountsLists.data
-                      ?.filter((cp) => cp?.companyId === params?.id && cp?.accountType !== 'Link')
+                      ?.filter((cp) => cp?.companyId === params?.id && cp?.accountType === 'Link')
                       .map((dayBookAccountData, index) => (
                         <tr key={index}>
                           <td>
@@ -119,7 +120,10 @@ const ViewDayBookAccount = () => {
                           </td>
                           <td>
                             <button
-                              onClick={() => navigateHandler(dayBookAccountData._id)}
+                              onClick={() => {
+                                navigateHandler(dayBookAccountData._id)
+                                console.log(dayBookAccountData)
+                              }}
                               className='btn  btn-active-color-primary btn-sm text-dark fw-bold text-hover-primary d-block fs-6'
                             >
                               {dayBookAccountData?.accountName}
@@ -171,40 +175,8 @@ const ViewDayBookAccount = () => {
         </div>
         {/* begin::Body */}
       </div>
-      <div className='card'>
-        <div className='card-body py-3'>
-          <div className='table-responsive'>
-            {/* begin::Table */}
-            <table className='table table-row-dashed table-row-gray-300 align-middle gs-0 gy-4'>
-              <thead>
-                <tr className='fw-bold'>
-                  <th className='min-w-150px'>S.NO</th>
-                  <th className='min-w-120px'>Account Name</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>
-                    <a href='#' className='text-dark fw-bold text-hover-primary d-block fs-6'>
-                      1
-                    </a>
-                  </td>
-                  <td>
-                    {' '}
-                    <button
-                      onClick={() => navigate(`/reciept/${params.id}`)}
-                      className='btn  btn-active-color-primary btn-sm text-dark text-center fw-bold text-hover-primary d-block fs-6'
-                    >
-                      Himanshu Walia
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
     </>
   )
 }
-export default ViewDayBookAccount
+
+export default ViewLinkAccount

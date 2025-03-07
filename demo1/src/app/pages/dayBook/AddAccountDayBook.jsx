@@ -14,6 +14,7 @@ const addAccountSchema = Yup.object().shape({
 const AddAccountDayBook = () => {
   const navigate = useNavigate()
   const params = useParams()
+
   let initialValues = {
     accountName: '',
     accountType: '',
@@ -98,6 +99,7 @@ const AddAccountDayBook = () => {
                       <option value={'Expense'}>Expense</option>
                       <option value={'Income'}>Income</option>
                       <option value={'Commission'}>Commission</option>
+                      <option value={'Link'}>Link</option>
                     </select>
                     {formik.touched.accountType && formik.errors.accountType && (
                       <div className='fv-plugins-message-container'>

@@ -113,8 +113,11 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
     debit,
     credit,
     naretion,
+    linkDayBookAccountData,
     companyId,
   } = req.body;
+
+  // console.log(req.body);
 
   try {
     const existingDataModel = await DayBookDataModel.find({ companyId }).sort();
@@ -138,6 +141,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 
     const newDayBookData = new DayBookDataModel({
       ...req.body,
+      linkDayBookAccountData: linkDayBookAccountData || null,
     });
     await newDayBookData.save();
     res
@@ -145,7 +149,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
       .json({ success: true, message: "day book data created successfully!!" });
   } catch (error) {
     res.status(500).json({
-      error: "Error: while creating the day book data " || error.message,
+      error: "Error: while creating the day book data " || error,
     });
   }
 });
@@ -153,7 +157,7 @@ export const addDayBookDataController = asyncHandler(async (req, res, next) => {
 export const getDayBookDataController = asyncHandler(async (req, res, next) => {
   try {
     const dayBookData = await DayBookDataModel.find({})
-      .populate("studentInfo")
+      .populate(["studentInfo", "linkDayBookAccountData"])
       .sort({ dayBookDatadate: 1 });
     res.status(200).json(dayBookData);
   } catch (error) {
@@ -167,10 +171,12 @@ export const getSingleDayBookDataController = asyncHandler(
     try {
       const dayBookData = await DayBookDataModel.find({
         dayBookAccountId: req.params.id,
-      }).sort({
-        dayBookDatadate: 1,
-      });
-      console.log(dayBookData);
+      })
+        .populate(["linkDayBookAccountData", "dayBookAccountId"])
+        .sort({
+          dayBookDatadate: 1,
+        });
+      // console.log(dayBookData);
       res.status(200).json(dayBookData);
     } catch (error) {
       res.status(500).json({

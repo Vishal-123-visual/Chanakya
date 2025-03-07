@@ -101,6 +101,7 @@ const EditDayBookAccount = () => {
                       <option value={'Expense'}>Expense</option>
                       <option value={'Income'}>Income</option>
                       <option value={'Commission'}>Commission</option>
+                      <option value={'Link'}>Link</option>
                     </select>
                     {formik.touched.accountType && formik.errors.accountType && (
                       <div className='fv-plugins-message-container'>
