@@ -40,7 +40,7 @@ const ShowSingleLinkAccountData = () => {
     (cp) => cp.linkAccountType === 'Link' && cp?.linkDayBookAccountData?._id == params?.id
   )
   //   console.log(location?.state?.data)
-  // console.log(linkedAccountData)
+  console.log(linkedAccountData)
   // console.log(params?.id)
   let credit = 0
   // const result = dayBookAccountCtx.useGetSingleDayBookAccount(id)
@@ -72,7 +72,7 @@ const ShowSingleLinkAccountData = () => {
         <div className='card-header border-0 pt-5'>
           <h3 className='card-title align-items-start flex-column'>
             <span className='card-label fw-bold fs-3 mb-1'>
-              {data && data[0]?.commissionPersonName}
+              {linkedAccountData && linkedAccountData?.[0]?.linkDayBookAccountData?.accountName}
             </span>
             <span className='text-muted mt-1 fw-semibold fs-7'>
               {' '}
@@ -95,7 +95,7 @@ const ShowSingleLinkAccountData = () => {
                   </th>
                   <th className='min-w-50px'>SR.NO</th>
                   <th className='min-w-50px'>Created At</th>
-                  <th className='min-w-80px'>Account Name</th>
+                  <th className='min-w-80px'>Actual Account</th>
                   <th className='min-w-200px'>Narration</th>
                   <th className='min-w-50px'>Credit</th>
                   <th className='min-w-50px'>Debit</th>
