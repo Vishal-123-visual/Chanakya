@@ -61,9 +61,7 @@ const EmailTemplate = () => {
       <h1>Email Reminder Text</h1>
       <form onSubmit={handleSubmit}>
         <div className='mb-3'>
-          <label htmlFor='firstRemainder' className='form-label'>
-            Before Over Due Reminder
-          </label>
+          <h3 htmlFor='firstRemainder'>Before Over Due Reminder</h3>
           <textarea
             id='firstRemainder'
             rows={10}
@@ -114,9 +112,7 @@ const EmailTemplate = () => {
           />
         </div> */}
         <div className='mb-3'>
-          <label htmlFor='thirdRemainder' className='form-label'>
-            After Over Due Reminder
-          </label>
+          <h3 htmlFor='thirdRemainder'>After Over Due Reminder</h3>
           <textarea
             id='thirdRemainder'
             rows={10}

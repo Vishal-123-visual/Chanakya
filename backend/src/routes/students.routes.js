@@ -903,12 +903,14 @@ router.get(
   requireSignIn,
   getAlertStudentPendingFeesController
 );
+
 router.delete(
   "/createAlertStudentPendingFees/:id",
   requireSignIn,
   isAdmin,
   deleteAlertStudentPendingFeesController
 );
+
 router.put(
   "/createAlertStudentPendingFees/:id",
   requireSignIn,

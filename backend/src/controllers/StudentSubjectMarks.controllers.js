@@ -4,34 +4,34 @@ import studentSubjectMarksModel from "../models/subject/student.subject.marks.mo
 export const addCourseSubjectMarksController = asyncHandler(
   async (req, res, next) => {
     try {
-      // Check if a record already exists for the student, subject, and course combination
-      const existingRecord = await studentSubjectMarksModel.findOne({
+      // Define the filter criteria to find the existing record
+      const filter = {
         studentInfo: req.body.studentId,
         Subjects: req.body.subjectId,
         course: req.body.courseId,
         companyName: req.body.companyName,
-      });
+      };
 
-      if (existingRecord) {
-        // Delete the existing record
-        await studentSubjectMarksModel.deleteOne({
-          studentInfo: req.body.studentId,
-          Subjects: req.body.subjectId,
-          course: req.body.courseId,
-          companyName: req.body.companyName,
-        });
-      }
-
-      // Create a new record with the updated data
-      const saveStudentSubjectMarks = new studentSubjectMarksModel({
+      // Define the update data
+      const updateData = {
         ...req.body,
         studentInfo: req.body.studentId,
         Subjects: req.body.subjectId,
         course: req.body.courseId,
         companyName: req.body.companyName,
-      });
+      };
 
-      await saveStudentSubjectMarks.save();
+      // Check if a record already exists for the given combination
+      const existingRecord = await studentSubjectMarksModel.findOne(filter);
+
+      if (existingRecord) {
+        // If the record exists, update it
+        await studentSubjectMarksModel.updateOne(filter, updateData);
+      } else {
+        // If the record does not exist, create a new one
+        const newRecord = new studentSubjectMarksModel(updateData);
+        await newRecord.save();
+      }
 
       return res
         .status(200)

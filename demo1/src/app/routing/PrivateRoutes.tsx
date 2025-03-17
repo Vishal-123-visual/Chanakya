@@ -400,6 +400,17 @@ const PrivateRoutes = () => {
                     <WhatsappMessageSuggestion />
                     <GstSuggesstion />
                     <AddPaymentOption />
+                    {/* <EmailTemplate /> */}
+                    {/* <DynamicEmailTemplate /> */}
+                  </div>
+                </>
+              }
+            />
+            <Route
+              path='/email-settings'
+              element={
+                <>
+                  <div className='d-flex flex-column gap-10'>
                     <EmailTemplate />
                     <DynamicEmailTemplate />
                   </div>

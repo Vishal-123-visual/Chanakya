@@ -14,6 +14,10 @@ const emailTemplateSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    courseSubjectTemplate: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true }
 );

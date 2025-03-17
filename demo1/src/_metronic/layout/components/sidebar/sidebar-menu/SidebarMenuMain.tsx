@@ -280,47 +280,60 @@ const SidebarMenuMain = () => {
           {/* ************* Manage Courses END   ****************** */}
 
           {/* ************************************* Manage Company Start ******************************** */}
-          <SidebarMenuItemWithSub
-            to='/apps/chat'
-            title='Manage Company'
-            fontIcon='bi-chat-left'
-            icon='message-text-2'
-          >
-            <SidebarMenuItem to='/company' title='Company' hasBullet={true} />
-            <SidebarMenuItem to='/add-company' title='Add Company' hasBullet={true} />
-          </SidebarMenuItemWithSub>
+          {currentUser?.role !== 'Counsellor' ? (
+            <SidebarMenuItemWithSub
+              to='/apps/chat'
+              title='Manage Company'
+              fontIcon='bi-chat-left'
+              icon='message-text-2'
+            >
+              <SidebarMenuItem to='/company' title='Company' hasBullet={true} />
+              <SidebarMenuItem to='/add-company' title='Add Company' hasBullet={true} />
+            </SidebarMenuItemWithSub>
+          ) : (
+            ''
+          )}
           {/* *************************************  Manage Company End ******************************** */}
 
           {/* ------------------------------ Settings Page Start ----------------------------------------- */}
-          <SidebarMenuItemWithSub
-            to='/apps/chat'
-            title='Settings'
-            fontIcon='bi-chat-left'
-            icon='abstract-29'
-          >
-            <SidebarMenuItem to='/general-settings' title='General Settings' hasBullet={true} />
-          </SidebarMenuItemWithSub>
+          {currentUser?.role !== 'Counsellor' ? (
+            <SidebarMenuItemWithSub
+              to='/apps/chat'
+              title='Settings'
+              fontIcon='bi-chat-left'
+              icon='abstract-29'
+            >
+              <SidebarMenuItem to='/general-settings' title='General Settings' hasBullet={true} />
+              <SidebarMenuItem to='/email-settings' title='Email Settings' hasBullet={true} />
+            </SidebarMenuItemWithSub>
+          ) : (
+            ''
+          )}
           {/* ------------------------------ Settings Page End ------------------------------------------- */}
 
-          <SidebarMenuItemWithSub
-            to='/apps/chat'
-            title='User management'
-            fontIcon='bi-layers'
-            icon='abstract-28'
-          >
-            <SidebarMenuItem
-              to='/apps/user-management/users'
+          {currentUser?.role !== 'Counsellor' ? (
+            <SidebarMenuItemWithSub
+              to='/apps/chat'
               title='User management'
-              hasBullet={true}
-            />
-            {currentUser?.role === 'SuperAdmin' && (
+              fontIcon='bi-layers'
+              icon='abstract-28'
+            >
               <SidebarMenuItem
-                to='/apps/user-role/management'
-                title='User Access'
+                to='/apps/user-management/users'
+                title='User management'
                 hasBullet={true}
               />
-            )}
-          </SidebarMenuItemWithSub>
+              {currentUser?.role === 'SuperAdmin' && (
+                <SidebarMenuItem
+                  to='/apps/user-role/management'
+                  title='User Access'
+                  hasBullet={true}
+                />
+              )}
+            </SidebarMenuItemWithSub>
+          ) : (
+            ''
+          )}
         </>
       ) : (
         <>

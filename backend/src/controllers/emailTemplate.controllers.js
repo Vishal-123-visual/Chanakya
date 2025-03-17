@@ -5,8 +5,12 @@ export const addEmailTemplateController = asyncHandler(
   async (req, res, next) => {
     try {
       // console.log(req.body)
-      const { customTemplate, cancellationTemplate, dynamicTemplate } =
-        req.body;
+      const {
+        customTemplate,
+        cancellationTemplate,
+        dynamicTemplate,
+        courseSubjectTemplate,
+      } = req.body;
 
       if (!customTemplate) {
         return res.status(400).json({
@@ -23,6 +27,11 @@ export const addEmailTemplateController = asyncHandler(
           error: "All fields are required",
         });
       }
+      if (!courseSubjectTemplate) {
+        return res.status(400).json({
+          error: "All fields are required",
+        });
+      }
 
       const emailsTemplates = await EmailTemplateModel.find({});
       emailsTemplates.forEach(
@@ -32,6 +41,7 @@ export const addEmailTemplateController = asyncHandler(
         customTemplate,
         cancellationTemplate,
         dynamicTemplate,
+        courseSubjectTemplate,
       });
       await emailTemplate.save();
       res.status(200).json({ message: "Email Template Added" });

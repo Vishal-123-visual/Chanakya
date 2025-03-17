@@ -5,15 +5,23 @@ import PopUpModal from '../../modules/accounts/components/popUpModal/PopUpModal'
 
 const DynamicEmailTemplate = () => {
   const companyCTX = useCompanyContext()
-  const {openModal: contextOpenModal, setOpenModal: setcontextOpenModal} = useDynamicFieldContext()
-  const [modalOpen, setModalOpen] = useState(null) // Use null to indicate no modal is open
+  const [modalOpen, setModalOpen] = useState(null)
 
   const {data: emailTemplates} = companyCTX.getEmailTemplate
   const [emailTemplate, setEmailTemplate] = useState({
     customTemplate: '',
     cancellationTemplate: '',
     dynamicTemplate: '',
+    courseSubjectTemplate: '',
   })
+
+  // Define default templates
+  const defaultTemplates = {
+    customTemplate: 'This is the default custom template.',
+    cancellationTemplate: 'This is the default cancellation template.',
+    dynamicTemplate: 'This is the default dynamic template.',
+    courseSubjectTemplate: 'This is the default course subject template.',
+  }
 
   // Update the email template when `emailTemplates` changes
   useEffect(() => {
@@ -22,6 +30,7 @@ const DynamicEmailTemplate = () => {
         customTemplate: emailTemplates[0]?.customTemplate || '',
         cancellationTemplate: emailTemplates[0]?.cancellationTemplate || '',
         dynamicTemplate: emailTemplates[0]?.dynamicTemplate || '',
+        courseSubjectTemplate: emailTemplates[0]?.courseSubjectTemplate || '',
       })
     }
   }, [emailTemplates])
@@ -48,8 +57,17 @@ const DynamicEmailTemplate = () => {
       setEmailTemplate({
         customTemplate: '',
         cancellationTemplate: '',
+        courseSubjectTemplate: '',
+        dynamicTemplate: '',
       })
     }
+  }
+
+  const handleDefaultTemplate = (templateKey) => {
+    setEmailTemplate((prevTemplate) => ({
+      ...prevTemplate,
+      [templateKey]: defaultTemplates[templateKey],
+    }))
   }
 
   return (
@@ -63,9 +81,7 @@ const DynamicEmailTemplate = () => {
       <form onSubmit={handleSubmit}>
         <div className='mb-3'>
           <div className='py-2'>
-            <label htmlFor='customTemplate' className='form-label'>
-              Warning Letter Template
-            </label>
+            <h3 htmlFor='customTemplate'>Warning Letter Template</h3>
           </div>
           <textarea
             id='customTemplate'
@@ -76,10 +92,16 @@ const DynamicEmailTemplate = () => {
             className='form-control'
             name='customTemplate'
           />
+          {/* <div className='py-2'>
+            <button
+              className='btn btn-info'
+              onClick={() => handleDefaultTemplate('customTemplate')}
+            >
+              Default
+            </button>
+          </div> */}
           <div className='py-2'>
-            <label htmlFor='cancellationTemplate' className='form-label'>
-              Admission Cancellation Letter Template
-            </label>
+            <h3 htmlFor='cancellationTemplate'>Admission Cancellation Letter Template</h3>
           </div>
           <textarea
             id='cancellationTemplate'
@@ -90,10 +112,16 @@ const DynamicEmailTemplate = () => {
             className='form-control'
             name='cancellationTemplate'
           />
-          <div className='d-flex justify-content-between py-2  '>
-            <label htmlFor='dynamicTemplate' className='form-label'>
-              Dynamic Template
-            </label>
+          {/* <div className='py-2'>
+            <button
+              className='btn btn-info'
+              onClick={() => handleDefaultTemplate('cancellationTemplate')}
+            >
+              Default
+            </button>
+          </div> */}
+          <div className='d-flex justify-content-between py-2'>
+            <h3 htmlFor='dynamicTemplate'>All Student Email Template</h3>
             <button className='btn btn-primary btn-sm' onClick={handleData}>
               Data Details
             </button>
@@ -107,14 +135,44 @@ const DynamicEmailTemplate = () => {
             className='form-control'
             name='dynamicTemplate'
           />
+          {/* <div className='py-2'>
+            <button
+              className='btn btn-info'
+              onClick={() => handleDefaultTemplate('dynamicTemplate')}
+            >
+              Default
+            </button>
+          </div> */}
+          <div className='d-flex justify-content-between py-2'>
+            <h3 htmlFor='courseSubjectTemplate'>Course Subjects Email Template</h3>
+          </div>
+          <textarea
+            id='courseSubjectTemplate'
+            rows={15}
+            value={emailTemplate.courseSubjectTemplate}
+            onChange={onChangeHandler}
+            type='text'
+            className='form-control'
+            name='courseSubjectTemplate'
+          />
         </div>
-        <button
-          disabled={companyCTX.postEmailTemplate.isLoading}
-          type='submit'
-          className='btn btn-primary'
-        >
-          {companyCTX.postEmailTemplate.isLoading ? 'Adding' : 'Submit'}
-        </button>
+        <div className='d-flex'>
+          <button
+            disabled={companyCTX.postEmailTemplate.isLoading}
+            type='submit'
+            className='btn btn-primary'
+            style={{margin: '0 8px', padding: '8px 16px', fontSize: '16px'}}
+          >
+            {companyCTX.postEmailTemplate.isLoading ? 'Adding' : 'Submit'}
+          </button>
+          {/* <button
+            className='btn btn-info'
+            onClick={() => handleDefaultTemplate('courseSubjectTemplate')}
+            style={{margin: '0 8px', padding: '8px 16px', fontSize: '16px'}}
+          >
+            Default
+          </button> */}
+        </div>
       </form>
       {modalOpen === 'student' && (
         <PopUpModal show={modalOpen === 'student'} handleClose={() => setModalOpen(null)}>

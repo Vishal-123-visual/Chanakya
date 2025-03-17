@@ -22,6 +22,8 @@ const CourseStudentSubjectMarks = () => {
   const [selectedCourses, setSelectedCourses] = useState({})
   //console.log(location?.state?.courseName._id === undefined)
   // console.log(location?.state)
+  // console.log(marksData)
+  // console.log(selectedCourses)
 
   const {data, error, isLoading} = courseSubjectsCtx.useSubjectsBasedOnCourse(
     location?.state?.courseName?._id === undefined
@@ -119,6 +121,8 @@ const CourseStudentSubjectMarks = () => {
     })
   }
 
+  // console.log(marksData)
+
   const filterData =
     data?.filter((data) => {
       // Ensure the filter logic includes the required conditions
@@ -128,19 +132,21 @@ const CourseStudentSubjectMarks = () => {
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true)
-      Object.keys(marksData).map((id) =>
-        courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
-          subjectId: id,
-          ...marksData[id],
-          subjects: selectedCourses,
-          courseId:
-            location?.state?.courseName._id === undefined
-              ? location?.state?.courseName
-              : location?.state?.courseName._id,
-          studentId: location.state._id,
-          companyName: location.state.companyName,
-        })
-      )
+      Object.keys(marksData)
+        .filter((id) => selectedCourses[id] === true)
+        .map((id) =>
+          courseSubjectsCtx.updateCourseSubjectMarksMutation.mutate({
+            subjectId: id,
+            ...marksData[id],
+            subjects: selectedCourses,
+            courseId:
+              location?.state?.courseName._id === undefined
+                ? location?.state?.courseName
+                : location?.state?.courseName._id,
+            studentId: location.state._id,
+            companyName: location.state.companyName,
+          })
+        )
 
       toast.success('Added marks successfully!', {
         style: {
@@ -323,7 +329,7 @@ const CourseStudentSubjectMarks = () => {
                                       name='theory'
                                       className='form-control w-auto'
                                       id={`theory_${yearWiseSubject._id}`}
-                                      defaultValue={studentMarks?.theory}
+                                      defaultValue={studentMarks?.theory || 0}
                                       onChange={(e) =>
                                         handleInputChange(
                                           e,
@@ -345,7 +351,7 @@ const CourseStudentSubjectMarks = () => {
                                       name='practical'
                                       className='form-control w-auto'
                                       id={`practical_${yearWiseSubject._id}`}
-                                      defaultValue={studentMarks?.practical}
+                                      defaultValue={studentMarks?.practical || 0}
                                       onChange={(e) =>
                                         handleInputChange(
                                           e,
