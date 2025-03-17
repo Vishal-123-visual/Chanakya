@@ -1540,7 +1540,7 @@ export const createEaseBuzzCourseFeesController = async (req, res) => {
       }
 
       // If the payment initiation is successful, send the payment link as a response
-      const paymentLink = `https://testpay.easebuzz.in/pay/${response.data.data}`;
+      const paymentLink = `https://pay.easebuzz.in/pay/${response.data.data}`;
       return res.json({ success: true, paymentLink }); // Send the link as a response
     } catch (axiosError) {
       console.error(" Axios Error:", axiosError);

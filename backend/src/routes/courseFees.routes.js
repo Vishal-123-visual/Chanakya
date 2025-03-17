@@ -141,7 +141,7 @@ router.post("/payment/success", async (req, res) => {
         companyId: student?.companyName?._id,
       }).toString();
 
-      return res.redirect(`${FRONTEND_URL}/payment/success?${queryParam}`);
+      return res.redirect(`${BACKEND_URL}/payment/success?${queryParam}`);
     }
 
     const newCourseFees = new CourseFeesModel({
@@ -227,9 +227,9 @@ router.post("/payment/success", async (req, res) => {
       companyId: student?.companyName?._id,
     }).toString();
 
-    // res.redirect(`${FRONTEND_URL}/payment/success`);
+    // res.redirect(`${BACKEND_URL}/payment/success`);
 
-    return res.redirect(`${FRONTEND_URL}/payment/success?${queryParams}`);
+    return res.redirect(`${BACKEND_URL}/payment/success?${queryParams}`);
   } catch (error) {
     console.error("❌ Error:", error);
     return res.status(500).json({
@@ -259,7 +259,7 @@ router.post("/payment/failure", async (req, res) => {
     });
 
     // Redirect URL and failure message
-    res.redirect(`${FRONTEND_URL}/payment/failure?${queryParams}`);
+    res.redirect(`${BACKEND_URL}/payment/failure?${queryParams}`);
   } catch (error) {
     console.error("❌ Error:", error);
     return res.status(500).json({
