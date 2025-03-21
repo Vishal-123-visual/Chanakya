@@ -8,3 +8,11 @@ export const mailTransporter = createTransport({
     pass: USER_PASSWORD,
   },
 });
+
+// export const mailTransporter1  = createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: USER_EMAIL1,
+//     pass: USER_PASSWORD1,
+//   },
+// });

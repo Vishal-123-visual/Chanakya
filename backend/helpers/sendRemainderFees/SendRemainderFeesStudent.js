@@ -142,4 +142,37 @@ export async function sendEmail(toEmails, subject, text, html, req, sendedBy) {
   }
 }
 
+// export async function sendEmail1(toEmails, subject, text, html, req, sendedBy) {
+//   const currentDateTime = moment().format("YYYY-MM-DD HH:mm:ss"); // Format date and time
+
+//   const mailOptions = {
+//     from: USER_EMAIL1,
+//     to: toEmails,
+//     subject: subject,
+//     text: text, // Plain text fallback
+//     html: html, // HTML content
+//   };
+//   // console.log("Mail Options before sending:", mailOptions);
+//   // console.log(currentDateTime);
+//   try {
+//     const result = await mailTransporter1.sendMail(mailOptions);
+//     const emailLog = new EmailLogModel({
+//       recipientEmails: toEmails, // List of recipients
+//       subject: subject, // Email subject
+//       content: html, // Email content (optional)
+//       sentAt: currentDateTime, // Timestamp
+//       sendedBy: sendedBy,
+//     });
+//     await emailLog.save(); // Save the email log
+
+//     // console.log("Email sent successfully and logged at", currentDateTime);
+//     console.log("Email send result:", result);
+
+//     return result; // Return the result if you want to use it
+//   } catch (error) {
+//     console.log("Email send failed with error:", error);
+//     throw new Error("Failed to send email");
+//   }
+// }
+
 export default sendRemainderFeesStudent;
