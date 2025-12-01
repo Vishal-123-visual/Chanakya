@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from 'react'
-import {KTIcon} from '../../../_metronic/helpers'
+import React, { useEffect, useState } from 'react'
+import { KTIcon } from '../../../_metronic/helpers'
 import PopUpModal from '../../modules/accounts/components/popUpModal/PopUpModal'
-import {useDynamicFieldContext} from '../enquiry-related/DynamicFieldsContext'
+import { useDynamicFieldContext } from '../enquiry-related/DynamicFieldsContext'
 import moment from 'moment'
-import {useCompanyContext} from '../compay/CompanyContext'
+import { useCompanyContext } from '../compay/CompanyContext'
 import axios from 'axios'
-import {toast} from 'react-toastify'
-import {useStudentCourseFeesContext} from '../courseFees/StudentCourseFeesContext'
+import { toast } from 'react-toastify'
+import { useStudentCourseFeesContext } from '../courseFees/StudentCourseFeesContext'
 
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
-const StudentEmailsTable = ({studentInfoData}) => {
+const StudentEmailsTable = ({ studentInfoData }) => {
   const [emailLogs, setEmailLogs] = useState([])
   const [isSendingEmail, setIsSendingEmail] = useState(false) // Track sending status
   const [emailTemplates, setEmailTemplates] = useState([])
@@ -19,13 +19,13 @@ const StudentEmailsTable = ({studentInfoData}) => {
   // Modal states
   const [isSendEmailModalOpen, setIsSendEmailModalOpen] = useState(false) // For sending email modal
   const [isEmailContentModalOpen, setIsEmailContentModalOpen] = useState(false) // For viewing email content modal
-  const [selectedEmail, setSelectedEmail] = useState({subject: '', content: ''}) // Email content for modal
+  const [selectedEmail, setSelectedEmail] = useState({ subject: '', content: '' }) // Email content for modal
   // console.log(selectedEmail.content)
   const companyCTX = useCompanyContext()
   const studentPayFeeCtx = useStudentCourseFeesContext()
   const result = studentPayFeeCtx.useSingleStudentCourseFees(studentInfoData?._id)
-  const {data: emailTemplate} = companyCTX.getEmailTemplate
-  const {data: singleCompanyData} = companyCTX?.useGetSingleCompanyData(
+  const { data: emailTemplate } = companyCTX.getEmailTemplate
+  const { data: singleCompanyData } = companyCTX?.useGetSingleCompanyData(
     studentInfoData?.companyName
   )
 
@@ -44,7 +44,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
 
     const fetchEmailTemplates = async () => {
       try {
-        const res = await companyCTX.getEmailTemplate
+        const res = await companyCTX.getEmailTemplate()
         setEmailTemplates(res.data || [])
         if (res.data.length > 0) {
           setSelectValue(res.data[0]?.customTemplate) // Set the first template as selected
@@ -59,7 +59,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
 
     fetchEmails()
     fetchEmailTemplates()
-  }, [emailLogs])
+  }, [])
 
   const handleSelectionChange = (e) => {
     const selectedValue = e.target.value
@@ -211,7 +211,7 @@ const StudentEmailsTable = ({studentInfoData}) => {
                           {/* Open Email Content Modal */}
                           <a
                             className='text-dark fw-bold text-hover-primary d-block fs-6'
-                            style={{cursor: 'pointer'}}
+                            style={{ cursor: 'pointer' }}
                             onClick={() => handleEmailClick(email)}
                           >
                             {email.subject}
@@ -291,11 +291,11 @@ const StudentEmailsTable = ({studentInfoData}) => {
           show={isEmailContentModalOpen}
           handleClose={() => setIsEmailContentModalOpen(false)}
         >
-          <div className='mt-10' style={{background: themeMode === 'dark' ? '#323333' : '#fff'}}>
+          <div className='mt-10' style={{ background: themeMode === 'dark' ? '#323333' : '#fff' }}>
             <h5>{selectedEmail.subject}</h5>
             <div
-              style={{color: themeMode === 'dark' ? '#fff' : ''}}
-              dangerouslySetInnerHTML={{__html: selectedEmail.content}}
+              style={{ color: themeMode === 'dark' ? '#fff' : '' }}
+              dangerouslySetInnerHTML={{ __html: selectedEmail.content }}
             />
           </div>
         </PopUpModal>

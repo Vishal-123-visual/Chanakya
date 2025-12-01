@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useRef } from 'react'
 import moment from 'moment'
 import './studentFeesRecipt.css'
 import { useCompanyContext } from '../compay/CompanyContext'
@@ -7,11 +7,17 @@ const BASE_URL = process.env.REACT_APP_BASE_URL
 const BASE_URL_Image = `${BASE_URL}/api/images`
 
 const PrintStudentFeesRecipt = () => {
+
+
   const studentGST_statusCTX = useCompanyContext()
   const [studentInfoData, setStudentInfoData] = useState(
     JSON.parse(localStorage.getItem('print-student-fees-recipt'))
   )
+    const ref = useRef();
   //console.log(studentInfoData?.companyName?.isGstBased)
+const handleDownload = async () => {
+    window.print()
+};
 
   const gstAmount =
     studentInfoData?.companyName?.isGstBased === 'Yes'
@@ -30,7 +36,7 @@ const PrintStudentFeesRecipt = () => {
   }
 
   return (
-    <div style={{ backgroundColor: 'white', height: '100%' }}>
+    <div  style={{ backgroundColor: 'white', height: '100%' }}>
       {/* Start body */}
       <table border='0' cellPadding='0' cellSpacing='0' width='100%'>
         {/* Start logo */}
@@ -44,7 +50,7 @@ const PrintStudentFeesRecipt = () => {
               style={{ maxWidth: '600px' }}
             >
               <tr>
-                <td align='center' valign='top' style={{ padding: '36px 24px' }}>
+                <td align='center' valign='top' style={{ padding: '0 0' }}>
                   <a
                     href='http://www.visualmedia.co.in/'
                     target='_blank'
@@ -71,9 +77,9 @@ const PrintStudentFeesRecipt = () => {
           </td>
         </tr>
         {/* End logo */}
-
+ 
         {/* Start hero */}
-        <tr>
+         <tr >
           <td align='center' bgcolor='white'>
             <table
               border='0'
@@ -108,9 +114,6 @@ const PrintStudentFeesRecipt = () => {
             </table>
           </td>
         </tr>
-        {/* End hero */}
-
-        {/* Start student info block */}
         <tr>
           <td align='center' bgcolor='white' valign='top' width='100%'>
             <table
@@ -221,9 +224,7 @@ const PrintStudentFeesRecipt = () => {
             </table>
           </td>
         </tr>
-        {/* End student info block */}
 
-        {/* Start copy block */}
         <tr>
           <td align='center' bgcolor='white'>
             <table
@@ -470,9 +471,16 @@ const PrintStudentFeesRecipt = () => {
             </table>
           </td>
         </tr>
-        {/* End copy block */}
 
-        {/* Start footer */}
+       <tr >
+<td align='center ' ><button
+                className=" mt-3 btn  btn-color-white btn-active-dark-danger bg-danger "
+                onClick={handleDownload}
+              >
+                Download as PDF
+              </button></td>
+        </tr>
+   
         <tr>
           <td align='center' bgcolor='white'>
             <table
@@ -514,9 +522,10 @@ const PrintStudentFeesRecipt = () => {
             </table>
           </td>
         </tr>
-        {/* End footer */}
+
       </table>
-      {/* End body */}
+
+
     </div>
   )
 }

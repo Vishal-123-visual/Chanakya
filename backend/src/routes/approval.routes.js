@@ -4,12 +4,13 @@ import {
   getAllApprovalStatusController,
   // deleteSingleApprovalDataController,
 } from "../controllers/approval.controllers.js";
+import { isAdmin, requireSignIn } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
 router
   .route("/")
-  .post(postApprovalController)
+  .post(requireSignIn, postApprovalController)
   .get(getAllApprovalStatusController);
 
 // router.route("/:id").delete(deleteSingleApprovalDataController);

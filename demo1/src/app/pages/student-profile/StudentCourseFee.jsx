@@ -17,7 +17,7 @@ import PayStudentFeeOnline from './PayStudentFeeOnline'
 const BASE_URL = process.env.REACT_APP_BASE_URL
 
 const StudentCourseFee = ({className, studentInfoData}) => {
-  //console.log(studentInfoData)
+  console.log(studentInfoData, 'studentInfoData')
   const params = useParams()
   const navigate = useNavigate()
   const {currentUser} = useAuth()
@@ -127,7 +127,7 @@ const StudentCourseFee = ({className, studentInfoData}) => {
       studentInfoData.name
     )}, We have successfully received Rs.${encodeURIComponent(
       payStudentFeesAdd.amountPaid
-    )}/- as your monthly installment.\nThanks,\nAVisual Media Academy`
+    )}/- as your monthly installment.\nThanks,\n${studentInfoData?.companyName?.companyName}`
 
     //console.log(Number(payStudentFeesAdd.amountPaid), Number(payStudentFeesAdd.netCourseFees))
 

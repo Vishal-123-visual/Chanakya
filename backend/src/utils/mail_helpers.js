@@ -3,9 +3,13 @@ import { USER_EMAIL, USER_PASSWORD } from "../config/config.js";
 
 export const mailTransporter = createTransport({
   service: "gmail",
+  secure: true,
   auth: {
     user: USER_EMAIL,
     pass: USER_PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false, // <== Bypass self-signed cert errors
   },
 });
 

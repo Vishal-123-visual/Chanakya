@@ -290,7 +290,7 @@ async function sendEmail(toEmails, subject, text, html, req) {
 export const getSingleStudentByIdController = asyncHandler(
   async (req, res, next) => {
     try {
-      const student = await addMissionFormModel.findById(req.params.id);
+      const student = await addMissionFormModel.findById(req.params.id).populate("companyName", "companyName");
       if (!student) {
         return res
           .status(404)

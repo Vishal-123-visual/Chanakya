@@ -1,3 +1,8 @@
+@page {
+  margin: 0;
+}
+
+
 body.page-loading {
   margin: 0;
   height: 100%;
@@ -57,3 +62,4 @@ html[data-bs-theme='dark'] .splash-screen .light-logo {
 html[data-bs-theme='dark'] .splash-screen .dark-logo {
   display: block;
 }
+

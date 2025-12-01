@@ -374,16 +374,13 @@ export const editUserController = asyncHandler(async (req, res, next) => {
     }
 
     // Check if the user performing the update is either SuperAdmin or the same user
-    if (
-      req.user.role === "Admin" ||
-      req.user.role === "SuperAdmin" ||
-      (req.user._id.toString() === req.params.id && req.user.role === "Admin")
-    ) {
+    const isSuperAdmin = req.user.role === "SuperAdmin";
+    const isSelf = req.user._id.toString() === req.params.id;
+    const isAdminEditingSelf = isSelf && req.user.role === "Admin";
+    // Check if the user performing the update is either SuperAdmin or the same user
+    if (req.user.role === "SuperAdmin") {
       // SuperAdmin can update anyone, Admin can update non-SuperAdmin users
-      if (user.role === "Admin" && req.user.role !== "Admin") {
-        return res.status(400).json({ error: "Cannot update Admin user." });
-      }
-      if (user.role === "SuperAdmin" && req.user.role !== "SuperAdmin") {
+      if (req.user.role !== "SuperAdmin") {
         return res
           .status(400)
           .json({ error: "Cannot update SuperAdmin user." });

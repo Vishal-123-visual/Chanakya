@@ -20,6 +20,7 @@ const ReadOnlyCourseFee = ({
   setStudentCourseFeesEditId,
   delelteStudentCourseFeesHandler,
 }) => {
+  console.log(studentInfoData, 'studentInfoData')
   const params = useParams()
   // console.log(params.id)
   // console.log(StudentFee)
@@ -51,7 +52,7 @@ const ReadOnlyCourseFee = ({
     // url += `&text=Hello, ${studentInfoData.name} your fess has been submitted successfully ${StudentFee.amountPaid} Rs? &app_absent=0`
     url += `&text=Dear ${studentInfoData.name}, We have successfully received Rs.${StudentFee.amountPaid}/- as your monthly installment.
 Thanks,
-Visual Media Academy`
+${studentInfoData?.companyName?.companyName}`
     window.open(url)
   }
 

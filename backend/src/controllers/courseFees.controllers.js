@@ -27,6 +27,7 @@ import SubjectModel from "../models/subject/subject.models.js";
 import StudentGST_GuggestionModel from "../models/email-remainder/Student.GST.Suggestion.js";
 import EmailLogModel from "../models/mail.models.js";
 import qs from "qs";
+import approvalModel from "../models/approval/approval.models.js";
 
 export const createCourseFeesController = asyncHandler(
   async (req, res, next) => {
@@ -173,19 +174,26 @@ export const createCourseFeesController = asyncHandler(
         // const findPaymentOptionName = await PaymentOptionsModel.findById(
         //   paymentOption
         // );
-        //console.log(findPaymentOptionName);
-        // Send email asynchronously
+        // // console.log(findPaymentOptionName);
+        // // Send email asynchronously
 
-        //     let companyLogoURL =
-        //       BACKEND_URL + "/api/images/" + student.companyName.logo;
-        //     // Send email asynchronously
+        // let companyLogoURL =
+        //   BACKEND_URL + "/api/images/" + student.companyName.logo;
+        // // Send email asynchronously
 
-        //     if (emailSuggestionsStatus[0].emailSuggestionStatus) {
-        //       sendEmail(
-        //         `${student.email}, ${student.companyName.email},${superAdminEmail}`,
-        //         ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
-        //         `Hello ${student.name} you have submitted fees `,
-        //         `<!DOCTYPE html>
+        // let recieptId = await CourseFeesModel.findById(studentInfo);
+
+        // let status = await approvalModel.findOne({ reciept: recieptId });
+
+        // if (
+        //   emailSuggestionsStatus[0].emailSuggestionStatus &&
+        //   status.status === "Approved"
+        // ) {
+        //   sendEmail(
+        //     `${student.email}, ${student.companyName.email},${superAdminEmail}`,
+        //     ` Your Fees Submitted Successfully - ${student.companyName.companyName}`,
+        //     `Hello ${student.name} you have submitted fees `,
+        //     `<!DOCTYPE html>
         //       <html>
 
         //       <head>
@@ -563,7 +571,9 @@ export const createCourseFeesController = asyncHandler(
         //                       line-height: 24px;
         //                     "
         //                             >
-        //                               GST (${studentGSTStatus[0]?.gst_percentage} %)
+        //                               GST (${
+        //                                 studentGSTStatus[0]?.gst_percentage
+        //                               } %)
         //                             </td>
 
         //                             <td
@@ -602,7 +612,9 @@ export const createCourseFeesController = asyncHandler(
         //       Rs ${
         //         student.companyName.isGstBased === "No"
         //           ? (Number(lateFees) + Number(amountPaid)).toFixed(2)
-        //           : (Number(lateFees) + Number(gstAmount + cutGSTAmount)).toFixed(2)
+        //           : (
+        //               Number(lateFees) + Number(gstAmount + cutGSTAmount)
+        //             ).toFixed(2)
         //       }
         //   </td>
         // </tr>
@@ -740,9 +752,9 @@ export const createCourseFeesController = asyncHandler(
         //       </body>
 
         //       </html>`,
-        //         req
-        //       );
-        //     }
+        //     req
+        //   );
+        // }
 
         await student.save();
         return res.status(200).json({
