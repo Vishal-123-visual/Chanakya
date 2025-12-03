@@ -409,7 +409,7 @@ export const postApprovalController = async (req, res, next) => {
                                                   line-height: 24px;
                                                 ">
                                       <strong>${
-                                        student.companyName.reciptNumber
+                                        recieptData?.reciptNumber
                                       }</strong>
                                     </td>
                                   </tr>
