@@ -64,7 +64,7 @@ const Company = () => {
             {/* end::Table head */}
             {/* begin::Table body */}
             <tbody>
-              {companyCTX.getCompanyLists.data.map((companyData) => (
+              {companyCTX.getCompanyLists?.data?.map((companyData) => (
                 <tr key={companyData._id}>
                   <td>
                     <div className='form-check form-check-sm form-check-custom form-check-solid'>
