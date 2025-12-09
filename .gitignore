@@ -3,8 +3,6 @@ backend/node_modules
 demo1/node_modules
 demo1/.env
 backend/.env
-backend/images
-
 demo1/build
 backend/build
 
